@@ -173,9 +173,9 @@
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <a href="#" class="text-light">
-            <small>비밀번호 찾기</small>
-          </a>
+          <router-link to="/dashboard" class="text-light">
+            <small>메인화면</small>
+          </router-link>
         </div>
         <div class="col-6 text-right">
           <router-link to="/login" class="text-light">

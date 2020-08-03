@@ -18,7 +18,7 @@
                   <h3 class="mb-0">회원정보</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <a href="#" class="btn btn-sm btn-primary">회원정보변경</a>
+                  <v-btn class="btn btn-sm btn-primary" @click="updateProfile()">회원 정보 수정</v-btn>
                 </div>
               </div>
             </div>
@@ -36,9 +36,9 @@
                         v-model="model.username"
                       />
                     </div>
-                    <div class="col-2">
+                    <!-- <div class="col-2">
                       <base-button type="default" class style="white-space: nowrap;">중복확인</base-button>
-                    </div>
+                    </div>-->
 
                     <div class="col-lg-12">
                       <base-input
@@ -50,7 +50,7 @@
                       />
                     </div>
                   </div>
-                  <v-btn class="ma-2" @click="userDelete()" color="error">탈퇴하기</v-btn>
+                  <v-btn class="ma-2" @click="userDelete()">탈퇴하기</v-btn>
                 </div>
               </form>
             </template>
@@ -64,24 +64,65 @@
 <script>
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
+import store from "@/store/store.js";
 
 export default {
-  name: "user-profile",
+  name: "profile",
   data() {
     return {
-      model: {
-        username: "",
-        email: "",
-      },
+      uid: "",
+      username: "",
+      email: "",
     };
   },
+  created() {
+    if (this.$session.exists()) {
+      store
+        .dispatch("auth/getUserInfo", this.$session.get("uid"))
+        .then((response) => {
+          this.uid = this.$session.get("uid");
+          this.setUserInfo(response.data.object);
+        })
+        .catch(() => {
+          this.$router.push("/");
+        });
+    }
+  },
   methods: {
+    setUserInfo(data) {
+      this.unick = data.username;
+      this.uemail = data.email;
+    },
+
+    updateProfile() {
+      let msg = "회원 정보 수정에 실패하였습니다.";
+      http
+        .put("/user/" + this.uid, {
+          uid: this.uid,
+          nickname: this.username,
+        })
+        .then(({ data }) => {
+          if (data.data == "success") {
+            msg = "회원 정보가 수정되었습니다";
+            alertify.notify(msg, "success", 3);
+            return;
+          } else {
+            alertify.error(msg, 3);
+            return;
+          }
+        })
+        .catch(() => {
+          msg = "회원정보 수정 서버 통신 실패";
+          alertify.error(msg, 3);
+          return;
+        });
+    },
     userDelete() {
       let uid = this.$session.get("uid");
       let msg = "회원탈퇴 실패";
       let vue = this;
       alertify.confirm(
-        "회원탈퇴",
+        "회원 탈퇴",
         "탈퇴 하시겠습니까?",
         function () {
           http

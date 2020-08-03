@@ -5,29 +5,31 @@ import MainLayout from "@/layout/MainLayout";
 import AuthLayout from "@/layout/AuthLayout";
 Vue.use(Router);
 
-
 //로그인이 되어 있지 않다면 접근 할 수 없다.
 const requireLogin = (to, from, next) => {
   if (Vue.prototype.$session.exists()) return next();
   next({
     // 아래 창에서 로그인 모달을 띄워줄순 없을지
-    path: '/user/login',
+    path: "/user/login",
     // 요청한 페이지로 이동 하기 위한 방식
     // query: {redirect: to.fullPath}
-  })
-}
-
+  });
+};
 
 //editor가 아니라면 접근 할 수 없다.
 const requireAuth = (to, from, next) => {
-  if (Vue.prototype.$session.exists() && (Vue.prototype.$session.get('auth') == 'editor')) return next();
+  if (
+    Vue.prototype.$session.exists() &&
+    Vue.prototype.$session.get("auth") == "editor"
+  )
+    return next();
   next({
     // 아래 창에서 로그인 모달을 띄워줄순 없을지
-    path: '/',
+    path: "/",
     // 요청한 페이지로 이동 하기 위한 방식
     // query: {redirect: to.fullPath}
-  })
-}
+  });
+};
 
 export default new Router({
   linkExactActiveClass: "active",
@@ -47,7 +49,7 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Main.vue"
             ),
-            // beforeEnter: requireLogin
+          // beforeEnter: requireLogin
         },
         {
           path: "/portfolio/edit",
@@ -59,7 +61,7 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Edit.vue"
             ),
-            beforeEnter: requireAuth
+          beforeEnter: requireAuth,
         },
         {
           path: "/dashboard",
@@ -105,14 +107,14 @@ export default new Router({
           name: "marklist",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/MarkList.vue"),
-            beforeEnter: requireLogin
+          beforeEnter: requireLogin,
         },
         {
           path: "/alarm",
           name: "alarm",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Alarm.vue"),
-            beforeEnter: requireLogin
+          beforeEnter: requireLogin,
         },
       ],
     },
@@ -142,10 +144,9 @@ export default new Router({
       ],
     },
     {
-      path: '*',
+      path: "*",
       // component: MainLayout,
-          component: () =>
-          import("@/views/Error/NotFoundPage"),
-    }
+      component: () => import("@/views/Error/NotFoundPage"),
+    },
   ],
 });
