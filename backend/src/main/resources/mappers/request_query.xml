@@ -66,7 +66,8 @@
 	<!-- 요청수락 -->
 	<update id="acceptRequest">
 		update request_form set
-				done_flag = 1
+				done_flag = 1,
+				response_date = now()
 		where rid = #{rid}
 	</update>
 	<!-- 요청완료 -->
@@ -78,7 +79,8 @@
 	<!-- 요청거절 -->
 	<update id="denyRequest">
 		update request_form set
-				done_flag = 5
+				done_flag = 5,
+				response_date = now()
 		where rid = #{rid}
 	</update>
 
@@ -90,13 +92,11 @@
 	<!-- 알림 등록 -->
 	<insert id="insertNotify">
 		insert into notify (
-							notify_nickname,
 							request_nickname,
 							response_nickname,
 							notify_type,
 							read_flag)
 		values (
-				#{notify_nickname},
 				#{request_nickname},
 				#{response_nickname},
 				#{notify_type},
@@ -106,7 +106,7 @@
 	<!-- 알림 리스트 조회 -->
 	<select id="searchNotify" resultType="NotifyDto">
 		select * from notify 
-		where notify_nickname = #{notify_nickname}
+		where response_nickname = #{response_nickname}
 		and read_flag = 0
 	</select>
 
@@ -126,7 +126,7 @@
 	<update id="updateAllNotify" parameterType="String">
 		update notify set
 			read_flag = 1
-		where notify_nickname = #{notify_nickname}
+		where response_nickname = #{response_nickname}
 	</update>
 
 	<!-- 태그 조회 -->

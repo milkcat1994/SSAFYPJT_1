@@ -35,7 +35,7 @@ public interface RequestService {
 	public int deleteRequest(int rid);
 
 	// 알림 조회
-	public List<NotifyDto> searchNotify(String notify_nickname);	
+	public List<NotifyDto> searchNotify(String response_nickname);	
 
 	// 알림 등록
 	public int insertNotify(NotifyDto notifyDto);
@@ -46,7 +46,7 @@ public interface RequestService {
 	// 알림 수정(읽음)
 	public int updateNotify(int nid);
 	// 알림수정2 (회원이 알림을 모두 읽음)
-	public int updateAllNotify(String notify_nickname);
+	public int updateAllNotify(String response_nickname);
 
 	// 태그 조회
 	public List<RequestTagDto> searchTag(int rid);
