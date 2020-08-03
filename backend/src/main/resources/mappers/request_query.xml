@@ -47,6 +47,7 @@
 												video_result_length, 
 												video_style,
 												video_skill,
+												start_date, 
 												end_date, 
 												request_description,
 												done_flag) 
@@ -58,6 +59,7 @@
 				#{video_result_length}, 
 				#{video_style},
 				#{video_skill},
+				#{start_date}, 
 				#{end_date}, 
 				#{request_description},
 				#{done_flag}) 
