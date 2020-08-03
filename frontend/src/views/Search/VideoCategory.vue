@@ -18,8 +18,9 @@
         <span class="display-4">기념 행사(생일, 결혼 등) 영상</span>
       </base-radio>
 
-      <base-radio class="custom-control-alternative" name="etc" v-model="category">
-        <span class="display-4">기타</span>
+      <base-radio class="custom-control-alternative" :name="etc" v-model="category">
+        <!-- <span class="display-4">기타</span> -->
+        <input type="text" placeholder="기타" v-model.lazy="etc" />
       </base-radio>
       
     </div>
@@ -47,20 +48,28 @@ export default {
   data() {
     return {
       category: null,
+      etc: '',
     }
   },
-  methods: {
-    setCategory() {
-      this.$store.commit('setCategory', {value: this.final})
-    },
-  },
-  validations: {
-    category: {
-      required,
-    },
+  validations() {
+    // 기타 선택 시 input에 값이 입력되었을 때만 validation 걸어주기
+    if (this.category === 'etc') {
+      return {
+        etc: {
+          required
+        }
+      }
+    } else {
+      return {
+        category: {
+          required
+        }
+      }
+    }
   },
   watch: {
     $v: {
+      deep: true,
       handler: function (val) {
         if (!val.$invalid) {
           this.$emit("can-continue", { value: true });
@@ -68,11 +77,20 @@ export default {
           this.$emit("can-continue", { value: false });
         }
       },
-      deep: true,
     },
     clickedNext(val) {
       if (val === true) {
         this.$v.category.$touch();
+      }
+    },
+    category(val) {
+      if (val !== 'etc') {
+        this.$store.commit('setCategory', {value: val})
+      }
+    },
+    etc(val) {
+      if (val === 'etc') {
+        this.$store.commit('setCategory', {value: val})
       }
     },
   },

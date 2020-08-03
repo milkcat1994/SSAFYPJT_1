@@ -6,45 +6,45 @@
     <div class="d-flex my-4">
       <div class="d-flex flex-column mr-4">
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="bright" v-model="checkbox.skill1">
+          <base-checkbox class="custom-control-alternative" name="bright" v-model="skills.skill1">
             <span class="display-4">밝기/대비 조정</span>
           </base-checkbox>
         </div>
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="color" v-model="checkbox.skill2">
+          <base-checkbox class="custom-control-alternative" name="color" v-model="skills.skill2">
             <span class="display-4">색 보정</span>
           </base-checkbox>
         </div>
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="audio" v-model="checkbox.skill3">
+          <base-checkbox class="custom-control-alternative" name="audio" v-model="skills.skill3">
             <span class="display-4">오디오/음악</span>
           </base-checkbox>
         </div>
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="motion" v-model="checkbox.skill4">
+          <base-checkbox class="custom-control-alternative" name="motion" v-model="skills.skill4">
             <span class="display-4">모션그래픽</span>
           </base-checkbox>
         </div>
       </div>
       <div class="d-flex flex-column">
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="caption" v-model="checkbox.skill5">
+          <base-checkbox class="custom-control-alternative" name="caption" v-model="skills.skill5">
             <span class="display-4">자막</span>
           </base-checkbox>
         </div>
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="intro" v-model="checkbox.skill6">
+          <base-checkbox class="custom-control-alternative" name="intro" v-model="skills.skill6">
             <span class="display-4">인트로</span>
           </base-checkbox>
         </div>
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="outro" v-model="checkbox.skill7">
+          <base-checkbox class="custom-control-alternative" name="outro" v-model="skills.skill7">
             <span class="display-4">아웃트로</span>
           </base-checkbox>
         </div>
         <div class="d-inline-flex p-2">
-          <base-checkbox class="custom-control-alternative" name="etc" v-model="checkbox.skill8">
-            <input type="text" placeholder="기타" v-model="checkbox.etc" />
+          <base-checkbox class="custom-control-alternative" :name="etc" v-model="skills.skill8">
+            <input type="text" placeholder="기타" v-model="etc" />
           </base-checkbox>
         </div>
       </div>
@@ -72,7 +72,7 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      checkbox: {
+      skills: {
         skill1: false,
         skill2: false,
         skill3: false,
@@ -81,20 +81,25 @@ export default {
         skill6: false,
         skill7: false,
         skill8: false,
-        etc: null,
       },
+      etc: null,
     };
   },
-  methods: {
-    setSkills() {
-      this.$store.commit('setSkills', {value: this.checkbox})
-    }
-  },
-  validations: {
+  validations() {
     // 기타 선택 시 input에 값이 입력되었을 때만 validation 걸어주기
-    checkbox: {
-      required,
-    },
+    if (this.etc === null || this.etc === '') {
+      return {
+        skills: {
+          required
+        }
+      }
+    } else {
+      return {
+        etc: {
+          required
+        }
+      }
+    }
   },
   watch: {
     $v: {
@@ -109,9 +114,18 @@ export default {
     },
     clickedNext(val) {
       if (val === true) {
-        this.$v.checkbox.$touch();
+        this.$v.skills.$touch();
         this.setSkills()
       }
+    },
+    skills: {
+      deep: true,
+      handler(val) {
+        this.$store.commit('setSkills', {value: val})
+      }
+    },
+    etc(val) {
+      this.$store.commit('setOtherSkill', {value: val})
     },
   },
   mounted() {

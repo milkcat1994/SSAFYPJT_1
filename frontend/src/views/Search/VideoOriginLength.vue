@@ -52,11 +52,6 @@ export default {
       origin: null,
     };
   },
-  methods: {
-    setOriginLength() {
-      this.$store.commit('setOriginLength', {value: this.origin})
-    },
-  },
   validations: {
     origin: {
       required,
@@ -76,9 +71,11 @@ export default {
     clickedNext(val) {
       if (val === true) {
         this.$v.origin.$touch();
-        this.setOriginLength()
       }
     },
+    origin(val) {
+      this.$store.commit('setOriginLength', {value: val})
+    }
   },
   mounted() {
     if (!this.$v.$invalid) {
