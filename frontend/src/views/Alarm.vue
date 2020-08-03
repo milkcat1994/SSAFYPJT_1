@@ -249,6 +249,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import { mapGetters } from 'vuex';
 import store from "@/store/store.js";
 import http from '@/util/http-common';
+import alertify from "alertifyjs"
 
 // for calenggar
 import { Calendar } from "vue-sweet-calendar";
@@ -317,7 +318,7 @@ export default {
         .put('/request/accept/'+rid)
         .then(({ data }) => {
           if (data == 'success'){
-            alert('요청이 수락되었습니다.');
+            alertify.notify('요청을 수락하였습니다.', 'success', 3)
             }
         })
         .catch(() => {
@@ -335,7 +336,7 @@ export default {
         .put('/request/deny/'+rid)
         .then(({ data }) => {
           if (data == 'success'){
-            alert('요청이 거절되었습니다.');
+            alertify.notify('요청을 거절하였습니다.', 'success', 3)
             }
         })
         .catch(() => {
@@ -352,7 +353,7 @@ export default {
         .put('/request/done/'+rid)
         .then(({ data }) => {
           if (data == 'success'){
-            alert('요청이 완료되었습니다.');
+            alertify.notify('요청이 완료되었습니다.', 'success', 3)
             }
         })
         .catch(() => {
