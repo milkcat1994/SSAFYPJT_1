@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.editor.model.mapper.request.RequestMapper">
+
+	<!-- 요청 검색 -->
+	<select id="searchRequest" resultType="RequestDto">
+		select *
+		from request_form
+		where rid = #{rid} 
+	
+	</select>
+
+	<!-- 요청자의 리스트 -->
+	<select id="searchListRequest" resultType="RequestDto">
+		select *
+		from request_form
+		where request_nickname = #{request_nickname} 
+	</select>
+	<!-- done_flag 0~2 -->
+	<select id="searchListFlagRequest" resultType="RequestDto">
+		select *
+		from request_form
+		where request_nickname = #{nickname}
+		and done_flag = #{done_flag} 
+	</select>
+
+	<!-- 요청받는사람의 리스트 -->
+	<select id="searchListResponse" resultType="RequestDto">
+		select *
+		from request_form
+		where response_nickname = #{response_nickname} 
+	</select>
+	<select id="searchListFlagResponse" resultType="RequestDto">
+		select *
+		from request_form
+		where response_nickname = #{nickname} 
+		and done_flag = #{done_flag}
+	</select>
+	
+	<!-- 요청 등록 태그 등록을 위한..  -->
+	<insert id="insertRequest" useGeneratedKeys="true" keyProperty="rid">
+		INSERT INTO request_form ( 
+												request_nickname, 
+												response_nickname, 
+												video_type, 
+												video_origin_length, 
+												video_result_length, 
+												video_style,
+												video_skill,
+												end_date, 
+												request_description,
+												done_flag) 
+		VALUES (
+				#{request_nickname}, 
+				#{response_nickname}, 
+				#{video_type}, 
+				#{video_origin_length}, 
+				#{video_result_length}, 
+				#{video_style},
+				#{video_skill},
+				#{end_date}, 
+				#{request_description},
+				#{done_flag}) 
+	</insert>
+
+	<!-- 요청수락 -->
+	<update id="acceptRequest">
+		update request_form set
+				done_flag = 1
+		where rid = #{rid}
+	</update>
+	<!-- 요청완료 -->
+	<update id="doneRequest">
+		update request_form set
+				done_flag = 2
+		where rid = #{rid}
+	</update>
+	<!-- 요청거절 -->
+	<update id="denyRequest">
+		update request_form set
+				done_flag = 5
+		where rid = #{rid}
+	</update>
+
+	<!-- 요청 삭제 -->
+	<delete id="deleteRequest">
+		delete from request_form where rid = #{rid}
+	</delete>
+
+	<!-- 알림 등록 -->
+	<insert id="insertNotify">
+		insert into notify (
+							notify_nickname,
+							request_nickname,
+							response_nickname,
+							notify_type,
+							read_flag)
+		values (
+				#{notify_nickname},
+				#{request_nickname},
+				#{response_nickname},
+				#{notify_type},
+				#{read_flag})
+	</insert>
+
+	<!-- 알림 리스트 조회 -->
+	<select id="searchNotify" resultType="NotifyDto">
+		select * from notify 
+		where notify_nickname = #{notify_nickname}
+		and read_flag = 0
+	</select>
+
+	<!-- 알림 삭제 -->
+	<delete id="deleteNotify">
+		delete from notify where nid = #{nid}
+	</delete>
+
+	<!-- 알림 수정(읽었는지만 수정) -->
+	<update id="updateNotify" parameterType="int">
+		update notify set
+			read_flag = 1
+		where nid = #{nid}
+	</update>
+
+	<!-- 알림 수정2(회원이 알림을 모두 읽음) -->
+	<update id="updateAllNotify" parameterType="String">
+		update notify set
+			read_flag = 1
+		where notify_nickname = #{notify_nickname}
+	</update>
+
+	<!-- 태그 조회 -->
+	<select id="searchTag" parameterType="int" resultType="RequestTagDto">
+		select * from request_tag
+		where request_form_rid = #{rid}
+	</select>
+
+	<!-- 태그 등록 -->
+	<insert id="insertTag" parameterType="RequestTagDto">
+		insert into request_tag (request_form_rid,
+								tag_name)
+		values (#{request_form_rid},
+				#{tag_name})
+	</insert>
+
+	<!-- 태그 삭제 요청서의 태그 삭제 -->
+	<delete id="deleteReqTag" parameterType="int">
+		delete from request_tag where request_form_rid = #{rid}
+	</delete>
+
+
+</mapper>

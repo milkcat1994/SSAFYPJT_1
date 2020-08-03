@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.editor.model.mapper.user.PortfolioMapper">
+
+    <!-- 포트폴리오 조회 -->
+    <select id="findPortfolioByUid" resultType="Portfolio">
+        SELECT `nickname`, `pay_min`, `description`
+        FROM portfolio
+        WHERE `uid` = #{uid}
+    </select>
+
+    <!-- 영상 조회 -->
+    <select id="findVideoByUid" resultType="PortfolioVideo">
+        SELECT `video_no`, `portfolio_uid`, `url`, `main_flag`
+        FROM video_info
+        WHERE `portfolio_uid` = #{uid}
+    </select>
+    
+    <!-- 태그 조회 -->
+    <select id="findTagByUid" resultType="PortfolioTag">
+        SELECT `tag_no`, `portfolio_uid`, `tag_name`
+        FROM portfolio_tag
+        WHERE `portfolio_uid` = #{uid}
+    </select>
+    
+    <!-- 스케쥴 조회 -->
+    <select id="findScheduleByUid" resultType="PortfolioSchedule">
+        SELECT `schedule_no`, `portfolio_uid`, `start_date`, `term`, `schedule_type`
+        FROM schedule_info
+        WHERE `portfolio_uid` = #{uid}
+    </select>
+    
+    <!-- 리뷰 조회 -->
+    <select id="findReviewByUid" resultType="PortfolioReview">
+        SELECT `review_no`, `portfolio_uid`, `nickname`, `created_date`, `video_score`, `kindness_score`, `finish_score`, `comment`
+        FROM review
+        WHERE `portfolio_uid` = #{uid}
+    </select>
+    
+    <!-- 포트폴리오 초기 등록 -->
+    <insert id="portfolioInitSave">
+        INSERT INTO portfolio (`uid`, `nickname`, `pay_min`, `description`)
+                        VALUES (#{uid},
+                                (SELECT `nickname`
+                                    FROM user_info
+                                    WHERE `uid` = #{uid}),
+                                '', '')
+    </insert>
+    <!-- 
+        user_info 테이블이 없어서 임시로 nickname 삽입
+        (SELECT `nickname`
+        FROM user_info
+        WHERE `uid` = #{uid}),
+     -->
+
+    <!-- 포트폴리오에 영상 등록 -->
+    <insert id="videoSave">
+        INSERT INTO video_info (`portfolio_uid`, `url`, `main_flag`)
+                        VALUES (#{portfolioUid}, #{url}, #{mainFlag})
+    </insert>
+    
+    <!-- 포트폴리오에 태그 등록 -->
+    <insert id="tagSave">
+        INSERT INTO portfolio_tag (`portfolio_uid`, `tag_name`)
+                        VALUES (#{portfolioUid}, #{tagName})
+    </insert>
+    
+    <!-- 포트폴리오에 스케쥴 등록 -->
+    <insert id="scheduleSave">
+        INSERT INTO schedule_info (`portfolio_uid`, `start_date`, `term`, `schedule_type`)
+                        VALUES (#{portfolioUid}, #{startDate}, #{term}, #{scheduleType})
+    </insert>
+    
+    <!-- 포트폴리오에 리뷰 등록 -->
+    <insert id="reviewSave">
+        INSERT INTO review (`portfolio_uid`, `nickname`, `video_score`, `kindness_score`, `finish_score`, `comment`)
+                        VALUES (#{portfolioUid}, #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
+    </insert>
+
+    <delete id="deleteVideosByUid">
+        DELETE FROM video_info
+        WHERE uid = #{uid}
+    </delete>
+</mapper>

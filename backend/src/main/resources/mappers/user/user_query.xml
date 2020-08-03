@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.editor.model.mapper.user.UserMapper">
+
+    <!-- 일반 로그인 -->
+    <select id="normalLogin" resultType="User">
+        SELECT `uid`, `auth`, `nickname`
+        FROM user_info
+        WHERE `email`= #{email}
+            AND `password` = #{password}
+    </select>
+
+    <!-- 일반 회원가입 -->
+    <insert id="normalRegister" useGeneratedKeys="true" keyProperty="uid">
+        INSERT INTO user_info (`platform_type`, `email`, `password`, `nickname`, `auth`)
+                        VALUES (#{platformType}, #{email}, #{password}, #{nickname}, #{auth})
+    </insert>
+
+    <!-- 회원 조회 -->
+    <select id="findByUid" resultType="User">
+        SELECT `email`, `nickname`, `auth`
+        FROM user_info
+        WHERE `uid` = #{uid}
+    </select>
+
+    <!-- 회원 정보 수정 -->
+    <update id="updateUser">
+        UPDATE user_info
+        set `nickname` = #{nickname}
+            
+    </update>
+
+    <!-- 회원 탈퇴 -->
+    <delete id="deleteUserByUid">
+        DELETE FROM user_info
+        WHERE uid = #{uid}
+    </delete>
+
+    <!-- 회원가입 시 있는 유저인지 파악 -->
+    <select id="findByEmailAndPlatformType" resultType="User">
+        SELECT `uid`
+        FROM user_info
+        WHERE `email` = #{email}
+            AND `platform_type` = #{platformType}
+    </select>
+    
+    <!-- nickname 중복 확인 -->
+    <select id="findByNickname" resultType="User">
+        SELECT `uid`
+        FROM user_info
+        WHERE `nickname` = #{nickname}
+    </select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.editor.model.mapper.email.EmailMapper">
+
+    <!-- email이용한 등록여부 확인 -->
+    <select id="findEmailConfirmByEmail" resultType="EmailConfirm">
+        SELECT `email`, `email_key`
+        FROM email_confirm
+        WHERE `email` = #{email}
+    </select>
+
+    <!-- email과 key를 이용한 등록 여부 확인 -->
+    <select id="findEmailConfirmByEmailAndEmailKey" resultType="EmailConfirm">
+        SELECT `email`, `email_key`
+        FROM email_confirm
+        WHERE `email` = #{email}
+            AND `email_key` = #{emailKey}
+    </select>
+
+    <!-- email 인증 코드 등록 -->
+    <insert id="createEmailCode">
+        INSERT INTO email_confirm (`email`, `email_key`)
+                            VALUES (#{email}, #{emailKey})
+    </insert>
+
+    <!-- email 인증 코드 수정 -->
+    <update id="updateEmail">
+        UPDATE email_confirm
+        SET `email_key` = #{emailKey}
+        WHERE `email` = #{email}
+    </update>
+
+    <!-- email 인증 코드 삭제 -->
+    <delete id="deleteEmailConfirmByEmail">
+        DELETE from email_confirm
+        WHERE `email` = #{email}
+    </delete>
+
+</mapper>
