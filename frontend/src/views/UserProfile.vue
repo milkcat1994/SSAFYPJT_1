@@ -37,12 +37,7 @@
                       />
                     </div>
                     <div class="col-2">
-                      <base-button
-                        type="default"
-                        class=""
-                        style="white-space: nowrap;"
-                        >중복확인</base-button
-                      >
+                      <base-button type="default" class style="white-space: nowrap;">중복확인</base-button>
                     </div>
 
                     <div class="col-lg-12">
@@ -55,6 +50,7 @@
                       />
                     </div>
                   </div>
+                  <v-btn class="ma-2" @click="userDelete()" color="error">탈퇴하기</v-btn>
                 </div>
               </form>
             </template>
@@ -66,6 +62,9 @@
   </div>
 </template>
 <script>
+import http from "@/util/http-common";
+import alertify from "alertifyjs";
+
 export default {
   name: "user-profile",
   data() {
@@ -75,6 +74,41 @@ export default {
         email: "",
       },
     };
+  },
+  methods: {
+    userDelete() {
+      let uid = this.$session.get("uid");
+      let msg = "회원탈퇴 실패";
+      let vue = this;
+      alertify.confirm(
+        "회원탈퇴",
+        "탈퇴 하시겠습니까?",
+        function () {
+          http
+            .delete("user/" + uid)
+            .then(({ data }) => {
+              if (data.data == "success") {
+                msg = "탈퇴가 완료되었습니다.";
+                alertify.notify(msg, "success", 3);
+                vue.logout();
+                return;
+              } else {
+                msg = "탈퇴에 실패하였습니다.";
+                alertify.error(msg, 3);
+                return;
+              }
+            })
+            .catch(() => {
+              msg = "회원탈퇴 서버 통신 실패";
+              alertify.error(msg, 3);
+              return;
+            });
+        },
+        function () {
+          alertify.error("취소되었습니다.");
+        }
+      );
+    },
   },
 };
 </script>

@@ -28,6 +28,7 @@
     "vue-clipboard2": "0.3.1",
     "vue-cookies": "^1.7.3",
     "vue-flatpickr-component": "8.1.5",
+    "vue-kakao-login": "^1.0.5",
     "vue-lazy-youtube-video": "^2.0.0",
     "vue-rate": "^2.4.0",
     "vue-router": "3.3.4",
