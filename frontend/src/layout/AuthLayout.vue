@@ -58,6 +58,12 @@
               <span class="nav-link-inner--text">Profile</span>
             </router-link>
           </li>
+          <li v-if="isLogin" class="nav-item">
+            <router-link class="nav-link nav-link-icon" to="/logout">
+              <i class="ni ni-single-02"></i>
+              <span class="nav-link-inner--text">로그아웃</span>
+            </router-link>
+          </li>
         </ul>
       </template>
     </base-nav>
@@ -141,22 +147,19 @@ export default {
   components: {
     SlideYUpTransition,
   },
-  watch: {
-    // route 경로가 바뀔때마다 로그인 상태인지 확인
-    $route() {
-      if (this.$session.exists()) {
-        this.isLogin = true;
-      } else {
-        this.isLogin = false;
-      }
-    },
-  },
   data() {
     return {
       year: new Date().getFullYear(),
       showMenu: false,
-      isLogin:false,
+      isLogin: false,
     };
+  },
+  created() {
+    if (this.$session.get("uid")) {
+      this.isLogin = true;
+    } else {
+      this.isLogin = false;
+    }
   },
 };
 </script>

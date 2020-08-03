@@ -136,7 +136,7 @@ export default new Router({
             import(/* webpackChunkName: "demo" */ "./views/Register.vue"),
         },
         {
-          path: "/{uid}",
+          path: "/profile",
           name: "profile",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/UserProfile.vue"),

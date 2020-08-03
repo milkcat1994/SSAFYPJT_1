@@ -1,13 +1,5 @@
 <template>
   <div>
-    <base-header
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-      style="min-height: 300px; background-image: url(img/theme/profile-cover.jpg); background-size: cover; background-position: center top;"
-    >
-      <!-- Mask -->
-      <span class="mask bg-gradient-success opacity-8"></span>
-    </base-header>
-
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col-xl-12 order-xl-1">
@@ -33,7 +25,7 @@
                         label="Nickname"
                         placeholder="Nickname"
                         input-classes="form-control-alternative"
-                        v-model="model.username"
+                        v-model="username"
                       />
                     </div>
                     <!-- <div class="col-2">
@@ -43,14 +35,16 @@
                     <div class="col-lg-12">
                       <base-input
                         alternative
+                        disabled
                         label="Email address"
-                        placeholder="email@example.com"
-                        input-classes="form-control-alternative"
-                        v-model="model.email"
+                        ref="email"
+                        v-model="email"
                       />
                     </div>
                   </div>
-                  <v-btn class="ma-2" @click="userDelete()">탈퇴하기</v-btn>
+                  <div class="d-flex justify-content-center">
+                    <v-btn class="btn btn-sm btn-primary" @click="userDelete()">탈퇴하기</v-btn>
+                  </div>
                 </div>
               </form>
             </template>
@@ -90,14 +84,14 @@ export default {
   },
   methods: {
     setUserInfo(data) {
-      this.unick = data.username;
-      this.uemail = data.email;
+      this.username = data.nickname;
+      this.email = data.email;
     },
 
     updateProfile() {
       let msg = "회원 정보 수정에 실패하였습니다.";
       http
-        .put("/user/" + this.uid, {
+        .put("/user/user/" + this.uid, {
           uid: this.uid,
           nickname: this.username,
         })
