@@ -11,6 +11,7 @@ import com.web.editor.model.dto.user.PortfolioScheduleSaveRequest;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.dto.user.PortfolioVideo;
+import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioVideoSaveRequest;
 
 import org.apache.ibatis.session.SqlSession;
@@ -80,7 +81,7 @@ public class PortfolioMapper {
     
 
     // 영상 모두 삭제
-    public int deleteVideosByUid(String uid) throws SQLException{
-		return sqlSession.delete("deleteVideosByUid", uid);
+    public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest) throws SQLException{
+		return sqlSession.delete("deleteVideos", portfolioVideoDeleteRequest);
 	}
 }

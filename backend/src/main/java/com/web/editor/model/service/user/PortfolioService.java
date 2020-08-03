@@ -10,6 +10,7 @@ import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
 import com.web.editor.model.dto.user.PortfolioScheduleSaveRequest;
 import com.web.editor.model.dto.user.PortfolioVideo;
+import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioVideoSaveRequest;
 
 public interface PortfolioService {
@@ -48,5 +49,5 @@ public interface PortfolioService {
     // 포트폴리오 수정
 
     //비디오 모두 삭제
-    public int deleteVideosByUid(String uid);
+    public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest);
 }

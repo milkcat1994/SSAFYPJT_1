@@ -13,6 +13,7 @@ import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
 import com.web.editor.model.dto.user.PortfolioScheduleSaveRequest;
 import com.web.editor.model.dto.user.PortfolioVideo;
+import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioVideoSaveRequest;
 import com.web.editor.model.mapper.user.PortfolioMapper;
 
@@ -170,9 +171,9 @@ public class PortfolioServiceImpl implements PortfolioService {
     }
 
     @Override
-    public int deleteVideosByUid(String uid) {
+    public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest) {
         try {
-            int res = portfolioMapper.deleteVideosByUid(uid);
+            int res = portfolioMapper.deleteVideos(portfolioVideoDeleteRequest);
             return res;
         } catch (SQLException e) {
             e.printStackTrace();

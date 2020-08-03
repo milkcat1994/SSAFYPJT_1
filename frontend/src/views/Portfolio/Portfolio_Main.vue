@@ -4,7 +4,7 @@
       style="min-height: 200px; background-size: cover; background-position: center top;">
       <span class="mask bg-gradient-success opacity-8"></span>
       <!-- 에디터 본인 일 경우에만 활성화 되어야한다. -->
-      <router-link v-if="uid == $session.get('uid') " to="/portfolio/edit">
+      <router-link v-if="uid == $session.get('uid') " :to="'/portfolio/edit?no='+this.uid">
         <base-button size="sm" type="info" class="btn btn-info float-right"
           >Edit profile</base-button
         >
@@ -214,7 +214,7 @@
           />
         </div>
           <label for="description">기타 요구사항</label>
-          <textarea class="form-control form-control-alternative" id="description" rows="3" placeholder="기타 요구사항을 작성해주세요."></textarea>
+          <textarea class="form-control form-control-alternative" id="description" v-model="description" rows="3" placeholder="기타 요구사항을 작성해주세요."></textarea>
         </div>
      <template slot="footer">
          <base-button type="secondary" @click="modal.show = false">Close</base-button>
@@ -320,7 +320,7 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
       }
       this.uid = this.$route.query.no;
       this.request_info.request_nickname = this.$session.get('nickname');
-      let URL = '/portfolio'
+      let URL = '/portfolio';
       //포트폴리오 정보, 영상, 리뷰, 스케쥴, 태그 가져오기
       //포트폴리오 정보
       this.getPortfolio(URL);

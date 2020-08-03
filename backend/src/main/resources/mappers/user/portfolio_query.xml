@@ -80,8 +80,9 @@
                         VALUES (#{portfolioUid}, #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
     </insert>
 
-    <delete id="deleteVideosByUid">
+    <delete id="deleteVideos">
         DELETE FROM video_info
-        WHERE uid = #{uid}
+        WHERE portfolio_uid = #{uid}
+        AND main_flag = #{mainFlag}
     </delete>
 </mapper>
