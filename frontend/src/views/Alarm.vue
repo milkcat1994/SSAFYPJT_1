@@ -283,8 +283,8 @@ export default {
       events: [
         {
           title: "Event 1",
-          start: "",
-          end: "",
+          start: "2020-08-10",
+          end: "2020-08-15",
           repeat: "monthly",
           categoryId: 1,
         },
