@@ -59,10 +59,10 @@
             </router-link>
           </li>
           <li v-if="isLogin" class="nav-item">
-            <router-link class="nav-link nav-link-icon" to="/logout">
+            <span class="nav-link nav-link-icon" @click="logout()">
               <i class="ni ni-single-02"></i>
-              <span class="nav-link-inner--text">로그아웃</span>
-            </router-link>
+              <span>로그아웃</span>
+            </span>
           </li>
         </ul>
       </template>
@@ -73,7 +73,7 @@
         <div class="header-body text-center mb-7">
           <div class="row justify-content-center">
             <div class="col-lg-5 col-md-6">
-              <h1 class="text-white">로그인이 필요합니다</h1>
+              <h1 v-if="!isLogin" class="text-white">로그인이 필요합니다</h1>
             </div>
           </div>
         </div>
@@ -155,11 +155,18 @@ export default {
     };
   },
   created() {
-    if (this.$session.get("uid")) {
+    if (this.$session.exists()) {
       this.isLogin = true;
     } else {
       this.isLogin = false;
     }
+  },
+  methods: {
+    logout() {
+      this.$session.destroy();
+      this.isLogin = false;
+      this.$router.push("/").catch(() => {});
+    },
   },
 };
 </script>

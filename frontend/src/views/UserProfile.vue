@@ -23,9 +23,8 @@
                       <base-input
                         alternative
                         label="Nickname"
-                        placeholder="Nickname"
                         input-classes="form-control-alternative"
-                        v-model="username"
+                        v-model="nickname"
                       />
                     </div>
                     <!-- <div class="col-2">
@@ -65,12 +64,14 @@ export default {
   data() {
     return {
       uid: "",
-      username: "",
+      nickname: "",
       email: "",
+      isLogin: false,
     };
   },
   created() {
     if (this.$session.exists()) {
+      this.isLogin = true;
       store
         .dispatch("auth/getUserInfo", this.$session.get("uid"))
         .then((response) => {
@@ -80,11 +81,13 @@ export default {
         .catch(() => {
           this.$router.push("/");
         });
+    } else {
+      this.isLogin = false;
     }
   },
   methods: {
     setUserInfo(data) {
-      this.username = data.nickname;
+      this.nickname = data.nickname;
       this.email = data.email;
     },
 
@@ -93,7 +96,7 @@ export default {
       http
         .put("/user/user/" + this.uid, {
           uid: this.uid,
-          nickname: this.username,
+          nickname: this.nickname,
         })
         .then(({ data }) => {
           if (data.data == "success") {
@@ -114,18 +117,18 @@ export default {
     userDelete() {
       let uid = this.$session.get("uid");
       let msg = "회원탈퇴 실패";
-      let vue = this;
+      let now = this;
       alertify.confirm(
         "회원 탈퇴",
         "탈퇴 하시겠습니까?",
         function () {
           http
-            .delete("user/" + uid)
+            .delete("user/user/" + uid)
             .then(({ data }) => {
               if (data.data == "success") {
                 msg = "탈퇴가 완료되었습니다.";
                 alertify.notify(msg, "success", 3);
-                vue.logout();
+                now.logout();
                 return;
               } else {
                 msg = "탈퇴에 실패하였습니다.";
@@ -143,6 +146,11 @@ export default {
           alertify.error("취소되었습니다.");
         }
       );
+    },
+    logout() {
+      this.$session.destroy();
+
+      this.$router.push("/");
     },
   },
 };
