@@ -435,7 +435,6 @@ export default {
         };
         event.start = item.start_date.substring(0, 10);
         event.end = item.end_date.substring(0, 10);
-        console.log(event);
         this.events.push(event);
       });
         this.events.push({
