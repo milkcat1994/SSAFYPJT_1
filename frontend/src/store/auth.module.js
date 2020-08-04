@@ -86,7 +86,7 @@ export const auth = {
     getUserInfo(context, uid) {
       return new Promise((resolve, reject) => {
         http
-          .post("/user/" + uid, {
+          .post("/user/user/" + uid, {
             uid: uid,
           })
           .then(({ data }) => {

@@ -1,13 +1,5 @@
 <template>
   <div>
-    <base-header
-      class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
-      style="min-height: 300px; background-image: url(img/theme/profile-cover.jpg); background-size: cover; background-position: center top;"
-    >
-      <!-- Mask -->
-      <span class="mask bg-gradient-success opacity-8"></span>
-    </base-header>
-
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col-xl-12 order-xl-1">
@@ -18,7 +10,7 @@
                   <h3 class="mb-0">회원정보</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <a href="#" class="btn btn-sm btn-primary">회원정보변경</a>
+                  <v-btn class="btn btn-sm btn-primary" @click="updateProfile()">회원 정보 수정</v-btn>
                 </div>
               </div>
             </div>
@@ -31,29 +23,26 @@
                       <base-input
                         alternative
                         label="Nickname"
-                        placeholder="Nickname"
                         input-classes="form-control-alternative"
-                        v-model="model.username"
+                        v-model="nickname"
                       />
                     </div>
-                    <div class="col-2">
-                      <base-button
-                        type="default"
-                        class=""
-                        style="white-space: nowrap;"
-                        >중복확인</base-button
-                      >
-                    </div>
+                    <!-- <div class="col-2">
+                      <base-button type="default" class style="white-space: nowrap;">중복확인</base-button>
+                    </div>-->
 
                     <div class="col-lg-12">
                       <base-input
                         alternative
+                        disabled
                         label="Email address"
-                        placeholder="email@example.com"
-                        input-classes="form-control-alternative"
-                        v-model="model.email"
+                        ref="email"
+                        v-model="email"
                       />
                     </div>
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <v-btn class="btn btn-sm btn-primary" @click="userDelete()">탈퇴하기</v-btn>
                   </div>
                 </div>
               </form>
@@ -66,15 +55,101 @@
   </div>
 </template>
 <script>
+import http from "@/util/http-common";
+import alertify from "alertifyjs";
+import store from "@/store/store.js";
+
 export default {
-  name: "user-profile",
+  name: "profile",
   data() {
     return {
-      model: {
-        username: "",
-        email: "",
-      },
+      uid: "",
+      nickname: "",
+      email: "",
+      isLogin: false,
     };
+  },
+  created() {
+    if (this.$session.exists()) {
+      this.isLogin = true;
+      store
+        .dispatch("auth/getUserInfo", this.$session.get("uid"))
+        .then((response) => {
+          this.uid = this.$session.get("uid");
+          this.setUserInfo(response.data.object);
+        })
+        .catch(() => {
+          this.$router.push("/");
+        });
+    } else {
+      this.isLogin = false;
+    }
+  },
+  methods: {
+    setUserInfo(data) {
+      this.nickname = data.nickname;
+      this.email = data.email;
+    },
+
+    updateProfile() {
+      let msg = "회원 정보 수정에 실패하였습니다.";
+      http
+        .put("/user/user/" + this.uid, {
+          nickname: this.nickname,
+        })
+        .then(({ data }) => {
+          if (data.data == "success") {
+            msg = "회원 정보가 수정되었습니다";
+            alertify.notify(msg, "success", 3);
+            return;
+          } else {
+            alertify.error(msg, 3);
+            return;
+          }
+        })
+        .catch(() => {
+          msg = "회원정보 수정 서버 통신 실패";
+          alertify.error(msg, 3);
+          return;
+        });
+    },
+    userDelete() {
+      let uid = this.$session.get("uid");
+      let msg = "회원탈퇴 실패";
+      let now = this;
+      alertify.confirm(
+        "회원 탈퇴",
+        "탈퇴 하시겠습니까?",
+        function () {
+          http
+            .delete("user/user/" + uid)
+            .then(({ data }) => {
+              if (data.data == "success") {
+                msg = "탈퇴가 완료되었습니다.";
+                alertify.notify(msg, "success", 3);
+                now.logout();
+                return;
+              } else {
+                msg = "탈퇴에 실패하였습니다.";
+                alertify.error(msg, 3);
+                return;
+              }
+            })
+            .catch(() => {
+              msg = "회원탈퇴 서버 통신 실패";
+              alertify.error(msg, 3);
+              return;
+            });
+        },
+        function () {
+          alertify.error("취소되었습니다.");
+        }
+      );
+    },
+    logout() {
+      this.$session.destroy();
+      this.$router.push("/");
+    },
   },
 };
 </script>
