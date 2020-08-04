@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.web.editor.model.dto.user.Portfolio;
+import com.web.editor.model.dto.user.PortfolioInfo;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
@@ -78,12 +79,16 @@ public class PortfolioMapper {
 		return sqlSession.insert("reviewSave", portfolioReviewSaveRequest);
 	}
     
+    // 포트폴리오 수정
+    public int portfolioUpdate(PortfolioInfo portfolioInfo) throws SQLException {
+        return sqlSession.update("portfolioUpdate", portfolioInfo);
+    }
+
     // 스케줄 삭제
     public int deleteSchedule(PortfolioScheduleDeleteRequest portfolioScheduleDeleteRequest) throws SQLException{
         return sqlSession.delete("deleteSchedule", portfolioScheduleDeleteRequest);
     }
     
-
     // 영상 모두 삭제
     public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest) throws SQLException{
 		return sqlSession.delete("deleteVideos", portfolioVideoDeleteRequest);

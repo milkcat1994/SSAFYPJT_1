@@ -1,9 +1,10 @@
 package com.web.editor.model.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Repository;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @Repository
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Portfolio {
+public class PortfolioInfo {
+    @ApiModelProperty(required = true)
+    @NotNull
     private int uid;
-    private String nickname;
+
+    @ApiModelProperty(required = true)
+    @NotNull
     private String skill;
+
+    @ApiModelProperty(required = true)
+    @NotNull
     private String payMin;
+
+    @ApiModelProperty(required = true)
+    @NotNull
     private String description;
 }

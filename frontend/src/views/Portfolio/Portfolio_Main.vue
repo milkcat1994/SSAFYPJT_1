@@ -26,13 +26,13 @@
                     </h1>
                     <!-- 스크롤 및 높이 지정 필요 -->
                     <h3>
-                      Skills: 배경음악, 로고삽입, 색 보정, 인트로 제작, 아웃트로 제작
+                      Skills: {{portfolio.skill}}
                     </h3>
                     <h3>
-                      Pay/Wages: 00,000원
+                      Pay/Wages: {{portfolio.payMin}}
                     </h3>
                     <h3>
-                      {{description}}
+                      {{portfolio.description}}
                     </h3>
                     <div class="tags-input">
                       <vue-tags-input
@@ -261,9 +261,12 @@ import { getFormatDate } from "@/util/day-common";
       return {
         uid:'',
         //닉네임, 소개
-        nickname:'',
-        description:'',
-
+        portfolio: {
+          nickname:'',
+          description:'',
+          payMin: '',
+          skill: '',
+        },
         // 각 평점
         videoAvg: 0,
         kindnessAvg: 0,
@@ -445,42 +448,6 @@ import { getFormatDate } from "@/util/day-common";
           return;
         })
       },
-      // getScheduleInfo(URL){
-      //   http
-      //       .get(URL+'/schedule/'+this.uid)
-      //       .then(({data}) => {
-      //           // private int scheduleNo;
-      //           // private int portfolioUid;
-      //           // private Date startDate;
-      //           // private int term;
-      //           // private String scheduleType;
-      //           //성공시 평균 계산 필요 추출 필요
-      //           if (data.data == 'success') {
-      //             let obj;
-      //             this.events = [];
-      //             console.log(data.object)
-      //             data.object.forEach(element => {
-      //               obj = new Object();
-      //               obj.title = element.scheduleNo;
-      //               obj.start = getFormatDate(element.startDate);
-      //               obj.end = getEndDate(element.startDate, element.term);
-      //               obj.repeat = 'never';
-      //               obj.categoryId = Number(element.scheduleType);
-      //             console.log(obj);
-      //               this.events.push(obj);
-      //             });
-
-      //             return;
-      //           } else {
-      //             // fail 
-      //               return;
-      //           }
-      //       })
-      //       .catch(error => {
-      //           console.log(error);
-      //           return;
-      //       })
-      // },
       getTagInfo(URL){
         http
             .get(URL+'/tag/'+this.uid)
@@ -503,13 +470,6 @@ import { getFormatDate } from "@/util/day-common";
             })
       },
       getReviewInfo(URL){
-      // private int reviewNo;
-      
-      // reviewNo를 쓸 필요가 있을까?
-      // private String nickname;
-      // private Date createdDate;
-
-      //1은 session uid
         http
             .get(URL+'/review/'+this.uid)
             .then(({data}) => {
@@ -570,11 +530,13 @@ import { getFormatDate } from "@/util/day-common";
             .then(({data}) => {
                 //성공시 video 추출 필요
                 if (data.data == 'success') {
-                  this.nickname = data.object.nickname;
-                  console.log(data.object);
+                  this.portfolio.nickname = data.object.nickname;
+                  // console.log(data.object);
                   this.request_info.response_nickname = data.object.nickname;
-                  this.description = data.object.description;
-                    return;
+                  this.portfolio.description = data.object.description;
+                  this.portfolio.payMin = data.object.payMin;
+                  this.portfolio.skill = data.object.skill;
+                  return;
                 } else {
                   // fail 
                     return;

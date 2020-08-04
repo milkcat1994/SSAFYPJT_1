@@ -9,13 +9,13 @@
       <div class="row">
         <div class="col-xl-7 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 295px;">
+            <div class="card-body pt-0 pt-md-4">
               <div class="row">
                 <div class="col">
                   <div class="text">
                     <h1>
                       {{portfolio.nickname}}
-                      <base-button size="sm" type="default float-right"> 수정하기 </base-button>
+                      <base-button size="sm" type="default float-right" @click="updatePortfolio()"> 수정하기 </base-button>
                     </h1>
                     <base-input
                       alternative
@@ -24,16 +24,29 @@
                       input-classes="form-control-alternative"
                       v-model="portfolio.description"
                     />
-                    <h3>
-                      {{portfolio.description}}
-                    </h3>
+                    <base-input
+                      alternative
+                      label="자신의 강점을 적어주세요."
+                      placeholder="인트로 전문 제작"
+                      input-classes="form-control-alternative"
+                      v-model="portfolio.skills"
+                    />
+                    <base-input
+                      alternative
+                      label="분당 페이가격을 적어주세요."
+                      placeholder="1,000원"
+                      input-classes="form-control-alternative"
+                      v-model="portfolio.payMin"
+                    />
                     <div class="tags-input">
                       <vue-tags-input
+                        label="태그로 자신을 표현하세요."
                         v-model="tag"
-                        :allow-edit-tags = "false"
+                        :allow-edit-tags = "true"
                         :tags="tags"
                         @tags-changed="newTags => tags = newTags"
                       />
+                      <!-- <base-button size="sm" type="default float-right"> 수정하기 </base-button> -->
                     </div>
                   </div>
                 </div>
@@ -69,6 +82,7 @@
             <div class="card-body">
               <base-button size="sm" type="default float-right" @click="uploadVideos()"> 수정하기 </base-button>
               <div class="row">
+                <div class="col">
                 <base-input
                   alternative
                   label="영상1 URL"
@@ -90,10 +104,11 @@
                   input-classes="form-control-alternative"
                   v-model="portfolio.URLs[2]"
                 />
+                </div>
               </div>
 
               <div class="row" style="margin-top: 30px">
-                <div class="col-xl-4 col-lg-6">
+                <div class="col">
                   <base-button size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
                   <label for="schedule"> 근무가 불가능한 날짜를 골라주세요. </label>
                   <vc-date-picker
@@ -130,6 +145,7 @@ import alertify from "alertifyjs";
       return {
         uid:'',
         // selectedValue: new Date(),
+        // havePortfolioInfo: false,
         haveSchedule: false,
         isFirstHeadVideo: false,
         isFirstVideos: false,
@@ -176,7 +192,7 @@ import alertify from "alertifyjs";
       this.getScheduleInfo(URL);
       
       // //포트폴리오 태그
-      // this.getTagInfo(URL);
+      this.getTagInfo(URL);
     },
     methods: {
       getTagInfo(URL){
@@ -260,11 +276,11 @@ import alertify from "alertifyjs";
                 if (data.data == 'success') {
                   this.portfolio.description = data.object.description;
                   this.portfolio.payMin = data.object.payMin;
-                  console.log(data.object);
-                    return;
+                  this.portfolio.skills = data.object.skill;
+                  return;
                 } else {
                   // fail 
-                    return;
+                  return;
                 }
             })
             .catch(error => {
@@ -370,6 +386,22 @@ import alertify from "alertifyjs";
             }
           })
         }
+      },
+      updatePortfolio(){
+        http
+        .put('/portfolio/portfolio/'+this.uid, {
+          uid: this.uid,
+          skill: this.portfolio.skills,
+          payMin: this.portfolio.payMin,
+          description: this.portfolio.description
+        })
+        .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+            }
+          })
       },
       makeVideosArray(result){
         let res = [];
