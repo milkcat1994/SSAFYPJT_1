@@ -45,50 +45,16 @@
     </base-header>
 
     <div class="container-fluid mt--7 mb-5">
-      <!-- 여기에 BE에서 요청받아온 List를 뿌려보자 -->
-      <vuescroll :ops="ops">
-        <editors-table title="편집자"></editors-table>
-      </vuescroll>
+      <editors-table title="Light Table"></editors-table>
     </div>
   </div>
 </template>
 <script>
-import vuescroll from "vuescroll"
 import EditorsTable from "./Tables/EditorsTable";
-import http from "@/util/http-common"
 export default {
   name: "editors",
   components: {
     EditorsTable,
-    vuescroll,
-  },
-  data() {
-    return {
-      editors: {},
-      ops: {
-        vuescroll: {
-          mode: 'native',
-          sizeStrategy: 'percent',
-          detectResize: true,
-        },
-      }
-    }
-  },
-  methods: {
-    fetchList() {
-      http.get('/search/list')
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.error(err)
-        })
-      return
-    }
-  },
-
-  mounted() {
-    this.fetchList()
   },
 };
 </script>
