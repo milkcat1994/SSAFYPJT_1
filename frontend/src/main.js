@@ -25,7 +25,7 @@ import VCalendar from "v-calendar";
 import store from "@/store/store.js";
 import VueSession from "vue-session";
 import VueCookies from "vue-cookies";
-
+import StarRating from "vue-star-rating";
 window.Kakao.init("435fabf554fd7f76ef38eeb97c6c7e50");
 
 Vue.use(VueCookies);
@@ -41,6 +41,8 @@ Vue.use(VueSession, sessionOptions);
 
 Vue.use(VueCookies);
 Vue.config.productionTip = false;
+
+Vue.component("star-rating", StarRating);
 
 Vue.use(ArgonDashboard);
 new Vue({
