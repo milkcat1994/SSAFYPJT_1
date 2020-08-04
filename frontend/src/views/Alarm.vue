@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height:100%">
     <base-header
       class="header pb-4 pt-2 pt-lg-5    d-flex align-items-center"
       style="
@@ -38,8 +38,7 @@
                 >
                   <b-card-body>
                     <b-card-text>
-                      <table class="table table-hover">
-                      
+                      <table class="table table-hover" style="float:left; width: 60%">
                       <tbody>
                         <tr>
                           <th>요청자</th>
@@ -62,7 +61,6 @@
                           <td>{{ requestitem0.video_style }}
                           <div style="color: blue; float: right" >{{ requestitem.tag_list }}</div>
                           </td>
-                          
                         </tr>
                         <tr>
                           <th>진행 날짜</th>
@@ -75,7 +73,13 @@
                       </tbody>
                       </table>
 
-                      
+                <!-- for calendar -->
+                  <calendar
+                    :eventCategories="eventCategories"
+                    :events="events"
+                    ref="calendar"
+                    style="float:left; width: 40%; height: 100%"
+                  />
 
                     </b-card-text>
                       <b-button class="statusBtn" style="background-color: #0099ff" @click="acceptRequest(requestitem0.rid)">요청 수락</b-button>
@@ -107,7 +111,7 @@
                 >
                   <b-card-body>
                     <b-card-text>
-                      <table class="table table-hover">
+                      <table class="table table-hover" style="float:left; width: 60%">
                       
                       <tbody>
                         <tr>
@@ -143,6 +147,14 @@
                         </tr>
                       </tbody>
                       </table>
+                      
+                <!-- for calendar -->
+                  <calendar
+                    :eventCategories="eventCategories"
+                    :events="events"
+                    ref="calendar"
+                    style="float:left; width: 40%; height: 100%"
+                  />
                     </b-card-text>
                     <b-button class="statusBtn" style="background-color: #0099ff" @click="doneRequest(requestitem1.rid)">요청 완료</b-button>
                   </b-card-body>
@@ -172,7 +184,7 @@
                 >
                   <b-card-body>
                     <b-card-text>
-                      <table class="table table-hover">
+                      <table class="table table-hover" style="float:left; width: 60%">
                       <tbody>
                         <tr>
                           <th>요청자</th>
@@ -207,6 +219,14 @@
                         </tr>
                       </tbody>
                       </table>
+                      
+                <!-- for calendar -->
+                  <calendar
+                    :eventCategories="eventCategories"
+                    :events="events"
+                    ref="calendar"
+                    style="float:left; width: 40%; height: 100%"
+                  />
                     </b-card-text>
                   </b-card-body>
                 </b-collapse>
@@ -229,6 +249,11 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import { mapGetters } from 'vuex';
 import store from "@/store/store.js";
 import http from '@/util/http-common';
+import alertify from "alertifyjs"
+
+// for calenggar
+import { Calendar } from "vue-sweet-calendar";
+import "vue-sweet-calendar/dist/SweetCalendar.css";
 
 // Install BootstrapVue
 Vue.use(BootstrapVue);
@@ -236,9 +261,34 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 export default {
   name: "alarm",
+  components: {
+    Calendar,
+  },
   data() {
     return {
-      
+      eventCategories: [
+        {
+          id: 1,
+          title: "Personal",
+          textColor: "white",
+          backgroundColor: "Blue",
+        },
+        {
+          id: 2,
+          title: "Company-wide",
+          textColor: "white",
+          backgroundColor: "red",
+        },
+      ],
+      events: [
+        {
+          title: "Event 1",
+          start: "2020-08-10",
+          end: "2020-08-15",
+          repeat: "monthly",
+          categoryId: 1,
+        },
+      ],
     };
   },
   created() {
@@ -268,7 +318,7 @@ export default {
         .put('/request/accept/'+rid)
         .then(({ data }) => {
           if (data == 'success'){
-            alert('요청이 수락되었습니다.');
+            alertify.notify('요청을 수락하였습니다.', 'success', 3)
             }
         })
         .catch(() => {
@@ -286,7 +336,7 @@ export default {
         .put('/request/deny/'+rid)
         .then(({ data }) => {
           if (data == 'success'){
-            alert('요청이 거절되었습니다.');
+            alertify.notify('요청을 거절하였습니다.', 'success', 3)
             }
         })
         .catch(() => {
@@ -303,7 +353,7 @@ export default {
         .put('/request/done/'+rid)
         .then(({ data }) => {
           if (data == 'success'){
-            alert('요청이 완료되었습니다.');
+            alertify.notify('요청이 완료되었습니다.', 'success', 3)
             }
         })
         .catch(() => {
@@ -315,6 +365,12 @@ export default {
           store.dispatch('getRequestitems2', '/request/res/' + this.$session.get('nickname') + '/2');
         });
     },
+
+    // 캘린더 날짜 셋팅
+    setCalendarDate(start, end){
+      this.events.start = start.substring(0, 10);
+      this.events.end = end.substring(0, 10);
+    }
   },
 };
 </script>

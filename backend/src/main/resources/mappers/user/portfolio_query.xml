@@ -42,12 +42,12 @@
     
     <!-- 포트폴리오 초기 등록 -->
     <insert id="portfolioInitSave">
-        INSERT INTO portfolio (`uid`, `nickname`, `pay_min`, `description`)
+        INSERT INTO portfolio (`uid`, `nickname`, `skill`, `pay_min`, `description`)
                         VALUES (#{uid},
                                 (SELECT `nickname`
                                     FROM user_info
                                     WHERE `uid` = #{uid}),
-                                '', '')
+                                '', '', '')
     </insert>
     <!-- 
         user_info 테이블이 없어서 임시로 nickname 삽입
