@@ -28,7 +28,8 @@
             <div  v-for="(notifyitem, index) in notifyitems" :key="index + '_notifyitems'"  @click="readNotify()">
               <router-link to="/alarm" class="dropdown-item">
                 <i class="ni ni-bulb-61 text-yellow"></i>
-                <span>{{ notifyitem.request_nickname }}님께서 영상편집을 요청하셨습니다</span>
+                <span v-if="notifyitem.notify_type=='request'">{{ notifyitem.request_nickname }}님께서 영상편집을 요청하셨습니다</span>
+                <span v-if="notifyitem.notify_type=='accepted'">{{ notifyitem.request_nickname }}님께서 요청을 수락하셨습니다</span>
               </router-link>
             </div>
             <div class="dropdown-divider"></div>

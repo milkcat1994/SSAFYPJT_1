@@ -299,7 +299,7 @@ export default {
       store.dispatch('getRequestitems2', '/request/res/' + this.$session.get('nickname') + '/2');
     } else {
       this.$router.push('/');
-      alert('로그인이 필요한페이지 입니다.');
+      alertify.error('로그인이 필요한페이지 입니다.', 3);
     }
   },
   computed: {
