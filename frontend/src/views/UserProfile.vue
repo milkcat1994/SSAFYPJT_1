@@ -95,7 +95,6 @@ export default {
       let msg = "회원 정보 수정에 실패하였습니다.";
       http
         .put("/user/user/" + this.uid, {
-          uid: this.uid,
           nickname: this.nickname,
         })
         .then(({ data }) => {
@@ -149,7 +148,6 @@ export default {
     },
     logout() {
       this.$session.destroy();
-
       this.$router.push("/");
     },
   },
