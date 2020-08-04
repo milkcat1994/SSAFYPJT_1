@@ -68,7 +68,7 @@
             </div> -->
 
             <div class="card-body">
-              <base-button size="sm" type="default float-right" @click="uploadHeadVideo()"> 수정하기 </base-button>
+              <base-button size="sm" type="default float-right" @click="uploadVideos()"> 수정하기 </base-button>
               <div class="row">
                 <base-input
                   alternative
@@ -275,7 +275,23 @@ import alertify from "alertifyjs";
               alertify.error("오류가 발생하였습니다.",3);
             }
           })
+        } else {
+          http
+          .put('/portfolio/video/'+this.uid, {
+            portfolioUid: this.uid,
+            url: this.portfolio.HeadURL,
+            mainFlag: 1
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+            }
+          })
         }
+      },
+      uploadVideos(){
         // 그외영상_최초등록일 경우
         if(this.isFirstVideos){
           http
@@ -295,6 +311,7 @@ import alertify from "alertifyjs";
           http
           .put('/portfolio/video/'+this.uid, {
             portfolioUid: this.uid,
+            url: this.portfolio.URLs,
             mainFlag: 0
           })
           .then(({ data }) => {

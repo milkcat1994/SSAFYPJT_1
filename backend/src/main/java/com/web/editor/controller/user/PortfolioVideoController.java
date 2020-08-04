@@ -64,7 +64,7 @@ public class PortfolioVideoController {
     public Object videoSave(@PathVariable String uid, @RequestBody PortfolioVideoRequest portfolioVideoRequest){
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
-        // System.out.println("영상 등록하기");
+
         String URL = "https://www.youtube.com/embed/";
         List<String> urlList = portfolioVideoRequest.getUrl();
         int size = urlList.size();
@@ -72,7 +72,6 @@ public class PortfolioVideoController {
             String[] temp = urlList.get(i).split("=");
             String url = URL + temp[1];
             urlList.set(i, url);
-            // System.out.println(url);
         }
         portfolioVideoRequest.setUrl(urlList);
 
@@ -100,7 +99,6 @@ public class PortfolioVideoController {
     public Object videoUpdate(@PathVariable String uid, @RequestBody PortfolioVideoRequest portfolioVideoRequest){
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
-        System.out.println("영상 삭제 및 재등록 호출");
         int res = 0;
         
         // 모든 videos 삭제
@@ -112,16 +110,16 @@ public class PortfolioVideoController {
             return response;
         }
         
-        System.out.println("비디오 삭제 완료");
         String URL = "https://www.youtube.com/embed/";
         String[] temp;
 
         List<String> urlList = portfolioVideoRequest.getUrl();
         int size = urlList.size();
-        System.out.println(size);
         for(int i=0; i<size;i++){
             temp = urlList.get(i).split("=");
+            // System.out.println(temp.length);
             String url = URL + temp[1];
+            // System.out.println(i + ":" + url);
             urlList.set(i, url);
         }
         portfolioVideoRequest.setUrl(urlList);
@@ -132,7 +130,7 @@ public class PortfolioVideoController {
             if(res != -1){
                 result.status = true;
                 result.data = "success";
-                System.out.println("업데이트 완료");
+                // System.out.println("업데이트 완료");
             } else {
                 result.status = false;
                 result.data = "fail";
