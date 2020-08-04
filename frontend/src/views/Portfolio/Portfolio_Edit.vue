@@ -15,7 +15,6 @@
                   <div class="text">
                     <h1>
                       {{portfolio.nickname}}
-                      <!-- 에디터 본인 일 경우에만 비활성화 되어야한다. -->
                       <base-button size="sm" type="default float-right"> 수정하기 </base-button>
                     </h1>
                     <base-input
@@ -95,18 +94,18 @@
 
               <div class="row" style="margin-top: 30px">
                 <div class="col-xl-4 col-lg-6">
-                  <base-button size="sm" type="default float-right"> 수정하기 </base-button>
+                  <base-button size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
                   <label for="schedule"> 근무가 불가능한 날짜를 골라주세요. </label>
                   <vc-date-picker
                     mode='multiple'
-                    v-model='selectedValue'>
+                    v-model='disableDates'>
                   </vc-date-picker>
                   <vc-calendar
                     title-position="left"
-                    v-model='selectedValue'
-                    :disabled-dates='selectedValue'
+                    v-model='disableDates'
+                    :disabled-dates='disableDates'
                   />
-
+                  <!-- {{disableDates}} -->
                 </div>
               </div>
             </div>
@@ -130,7 +129,8 @@ import alertify from "alertifyjs";
     data() {
       return {
         uid:'',
-        selectedValue: new Date(),
+        // selectedValue: new Date(),
+        haveSchedule: false,
         isFirstHeadVideo: false,
         isFirstVideos: false,
         portfolio: {
@@ -164,7 +164,7 @@ import alertify from "alertifyjs";
       this.uid = this.$route.query.no;
       this.portfolio.nickname = this.$session.get('nickname');
       let URL = '/portfolio';
-      // console.log(this.uid);
+
       //포트폴리오 정보, 영상, 리뷰, 스케쥴, 태그 가져오기
       //포트폴리오 정보
       this.getPortfolio(URL);
@@ -173,7 +173,7 @@ import alertify from "alertifyjs";
       this.getVideoInfo(URL);
 
       // //포트폴리오 스케쥴
-      // this.getScheduleInfo(URL);
+      this.getScheduleInfo(URL);
       
       // //포트폴리오 태그
       // this.getTagInfo(URL);
@@ -209,35 +209,48 @@ import alertify from "alertifyjs";
                 this.portfolio.URLs = this.makeVideosArray(result);
                 if(this.portfolio.URLs.length == 0){
                   this.isFirstVideos = true;
-                  console.log("그외 동영상 없음");
                 } else {
                   this.isFirstVideos = false;
-                  console.log("그외 동영상 있음");
-                  // console.log(this.portfolio.URLs.length);
                 }
 
                 result = data.object.filter(video => video.mainFlag == 1);
                 this.portfolio.HeadURL = this.makeVideosArray(result);
-                // console.log(this.portfolio.HeadURL.length);
+
                 if(this.portfolio.HeadURL.length == 0){
                   this.isFirstHeadVideo = true;
-                  // console.log("대표영상 없음");
                 } else {
                   this.isFirstHeadVideo = false;
                 }
                 return;
               } else {
-                // this.isFirstVideo = true;
-                // console.log("URL 없음" + this.isFirstVideo);
                 return;
               }
             })
             .catch(error => {
-              // this.isFirstVideo = true;
-              // console.log("URL 없음");
               console.log(error);
               return;
             })
+      },
+      getScheduleInfo(URL){
+        http
+        .get(URL+'/schedule/'+this.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
+            this.haveSchedule = true;
+            // scheduleType=0 기본
+            let result = data.object.filter(schedule => schedule.scheduleType == 0);
+            this.disableDates = this.makeScheduleArray(result);
+            // console.log(result);
+            return;
+          } else {
+            this.haveSchedule = false;
+            return;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          return;
+        })
       },
       getPortfolio(URL){
       //1은 session uid
@@ -323,11 +336,53 @@ import alertify from "alertifyjs";
           })
         }
       },
+      updateSchedule(){
+        // 스케줄이 없는 경우 최초등록
+        // 스케줄 타입 0: 기본, 1: 개인일정(휴가 등등), 2: 다른 작업중
+        if(!this.haveSchedule){
+          http
+          .post('/portfolio/schedule/'+this.uid, {
+            portfolioUid: this.uid,
+            startDate: this.disableDates,
+            endDate: this.disableDates,
+            scheduleType: 0
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("저장이 완료되었습니다.","success",3);
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+            }
+          })
+        } else { // 스케줄이 있는 경우 수정하기
+          http
+          .put('/portfolio/schedule/'+this.uid, {
+            portfolioUid: this.uid,
+            startDate: this.disableDates,
+            endDate: this.disableDates,
+            scheduleType: 0
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+            }
+          })
+        }
+      },
       makeVideosArray(result){
         let res = [];
         result.forEach(element => {
           res.push(element.url);
         });
+        return res;
+      },
+      makeScheduleArray(result){
+        let res = [];
+        result.forEach(element => {
+          res.push(element.startDate);
+        })
         return res;
       },
     },

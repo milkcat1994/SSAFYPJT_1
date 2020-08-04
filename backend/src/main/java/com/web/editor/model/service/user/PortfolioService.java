@@ -8,6 +8,7 @@ import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
+import com.web.editor.model.dto.user.PortfolioScheduleDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioScheduleSaveRequest;
 import com.web.editor.model.dto.user.PortfolioVideo;
 import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
@@ -46,7 +47,8 @@ public interface PortfolioService {
     // 리뷰 등록
     public int reviewSave(PortfolioReviewSaveRequest portfolioReviewSaveRequest);
     
-    // 포트폴리오 수정
+    // 스케줄 삭제
+    public int deleteSchedule(PortfolioScheduleDeleteRequest PortfolioScheduleDeleteRequest);
 
     //비디오 모두 삭제
     public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest);

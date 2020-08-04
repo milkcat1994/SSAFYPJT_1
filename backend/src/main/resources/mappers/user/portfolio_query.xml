@@ -28,7 +28,7 @@
     
     <!-- 스케쥴 조회 -->
     <select id="findScheduleByUid" resultType="PortfolioSchedule">
-        SELECT `schedule_no`, `portfolio_uid`, `start_date`, `term`, `schedule_type`
+        SELECT `schedule_no`, `portfolio_uid`, `start_date`, `end_date`, `schedule_type`
         FROM schedule_info
         WHERE `portfolio_uid` = #{uid}
     </select>
@@ -70,8 +70,8 @@
     
     <!-- 포트폴리오에 스케쥴 등록 -->
     <insert id="scheduleSave">
-        INSERT INTO schedule_info (`portfolio_uid`, `start_date`, `term`, `schedule_type`)
-                        VALUES (#{portfolioUid}, #{startDate}, #{term}, #{scheduleType})
+        INSERT INTO schedule_info (`portfolio_uid`, `start_date`, `end_date`, `schedule_type`)
+                        VALUES (#{portfolioUid}, #{startDate}, #{endDate}, #{scheduleType})
     </insert>
     
     <!-- 포트폴리오에 리뷰 등록 -->
@@ -84,5 +84,11 @@
         DELETE FROM video_info
         WHERE portfolio_uid = #{uid}
         AND main_flag = #{mainFlag}
+    </delete>
+
+    <delete id="deleteSchedule">
+        DELETE FROM schedule_info
+        WHERE portfolio_uid = #{uid}
+        AND schedule_type = #{scheduleType}
     </delete>
 </mapper>

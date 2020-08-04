@@ -100,11 +100,17 @@
                   </h3>
                 </div>
                 <div class="col-xl-4 col-lg-6">
-                  <calendar
+                  <vc-calendar
+                    title-position="left"
+                    v-model='disableDates'
+                    :disabled-dates='disableDates'
+                  />
+                  <!-- {{disableDates}} -->
+                  <!-- <calendar
                     :eventCategories="eventCategories"
                     :events="events"
                     ref="calendar"
-                  />
+                  /> -->
                 </div>
                 <div class="col-xl-4 col-lg-6">
                   <h3>한줄평</h3>
@@ -226,7 +232,7 @@
 <script>
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 import { Rate } from "vue-rate";
-import { Calendar } from "vue-sweet-calendar";
+// import { Calendar } from "vue-sweet-calendar";
 import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
 import flatPicker from "vue-flatpickr-component";
 import VueTagsInput from '@johmun/vue-tags-input';
@@ -238,12 +244,13 @@ import alertify from "alertifyjs"
 // axios 초기 설정파일
 import http from "@/util/http-common";
 // 날짜 계산 파일
-import { getEndDate, getFormatDate } from "@/util/day-common";
+import { getFormatDate } from "@/util/day-common";
+// import { getEndDate, getFormatDate } from "@/util/day-common";
   export default {
     name: 'user-portfolio',
     components: {
       LazyYoutubeVideo,
-      Calendar,
+      // Calendar,
       Rate,
       BadgerAccordion,
       BadgerAccordionItem,
@@ -268,6 +275,9 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
         //태그들
         tags:[],
         tag: '',
+
+        // 스케줄
+        disableDates: [],
 
         eventCategories: [
           {
@@ -418,40 +428,59 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
       },
       getScheduleInfo(URL){
         http
-            .get(URL+'/schedule/'+this.uid)
-            .then(({data}) => {
-                // private int scheduleNo;
-                // private int portfolioUid;
-                // private Date startDate;
-                // private int term;
-                // private String scheduleType;
-                //성공시 평균 계산 필요 추출 필요
-                if (data.data == 'success') {
-                  let obj;
-                  this.events = [];
-                  console.log(data.object)
-                  data.object.forEach(element => {
-                    obj = new Object();
-                    obj.title = element.scheduleNo;
-                    obj.start = getFormatDate(element.startDate);
-                    obj.end = getEndDate(element.startDate, element.term);
-                    obj.repeat = 'never';
-                    obj.categoryId = Number(element.scheduleType);
-                  console.log(obj);
-                    this.events.push(obj);
-                  });
-
-                  return;
-                } else {
-                  // fail 
-                    return;
-                }
-            })
-            .catch(error => {
-                console.log(error);
-                return;
-            })
+        .get(URL+'/schedule/'+this.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
+            // scheduleType=0 기본
+            let result = data.object.filter(schedule => schedule.scheduleType == 0);
+            this.disableDates = this.makeScheduleArray(result);
+            // console.log(result);
+            return;
+          } else {
+            return;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          return;
+        })
       },
+      // getScheduleInfo(URL){
+      //   http
+      //       .get(URL+'/schedule/'+this.uid)
+      //       .then(({data}) => {
+      //           // private int scheduleNo;
+      //           // private int portfolioUid;
+      //           // private Date startDate;
+      //           // private int term;
+      //           // private String scheduleType;
+      //           //성공시 평균 계산 필요 추출 필요
+      //           if (data.data == 'success') {
+      //             let obj;
+      //             this.events = [];
+      //             console.log(data.object)
+      //             data.object.forEach(element => {
+      //               obj = new Object();
+      //               obj.title = element.scheduleNo;
+      //               obj.start = getFormatDate(element.startDate);
+      //               obj.end = getEndDate(element.startDate, element.term);
+      //               obj.repeat = 'never';
+      //               obj.categoryId = Number(element.scheduleType);
+      //             console.log(obj);
+      //               this.events.push(obj);
+      //             });
+
+      //             return;
+      //           } else {
+      //             // fail 
+      //               return;
+      //           }
+      //       })
+      //       .catch(error => {
+      //           console.log(error);
+      //           return;
+      //       })
+      // },
       getTagInfo(URL){
         http
             .get(URL+'/tag/'+this.uid)
@@ -566,6 +595,14 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
           obj.previewImageSize = 'maxresdefault';
           res.push(obj);
         });
+        return res;
+      },
+      makeScheduleArray(result){
+        let res = [];
+        result.forEach(element => {
+          res.push(getFormatDate(element.startDate));
+          console.log(element.startDate);
+        })
         return res;
       },
       goToday() {
