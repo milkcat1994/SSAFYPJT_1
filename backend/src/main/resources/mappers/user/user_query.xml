@@ -30,7 +30,7 @@
     <update id="updateUser">
         UPDATE user_info
         set `nickname` = #{nickname}
-            
+        WHERE uid = #{uid}
     </update>
 
     <!-- 회원 탈퇴 -->

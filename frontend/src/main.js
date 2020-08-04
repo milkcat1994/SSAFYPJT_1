@@ -21,20 +21,22 @@ import router from "./router";
 import "./registerServiceWorker";
 import ArgonDashboard from "./plugins/argon-dashboard";
 import "vue-lazy-youtube-video/dist/style.css";
-import VCalendar from 'v-calendar';
+import VCalendar from "v-calendar";
 import store from "@/store/store.js";
 import VueSession from "vue-session";
 import VueCookies from "vue-cookies";
 
+window.Kakao.init("435fabf554fd7f76ef38eeb97c6c7e50");
+
 Vue.use(VueCookies);
 Vue.use(VueSession);
 Vue.use(VCalendar, {
-  componentPrefix: 'vc'
+  componentPrefix: "vc",
 });
 
 var sessionOptions = {
-  persist: true
-}
+  persist: true,
+};
 Vue.use(VueSession, sessionOptions);
 
 Vue.use(VueCookies);
@@ -44,5 +46,5 @@ Vue.use(ArgonDashboard);
 new Vue({
   router,
   store,
-  render: (h) => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
