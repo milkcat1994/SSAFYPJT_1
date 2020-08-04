@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%">
+  <div>
     <base-header
       class="header pb-4 pt-2 pt-lg-5    d-flex align-items-center"
       style="
@@ -16,7 +16,7 @@
     <hr />
     <!-- <h2 class="text-center">알림창</h2> -->
     <br />
-    <div class="container mb-4">
+    <div class="container-fluid mt--7 mb-5">
       <tabs fill class="flex-column flex-md-row">
         <card shadow>
           <tab-pane>
@@ -370,6 +370,7 @@ export default {
           // 목록 새로고침
           store.dispatch('getRequestitems0', '/request/res/' + this.$session.get('nickname') + '/0');
           store.dispatch('getRequestitems1', '/request/res/' + this.$session.get('nickname') + '/1');
+          this.setInprogressDate();
         });
     },
     // 요청 거절
@@ -409,9 +410,11 @@ export default {
           if (this.$session.get('auth')=='editor') {
           store.dispatch('getRequestitems1', '/request/res/' + this.$session.get('nickname') + '/1');
           store.dispatch('getRequestitems2', '/request/res/' + this.$session.get('nickname') + '/2');
-          } else if (this.$session.get('auth')=='noneditor') 
+          } else if (this.$session.get('auth')=='noneditor') {
           store.dispatch('getRequestitems1', '/request/req/' + this.$session.get('nickname') + '/1');
           store.dispatch('getRequestitems2', '/request/req/' + this.$session.get('nickname') + '/2');
+          }
+          this.setInprogressDate();
         });
     },
 
