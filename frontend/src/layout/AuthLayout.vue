@@ -58,6 +58,12 @@
               <span class="nav-link-inner--text">Profile</span>
             </router-link>
           </li>
+          <li v-if="isLogin" class="nav-item">
+            <span class="nav-link nav-link-icon" @click="logout()">
+              <i class="ni ni-single-02"></i>
+              <span>로그아웃</span>
+            </span>
+          </li>
         </ul>
       </template>
     </base-nav>
@@ -67,7 +73,7 @@
         <div class="header-body text-center mb-7">
           <div class="row justify-content-center">
             <div class="col-lg-5 col-md-6">
-              <h1 class="text-white">로그인이 필요합니다</h1>
+              <h1 v-if="!isLogin" class="text-white">로그인이 필요합니다</h1>
             </div>
           </div>
         </div>
@@ -141,22 +147,26 @@ export default {
   components: {
     SlideYUpTransition,
   },
-  watch: {
-    // route 경로가 바뀔때마다 로그인 상태인지 확인
-    $route() {
-      if (this.$session.exists()) {
-        this.isLogin = true;
-      } else {
-        this.isLogin = false;
-      }
-    },
-  },
   data() {
     return {
       year: new Date().getFullYear(),
       showMenu: false,
-      isLogin:false,
+      isLogin: false,
     };
+  },
+  created() {
+    if (this.$session.exists()) {
+      this.isLogin = true;
+    } else {
+      this.isLogin = false;
+    }
+  },
+  methods: {
+    logout() {
+      this.$session.destroy();
+      this.isLogin = false;
+      this.$router.push("/").catch(() => {});
+    },
   },
 };
 </script>
