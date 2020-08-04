@@ -21,14 +21,20 @@
         <card shadow>
           <tab-pane>
             <span slot="title">
-              <div>요청된 작업</div>
+              <div v-if="$session.get('auth')== 'editor'">요청된 작업</div>
+              <div v-if="$session.get('auth')== 'noneditor'">요청한 작업</div>
             </span>
             <div role="tablist">
               <div v-for="(requestitem0, index) in requestitems0" :key="index + '_requestitems0'">
               <b-card no-body class="m-1"> 
                 <b-card-header header-tag="header" class="p-1" role="tab">
                   <b-button block v-b-toggle="'accordion-' + requestitem0.uid" variant="info" @click="getDetail(requestitem0.rid)"
+                    v-if="$session.get('auth')== 'editor'"
                     >{{ requestitem0.request_nickname }}님이 작업을 요청했습니다.</b-button
+                  >
+                  <b-button block v-b-toggle="'accordion-' + requestitem0.uid" variant="info" @click="getDetail(requestitem0.rid)"
+                    v-if="$session.get('auth')== 'noneditor'"
+                    >{{ requestitem0.response_nickname }}님에게 작업을 요청했습니다.</b-button
                   >
                 </b-card-header>
                 <b-collapse
@@ -40,9 +46,13 @@
                     <b-card-text>
                       <table class="table table-hover" style="float:left; width: 60%">
                       <tbody>
-                        <tr>
+                        <tr v-if="$session.get('auth')== 'editor'">
                           <th>요청자</th>
                           <td>{{ requestitem0.request_nickname }}</td>
+                        </tr>
+                        <tr v-if="$session.get('auth')== 'noneditor'">
+                          <th>편집자</th>
+                          <td>{{ requestitem0.response_nickname }}</td>
                         </tr>
                         <tr>
                           <th>영상 타입</th>
@@ -64,7 +74,7 @@
                         </tr>
                         <tr>
                           <th>진행 날짜</th>
-                          <td>{{ requestitem0.start_date }} ~ {{ requestitem0.end_date }}</td>
+                          <td>{{ requestitem0.start_date.substring(0, 10) }} ~ {{ requestitem0.end_date.substring(0, 10) }}</td>
                         </tr>
                         <tr>
                           <th>기타 요청사항</th>
@@ -80,10 +90,18 @@
                     ref="calendar"
                     style="float:left; width: 40%; height: 100%"
                   />
-
+                    <div style="float:left; width: 40%; height: 100%">
+                      <i class="fas fa-circle" style="color: #f29661; margin: 15px">요청 작업</i>
+                      <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
+                    </div>
                     </b-card-text>
+                    <div id="editorBtn" v-if="$session.get('auth')== 'editor'">
                       <b-button class="statusBtn" style="background-color: #0099ff" @click="acceptRequest(requestitem0.rid)">요청 수락</b-button>
                       <b-button class="statusBtn" style="background-color: #aaaaaa" @click="denyRequest(requestitem0.rid)">요청 거절</b-button>
+                    </div>
+                    <div id="noneditorBtn" v-if="$session.get('auth')== 'noneditor'">
+                      <b-button class="statusBtn" style="background-color: #aaaaaa" @click="denyRequest(requestitem0.rid)">요청 취소</b-button>
+                    </div>
                   </b-card-body>
                 </b-collapse>
               </b-card>
@@ -114,9 +132,13 @@
                       <table class="table table-hover" style="float:left; width: 60%">
                       
                       <tbody>
-                        <tr>
+                        <tr v-if="$session.get('auth')== 'editor'">
                           <th>요청자</th>
                           <td>{{ requestitem1.request_nickname }}</td>
+                        </tr>
+                        <tr v-if="$session.get('auth')== 'noneditor'">
+                          <th>편집자</th>
+                          <td>{{ requestitem1.response_nickname }}</td>
                         </tr>
                         <tr>
                           <th>영상 타입</th>
@@ -139,7 +161,7 @@
                         </tr>
                         <tr>
                           <th>진행 날짜</th>
-                          <td>{{ requestitem1.start_date }} ~ {{ requestitem1.end_date }}</td>
+                          <td>{{ requestitem1.start_date.substring(0, 10) }} ~ {{ requestitem1.end_date.substring(0, 10) }}</td>
                         </tr>
                         <tr>
                           <th>기타 요청사항</th>
@@ -186,9 +208,13 @@
                     <b-card-text>
                       <table class="table table-hover" style="float:left; width: 60%">
                       <tbody>
-                        <tr>
+                        <tr v-if="$session.get('auth')== 'editor'">
                           <th>요청자</th>
                           <td>{{ requestitem2.request_nickname }}</td>
+                        </tr>
+                        <tr v-if="$session.get('auth')== 'noneditor'">
+                          <th>편집자</th>
+                          <td>{{ requestitem2.response_nickname }}</td>
                         </tr>
                         <tr>
                           <th>영상 타입</th>
@@ -211,7 +237,7 @@
                         </tr>
                         <tr>
                           <th>진행 날짜</th>
-                          <td>{{ requestitem2.start_date }} ~ {{ requestitem2.end_date }}</td>
+                          <td>{{ requestitem2.start_date.substring(0, 10) }} ~ {{ requestitem2.end_date.substring(0, 10) }}</td>
                         </tr>
                         <tr>
                           <th>기타 요청사항</th>
@@ -227,6 +253,7 @@
                     ref="calendar"
                     style="float:left; width: 40%; height: 100%"
                   />
+
                     </b-card-text>
                   </b-card-body>
                 </b-collapse>
@@ -255,6 +282,9 @@ import alertify from "alertifyjs"
 import { Calendar } from "vue-sweet-calendar";
 import "vue-sweet-calendar/dist/SweetCalendar.css";
 
+
+
+
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
@@ -265,38 +295,45 @@ export default {
     Calendar,
   },
   data() {
-    return {
+    return {       
       eventCategories: [
         {
           id: 1,
           title: "Personal",
           textColor: "white",
-          backgroundColor: "Blue",
+          backgroundColor: "skyBlue",
         },
         {
           id: 2,
           title: "Company-wide",
           textColor: "white",
-          backgroundColor: "red",
+          backgroundColor: "#f29661",
         },
       ],
       events: [
         {
           title: "Event 1",
-          start: "2020-08-10",
-          end: "2020-08-15",
+          start: this.$store.state.requestitem.start_date.substring(0, 10),
+          end:  this.$store.state.requestitem.end_date.substring(0, 10),
           repeat: "monthly",
-          categoryId: 1,
+          categoryId: 2,
         },
       ],
+
     };
   },
   created() {
     //생성 시 로그인 상태 확인
     if (this.$session.exists()) {
-      store.dispatch('getRequestitems0', '/request/res/' + this.$session.get('nickname') + '/0');
-      store.dispatch('getRequestitems1', '/request/res/' + this.$session.get('nickname') + '/1');
-      store.dispatch('getRequestitems2', '/request/res/' + this.$session.get('nickname') + '/2');
+      if (this.$session.get('auth') == "editor"){
+        store.dispatch('getRequestitems0', '/request/res/' + this.$session.get('nickname') + '/0');
+        store.dispatch('getRequestitems1', '/request/res/' + this.$session.get('nickname') + '/1');
+        store.dispatch('getRequestitems2', '/request/res/' + this.$session.get('nickname') + '/2');
+      } else if (this.$session.get('auth') == "noneditor"){
+        store.dispatch('getRequestitems0', '/request/req/' + this.$session.get('nickname') + '/0');
+        store.dispatch('getRequestitems1', '/request/req/' + this.$session.get('nickname') + '/1');
+        store.dispatch('getRequestitems2', '/request/req/' + this.$session.get('nickname') + '/2');
+      }
     } else {
       this.$router.push('/');
       alertify.error('로그인이 필요한페이지 입니다.', 3);
@@ -310,7 +347,9 @@ export default {
   },
   methods: {
     getDetail(rid){
-      store.dispatch('getRequestitem', '/request/' + rid)
+      store.dispatch('getRequestitem', '/request/' + rid);
+      // this.start = this.$store.state.requestitem.start_date.substring(0, 10);
+      // this.end = this.$store.state.requestitem.end_date.substring(0, 10);
     },
     // 요청 수락
     acceptRequest(rid){
