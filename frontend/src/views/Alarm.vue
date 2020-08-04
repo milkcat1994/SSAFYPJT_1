@@ -313,8 +313,8 @@ export default {
       events: [
         {
           title: "Event 1",
-          start: this.$store.state.requestitem.start_date.substring(0, 10),
-          end:  this.$store.state.requestitem.end_date.substring(0, 10),
+          start: "",
+          end:  "",
           repeat: "monthly",
           categoryId: 2,
         },
@@ -348,8 +348,8 @@ export default {
   methods: {
     getDetail(rid){
       store.dispatch('getRequestitem', '/request/' + rid);
-      // this.start = this.$store.state.requestitem.start_date.substring(0, 10);
-      // this.end = this.$store.state.requestitem.end_date.substring(0, 10);
+      this.events[0].start = this.$store.state.requestitem.start_date.substring(0, 10);
+      this.events[0].end = this.$store.state.requestitem.end_date.substring(0, 10);
     },
     // 요청 수락
     acceptRequest(rid){
