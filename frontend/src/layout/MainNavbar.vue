@@ -14,7 +14,7 @@
     <!-- 최근 메시지 보여주기 -->
     <ul class="navbar-nav align-items-center mr-4 d-none d-md-flex ml-lg-auto">
       <li class="nav-item dropdown" v-if="isLogin">
-        <base-dropdown class="nav-link pr-0">
+        <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
             <i class="ni ni-bell-55"></i>
             <badge type="text-light">{{ getNotifyNum() }}</badge>
