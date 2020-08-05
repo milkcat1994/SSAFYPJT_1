@@ -557,13 +557,11 @@ import { getFormatDate } from "@/util/day-common";
             data.object.forEach(obj => {
               if(obj.userInfoUid == this.$session.get('uid')){
                 this.togleBookmark = true;
-                console.log(this.$session.get('uid') + " 여기");
                 return;
               } else {
                 this.togleBookmark = false;
               }
             })
-            console.log(this.togleBookmark);
             return;
           } else {
             return;
@@ -584,7 +582,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({data}) => {
             if(data.data == "success"){
               this.togleBookmark = true;
-              // this.portfolio.markCnt += 1;
               this.getBookmarkCount();
               return;
             } else {
@@ -624,7 +621,6 @@ import { getFormatDate } from "@/util/day-common";
         let res = [];
         result.forEach(element => {
           res.push(getFormatDate(element.startDate));
-          // console.log(element.startDate);
         })
         return res;
       },

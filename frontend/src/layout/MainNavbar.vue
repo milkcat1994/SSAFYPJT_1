@@ -86,14 +86,14 @@
               <i class="ni ni-single-02"></i>
               <span>내 정보</span>
             </router-link>
-            <router-link to="/404" class="dropdown-item">
+            <!-- <router-link to="/404" class="dropdown-item">
               <i class="ni ni-settings-gear-65"></i>
               <span>계정 설정</span>
             </router-link>
             <router-link to="/404" class="dropdown-item">
               <i class="ni ni-calendar-grid-58"></i>
               <span>작업 일정</span>
-            </router-link>
+            </router-link> -->
             <router-link to="/404" class="dropdown-item">
               <i class="ni ni-support-16"></i>
               <span>도움말</span>
@@ -106,14 +106,6 @@
           </template>
         </base-dropdown>
       </li>
-      <!-- <base-button
-        v-if="isLogin"
-        class="login-btn"
-        text
-        large
-        @click="logout()"
-        style="cursor:pointer"
-      >로그아웃</base-button>-->
     </ul>
   </base-nav>
 </template>
