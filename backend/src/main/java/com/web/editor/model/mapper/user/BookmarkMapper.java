@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.web.editor.model.dto.user.bookmark.Bookmark;
 import com.web.editor.model.dto.user.bookmark.BookmarkDeleteRequest;
+import com.web.editor.model.dto.user.bookmark.BookmarkInfo;
 import com.web.editor.model.dto.user.bookmark.BookmarkSaveRequest;
 import com.web.editor.model.dto.user.bookmark.BookmarkUid;
 
@@ -27,6 +28,10 @@ public class BookmarkMapper {
      */
     public List<Bookmark> findBookmarkByUid(String uid) throws SQLException{
         return sqlSession.selectList("findBookmarkByUid", uid);
+    }
+
+    public List<BookmarkInfo> cntBookmarkByUid(String muid) throws SQLException {
+        return sqlSession.selectList("cntBookmarkByUid", Integer.parseInt(muid));
     }
     
     /**

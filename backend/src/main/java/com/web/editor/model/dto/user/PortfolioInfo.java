@@ -1,39 +1,34 @@
 package com.web.editor.model.dto.user;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import org.springframework.stereotype.Repository;
 
-@Valid
-@ToString
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class PortfolioReviewSaveRequest {
+@Repository
+public class PortfolioInfo {
     @ApiModelProperty(required = true)
     @NotNull
-    private String portfolioNickname;
+    private int uid;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private String nickname;
+    private String skill;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private int videoScore;
+    private String payMin;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private int kindnessScore;
-
-    @ApiModelProperty(required = true)
-    @NotNull
-    private int finishScore;
-
-    @ApiModelProperty(required = true)
-    @NotNull
-    private String comment;
+    private String description;
 }

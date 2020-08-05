@@ -3,6 +3,7 @@ package com.web.editor.controller.user;
 import java.util.List;
 
 import com.web.editor.model.dto.user.PortfolioTag;
+import com.web.editor.model.dto.user.PortfolioTagRequest;
 import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.user.PortfolioService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,22 +55,61 @@ public class PortfolioTagController {
     // 태그등록
     @PostMapping("/{uid}")
     @ApiOperation(value="태그 등록")
-    public Object scheduleSave(@PathVariable String uid, @RequestBody PortfolioTagSaveRequest portfolioTagSaveRequest){
+    public Object scheduleSave(@PathVariable String uid, @RequestBody PortfolioTagRequest portfolioTagRequest){
+        ResponseEntity response = null;
+        final BasicResponse result = new BasicResponse();
+
+        int res = 0;
+        for(int i=0; i < portfolioTagRequest.getTagName().size(); i++){
+        res = portfolioService.tagSave(new PortfolioTagSaveRequest(Integer.parseInt(uid), portfolioTagRequest.getTagName().get(i)));
+
+            // 저장에 성공
+            if(res != -1){
+                result.status = true;
+                result.data = "success";
+            } else {
+                result.status = false;
+                result.data = "fail";
+                response = new ResponseEntity<>(result, HttpStatus.OK);
+                return response;
+            }
+        }
+
+        response = new ResponseEntity<>(result, HttpStatus.OK);
+        return response;
+    }
+
+    // 태그 수정
+    @PutMapping("/{uid}")
+    @ApiOperation(value="태그 수정")
+    public Object updateTags(@PathVariable String uid, @RequestBody PortfolioTagRequest portfolioTagRequest){
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
         
-        int res = portfolioService.tagSave(portfolioTagSaveRequest);
-
-        // 저장에 성공
-        if(res != -1){
-            result.status = true;
-            result.data = "success";
-            response = new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
+        int res = portfolioService.deleteTags(uid);
+        if(res < 0){
             result.status = false;
             result.data = "fail";
             response = new ResponseEntity<>(result, HttpStatus.OK);
+            return response;
         }
+
+        for(int i=0; i < portfolioTagRequest.getTagName().size(); i++){
+        res = portfolioService.tagSave(new PortfolioTagSaveRequest(Integer.parseInt(uid), portfolioTagRequest.getTagName().get(i)));
+
+            // 저장에 성공
+            if(res != -1){
+                result.status = true;
+                result.data = "success";
+            } else {
+                result.status = false;
+                result.data = "fail";
+                response = new ResponseEntity<>(result, HttpStatus.OK);
+                return response;
+            }
+        }
+
+        response = new ResponseEntity<>(result, HttpStatus.OK);
         return response;
     }
 }

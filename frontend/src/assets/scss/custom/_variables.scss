@@ -98,10 +98,11 @@ $colors: map-merge((
   "gray-dark":  $gray-800
 ), $colors);
 
-// $default:       #172b4d !default;
-$default:       #120136 !default;
-// $primary:       #5e72e4 !default;
-$primary:       #035aa6 !default;
+$default:       #172b4d !default;   // 기본
+// $default:       #120136 !default;  // 우리 테마
+// $primary:       #5e72e4 !default;  // 기본
+$primary:       #172b4d !default;
+// $primary:       #035aa6 !default;  // 우리 테마
 $secondary:     #fcbf1e !default;
 $success:       $green !default;
 $info:          $teal !default;

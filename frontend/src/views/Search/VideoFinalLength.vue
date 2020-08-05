@@ -52,11 +52,6 @@ export default {
       final: null,
     };
   },
-  methods: {
-    setFinalLength() {
-      this.$store.commit('setFinalLength', {value: this.final})
-    },
-  },
   validations: {
     final: {
       required,
@@ -79,6 +74,9 @@ export default {
         this.setFinalLength()
       }
     },
+    final(val) {
+      this.$store.commit('setFinalLength', {value: val})
+    }
   },
   mounted() {
     if (!this.$v.$invalid) {
