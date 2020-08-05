@@ -14,6 +14,8 @@ public class RequestDto {
 	private String video_result_length;
 	private String video_style;
 	private String video_skill;
+	private String request_date;
+	private String response_date;
 	private String start_date;
 	private String end_date;
 	private String request_description;

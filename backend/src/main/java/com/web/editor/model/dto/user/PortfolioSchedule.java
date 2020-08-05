@@ -21,7 +21,6 @@ public class PortfolioSchedule {
     private int scheduleNo;
     private int portfolioUid;
     private Date startDate;
-    private int term;
-    private String scheduleType;
-    
+    private Date endDate;
+    private int scheduleType;
 }

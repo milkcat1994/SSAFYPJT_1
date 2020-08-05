@@ -69,8 +69,8 @@ public class RequestMapper {
 	
 	
 	// 알림 조회
-	public List<NotifyDto> searchNotify(String notify_nickname) throws SQLException{
-		return sqlSession.selectList("searchNotify", notify_nickname);
+	public List<NotifyDto> searchNotify(String response_nickname) throws SQLException{
+		return sqlSession.selectList("searchNotify", response_nickname);
 	};
 
 	// 알람 등록
@@ -88,8 +88,8 @@ public class RequestMapper {
 		return sqlSession.update("updateNotify", nid);
 	};
 	// 알림수정2(회원이 알림을 모두 읽음)
-	public int updateAllNotify(String notify_nickname) throws SQLException {
-		return sqlSession.update("updateAllNotify", notify_nickname);
+	public int updateAllNotify(String response_nickname) throws SQLException {
+		return sqlSession.update("updateAllNotify", response_nickname);
 	}
 
 	// 태그 조회

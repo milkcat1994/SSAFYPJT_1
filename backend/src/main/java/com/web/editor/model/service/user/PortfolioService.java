@@ -3,13 +3,16 @@ package com.web.editor.model.service.user;
 import java.util.List;
 
 import com.web.editor.model.dto.user.Portfolio;
+import com.web.editor.model.dto.user.PortfolioInfo;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
+import com.web.editor.model.dto.user.PortfolioScheduleDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioScheduleSaveRequest;
 import com.web.editor.model.dto.user.PortfolioVideo;
+import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioVideoSaveRequest;
 
 public interface PortfolioService {
@@ -44,9 +47,16 @@ public interface PortfolioService {
 
     // 리뷰 등록
     public int reviewSave(PortfolioReviewSaveRequest portfolioReviewSaveRequest);
-    
+
     // 포트폴리오 수정
+    public int portfolioUpdate(PortfolioInfo portfolioInfo);
+    
+    // 스케줄 삭제
+    public int deleteSchedule(PortfolioScheduleDeleteRequest PortfolioScheduleDeleteRequest);
 
     //비디오 모두 삭제
-    public int deleteVideosByUid(String uid);
+    public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest);
+
+    // 태그 모두 삭제
+    public int deleteTags(String uid);
 }

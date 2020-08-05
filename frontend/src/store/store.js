@@ -31,7 +31,8 @@ export default new Vuex.Store({
       theme: null,
       originLength: null,
       finalLength: null,
-      skills: {},
+      skills: null,
+      otherSkill: null,
       term: null
     }
   },
@@ -134,6 +135,9 @@ export default new Vuex.Store({
     },
     setSkills(state, payload) {
       state.requests.skills = payload.value
+    },
+    setOtherSkill(state, payload) {
+      state.requests.otherSkill = payload.value
     },
     setTerm(state, payload) {
       state.requests.term = payload.value

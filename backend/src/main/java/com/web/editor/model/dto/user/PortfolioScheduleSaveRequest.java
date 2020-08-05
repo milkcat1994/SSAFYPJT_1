@@ -6,10 +6,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Valid
 @ToString
 @Getter
@@ -25,9 +29,9 @@ public class PortfolioScheduleSaveRequest {
 
     @ApiModelProperty(required = true)
     @NotNull
-    private int term;
+    private Date endDate;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private String scheduleType;
+    private int scheduleType;
 }

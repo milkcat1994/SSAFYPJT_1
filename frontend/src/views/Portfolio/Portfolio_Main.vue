@@ -4,7 +4,7 @@
       style="min-height: 200px; background-size: cover; background-position: center top;">
       <span class="mask bg-gradient-success opacity-8"></span>
       <!-- 에디터 본인 일 경우에만 활성화 되어야한다. -->
-      <router-link v-if="uid == $session.get('uid') " to="/portfolio/edit">
+      <router-link v-if="uid == $session.get('uid') " :to="'/portfolio/edit?no='+this.uid">
         <base-button size="sm" type="info" class="btn btn-info float-right"
           >Edit profile</base-button
         >
@@ -20,28 +20,29 @@
                 <div class="col">
                   <div class="text">
                     <h1>
-                      {{nickname}}
+                      {{portfolio.nickname}}
+                      <base-button outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                      {{portfolio.markCnt}}
+                      </base-button>
                       <!-- 에디터 본인 일 경우에만 비활성화 되어야한다. -->
-                      <base-button size="sm" type="default" @click="modal.show=true"> 작업 요청하기 </base-button>
+                      <base-button size="sm" type="default float-right" @click="modal.show=true"> 작업 요청하기 </base-button>
                     </h1>
-                    <!-- 스크롤 및 높이 지정 필요 -->
                     <h3>
-                      Skills: 배경음악, 로고삽입, 색 보정, 인트로 제작, 아웃트로 제작
+                      Skills: {{portfolio.skill}}
                     </h3>
                     <h3>
-                      Pay/Wages: 00,000원
+                      Pay/Wages: {{portfolio.payMin}}
                     </h3>
                     <h3>
-                      {{description}}
+                      {{portfolio.description}}
                     </h3>
-                    <div class="tags-input">
-                      <vue-tags-input
-                        v-model="tag"
-                        :allow-edit-tags = "false"
-                        :tags="tags"
-                        @tags-changed="newTags => tags = newTags"
-                      />
-                    </div>
+                    
+                    <div class="col-xl-5 order-xl-1">
+                      <!-- <div class="row"> -->
+                      <i class="ni ni-tag"></i>
+                      <input-tag v-model="tags" :read-only="true" style="width:500px;"></input-tag>
+                      </div>
+                    <!-- </div> -->
                   </div>
                 </div>
               </div>
@@ -100,10 +101,10 @@
                   </h3>
                 </div>
                 <div class="col-xl-4 col-lg-6">
-                  <calendar
-                    :eventCategories="eventCategories"
-                    :events="events"
-                    ref="calendar"
+                  <vc-calendar
+                    title-position="left"
+                    v-model='disableDates'
+                    :disabled-dates='disableDates'
                   />
                 </div>
                 <div class="col-xl-4 col-lg-6">
@@ -214,7 +215,7 @@
           />
         </div>
           <label for="description">기타 요구사항</label>
-          <textarea class="form-control form-control-alternative" id="description" rows="3" placeholder="기타 요구사항을 작성해주세요."></textarea>
+          <textarea class="form-control form-control-alternative" id="description" v-model="request_info.request_description" rows="3" placeholder="기타 요구사항을 작성해주세요."></textarea>
         </div>
      <template slot="footer">
          <base-button type="secondary" @click="modal.show = false">Close</base-button>
@@ -224,12 +225,11 @@
   </div>
 </template>
 <script>
+import InputTag from 'vue-input-tag';
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 import { Rate } from "vue-rate";
-import { Calendar } from "vue-sweet-calendar";
 import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
 import flatPicker from "vue-flatpickr-component";
-import VueTagsInput from '@johmun/vue-tags-input';
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
 import "vue-sweet-calendar/dist/SweetCalendar.css";
@@ -238,25 +238,29 @@ import alertify from "alertifyjs"
 // axios 초기 설정파일
 import http from "@/util/http-common";
 // 날짜 계산 파일
-import { getEndDate, getFormatDate } from "@/util/day-common";
+import { getFormatDate } from "@/util/day-common";
+// import { getEndDate, getFormatDate } from "@/util/day-common";
   export default {
     name: 'user-portfolio',
     components: {
       LazyYoutubeVideo,
-      Calendar,
       Rate,
       BadgerAccordion,
       BadgerAccordionItem,
       flatPicker,
-      VueTagsInput
+      InputTag
     },
     data() {
       return {
         uid:'',
         //닉네임, 소개
-        nickname:'',
-        description:'',
-
+        portfolio: {
+          nickname:'',
+          description:'',
+          payMin: '',
+          skill: '',
+          markCnt: 0,
+        },
         // 각 평점
         videoAvg: 0,
         kindnessAvg: 0,
@@ -268,6 +272,12 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
         //태그들
         tags:[],
         tag: '',
+
+        // 북마크 토글
+        togleBookmark: false,
+
+        // 스케줄
+        disableDates: [],
 
         eventCategories: [
           {
@@ -320,7 +330,7 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
       }
       this.uid = this.$route.query.no;
       this.request_info.request_nickname = this.$session.get('nickname');
-      let URL = '/portfolio'
+      let URL = '/portfolio';
       //포트폴리오 정보, 영상, 리뷰, 스케쥴, 태그 가져오기
       //포트폴리오 정보
       this.getPortfolio(URL);
@@ -330,11 +340,15 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
 
       // 포트폴리오 영상
       this.getVideoInfo(URL);
+
       // 포트폴리오 스케쥴
       this.getScheduleInfo(URL);
       
       // 포트폴리오 태그
       this.getTagInfo(URL);
+
+      // 북마크 정보 가져와서 북마크 한 인원수 보여주기
+      this.getBookmarkCount();
     },
     methods: {
       checkRequestForm(){
@@ -418,39 +432,22 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
       },
       getScheduleInfo(URL){
         http
-            .get(URL+'/schedule/'+this.uid)
-            .then(({data}) => {
-                // private int scheduleNo;
-                // private int portfolioUid;
-                // private Date startDate;
-                // private int term;
-                // private String scheduleType;
-                //성공시 평균 계산 필요 추출 필요
-                if (data.data == 'success') {
-                  let obj;
-                  this.events = [];
-                  console.log(data.object)
-                  data.object.forEach(element => {
-                    obj = new Object();
-                    obj.title = element.scheduleNo;
-                    obj.start = getFormatDate(element.startDate);
-                    obj.end = getEndDate(element.startDate, element.term);
-                    obj.repeat = 'never';
-                    obj.categoryId = Number(element.scheduleType);
-                  console.log(obj);
-                    this.events.push(obj);
-                  });
-
-                  return;
-                } else {
-                  // fail 
-                    return;
-                }
-            })
-            .catch(error => {
-                console.log(error);
-                return;
-            })
+        .get(URL+'/schedule/'+this.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
+            // scheduleType=0 기본
+            let result = data.object.filter(schedule => schedule.scheduleType == 0);
+            this.disableDates = this.makeScheduleArray(result);
+            // console.log(result);
+            return;
+          } else {
+            return;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          return;
+        })
       },
       getTagInfo(URL){
         http
@@ -474,13 +471,6 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
             })
       },
       getReviewInfo(URL){
-      // private int reviewNo;
-      
-      // reviewNo를 쓸 필요가 있을까?
-      // private String nickname;
-      // private Date createdDate;
-
-      //1은 session uid
         http
             .get(URL+'/review/'+this.uid)
             .then(({data}) => {
@@ -541,11 +531,13 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
             .then(({data}) => {
                 //성공시 video 추출 필요
                 if (data.data == 'success') {
-                  this.nickname = data.object.nickname;
-                  console.log(data.object);
+                  this.portfolio.nickname = data.object.nickname;
+                  // console.log(data.object);
                   this.request_info.response_nickname = data.object.nickname;
-                  this.description = data.object.description;
-                    return;
+                  this.portfolio.description = data.object.description;
+                  this.portfolio.payMin = data.object.payMin;
+                  this.portfolio.skill = data.object.skill;
+                  return;
                 } else {
                   // fail 
                     return;
@@ -555,6 +547,63 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
                 console.log(error);
                 return;
             })
+      },
+      getBookmarkCount(){
+        http
+        .get('/bookmark/cnt/'+this.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
+            this.portfolio.markCnt = data.object.length;
+            data.object.forEach(obj => {
+              if(obj.userInfoUid == this.$session.get('uid')){
+                this.togleBookmark = true;
+                return;
+              } else {
+                this.togleBookmark = false;
+              }
+            })
+            return;
+          } else {
+            return;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          return;
+        })
+      },
+      addBookmark(){
+        if(!this.togleBookmark){
+          http
+          .post('/bookmark', {
+            uid: this.$session.get('uid'),
+            muid: this.uid
+          })
+          .then(({data}) => {
+            if(data.data == "success"){
+              this.togleBookmark = true;
+              this.getBookmarkCount();
+              return;
+            } else {
+              return;
+            }
+          })
+        } else {
+          http
+          .post('/bookmark/delete', {
+            uid: this.$session.get('uid'),
+            muid: this.uid
+          })
+          .then(({data}) => {
+            if(data.data == "success"){
+              this.togleBookmark = false;
+              this.getBookmarkCount();
+              return;
+            } else {
+              return;
+            }
+          })
+        }
       },
       //성공했을 경우 각 객체 돌면서 비디오 추출 필요
       makeVideosArray(result){
@@ -566,6 +615,13 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
           obj.previewImageSize = 'maxresdefault';
           res.push(obj);
         });
+        return res;
+      },
+      makeScheduleArray(result){
+        let res = [];
+        result.forEach(element => {
+          res.push(getFormatDate(element.startDate));
+        })
         return res;
       },
       goToday() {
@@ -581,14 +637,5 @@ import { getEndDate, getFormatDate } from "@/util/day-common";
 };
 </script>
 <style lang="scss">
-@import url(//fonts.googleapis.com/earlyaccess/nanumpenscript.css);
 
-.tags-input-tag{
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 20px;
-}
-
-.mb-30 {
-  margin-bottom:30px;
-}
 </style>

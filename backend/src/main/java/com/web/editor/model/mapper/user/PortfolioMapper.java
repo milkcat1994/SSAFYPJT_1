@@ -4,13 +4,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.web.editor.model.dto.user.Portfolio;
+import com.web.editor.model.dto.user.PortfolioInfo;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
+import com.web.editor.model.dto.user.PortfolioScheduleDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioScheduleSaveRequest;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.dto.user.PortfolioVideo;
+import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioVideoSaveRequest;
 
 import org.apache.ibatis.session.SqlSession;
@@ -77,10 +80,22 @@ public class PortfolioMapper {
 	}
     
     // 포트폴리오 수정
-    
+    public int portfolioUpdate(PortfolioInfo portfolioInfo) throws SQLException {
+        return sqlSession.update("portfolioUpdate", portfolioInfo);
+    }
 
+    // 스케줄 삭제
+    public int deleteSchedule(PortfolioScheduleDeleteRequest portfolioScheduleDeleteRequest) throws SQLException{
+        return sqlSession.delete("deleteSchedule", portfolioScheduleDeleteRequest);
+    }
+    
     // 영상 모두 삭제
-    public int deleteVideosByUid(String uid) throws SQLException{
-		return sqlSession.delete("deleteVideosByUid", uid);
-	}
+    public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest) throws SQLException{
+		return sqlSession.delete("deleteVideos", portfolioVideoDeleteRequest);
+    }
+    
+    // 태그 모두 삭제
+    public int deleteTags(int uid) throws SQLException {
+        return sqlSession.delete("deleteTags", uid);
+    }
 }

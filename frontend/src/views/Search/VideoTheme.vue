@@ -5,25 +5,25 @@
 
     <div class="container py-4">
 
-      <base-radio class="custom-control-alternative" name="comic" v-model="radio.theme">
+      <base-radio class="custom-control-alternative" name="comic" v-model="theme">
         <span class="display-4">코믹</span>
       </base-radio>
     
-      <base-radio class="custom-control-alternative" name="gang" v-model="radio.theme">
+      <base-radio class="custom-control-alternative" name="gang" v-model="theme">
         <span class="display-4">화려한 조명이 감싸는</span>
       </base-radio>
     
-      <base-radio class="custom-control-alternative" name="insta" v-model="radio.theme">
+      <base-radio class="custom-control-alternative" name="insta" v-model="theme">
         <span class="display-4">갬성 충만</span>
       </base-radio>
     
-      <base-radio class="custom-control-alternative" name="trim" v-model="radio.theme">
+      <base-radio class="custom-control-alternative" name="trim" v-model="theme">
         <span class="display-4">보정 only</span>
       </base-radio>
     
-      <base-radio class="custom-control-alternative" name="etc" v-model="radio.theme">
-        <input type="text" placeholder="기타" v-model="radio.etc" />
-      </base-radio>
+      <!-- <base-radio class="custom-control-alternative" :name="etc" v-model="theme">
+        <input type="text" placeholder="기타" v-model="etc" />
+      </base-radio> -->
         
     </div>
   </div>
@@ -49,27 +49,34 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      radio: {
-        theme: null,
-        etc: null,
-      }
+      theme: null,
+      etc: '',
     };
   },
-  methods: {
-    setTheme() {
-      this.$store.commit('setTheme', {value: this.radio.theme})
-    },
-  },
-  validations: {
-    // 기타 선택 시 input에 값이 입력되었을 때만 validation 걸어주기
-    radio: {
+  validations() {
+    return {
       theme: {
-        required,
+        required
       }
-    },
+    }
+    // 기타 선택 시 input에 값이 입력되었을 때만 validation 걸어주기
+    // if (this.theme === 'etc') {
+    //   return {
+    //     etc: {
+    //       required,
+    //     }
+    //   }
+    // } else {
+    //   return {
+    //     theme: {
+    //       required
+    //     }
+    //   }
+    // }
   },
   watch: {
     $v: {
+      deep: true,
       handler: function (val) {
         if (!val.$invalid) {
           this.$emit("can-continue", { value: true });
@@ -77,13 +84,22 @@ export default {
           this.$emit("can-continue", { value: false });
         }
       },
-      deep: true,
     },
     clickedNext(val) {
       if (val === true) {
         this.$v.radio.$touch();
       }
     },
+    theme(val) {
+      // if (val !== 'etc') {
+        this.$store.commit('setTheme', {value: val})
+      // }
+    },
+    // etc(val) {
+    //   if (val === 'etc') {
+    //     this.$store.commit('setTheme', {value: val})
+    //   }
+    // }
   },
   mounted() {
     if (!this.$v.$invalid) {

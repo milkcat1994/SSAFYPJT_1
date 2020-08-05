@@ -6,131 +6,141 @@
     </base-header>
 
     <div class="container-fluid mt--7">
-      <div class="card">
-        <form @submit.prevent>
-          <h6 class="heading-small text-muted mb-4">User Portfolio Information</h6>
-          <div class="pl-lg-4">
-            <div class="row">
-              <!-- <div class="col-lg-12">
-                <base-input
-                  alternative
-                  label="사용기술"
-                  placeholder="에팩, 프리미어"
-                  input-classes="form-control-alternative"
-                  v-model="portfolio.skills"
-                />
-              </div> -->
-              <div class="col-lg-12">
-                <base-input
-                  alternative
-                  label="Pay/Wages"
-                  placeholder="00,000"
-                  input-classes="form-control-alternative"
-                  v-model="portfolio.payMin"
-                />
+      <div class="row">
+        <div class="col-xl-7 order-xl-2 mb-5 mb-xl-0">
+          <div class="card card-profile shadow">
+            <div class="card-body pt-0 pt-md-4">
+              <div class="row">
+                <div class="col">
+                  <div class="text">
+                    <h1>
+                      {{portfolio.nickname}}
+                      <base-button size="sm" type="default float-right" @click="updatePortfolio()"> 수정하기 </base-button>
+                    </h1>
+                    <base-input
+                      alternative
+                      label="자신을 어필해주세요."
+                      placeholder="깔끔한 편집에 자신있습니다!"
+                      input-classes="form-control-alternative"
+                      v-model="portfolio.description"
+                    />
+                    <base-input
+                      alternative
+                      label="자신의 강점을 적어주세요."
+                      placeholder="인트로 전문 제작"
+                      input-classes="form-control-alternative"
+                      v-model="portfolio.skills"
+                    />
+                    <base-input
+                      alternative
+                      label="분당 페이가격을 적어주세요."
+                      placeholder="1,000원"
+                      input-classes="form-control-alternative"
+                      v-model="portfolio.payMin"
+                    />
+                    <div class="tags-input">
+                      <base-button size="sm" type="default float-right" @click="updateTags()"> 수정하기 </base-button>
+                      <input-tag placeholder="Add Tag" v-model="tags" :limit="limit"></input-tag>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="col-lg-12">
-                <base-input
-                  alternative
-                  label="대표영상 URL"
-                  placeholder="https://"
-                  input-classes="form-control-alternative"
-                  v-model="portfolio.URLs[0]"
-                />
-              </div>
-              <div class="col-lg-12">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-5 order-xl-1">
+          <card shadow type="secondary">
+            <base-input
+              alternative
+              label="대표영상 URL"
+              placeholder="https://"
+              input-classes="form-control-alternative"
+              v-model="portfolio.HeadURL[0]"
+            />
+            <base-button size="sm" type="default float-right" @click="uploadHeadVideo()"> 수정하기 </base-button>
+          </card>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" style="margin-top: 20px">
+      <div class="row">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-body">
+              <base-button size="sm" type="default float-right" @click="uploadVideos()"> 수정하기 </base-button>
+              <div class="row">
+                <div class="col">
                 <base-input
                   alternative
                   label="영상1 URL"
                   placeholder="https://"
                   input-classes="form-control-alternative"
-                  v-model="portfolio.URLs[1]"
+                  v-model="portfolio.URLs[0]"
                 />
-              </div>
-              <div class="col-lg-12">
                 <base-input
                   alternative
                   label="영상2 URL"
                   placeholder="https://"
                   input-classes="form-control-alternative"
-                  v-model="portfolio.URLs[2]"
+                  v-model="portfolio.URLs[1]"
                 />
-              </div>
-              <div class="col-lg-12">
                 <base-input
                   alternative
                   label="영상3 URL"
                   placeholder="https://"
                   input-classes="form-control-alternative"
-                  v-model="portfolio.URLs[3]"
+                  v-model="portfolio.URLs[2]"
                 />
-              </div>
-              <div class="col-lg-12">
-                <!-- 아직 더 생각하고 작업해봐야할듯 -->
-                <!-- <label for="schedule"> 근무 가능 요일을 골라주세요 </label> -->
-                <!-- <div class="row"> -->
-                  <!-- <base-checkbox class="mb-3" id="1,7" v-model="checkboxes.weekday">평일</base-checkbox>
-                  <base-checkbox class="mb-3" id="2,3,4,5,6" v-model="checkboxes.weekend">주말</base-checkbox>
-                  <base-checkbox class="mb-3" id="2" v-model="checkboxes.mon">월</base-checkbox>
-                  <base-checkbox class="mb-3" id="3" v-model="checkboxes.tue">화</base-checkbox>
-                  <base-checkbox class="mb-3" id="4" v-model="checkboxes.wed">수</base-checkbox>
-                  <base-checkbox class="mb-3" id="5" v-model="checkboxes.thur">목</base-checkbox>
-                  <base-checkbox class="mb-3" id="6" v-model="checkboxes.fri">금</base-checkbox>
-                  <base-checkbox class="mb-3" id="7" v-model="checkboxes.sat">토</base-checkbox>
-                  <base-checkbox class="mb-3" id="1" v-model="checkboxes.sun">일</base-checkbox>
-                <span>{{ disableDates }} </span>
-                <span>{{ checkboxes }} </span> -->
-                <!-- </div> -->
-                <label for="schedule"> 근무가 불가능한 날짜를 골라주세요. </label>
-                <vc-date-picker
-                  mode='multiple'
-                  v-model='selectedValue'>
-                </vc-date-picker>
-                <vc-calendar
-                  title-position="left"
-                  v-model='selectedValue'
-                  :disabled-dates='selectedValue'
-                />
+                </div>
               </div>
 
-              <div class="col-lg-12 tags-input">
-                <vue-tags-input
-                  v-model="tag"
-                  :allow-edit-tags = "false"
-                  :tags="tags"
-                  @tags-changed="newTags => tags = newTags"
-                />
+              <div class="row" style="margin-top: 30px">
+                <div class="col">
+                  <base-button size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
+                  <label for="schedule"> 근무가 불가능한 날짜를 골라주세요. </label>
+                  <vc-date-picker
+                    mode='multiple'
+                    v-model='disableDates'>
+                  </vc-date-picker>
+                  <vc-calendar
+                    title-position="left"
+                    v-model='disableDates'
+                    :disabled-dates='disableDates'
+                  />
+                  <!-- {{disableDates}} -->
+                </div>
               </div>
             </div>
           </div>
-          <base-button
-            type="default"
-            class="mb-3 float-right"
-            style="white-space: nowrap;"
-            @click="updatePortfolio()">
-            Update
-          </base-button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import VueTagsInput from '@johmun/vue-tags-input';
+import InputTag from 'vue-input-tag';
 //axios 초기 설정파일
 import http from "@/util/http-common";
+import alertify from "alertifyjs";
 
   export default {
-    name: 'user-portfolio-edit',
+    name: 'portfolio_edit',
     components: {
-      VueTagsInput,
+      InputTag
     },
     data() {
       return {
-        selectedValue: new Date(),
+        uid:'',
+        haveSchedule: false,
+        isFirstHeadVideo: false,
+        isFirstVideos: false,
         portfolio: {
+          nickname: '',
           skills: "",
           payMin: "",
+          HeadURL: [],
           URLs: [],
           schedule: "",
           description: ""
@@ -154,7 +164,10 @@ import http from "@/util/http-common";
       }
     },
     created() {
-      let URL = 'http://i3a509.p.ssafy.io:8080/portfolio'
+      this.uid = this.$route.query.no;
+      this.portfolio.nickname = this.$session.get('nickname');
+      let URL = '/portfolio';
+
       //포트폴리오 정보, 영상, 리뷰, 스케쥴, 태그 가져오기
       //포트폴리오 정보
       this.getPortfolio(URL);
@@ -163,7 +176,7 @@ import http from "@/util/http-common";
       this.getVideoInfo(URL);
 
       // //포트폴리오 스케쥴
-      // this.getScheduleInfo(URL);
+      this.getScheduleInfo(URL);
       
       // //포트폴리오 태그
       this.getTagInfo(URL);
@@ -171,7 +184,7 @@ import http from "@/util/http-common";
     methods: {
       getTagInfo(URL){
         http
-            .get(URL+'/tag/'+1)
+            .get(URL+'/tag/'+this.uid)
             .then(({data}) => {
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
@@ -191,20 +204,70 @@ import http from "@/util/http-common";
             })
       },
       getVideoInfo(URL){
+        http
+            .get(URL+'/video/'+this.uid)
+            .then(({data}) => {
+              if (data.data == 'success') {
+                let result = data.object.filter(video => video.mainFlag == 0);
+                this.portfolio.URLs = this.makeVideosArray(result);
+                if(this.portfolio.URLs.length == 0){
+                  this.isFirstVideos = true;
+                } else {
+                  this.isFirstVideos = false;
+                }
+
+                result = data.object.filter(video => video.mainFlag == 1);
+                this.portfolio.HeadURL = this.makeVideosArray(result);
+
+                if(this.portfolio.HeadURL.length == 0){
+                  this.isFirstHeadVideo = true;
+                } else {
+                  this.isFirstHeadVideo = false;
+                }
+                return;
+              } else {
+                return;
+              }
+            })
+            .catch(error => {
+              console.log(error);
+              return;
+            })
+      },
+      getScheduleInfo(URL){
+        http
+        .get(URL+'/schedule/'+this.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
+            this.haveSchedule = true;
+            // scheduleType=0 기본
+            let result = data.object.filter(schedule => schedule.scheduleType == 0);
+            this.disableDates = this.makeScheduleArray(result);
+            // console.log(result);
+            return;
+          } else {
+            this.haveSchedule = false;
+            return;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          return;
+        })
+      },
+      getPortfolio(URL){
       //1은 session uid
         http
-            .get(URL+'/video/'+1)
+            .get(URL+'/portfolio/'+this.uid)
             .then(({data}) => {
-                //성공시 video 추출 필요
                 if (data.data == 'success') {
-                  this.portfolio.URLs = [];
-                  data.object.forEach(obj => {
-                    this.portfolio.URLs.push(obj.url);
-                  });
-                    return;
+                  this.portfolio.description = data.object.description;
+                  this.portfolio.payMin = data.object.payMin;
+                  this.portfolio.skills = data.object.skill;
+                  return;
                 } else {
                   // fail 
-                    return;
+                  return;
                 }
             })
             .catch(error => {
@@ -212,25 +275,164 @@ import http from "@/util/http-common";
                 return;
             })
       },
-      getPortfolio(URL){
-      //1은 session uid
+      uploadHeadVideo(){
+        // 대표영상_최초등록일 경우
+        if(this.isFirstHeadVideo){
+          http
+          .post('/portfolio/video/'+this.uid, {
+            portfolioUid: this.uid,
+            url: this.portfolio.HeadURL,
+            mainFlag: 1
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+          })
+        } else {
+          http
+          .put('/portfolio/video/'+this.uid, {
+            portfolioUid: this.uid,
+            url: this.portfolio.HeadURL,
+            mainFlag: 1
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+          })
+        }
+      },
+      uploadVideos(){
+        // 그외영상_최초등록일 경우
+        if(this.isFirstVideos){
+          http
+          .post('/portfolio/video/'+this.uid, {
+            portfolioUid: this.uid,
+            url: this.portfolio.URLs,
+            mainFlag: 0
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+          })
+        } else {
+          http
+          .put('/portfolio/video/'+this.uid, {
+            portfolioUid: this.uid,
+            url: this.portfolio.URLs,
+            mainFlag: 0
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+          })
+        }
+      },
+      updateSchedule(){
+        // 스케줄이 없는 경우 최초등록
+        // 스케줄 타입 0: 기본, 1: 개인일정(휴가 등등), 2: 다른 작업중
+        if(!this.haveSchedule){
+          http
+          .post('/portfolio/schedule/'+this.uid, {
+            portfolioUid: this.uid,
+            startDate: this.disableDates,
+            endDate: this.disableDates,
+            scheduleType: 0
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+          })
+        } else { // 스케줄이 있는 경우 수정하기
+          http
+          .put('/portfolio/schedule/'+this.uid, {
+            portfolioUid: this.uid,
+            startDate: this.disableDates,
+            endDate: this.disableDates,
+            scheduleType: 0
+          })
+          .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+          })
+        }
+      },
+      updatePortfolio(){
         http
-            .get(URL+'/portfolio/'+1)
-            .then(({data}) => {
-                if (data.data == 'success') {
-                  this.portfolio.description = data.object.description;
-                  this.portfolio.payMin = data.object.payMin;
-                  console.log(data.object);
-                    return;
-                } else {
-                  // fail 
-                    return;
-                }
-            })
-            .catch(error => {
-                console.log(error);
-                return;
-            })
+        .put('/portfolio/portfolio/'+this.uid, {
+          uid: this.uid,
+          skill: this.portfolio.skills,
+          payMin: this.portfolio.payMin,
+          description: this.portfolio.description
+        })
+        .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+        })
+      },
+      updateTags(){
+        http
+        .put('/portfolio/tag/'+this.uid, {
+          portfolioUid: this.uid,
+          tagName: this.tags
+        })
+        .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+        })
+      },
+      makeVideosArray(result){
+        let res = [];
+        result.forEach(element => {
+          res.push(element.url);
+        });
+        return res;
+      },
+      makeScheduleArray(result){
+        let res = [];
+        result.forEach(element => {
+          res.push(element.startDate);
+        })
+        return res;
       },
     },
   };
