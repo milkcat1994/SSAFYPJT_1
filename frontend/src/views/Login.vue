@@ -101,25 +101,9 @@ export default {
       }
       return true;
     },
-    pwdCheck(pwd) {
-      let pattern1 = /[0-9]/;
-      let pattern2 = /[A-Za-z]/;
-      if (pattern1.test(pwd) == false) {
-        return false;
-      }
-      if (pattern2.test(pwd) == false) {
-        return false;
-      }
-      if (pwd.length < 8) return false;
-      return true;
-    },
     login() {
       if (!this.emailCheck(this.model.email)) {
         alertify.error("아이디 형식이 올바르지 않습니다.");
-        return;
-      }
-      if (!this.pwdCheck(this.model.pwd)) {
-        alertify.error("비밀번호 형식이 올바르지 않습니다.");
         return;
       }
       store
