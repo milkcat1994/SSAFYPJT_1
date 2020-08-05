@@ -5,16 +5,16 @@
 	<!-- 진행중인 요청만 가져옴 -->
 
 	<!-- 일반회원의 진행중 일정 -->
-	<select id="searchListFlagRequest" resultType="RequestDto">
-		select *
+	<select id="searchListFlagRequest" resultType="RequestDateDto">
+		select start_date as start, end_date as end
 		from request_form
 		where request_nickname = #{nickname}
 		and done_flag = 1
 	</select>
 
 	<!-- 편집자 회원의 진행중 일정 -->
-	<select id="searchListFlagResponse" resultType="RequestDto">
-		select *
+	<select id="searchListFlagResponse" resultType="RequestDateDto">
+		select start_date as start, end_date as end
 		from request_form
 		where response_nickname = #{nickname} 
 		and done_flag = 1
