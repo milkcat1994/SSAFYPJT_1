@@ -11,7 +11,7 @@
           @on-close="blur"
           :config="{allowInput: true}"
           class="form-control datepicker"
-          v-model="dates.simple"
+          v-model="dates"
         ></flat-picker>
       </base-input>
     </div>
@@ -42,21 +42,12 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      dates: {
-        simple: "2020-07-29",
-      },
+      dates: null,
     };
-  },
-  methods: {
-    setTerm() {
-      this.$store.commit('setTerm', {value: this.dates.simple})
-    },
   },
   validations: {
     dates: {
-      simple: {
-        required,
-      },
+      required,
     },
   },
   watch: {
@@ -73,9 +64,11 @@ export default {
     clickedNext(val) {
       if (val === true) {
         this.$v.dates.$touch();
-        this.setTerm()
       }
     },
+    dates(val) {
+      this.$store.commit('setTerm', {value: val})
+    }
   },
   mounted() {
     if (!this.$v.$invalid) {

@@ -1,116 +1,46 @@
 <template>
-  <div class="card shadow"
-       :class="type === 'dark' ? 'bg-default': ''">
-    <div class="card-header border-0"
-         :class="type === 'dark' ? 'bg-transparent': ''">
-      <div class="row align-items-center">
-        <div class="col">
-          <h3 class="mb-0" :class="type === 'dark' ? 'text-white': ''">
-            {{title}}
-          </h3>
-        </div>
-        <div class="col text-right">
-          <base-button type="primary" size="sm">See all</base-button>
-        </div>
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <base-table class="table align-items-center table-flush"
-                  :class="type === 'dark' ? 'table-dark': ''"
-                  :thead-classes="type === 'dark' ? 'thead-dark': 'thead-light'"
-                  tbody-classes="list"
-                  :data="editorsData">
-        <template slot="columns">
-          <th>편집자</th>
-          <th>별점</th>
-          <th>상태</th>
-          <th>선호 태그</th>
-          <th>작업 진행 상황</th>
-          <th></th>
-        </template>
-
-        <template slot-scope="{row}">
-          <th scope="row">
-            <div class="media align-items-center">
-              <a href="#" class="avatar rounded-circle mr-3">
-                <!-- 편집자 대표 이미지 -->
-                <img alt="Image placeholder" :src="row.img">
-              </a>
-              <div class="media-body">
-                <span class="name mb-0 text-sm">{{row.title}}</span>
+  <div style="max-height: 700px;">
+    <div class="card p-4">
+      <ul class="list-unstyled mt-4">
+        <li class="mb-4" v-for="editor in editorsData" :key="editor.id">
+          <router-link :to="`/portfolio?no=${editor.id}`">
+          <div class="container">
+            <div class="row">
+              <div class="col-2">
+                <img :src="editor.imgURL" :alt="editor.nickname" class="mr-3" style="max-width: 180px;">
+              </div>
+              <div class="col-10">
+                <div class="d-flex align-items-stretch mt-4">
+                  <div class="d-inline-flex ml-2">
+                    <!-- nickname and bookmarks -->
+                    <span class="display-1 mt-0 mb-1 text-default">{{editor.nickname}}</span>
+                  </div>
+                  <div class="d-inline-flex flex-column ml-3 mt-3">
+                    <div><i class="display-4 ni ni-like-2"></i></div>
+                    <div>{{editor.bookmarks}}</div>
+                  </div>
+                </div>
+                <div class="ml-2 mt-4">
+                  <!-- tags and estimated price -->
+                  <div class="row">
+                    <div class="col-6">{{editor.tags}}</div>
+                    <div class="col-6 text-danger">예상 견적: 분당 {{editor.pay}}원</div>
+                  </div>
+                </div>
               </div>
             </div>
-          </th>
-          <td class="stars">
-            <badge type="secondary">{{row.stars}}</badge>
-          </td>
-          <td>
-            <badge class="badge-dot mr-4" :type="row.statusType">
-              <i :class="`bg-${row.statusType}`"></i>
-              <span class="status">{{row.status}}</span>
-            </badge>
-          </td>
-          <td>
-            <div class="avatar-group">
-              <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                <img alt="Image placeholder" src="img/theme/team-1-800x800.jpg">
-              </a>
-              <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                <img alt="Image placeholder" src="img/theme/team-2-800x800.jpg">
-              </a>
-              <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                <img alt="Image placeholder" src="img/theme/team-3-800x800.jpg">
-              </a>
-              <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                <img alt="Image placeholder" src="img/theme/team-4-800x800.jpg">
-              </a>
-            </div>
-          </td>
-
-          <td>
-            <div class="d-flex align-items-center">
-              <span class="completion mr-2">{{row.completion}}%</span>
-              <div>
-                <base-progress :type="row.statusType"
-                               :show-percentage="false"
-                               class="pt-0"
-                               :value="row.completion"/>
-              </div>
-            </div>
-          </td>
-
-          <td class="text-right">
-            <router-link to="/portfolio?no=1">
-              <base-button class="btn btn-secondary">DETAIL</base-button>
-            </router-link>
-            <!-- <base-dropdown class="dropdown"
-                           position="right">
-              <a slot="title" class="btn btn-sm btn-icon-only text-light" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-v"></i>
-              </a>
-
-              <template>
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </template>
-            </base-dropdown> -->
-          </td>
-
-        </template>
-
-      </base-table>
+          </div>
+          </router-link>
+        </li>
+      </ul>
+      <scroll-loader :loader-method="fetchEditors">
+        <div>불러오는 중...</div>
+      </scroll-loader>
     </div>
-
-    <div class="card-footer d-flex justify-content-end"
-         :class="type === 'dark' ? 'bg-transparent': ''">
-      <base-pagination total="30"></base-pagination>
-    </div>
-
   </div>
 </template>
 <script>
+import ScrollLoader from "vue-scroll-loader"
 
 export default {
   name: 'editors-table',
@@ -118,55 +48,123 @@ export default {
     type: {
       type: String
     },
-    title: String
+    title: String,
+  },
+  components:{
+    ScrollLoader
   },
   data() {
     return {
-      //태그들
+      // 태그들
       tags:[],
       tag: '',
+
+      // 편집자 리스트
+      loadMore: true,
       editorsData: [
+        // {
+        //   id: portfolio.uid,
+        //   nickname: portfolio.nickname,
+        //   skills: portfolio.skills,
+        //   pay: portfolio.pay_min
+        // },
         {
-          img: 'img/theme/ryan.jpg',
-          title: '라이언',
-          stars: 5,
+          id: 1,
+          imgURL: 'img/theme/ryan.jpg',
+          nickname: '라이언',
+          bookmarks: 555,
           status: 'pending',
-          statusType: 'warning',
-          completion: 60
+          tags: '#화려한조명이감싸는#내가제일잘나가',
+          pay: 60000
         },
         {
-          img: 'img/theme/tube.png',
-          title: '튜브',
-          stars: 2,
+          id: 2,
+          imgURL: 'img/theme/tube.png',
+          nickname: '튜브',
+          bookmarks: 222,
           status: 'completed',
-          statusType: 'success',
-          completion: 100
+          tags: '#흙수저#대충그까이꺼뭐#일단재생#가성비',
+          pay: 10000
         },
         {
-          img: 'img/theme/apeach.jpg',
-          title: '어피치',
-          stars: 5,
+          id: 3,
+          imgURL: 'img/theme/apeach.jpg',
+          nickname: '어피치',
+          bookmarks: 531,
           status: 'delayed',
-          statusType: 'danger',
-          completion: 72
+          tags: '#고객중심#원하는대로#심플',
+          pay: 72000
         },
         {
-          img: 'img/theme/frodo.png',
-          title: '프로도',
-          stars: 3,
+          id: 4,
+          imgURL: 'img/theme/frodo.png',
+          nickname: '프로도',
+          bookmarks: 333,
           status: 'on schedule',
-          statusType: 'info',
-          completion: 90
+          tags: '#그냥믿고맡기는#베테랑',
+          pay: 90000
         },
         {
-          img: 'img/theme/muzi.png',
-          title: '무지',
-          stars: 4,
+          id: 5,
+          imgURL: 'img/theme/muzi.png',
+          nickname: '무지',
+          bookmarks: 444,
           status: 'completed',
-          statusType: 'success',
-          completion: 100
+          tags: '#알지#믿지#예술의경지',
+          pay: 100000
         }
       ]
+    }
+  },
+  methods: {
+    fetchEditors() {
+      this.editorsData.concat([
+        {
+          id: this.editorsData.length + 1,
+          imgURL: 'img/theme/ryan.jpg',
+          nickname: '라이언',
+          bookmarks: 555,
+          status: 'pending',
+          tags: '#화려한조명이감싸는#내가제일잘나가',
+          pay: 60000
+        },
+        {
+          id: this.editorsData.length + 2,
+          imgURL: 'img/theme/tube.png',
+          nickname: '튜브',
+          bookmarks: 222,
+          status: 'completed',
+          tags: '#흙수저#대충그까이꺼뭐#일단재생#가성비',
+          pay: 10000
+        },
+        {
+          id: this.editorsData.length + 3,
+          imgURL: 'img/theme/apeach.jpg',
+          nickname: '어피치',
+          bookmarks: 531,
+          status: 'delayed',
+          tags: '#고객중심#원하는대로#심플',
+          pay: 72000
+        },
+        {
+          id: this.editorsData.length + 4,
+          imgURL: 'img/theme/frodo.png',
+          nickname: '프로도',
+          bookmarks: 333,
+          status: 'on schedule',
+          tags: '#그냥믿고맡기는#베테랑',
+          pay: 90000
+        },
+        {
+          id: this.editorsData.length + 5,
+          imgURL: 'img/theme/muzi.png',
+          nickname: '무지',
+          bookmarks: 444,
+          status: 'completed',
+          tags: '#알지#믿지#예술의경지',
+          pay: 100000
+        }
+      ])
     }
   }
 }

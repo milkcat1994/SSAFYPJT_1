@@ -10,14 +10,19 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.SearchPageBean;
 import com.web.editor.model.service.user.SearchService;
 
-@Controller
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping("/search")
 public class SearchController {
 
 	@Autowired
