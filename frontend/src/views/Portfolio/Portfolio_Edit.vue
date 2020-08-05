@@ -287,8 +287,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         } else {
@@ -301,8 +303,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         }
@@ -319,8 +323,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         } else {
@@ -333,8 +339,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         }
@@ -353,8 +361,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         } else { // 스케줄이 있는 경우 수정하기
@@ -368,8 +378,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         }
@@ -385,8 +397,10 @@ import alertify from "alertifyjs";
         .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
         })
       },
@@ -399,8 +413,10 @@ import alertify from "alertifyjs";
         .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
         })
       },

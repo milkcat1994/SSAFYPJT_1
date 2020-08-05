@@ -20,6 +20,10 @@
 
     </select>
 
+    <select id="cntBookmarkByUid" resultType="BookmarkInfo">
+        SELECT user_info_uid, mark_uid FROM bookmark
+        WHERE mark_uid = #{muid}
+    </select>
         <!-- SELECT B.`mark_uid` as muid, U.nickname as nickname, P.pay_min as payMin, V.url as mainUrl, AVG(R.video_score) as avgV, AVG(R.kindness_score) as avgK, AVG(R.finish_score) as avgF
         FROM 
         (SELECT `user_info_uid`, `mark_uid` FROM bookmark WHERE `user_info_uid` = #{uid}) B
