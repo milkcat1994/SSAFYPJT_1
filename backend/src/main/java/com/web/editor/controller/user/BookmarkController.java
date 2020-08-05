@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.bookmark.Bookmark;
 import com.web.editor.model.dto.user.bookmark.BookmarkDeleteRequest;
+import com.web.editor.model.dto.user.bookmark.BookmarkInfo;
 import com.web.editor.model.dto.user.bookmark.BookmarkSaveRequest;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.user.BookmarkService;
@@ -64,6 +65,19 @@ public class BookmarkController {
             result.data = "fail";
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
+        return response;
+    }
+
+    @GetMapping("/cnt/{uid}")
+    @ApiOperation(value = "편집자 북마크한 인원 수와 uid 가져오기")
+    public Object countBookmark(@PathVariable String uid){
+        ResponseEntity response = null;
+        final BasicResponse result = new BasicResponse();
+        List<BookmarkInfo> bookmarks = bookmarkService.cntBookmarkByUid(uid);
+        result.status = true;
+        result.data = "success";
+        result.object = bookmarks;
+        response = new ResponseEntity<>(result, HttpStatus.OK);
         return response;
     }
 

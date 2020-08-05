@@ -9,13 +9,13 @@
       <div class="row">
         <div class="col-xl-7 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 295px;">
+            <div class="card-body pt-0 pt-md-4">
               <div class="row">
                 <div class="col">
                   <div class="text">
                     <h1>
                       {{portfolio.nickname}}
-                      <base-button size="sm" type="default float-right"> 수정하기 </base-button>
+                      <base-button size="sm" type="default float-right" @click="updatePortfolio()"> 수정하기 </base-button>
                     </h1>
                     <base-input
                       alternative
@@ -24,16 +24,23 @@
                       input-classes="form-control-alternative"
                       v-model="portfolio.description"
                     />
-                    <h3>
-                      {{portfolio.description}}
-                    </h3>
+                    <base-input
+                      alternative
+                      label="자신의 강점을 적어주세요."
+                      placeholder="인트로 전문 제작"
+                      input-classes="form-control-alternative"
+                      v-model="portfolio.skills"
+                    />
+                    <base-input
+                      alternative
+                      label="분당 페이가격을 적어주세요."
+                      placeholder="1,000원"
+                      input-classes="form-control-alternative"
+                      v-model="portfolio.payMin"
+                    />
                     <div class="tags-input">
-                      <vue-tags-input
-                        v-model="tag"
-                        :allow-edit-tags = "false"
-                        :tags="tags"
-                        @tags-changed="newTags => tags = newTags"
-                      />
+                      <base-button size="sm" type="default float-right" @click="updateTags()"> 수정하기 </base-button>
+                      <input-tag placeholder="Add Tag" v-model="tags" :limit="limit"></input-tag>
                     </div>
                   </div>
                 </div>
@@ -44,7 +51,6 @@
 
         <div class="col-xl-5 order-xl-1">
           <card shadow type="secondary">
-            <!-- <h3 class="mb-0" style="text-align:center">대표영상</h3> -->
             <base-input
               alternative
               label="대표영상 URL"
@@ -62,13 +68,10 @@
       <div class="row">
         <div class="col">
           <div class="card shadow">
-            <!-- <div class="card-header bg-transparent">
-              <h3 class="mb-0">그 외 영상들</h3>
-            </div> -->
-
             <div class="card-body">
               <base-button size="sm" type="default float-right" @click="uploadVideos()"> 수정하기 </base-button>
               <div class="row">
+                <div class="col">
                 <base-input
                   alternative
                   label="영상1 URL"
@@ -90,10 +93,11 @@
                   input-classes="form-control-alternative"
                   v-model="portfolio.URLs[2]"
                 />
+                </div>
               </div>
 
               <div class="row" style="margin-top: 30px">
-                <div class="col-xl-4 col-lg-6">
+                <div class="col">
                   <base-button size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
                   <label for="schedule"> 근무가 불가능한 날짜를 골라주세요. </label>
                   <vc-date-picker
@@ -116,7 +120,7 @@
   </div>
 </template>
 <script>
-import VueTagsInput from '@johmun/vue-tags-input';
+import InputTag from 'vue-input-tag';
 //axios 초기 설정파일
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
@@ -124,12 +128,11 @@ import alertify from "alertifyjs";
   export default {
     name: 'portfolio_edit',
     components: {
-      VueTagsInput,
+      InputTag
     },
     data() {
       return {
         uid:'',
-        // selectedValue: new Date(),
         haveSchedule: false,
         isFirstHeadVideo: false,
         isFirstVideos: false,
@@ -176,7 +179,7 @@ import alertify from "alertifyjs";
       this.getScheduleInfo(URL);
       
       // //포트폴리오 태그
-      // this.getTagInfo(URL);
+      this.getTagInfo(URL);
     },
     methods: {
       getTagInfo(URL){
@@ -260,11 +263,11 @@ import alertify from "alertifyjs";
                 if (data.data == 'success') {
                   this.portfolio.description = data.object.description;
                   this.portfolio.payMin = data.object.payMin;
-                  console.log(data.object);
-                    return;
+                  this.portfolio.skills = data.object.skill;
+                  return;
                 } else {
                   // fail 
-                    return;
+                  return;
                 }
             })
             .catch(error => {
@@ -284,8 +287,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         } else {
@@ -298,8 +303,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         }
@@ -316,8 +323,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         } else {
@@ -330,8 +339,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         }
@@ -350,8 +361,10 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("저장이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         } else { // 스케줄이 있는 경우 수정하기
@@ -365,11 +378,47 @@ import alertify from "alertifyjs";
           .then(({ data }) => {
             if(data.data == "success"){
               alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
+              return;
             }
           })
         }
+      },
+      updatePortfolio(){
+        http
+        .put('/portfolio/portfolio/'+this.uid, {
+          uid: this.uid,
+          skill: this.portfolio.skills,
+          payMin: this.portfolio.payMin,
+          description: this.portfolio.description
+        })
+        .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+        })
+      },
+      updateTags(){
+        http
+        .put('/portfolio/tag/'+this.uid, {
+          portfolioUid: this.uid,
+          tagName: this.tags
+        })
+        .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+              return;
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+              return;
+            }
+        })
       },
       makeVideosArray(result){
         let res = [];
