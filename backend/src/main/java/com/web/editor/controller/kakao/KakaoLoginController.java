@@ -62,8 +62,8 @@ public class KakaoLoginController {
 
         String access_Token = kakao.getAccessToken(code);
         HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
-        //String email = userInfo.getKey();
-        User user = userService.findByEmailAndPlatformType(new UserConfirm(userInfo, "kakao"));
+        String email = (String) userInfo.get("email");
+        User user = userService.findByEmailAndPlatformType(new UserConfirm(email, "kakao"));
         
         if(user != null){ //이미 가입이 되어 있으면 로그인 된걸로
             result.status = true;
