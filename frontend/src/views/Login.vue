@@ -47,18 +47,20 @@
 
             <!-- <base-checkbox class="custom-control-alternative">
               <span class="text-muted">이 사이트 기억하기</span>
-            </base-checkbox> -->
+            </base-checkbox>-->
             <div class="text-center">
-              <base-button type="primary" class="my-4" @click="login()">로그인</base-button>
+              <base-button type="primary" class="my-4" @click="login()"
+                >로그인</base-button
+              >
             </div>
           </form>
         </div>
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <a href="#" class="text-light">
-            <small>비밀번호 찾기</small>
-          </a>
+          <router-link to="/dashboard" class="text-light">
+            <small>메인화면</small>
+          </router-link>
         </div>
         <div class="col-6 text-right">
           <router-link :to="{ name: 'register' }" class="text-light">
@@ -72,7 +74,7 @@
 <script>
 import store from "@/store/store.js";
 import { mapGetters } from "vuex";
-import alertify from "alertifyjs"
+import alertify from "alertifyjs";
 
 export default {
   name: "login",
@@ -99,24 +101,11 @@ export default {
       }
       return true;
     },
-    pwdCheck(pwd) {
-      let pattern1 = /[0-9]/;
-      let pattern2 = /[A-Za-z]/;
-      if (pattern1.test(pwd) == false) {
-        return false;
-      }
-      if (pattern2.test(pwd) == false) {
-        return false;
-      }
-      if (pwd.length < 8) return false;
-      return true;
-    },
     login() {
       if (!this.emailCheck(this.model.email)) {
-        alertify.error("아이디 또는 비밀번호가 올바르지 않습니다.");
+        alertify.error("아이디 형식이 올바르지 않습니다.");
         return;
       }
-
       store
         .dispatch("auth/login", {
           userEmail: this.model.email,
@@ -125,7 +114,7 @@ export default {
         .then(({ data }) => {
           if (data.data == "success") {
             this.$session.start();
-            console.log(data.object)
+            console.log(data.object);
             this.$session.set("uid", data.object.uid);
             this.$session.set("nickname", data.object.nickname);
             this.$session.set("auth", data.object.auth);
@@ -135,7 +124,7 @@ export default {
           }
         })
         .catch(() => {
-          alert.error("로그인중 서버 오류가 발생하였습니다.", 3);
+          alertify.error("로그인중 서버 오류가 발생하였습니다.", 3);
           return;
         });
     },

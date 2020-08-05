@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import com.web.editor.model.dto.user.PortfolioVideo;
+import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
+import com.web.editor.model.dto.user.PortfolioVideoRequest;
 import com.web.editor.model.dto.user.PortfolioVideoSaveRequest;
-import com.web.editor.model.dto.user.PortfolioVideoUpdateRequest;
+// import com.web.editor.model.dto.user.PortfolioVideoUpdateRequest;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.user.PortfolioService;
 
@@ -37,15 +39,18 @@ public class PortfolioVideoController {
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
 
+        // System.out.println("영상조회 호출 " + uid);
         List<PortfolioVideo> video = portfolioService.findVideoByUid(uid);
 
         //포트폴리오의 영상이 있을 경우
-        if(video != null){
+        if(!video.isEmpty()){
+            // System.out.println(video.isEmpty() + " " + video.size());
             result.status = true;
             result.data = "success";
             result.object = video;
             response = new ResponseEntity<>(result, HttpStatus.OK);
         } else {
+            // System.out.println("URL 없음 " + uid);
             result.status = false;
             result.data = "fail";
             response = new ResponseEntity<>(result, HttpStatus.OK);
@@ -56,38 +61,48 @@ public class PortfolioVideoController {
     // 영상등록
     @PostMapping("/{uid}")
     @ApiOperation(value="영상 등록")
-    public Object videoSave(@PathVariable String uid, @RequestBody PortfolioVideoSaveRequest portfolioVideoSaveRequest){
+    public Object videoSave(@PathVariable String uid, @RequestBody PortfolioVideoRequest portfolioVideoRequest){
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
+
         String URL = "https://www.youtube.com/embed/";
-        String[] temp = portfolioVideoSaveRequest.getUrl().split("=");
-        portfolioVideoSaveRequest.setUrl(URL + temp[1]);
-
-        int res = portfolioService.videoSave(portfolioVideoSaveRequest);
-
-        // 저장에 성공
-        if(res != -1){
-            result.status = true;
-            result.data = "success";
-            response = new ResponseEntity<>(result, HttpStatus.OK);
-        } else { 
-            result.status = false;
-            result.data = "fail";
-            response = new ResponseEntity<>(result, HttpStatus.OK);
+        List<String> urlList = portfolioVideoRequest.getUrl();
+        int size = urlList.size();
+        for(int i=0; i<size;i++){
+            String[] temp = urlList.get(i).split("=");
+            String url = URL + temp[1];
+            urlList.set(i, url);
         }
+        portfolioVideoRequest.setUrl(urlList);
+
+        int res = -1;
+        for(int i=0;i<size;i++){
+            res = portfolioService.videoSave(new PortfolioVideoSaveRequest(Integer.parseInt(uid), portfolioVideoRequest.getUrl().get(i),
+                                                                                portfolioVideoRequest.getMainFlag()));
+            if(res != -1){
+                result.status = true;
+                result.data = "success";
+            } else {
+                result.status = false;
+                result.data = "fail";
+                response = new ResponseEntity<>(result, HttpStatus.OK);
+                return response;
+            }
+        }
+        
+        response = new ResponseEntity<>(result, HttpStatus.OK);
         return response;
     }
 
     @PutMapping("/{uid}")
     @ApiOperation(value = "영상 삭제 및 재등록")
-    public Object videoUpdate(@PathVariable String uid, @RequestBody PortfolioVideoUpdateRequest portfolioVideoUpdateRequest){
+    public Object videoUpdate(@PathVariable String uid, @RequestBody PortfolioVideoRequest portfolioVideoRequest){
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
-        
         int res = 0;
         
         // 모든 videos 삭제
-        res = portfolioService.deleteVideosByUid(uid);
+        res = portfolioService.deleteVideos(new PortfolioVideoDeleteRequest(Integer.parseInt(uid), portfolioVideoRequest.getMainFlag()));
         if(res < 0){
             result.status = false;
             result.data = "fail";
@@ -97,17 +112,25 @@ public class PortfolioVideoController {
         
         String URL = "https://www.youtube.com/embed/";
         String[] temp;
+
+        List<String> urlList = portfolioVideoRequest.getUrl();
+        int size = urlList.size();
+        for(int i=0; i<size;i++){
+            temp = urlList.get(i).split("=");
+            // System.out.println(temp.length);
+            String url = URL + temp[1];
+            // System.out.println(i + ":" + url);
+            urlList.set(i, url);
+        }
+        portfolioVideoRequest.setUrl(urlList);
         
-        //url들을 하나씩 Insert
-        // PortfolioVideoSaveRequest pfvsr = null;
-        for (PortfolioVideoSaveRequest pfvsr : portfolioVideoUpdateRequest.getPortfolioVideo()) {
-            temp = pfvsr.getUrl().split("=");
-            pfvsr.setUrl(URL + temp[1]);
-            res = portfolioService.videoSave(pfvsr);
-            // 저장에 성공
+        for(int i=0;i<size;i++){
+            res = portfolioService.videoSave(new PortfolioVideoSaveRequest(Integer.parseInt(uid), portfolioVideoRequest.getUrl().get(i),
+                                                                                portfolioVideoRequest.getMainFlag()));
             if(res != -1){
                 result.status = true;
                 result.data = "success";
+                // System.out.println("업데이트 완료");
             } else {
                 result.status = false;
                 result.data = "fail";

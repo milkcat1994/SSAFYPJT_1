@@ -7,12 +7,18 @@
             <small>소셜 회원가입</small>
           </div>
           <div class="btn-wrapper text-center">
-            <a href="#" class="btn btn-neutral btn-icon">
+            <router-link :to="{ name: 'Kakao' }" class="btn btn-neutral btn-icon">
               <span class="btn-inner--icon">
                 <img src="img/icons/common/kakao.svg" />
               </span>
               <span class="btn-inner--text">Kakao</span>
-            </a>
+            </router-link>
+            <!-- <a href="#" class="btn btn-neutral btn-icon">
+              <span class="btn-inner--icon">
+                <img src="img/icons/common/kakao.svg" />
+              </span>
+              <span class="btn-inner--text">Kakao</span>
+            </a>-->
             <a href="#" class="btn btn-neutral btn-icon">
               <span class="btn-inner--icon">
                 <img src="img/icons/common/google.svg" />
@@ -97,23 +103,28 @@
               <div>
                 <div class="row">
                   <div class="col-3">
-                  <h3>인증 번호</h3>
-                    </div>
+                    <h3>인증 번호</h3>
+                  </div>
                   <div class="col">
-                  <base-input
-                    alternative
-                    placeholder="0000"
-                    input-classes="text"
-                    v-model="model.emailcode"
-                  />
-                    </div>
+                    <base-input
+                      alternative
+                      placeholder="0000"
+                      input-classes="text"
+                      v-model="model.emailcode"
+                    />
+                  </div>
                   <div class="col-4">
-                  <base-button type="primary" :disabled="isCheck" @click="sendEmail()" style="height:42px">요청하기</base-button>
-                    </div>
+                    <base-button
+                      type="primary"
+                      :disabled="isCheck"
+                      @click="sendEmail()"
+                      style="height:42px"
+                    >요청하기</base-button>
+                  </div>
                 </div>
               </div>
               <template slot="footer">
-                <base-button type="primary" :disabled="isCheck"  @click="checkEmailCode()">인증하기</base-button>
+                <base-button type="primary" :disabled="isCheck" @click="checkEmailCode()">인증하기</base-button>
                 <base-button type="secondary" @click="modal.show = false">Close</base-button>
               </template>
             </modal>
@@ -144,7 +155,7 @@
               </small>
             </div>-->
 
-<!-- 약관동의 -->
+            <!-- 약관동의 -->
             <!-- <div class="row my-4">
               <div class="col-12">
                 <base-checkbox class="custom-control-alternative">
@@ -153,7 +164,7 @@
                   </span>
                 </base-checkbox>
               </div>
-            </div> -->
+            </div>-->
             <div class="text-center">
               <base-button type="primary" class="my-4" @click="joinCheck()">회원가입</base-button>
             </div>
@@ -162,9 +173,9 @@
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <a href="#" class="text-light">
-            <small>비밀번호 찾기</small>
-          </a>
+          <router-link to="/dashboard" class="text-light">
+            <small>메인화면</small>
+          </router-link>
         </div>
         <div class="col-6 text-right">
           <router-link to="/login" class="text-light">
@@ -179,7 +190,7 @@
 // import { required, email, sameAs } from "vuelidate/lib/validators";
 
 import http from "@/util/http-common";
-import alertify from "alertifyjs"
+import alertify from "alertifyjs";
 export default {
   name: "register",
   data() {
@@ -295,7 +306,7 @@ export default {
     },
     joinCheck() {
       if (!this.emailCheck(this.model.email)) {
-        alertify.error("이메일 양식이 아닙니다.",3);
+        alertify.error("이메일 양식이 아닙니다.", 3);
         return;
       }
 
@@ -320,10 +331,10 @@ export default {
         (message = "비밀번호는 8자 이상 숫자,문자 1개이상 입니다."));
       valid &&
         (!this.model.password ||
-        !this.model.passwordconf ||
-        this.model.password !== this.model.passwordconf) &&
+          !this.model.passwordconf ||
+          this.model.password !== this.model.passwordconf) &&
         ((valid = false), (message = "비밀번호를 다시 확인해주세요."));
-      console.log('valid>>'+message);
+      console.log("valid>>" + message);
       if (valid) this.join();
       else {
         alertify.error(message, 3);
@@ -346,10 +357,9 @@ export default {
             this.$router.push("/login");
           }
           // 회원가입 실패시 오류 메시지 보여주기
-          else if(data.data =="email") {
+          else if (data.data == "email") {
             alertify.error("이미 존재하는 email입니다.", 3);
-          }
-          else if(data.data == "nickname"){
+          } else if (data.data == "nickname") {
             alertify.error("이미 존재하는 닉네임입니다.", 3);
           }
         })
@@ -382,17 +392,17 @@ export default {
       else return false;
     },
     emailJValid() {
-        if (this.emailCheck(this.model.email)) return true;
-        else {
-            if(this.isCheck) return true;
-            else return false;
-        }
-    }
+      if (this.emailCheck(this.model.email)) return true;
+      else {
+        if (this.isCheck) return true;
+        else return false;
+      }
+    },
   },
 };
 </script>
 <style>
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 </style>

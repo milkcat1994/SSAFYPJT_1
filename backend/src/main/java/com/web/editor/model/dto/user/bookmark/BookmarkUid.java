@@ -1,6 +1,4 @@
-package com.web.editor.model.dto.user;
-
-import java.util.Date;
+package com.web.editor.model.dto.user.bookmark;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -17,10 +15,7 @@ import lombok.Setter;
 @Setter
 @Repository
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PortfolioSchedule {
-    private int scheduleNo;
-    private int portfolioUid;
-    private Date startDate;
-    private Date endDate;
-    private int scheduleType;
+public class BookmarkUid {
+    // 북마크에 등록된 편집자 id
+    private int muid;
 }

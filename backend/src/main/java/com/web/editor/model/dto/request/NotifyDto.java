@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class NotifyDto {
     private int nid;
-    private String notify_nickname;
     private String request_nickname;
     private String response_nickname;
     private String notify_type;
