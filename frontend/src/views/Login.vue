@@ -13,7 +13,9 @@
               </span>
               <span class="btn-inner--text">Kakao</span>
             </a>
-            <a href="#" class="btn btn-neutral btn-icon">
+
+            <!-- for google login -->
+            <a @click="googleLogin" class="btn btn-neutral btn-icon">
               <span class="btn-inner--icon">
                 <img src="img/icons/common/google.svg" />
               </span>
@@ -69,12 +71,30 @@
         </div>
       </div>
     </div>
+
+
+  <!-- for google connect acception -->
+    <modal :show.sync="modal.show">
+      <template slot="header">
+        <h5 class="modal-title" id="requestForm">Google 계정 연동 동의</h5>
+      </template>
+      <div>
+        구글 계정 연동에 동의하시겠습니까?
+      </div>
+     <template slot="footer">
+         <base-button type="secondary" @click="modal.show = false">Close</base-button>
+         <base-button type="primary" @click="connectGoogle">동의</base-button>
+     </template>
+   </modal>
+
+
   </div>
 </template>
 <script>
 import store from "@/store/store.js";
 import { mapGetters } from "vuex";
 import alertify from "alertifyjs";
+import http from '@/util/http-common';
 
 export default {
   name: "login",
@@ -87,6 +107,10 @@ export default {
         email: "",
         password: "",
       },
+      modal: {
+          show: false
+      },
+      googleUid: "",
     };
   },
   methods: {
@@ -128,6 +152,80 @@ export default {
           return;
         });
     },
+
+    // google Login 
+    googleLogin(){
+      this.$gAuth.signIn()
+      .then(GoogleUser => {
+        var userEmail = GoogleUser.getBasicProfile().getEmail();
+        // 이메일 회원 있는지 확인
+          http
+            .post('/auth/google/' + userEmail)
+            .then(({ data }) => {
+                if (data.data == 'success') {
+                    alertify.success('로그인이 되었습니다.');
+                    this.$session.start();
+                    this.$session.set("uid", data.object.uid);
+                    this.$session.set("nickname", data.object.nickname);
+                    this.$session.set("auth", data.object.auth);
+                    this.initInputL();
+                    this.$router.push("/");
+                }else if (data.data == 'kakao'){
+                    alertify.warning('카카오와 연동된 계정 입니다.');
+                }else if (data.data == 'normal') {
+                  this.googleUid = data.object.uid;
+                  this.modal.show = true;
+                }else {
+                  alertify.error('회원 정보가 없습니다. 먼저 회원가입을 진행해 주세요');
+                }
+            })
+            .catch(() => {
+                alert('로그인 시 에러가 발생했습니다.');
+            });
+
+
+
+// 토큰생성
+        // this.$gAuth.getAuthCode()
+        //   .then(authCode => {
+        //     //on success
+        //     return this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
+        //   })
+        //   .then(response => {
+        //     //and then
+        //   })
+        //   .catch(error => {
+        //     //on fail do something
+        // })
+      })
+      .catch(error  => {
+        console.log(error);
+      })
+    },
+    connectGoogle(){
+      http
+        .post('/auth/google/connect/' + this.googleUid)
+        .then(({ data }) => {
+            if (data.data == 'success') {
+              alertify.success('연동이 완료되었습니다.');
+              this.$session.start();
+              this.$session.set("uid", data.object.uid);
+              this.$session.set("nickname", data.object.nickname);
+              this.$session.set("auth", data.object.auth);
+              this.initInputL();
+              this.$router.push("/");
+            }else if (data == 'fail'){
+              alertify.warning('연동시 에러가 발생했습니다.');
+              this.modal.show = false;
+            }
+        })
+        .catch(() => {
+          this.modal.show = false;
+        });
+
+      this.googleUid
+    },
+
   },
   watch: {},
   created() {},
