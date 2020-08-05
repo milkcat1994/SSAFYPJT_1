@@ -283,6 +283,7 @@
                       <b-button
                         class="statusBtn"
                         style="background-color: #0099ff"
+                        v-if="$session.get('auth')== 'editor'"
                         @click="$bvModal.show('review')"
                       >후기 남기기</b-button>
                       <b-modal id="review" hide-footer>
