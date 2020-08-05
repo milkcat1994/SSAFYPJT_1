@@ -18,10 +18,9 @@
         <span class="display-4">기념 행사(생일, 결혼 등) 영상</span>
       </base-radio>
 
-      <base-radio class="custom-control-alternative" :name="etc" v-model="category">
-        <!-- <span class="display-4">기타</span> -->
+      <!-- <base-radio class="custom-control-alternative" :name="etc" v-model="category">
         <input type="text" placeholder="기타" v-model.lazy="etc" />
-      </base-radio>
+      </base-radio> -->
       
     </div>
   </div>
@@ -53,19 +52,24 @@ export default {
   },
   validations() {
     // 기타 선택 시 input에 값이 입력되었을 때만 validation 걸어주기
-    if (this.category === 'etc') {
-      return {
-        etc: {
-          required
-        }
-      }
-    } else {
-      return {
-        category: {
-          required
-        }
+    return {
+      category: {
+        required
       }
     }
+    // if (this.category === 'etc') {
+    //   return {
+    //     etc: {
+    //       required
+    //     }
+    //   }
+    // } else {
+    //   return {
+    //     category: {
+    //       required
+    //     }
+    //   }
+    // }
   },
   watch: {
     $v: {
@@ -84,15 +88,15 @@ export default {
       }
     },
     category(val) {
-      if (val !== 'etc') {
+      // if (val !== 'etc') {
         this.$store.commit('setCategory', {value: val})
-      }
+      // }
     },
-    etc(val) {
-      if (val === 'etc') {
-        this.$store.commit('setCategory', {value: val})
-      }
-    },
+    // etc(val) {
+    //   if (val === 'etc') {
+    //     this.$store.commit('setCategory', {value: val})
+    //   }
+    // },
   },
   mounted() {
     if (!this.$v.$invalid) {

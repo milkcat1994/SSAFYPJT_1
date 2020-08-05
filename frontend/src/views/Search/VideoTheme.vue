@@ -21,9 +21,9 @@
         <span class="display-4">보정 only</span>
       </base-radio>
     
-      <base-radio class="custom-control-alternative" :name="etc" v-model="theme">
+      <!-- <base-radio class="custom-control-alternative" :name="etc" v-model="theme">
         <input type="text" placeholder="기타" v-model="etc" />
-      </base-radio>
+      </base-radio> -->
         
     </div>
   </div>
@@ -50,24 +50,29 @@ export default {
   data() {
     return {
       theme: null,
-      etc: null,
+      etc: '',
     };
   },
   validations() {
-    // 기타 선택 시 input에 값이 입력되었을 때만 validation 걸어주기
-    if (this.theme === 'etc') {
-      return {
-        etc: {
-          required,
-        }
-      }
-    } else {
-      return {
-        theme: {
-          required
-        }
+    return {
+      theme: {
+        required
       }
     }
+    // 기타 선택 시 input에 값이 입력되었을 때만 validation 걸어주기
+    // if (this.theme === 'etc') {
+    //   return {
+    //     etc: {
+    //       required,
+    //     }
+    //   }
+    // } else {
+    //   return {
+    //     theme: {
+    //       required
+    //     }
+    //   }
+    // }
   },
   watch: {
     $v: {
@@ -86,15 +91,15 @@ export default {
       }
     },
     theme(val) {
-      if (val !== 'etc') {
+      // if (val !== 'etc') {
         this.$store.commit('setTheme', {value: val})
-      }
+      // }
     },
-    etc(val) {
-      if (val === 'etc') {
-        this.$store.commit('setTheme', {value: val})
-      }
-    }
+    // etc(val) {
+    //   if (val === 'etc') {
+    //     this.$store.commit('setTheme', {value: val})
+    //   }
+    // }
   },
   mounted() {
     if (!this.$v.$invalid) {
