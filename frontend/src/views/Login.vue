@@ -49,7 +49,9 @@
               <span class="text-muted">이 사이트 기억하기</span>
             </base-checkbox>-->
             <div class="text-center">
-              <base-button type="primary" class="my-4" @click="login()">로그인</base-button>
+              <base-button type="primary" class="my-4" @click="login()"
+                >로그인</base-button
+              >
             </div>
           </form>
         </div>
