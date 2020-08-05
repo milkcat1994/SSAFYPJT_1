@@ -316,14 +316,6 @@ export default {
       events: [
       ],
 
-      event: {
-        title: "In Progress",
-        start: "",
-        end: "",
-        repeat: "montly",
-        categoryId: 1,
-      }
-
     };
   },
   created() {
