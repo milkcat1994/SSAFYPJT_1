@@ -383,26 +383,17 @@
                         <div class="d-block text-center">
                           *편집된 영상에 만족하셨나요?
                           <div class="d-flex justify-content-center">
-                            <star-rating
-                              :increment="0.5"
-                              v-model="videoScore"
-                            ></star-rating>
+                            <star-rating v-model="videoScore"></star-rating>
                           </div>
                           <hr />
                           *편집자가 친절하게 소통했나요?
                           <div class="d-flex justify-content-center">
-                            <star-rating
-                              :increment="0.5"
-                              v-model="kindnessScore"
-                            ></star-rating>
+                            <star-rating v-model="kindnessScore"></star-rating>
                           </div>
                           <hr />
                           *편집자가 마감 기한을 잘 지켰나요?
                           <div class="d-flex justify-content-center">
-                            <star-rating
-                              :increment="0.5"
-                              v-model="finishScore"
-                            ></star-rating>
+                            <star-rating v-model="finishScore"></star-rating>
                           </div>
                           <hr />
                           *솔직한 한 줄 평을 남겨주세요.
@@ -414,7 +405,10 @@
                           </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                          <b-button @click="writeReview(requestitem2.rid)"
+                          <b-button
+                            @click="
+                              writeReview(requestitems2.response_nickname)
+                            "
                             >작성 완료</b-button
                           >
                           <b-button @click="$bvModal.hide('review')"
@@ -633,11 +627,11 @@ export default {
     setUserInfo(data) {
       this.nickname = data.nickname;
     },
-    writeReview(rid) {
+    writeReview(portfolioid) {
       let msg = "리뷰 작성에 실패하였습니다.";
       http
         .post("/portfolio/review/" + this.uid, {
-          portfolioUid: rid,
+          portfolioUid: portfolioid,
           nickname: this.nickname,
           videoScore: this.videoScore,
           kindnessScore: this.kindnessScore,
@@ -649,7 +643,7 @@ export default {
           if (data.data == "success") {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
-            "#review".hide;
+            this.$bvModal.hide("review");
             return;
           } else {
             alertify.error(msg, 3);
