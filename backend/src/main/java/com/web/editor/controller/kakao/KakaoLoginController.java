@@ -21,7 +21,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
 
+import com.web.editor.model.dto.user.NormalLoginRequest;
+import com.web.editor.model.dto.user.NormalRegisterRequest;
+import com.web.editor.model.dto.user.UserUpdateRequest;
+import io.swagger.annotations.ApiOperation;
 import com.web.editor.model.service.kakao.KakaoAPI;
  
 // @Controller
@@ -41,7 +46,7 @@ public class KakaoLoginController {
     }
    
     @PostMapping(value="/login")
-    public String login(@RequestParam("code") String code, HttpSession session,@Valid @RequestBody NormalRegisterRequest request) {
+    public Object login(@RequestParam("code") String code, HttpSession session,@Valid @RequestBody NormalRegisterRequest request) {
         // String access_Token = kakao.getAccessToken(code);
         // HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
         // System.out.println("login Controller : " + userInfo);
@@ -74,19 +79,24 @@ public class KakaoLoginController {
             //user = new User(email, null, nickname, "kakao", auth);
         }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return response;
     }
     
     
-    @RequestMapping(value="/logout")
-    public String logout(HttpSession session) {
+    @PostMapping(value="/logout")
+    @ApiOperation(value = "로그아웃")
+    public Object logout(HttpSession session) {
+
+        ResponseEntity response = null;
+        final BasicResponse result = new BasicResponse();
 
         kakao.kakaoLogout((String)session.getAttribute("access_Token"));
         session.removeAttribute("access_Token");
         session.removeAttribute("userId");
         System.out.println("로그아웃 완료!!!");
+        response = new ResponseEntity<>(result, HttpStatus.OK);
         
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return response;
     }
     
 }
