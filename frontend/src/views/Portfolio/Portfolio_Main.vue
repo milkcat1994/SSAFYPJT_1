@@ -24,7 +24,6 @@
                       <!-- 에디터 본인 일 경우에만 비활성화 되어야한다. -->
                       <base-button size="sm" type="default" @click="modal.show=true"> 작업 요청하기 </base-button>
                     </h1>
-                    <!-- 스크롤 및 높이 지정 필요 -->
                     <h3>
                       Skills: {{portfolio.skill}}
                     </h3>
@@ -34,14 +33,7 @@
                     <h3>
                       {{portfolio.description}}
                     </h3>
-                    <div class="tags-input">
-                      <vue-tags-input
-                        v-model="tag"
-                        :allow-edit-tags = "false"
-                        :tags="tags"
-                        @tags-changed="newTags => tags = newTags"
-                      />
-                    </div>
+                    <input-tag v-model="tags" :limit="limit" :read-only="true"></input-tag>
                   </div>
                 </div>
               </div>
@@ -105,12 +97,6 @@
                     v-model='disableDates'
                     :disabled-dates='disableDates'
                   />
-                  <!-- {{disableDates}} -->
-                  <!-- <calendar
-                    :eventCategories="eventCategories"
-                    :events="events"
-                    ref="calendar"
-                  /> -->
                 </div>
                 <div class="col-xl-4 col-lg-6">
                   <h3>한줄평</h3>
@@ -230,12 +216,11 @@
   </div>
 </template>
 <script>
+import InputTag from 'vue-input-tag';
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 import { Rate } from "vue-rate";
-// import { Calendar } from "vue-sweet-calendar";
 import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
 import flatPicker from "vue-flatpickr-component";
-import VueTagsInput from '@johmun/vue-tags-input';
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
 import "vue-sweet-calendar/dist/SweetCalendar.css";
@@ -250,12 +235,11 @@ import { getFormatDate } from "@/util/day-common";
     name: 'user-portfolio',
     components: {
       LazyYoutubeVideo,
-      // Calendar,
       Rate,
       BadgerAccordion,
       BadgerAccordionItem,
       flatPicker,
-      VueTagsInput
+      InputTag
     },
     data() {
       return {
@@ -580,14 +564,5 @@ import { getFormatDate } from "@/util/day-common";
 };
 </script>
 <style lang="scss">
-@import url(//fonts.googleapis.com/earlyaccess/nanumpenscript.css);
 
-.tags-input-tag{
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 20px;
-}
-
-.mb-30 {
-  margin-bottom:30px;
-}
 </style>

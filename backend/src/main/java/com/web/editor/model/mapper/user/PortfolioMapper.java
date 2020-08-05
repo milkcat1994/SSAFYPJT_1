@@ -92,5 +92,10 @@ public class PortfolioMapper {
     // 영상 모두 삭제
     public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest) throws SQLException{
 		return sqlSession.delete("deleteVideos", portfolioVideoDeleteRequest);
-	}
+    }
+    
+    // 태그 모두 삭제
+    public int deleteTags(int uid) throws SQLException {
+        return sqlSession.delete("deleteTags", uid);
+    }
 }

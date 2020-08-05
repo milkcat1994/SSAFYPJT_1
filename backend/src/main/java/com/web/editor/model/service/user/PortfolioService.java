@@ -56,4 +56,7 @@ public interface PortfolioService {
 
     //비디오 모두 삭제
     public int deleteVideos(PortfolioVideoDeleteRequest portfolioVideoDeleteRequest);
+
+    // 태그 모두 삭제
+    public int deleteTags(String uid);
 }

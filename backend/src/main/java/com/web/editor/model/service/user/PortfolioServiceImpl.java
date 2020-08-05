@@ -132,17 +132,18 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public int tagSave(PortfolioTagSaveRequest portfolioTagSaveRequest) {
         try {
-            PortfolioTagSaveRequest pfts = null;
-            int uid = portfolioTagSaveRequest.getPortfolioUid();
-            StringTokenizer st = new StringTokenizer(portfolioTagSaveRequest.getTagName().trim(), "#");
+            // PortfolioTagSaveRequest pfts = null;
+            // int uid = portfolioTagSaveRequest.getPortfolioUid();
+            // StringTokenizer st = new StringTokenizer(portfolioTagSaveRequest.getTagName().trim(), "#");
 
-            int res = 0;
-            while (st.hasMoreTokens()) {
-                pfts = new PortfolioTagSaveRequest(uid, st.nextToken().trim());
-                res = portfolioMapper.tagSave(pfts);
-                if (res < 0)
-                    break;
-            }
+            // int res = 0;
+            // while (st.hasMoreTokens()) {
+            //     pfts = new PortfolioTagSaveRequest(uid, st.nextToken().trim());
+            //     res = portfolioMapper.tagSave(pfts);
+            //     if (res < 0)
+            //         break;
+            // }
+            int res = portfolioMapper.tagSave(portfolioTagSaveRequest);
             return res;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -200,6 +201,17 @@ public class PortfolioServiceImpl implements PortfolioService {
             int res = portfolioMapper.portfolioUpdate(portfolioInfo);
             return res;
         } catch (SQLException e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public int deleteTags(String uid) {
+        try{
+            int res = portfolioMapper.deleteTags(Integer.parseInt(uid));
+            return res;
+        } catch (SQLException e) {
             e.printStackTrace();
             return -1;
         }

@@ -39,14 +39,8 @@
                       v-model="portfolio.payMin"
                     />
                     <div class="tags-input">
-                      <vue-tags-input
-                        label="태그로 자신을 표현하세요."
-                        v-model="tag"
-                        :allow-edit-tags = "true"
-                        :tags="tags"
-                        @tags-changed="newTags => tags = newTags"
-                      />
-                      <!-- <base-button size="sm" type="default float-right"> 수정하기 </base-button> -->
+                      <base-button size="sm" type="default float-right" @click="updateTags()"> 수정하기 </base-button>
+                      <input-tag placeholder="Add Tag" v-model="tags" :limit="limit"></input-tag>
                     </div>
                   </div>
                 </div>
@@ -57,7 +51,6 @@
 
         <div class="col-xl-5 order-xl-1">
           <card shadow type="secondary">
-            <!-- <h3 class="mb-0" style="text-align:center">대표영상</h3> -->
             <base-input
               alternative
               label="대표영상 URL"
@@ -75,10 +68,6 @@
       <div class="row">
         <div class="col">
           <div class="card shadow">
-            <!-- <div class="card-header bg-transparent">
-              <h3 class="mb-0">그 외 영상들</h3>
-            </div> -->
-
             <div class="card-body">
               <base-button size="sm" type="default float-right" @click="uploadVideos()"> 수정하기 </base-button>
               <div class="row">
@@ -131,7 +120,7 @@
   </div>
 </template>
 <script>
-import VueTagsInput from '@johmun/vue-tags-input';
+import InputTag from 'vue-input-tag';
 //axios 초기 설정파일
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
@@ -139,13 +128,11 @@ import alertify from "alertifyjs";
   export default {
     name: 'portfolio_edit',
     components: {
-      VueTagsInput,
+      InputTag
     },
     data() {
       return {
         uid:'',
-        // selectedValue: new Date(),
-        // havePortfolioInfo: false,
         haveSchedule: false,
         isFirstHeadVideo: false,
         isFirstVideos: false,
@@ -401,7 +388,21 @@ import alertify from "alertifyjs";
             } else {
               alertify.error("오류가 발생하였습니다.",3);
             }
-          })
+        })
+      },
+      updateTags(){
+        http
+        .put('/portfolio/tag/'+this.uid, {
+          portfolioUid: this.uid,
+          tagName: this.tags
+        })
+        .then(({ data }) => {
+            if(data.data == "success"){
+              alertify.notfiy("수정이 완료되었습니다.","success",3);
+            } else {
+              alertify.error("오류가 발생하였습니다.",3);
+            }
+        })
       },
       makeVideosArray(result){
         let res = [];

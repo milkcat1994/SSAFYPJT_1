@@ -98,4 +98,9 @@
         WHERE portfolio_uid = #{uid}
         AND schedule_type = #{scheduleType}
     </delete>
+
+    <delete id="deleteTags">
+        DELETE FROM portfolio_tag
+        WHERE portfolio_uid = #{uid}
+    </delete>
 </mapper>
