@@ -49,7 +49,9 @@
               <span class="text-muted">이 사이트 기억하기</span>
             </base-checkbox>-->
             <div class="text-center">
-              <base-button type="primary" class="my-4" @click="login()">로그인</base-button>
+              <base-button type="primary" class="my-4" @click="login()"
+                >로그인</base-button
+              >
             </div>
           </form>
         </div>
@@ -113,10 +115,13 @@ export default {
     },
     login() {
       if (!this.emailCheck(this.model.email)) {
-        alertify.error("아이디 또는 비밀번호가 올바르지 않습니다.");
+        alertify.error("아이디 형식이 올바르지 않습니다.");
         return;
       }
-
+      if (!this.pwdCheck(this.model.pwd)) {
+        alertify.error("비밀번호 형식이 올바르지 않습니다.");
+        return;
+      }
       store
         .dispatch("auth/login", {
           userEmail: this.model.email,
