@@ -77,7 +77,11 @@
     <!-- 포트폴리오에 리뷰 등록 -->
     <insert id="reviewSave">
         INSERT INTO review (`portfolio_uid`, `nickname`, `video_score`, `kindness_score`, `finish_score`, `comment`)
-                        VALUES (#{portfolioUid}, #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
+                        VALUES 
+                        ((SELECT `uid`
+                         FROM user_info
+                         WHERE `nickname` = #{portfolioNickname}),
+                        #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
     </insert>
 
     <delete id="deleteVideos">

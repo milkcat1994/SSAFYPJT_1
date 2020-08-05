@@ -15,7 +15,7 @@ import lombok.ToString;
 public class PortfolioReviewSaveRequest {
     @ApiModelProperty(required = true)
     @NotNull
-    private int portfolioUid;
+    private String portfolioNickname;
 
     @ApiModelProperty(required = true)
     @NotNull
