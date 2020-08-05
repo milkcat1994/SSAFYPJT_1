@@ -1,8 +1,5 @@
 package com.web.editor.model.dto.user;
 
-import java.util.Date;
-
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -12,26 +9,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Valid
 @ToString
 @Getter
 @Setter
-public class PortfolioScheduleSaveRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PortfolioVideoDeleteRequest {
     @ApiModelProperty(required = true)
     @NotNull
-    private int portfolioUid;
+    private int uid;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private Date startDate;
-
-    @ApiModelProperty(required = true)
-    @NotNull
-    private Date endDate;
-
-    @ApiModelProperty(required = true)
-    @NotNull
-    private int scheduleType;
+    private int mainFlag;
 }

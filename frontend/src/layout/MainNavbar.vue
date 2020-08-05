@@ -14,7 +14,7 @@
     <!-- 최근 메시지 보여주기 -->
     <ul class="navbar-nav align-items-center mr-4 d-none d-md-flex ml-lg-auto">
       <li class="nav-item dropdown" v-if="isLogin">
-        <base-dropdown class="nav-link pr-0">
+        <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
             <i class="ni ni-bell-55"></i>
             <badge type="text-light">{{ getNotifyNum() }}</badge>
@@ -32,7 +32,8 @@
             >
               <router-link to="/alarm" class="dropdown-item">
                 <i class="ni ni-bulb-61 text-yellow"></i>
-                <span>{{ notifyitem.request_nickname }}님께서 영상편집을 요청하셨습니다</span>
+                <span v-if="notifyitem.notify_type=='request'">{{ notifyitem.request_nickname }}님께서 영상편집을 요청하셨습니다</span>
+                <span v-if="notifyitem.notify_type=='accepted'">{{ notifyitem.request_nickname }}님께서 요청을 수락하셨습니다</span>
               </router-link>
             </div>
             <div class="dropdown-divider"></div>

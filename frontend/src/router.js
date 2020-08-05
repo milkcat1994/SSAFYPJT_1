@@ -40,30 +40,6 @@ export default new Router({
       component: MainLayout,
       children: [
         {
-          path: "/portfolio",
-          name: "portfolio",
-          // route level code-splitting
-          // this generates a separate chunk (about.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
-          component: () =>
-            import(
-              /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Main.vue"
-            ),
-          // beforeEnter: requireLogin
-        },
-        {
-          path: "/portfolio/edit",
-          name: "portfolio_edit",
-          // route level code-splitting
-          // this generates a separate chunk (about.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
-          component: () =>
-            import(
-              /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Edit.vue"
-            ),
-          beforeEnter: requireAuth,
-        },
-        {
           path: "/dashboard",
           name: "dashboard",
           // route level code-splitting
@@ -117,6 +93,37 @@ export default new Router({
           beforeEnter: requireLogin,
         },
       ],
+    },
+    {
+      path: "/portfolio",
+      redirect: "portfolio",
+      component: MainLayout,
+      children: [
+        {
+          path: "",
+          name: "portfolio",
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () =>
+            import(
+              /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Main.vue"
+            ),
+            // beforeEnter: requireLogin
+        },
+        {
+          path: "/portfolio/edit",
+          name: "portfolio_edit",
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () =>
+            import(
+              /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Edit.vue"
+            ),
+            beforeEnter: requireAuth
+        },
+      ]
     },
     {
       path: "/user",

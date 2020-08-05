@@ -15,8 +15,16 @@ import lombok.ToString;
 @Getter
 @Setter
 @Repository
-public class PortfolioVideoUpdateRequest {
+public class PortfolioVideoRequest {
     @ApiModelProperty(required = true)
     @NotNull
-    private List<PortfolioVideoSaveRequest> portfolioVideo;
+    private int portfolioUid;
+
+    @ApiModelProperty(required = true)
+    @NotNull
+    private List<String> url;
+
+    @ApiModelProperty(required = true)
+    @NotNull
+    private int mainFlag;
 }
