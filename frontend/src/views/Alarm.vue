@@ -42,7 +42,7 @@
           >
           <i
             class="fas fa-circle"
-            style="color: #ff0077; margin: 15px"
+            style="color: #ff0066; margin: 15px"
             v-if="$session.get('auth') == 'editor'"
             >내 휴일</i
           >
@@ -53,7 +53,7 @@
       <tabs fill class="flex-column flex-md-row">
         <card shadow>
           <tab-pane>
-            <span slot="title" @click="setDateClean()">
+            <span slot="title" @click="setDateClean">
               <div v-if="$session.get('auth') == 'editor'">요청된 작업</div>
               <div v-if="$session.get('auth') == 'noneditor'">요청한 작업</div>
             </span>
@@ -85,7 +85,6 @@
                       v-b-toggle="'accordion-' + requestitem0.uid"
                       variant="info"
                       @click="
-                        setDateClean();
                         getDetail(requestitem0.rid);
                         setRequestDate(
                           requestitem0.start_date,
@@ -189,7 +188,7 @@
           </tab-pane>
 
           <tab-pane title="Profile">
-            <span slot="title" @click="setDateClean()">
+            <span slot="title" @click="setDateClean">
               <div>진행중 작업</div>
             </span>
             <div role="tablist">
@@ -204,7 +203,6 @@
                       v-b-toggle="'accordion-' + requestitem1.uid"
                       variant="info"
                       @click="
-                        setDateClean();
                         getDetail(requestitem1.rid);
                         setRequestDate(
                           requestitem1.start_date,
@@ -285,7 +283,7 @@
           </tab-pane>
 
           <tab-pane>
-            <span slot="title" @click="setDateClean();">
+            <span slot="title" @click="setDateClean">
               <div>완료된 작업</div>
             </span>
             <div role="tablist">
@@ -300,7 +298,6 @@
                       v-b-toggle="'accordion-' + requestitem2.uid"
                       variant="info"
                       @click="
-                        setDateClean();
                         getDetail(requestitem2.rid);
                         setRequestDate(
                           requestitem2.start_date,
@@ -500,7 +497,6 @@ export default {
           "getRequestitems2",
           "/request/res/" + this.$session.get("nickname") + "/2"
         );
-        store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
       } else if (this.$session.get("auth") == "noneditor") {
         store.dispatch(
           "getRequestitems0",
@@ -515,11 +511,11 @@ export default {
           "/request/req/" + this.$session.get("nickname") + "/2"
         );
       }
-      this.setProgressDate();
     } else {
       this.$router.push("/");
       alertify.error("로그인이 필요한페이지 입니다.", 3);
     }
+    this.setProgressDate();
   },
   computed: {
     ...mapGetters(["requestitems0"]),
@@ -655,15 +651,24 @@ export default {
         });
     },
     setRequestDate(start, end) {
+      // if (this.events[this.$store.state.progressdate.length].start != "") {
+      //   this.setDateClean();
+      //   return;
+      // }
       this.events[this.$store.state.progressdate.length].start = start.substring(0, 10);
       this.events[this.$store.state.progressdate.length].end = end.substring(0, 10);
     },
     setDateClean(){
-      this.events[this.events.length - 1].start = "";
-      this.events[this.events.length - 1].end = "";
+      this.events[this.$store.state.progressdate.length].start = "";
+      this.events[this.$store.state.progressdate.length].end = "";
     },
     setProgressDate(){
-      store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
+      if (this.$session.get("auth") == "editor") {
+        store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
+      }
+      else if (this.$session.get("auth") == "noneditor") {
+        store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
+      }
       this.events = this.$store.state.progressdate;
       this.events.push({
         start: "",
