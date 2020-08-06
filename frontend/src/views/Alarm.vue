@@ -12,15 +12,48 @@
       <span class="mask bg-gradient-success opacity-8"></span>
     </base-header>
 
+
+
     <br />
     <hr />
     <!-- <h2 class="text-center">알림창</h2> -->
     <br />
+
     <div class="container-fluid mt--7 mb-5">
+
+      <!-- for calendar -->
+      <br><br>
+      <div style="display: table; width:100%">
+        <div style="display: table-cell; text-align:center;">
+          <calendar
+            :eventCategories="eventCategories"
+            :events="events"
+            ref="calendar"
+          />
+          <i
+            class="fas fa-circle"
+            style="color: #f29661; margin: 15px;"
+            >선택된 작업</i
+          >
+          <i
+            class="fas fa-circle"
+            style="color: #6699ff; margin: 15px"
+            >진행중 작업</i
+          >
+          <i
+            class="fas fa-circle"
+            style="color: #ff0066; margin: 15px"
+            v-if="$session.get('auth') == 'editor'"
+            >개인 일정</i
+          >
+        </div>
+      </div>
+
+
       <tabs fill class="flex-column flex-md-row">
         <card shadow>
           <tab-pane>
-            <span slot="title">
+            <span slot="title" @click="setDateClean">
               <div v-if="$session.get('auth') == 'editor'">요청된 작업</div>
               <div v-if="$session.get('auth') == 'noneditor'">요청한 작업</div>
             </span>
@@ -73,7 +106,6 @@
                       <b-card-text>
                         <table
                           class="table table-hover"
-                          style="float:left; width: 60%"
                         >
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
@@ -119,25 +151,6 @@
                           </tbody>
                         </table>
 
-                        <!-- for calendar -->
-                        <calendar
-                          :eventCategories="eventCategories"
-                          :events="events"
-                          ref="calendar"
-                          style="float:left; width: 40%; height: 100%"
-                        />
-                        <div style="float:left; width: 40%; height: 100%">
-                          <i
-                            class="fas fa-circle"
-                            style="color: #f29661; margin: 15px"
-                            >요청 작업</i
-                          >
-                          <i
-                            class="fas fa-circle"
-                            style="color: #6699ff; margin: 15px"
-                            >진행중 작업</i
-                          >
-                        </div>
                       </b-card-text>
                       <div
                         id="editorBtn"
@@ -175,7 +188,7 @@
           </tab-pane>
 
           <tab-pane title="Profile">
-            <span slot="title">
+            <span slot="title" @click="setDateClean">
               <div>진행중 작업</div>
             </span>
             <div role="tablist">
@@ -210,7 +223,6 @@
                       <b-card-text>
                         <table
                           class="table table-hover"
-                          style="float:left; width: 60%"
                         >
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
@@ -256,25 +268,6 @@
                           </tbody>
                         </table>
 
-                        <!-- for calendar -->
-                        <calendar
-                          :eventCategories="eventCategories"
-                          :events="events"
-                          ref="calendar"
-                          style="float:left; width: 40%; height: 100%"
-                        />
-                        <div style="float:left; width: 40%; height: 100%">
-                          <i
-                            class="fas fa-circle"
-                            style="color: #f29661; margin: 15px"
-                            >현재 선택된 작업</i
-                          >
-                          <i
-                            class="fas fa-circle"
-                            style="color: #6699ff; margin: 15px"
-                            >진행중 작업</i
-                          >
-                        </div>
                       </b-card-text>
                       <b-button
                         class="statusBtn"
@@ -290,7 +283,7 @@
           </tab-pane>
 
           <tab-pane>
-            <span slot="title">
+            <span slot="title" @click="setDateClean">
               <div>완료된 작업</div>
             </span>
             <div role="tablist">
@@ -325,7 +318,6 @@
                       <b-card-text>
                         <table
                           class="table table-hover"
-                          style="float:left; width: 100%"
                         >
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
@@ -556,15 +548,21 @@ export default {
       eventCategories: [
         {
           id: 1,
-          title: "Personal",
+          title: "holiday",
           textColor: "white",
-          backgroundColor: "#6699ff",
+          backgroundColor: "#ff0066",
         },
         {
           id: 2,
-          title: "Company-wide",
+          title: "selected",
           textColor: "white",
           backgroundColor: "#f29661",
+        },
+        {
+          id: 3,
+          title: "In Progress",
+          textColor: "white",
+          backgroundColor: "#6699ff",
         },
       ],
       events: [],
@@ -621,11 +619,11 @@ export default {
           "/request/req/" + this.$session.get("nickname") + "/3"
         );
       }
-      this.setInprogressDate();
     } else {
       this.$router.push("/");
       alertify.error("로그인이 필요한페이지 입니다.", 3);
     }
+    this.setProgressDate();
   },
   computed: {
     ...mapGetters(["requestitems0"]),
@@ -633,6 +631,8 @@ export default {
     ...mapGetters(["requestitems2"]),
     ...mapGetters(["requestitems3"]),
     ...mapGetters(["requestitem"]),
+    ...mapGetters(["progressdate"]),
+    ...mapGetters(["holidaydate"]),
   },
   methods: {
     getDetail(rid) {
@@ -660,7 +660,7 @@ export default {
             "getRequestitems1",
             "/request/res/" + this.$session.get("nickname") + "/1"
           );
-          this.setInprogressDate();
+          this.setProgressDate()
         });
     },
     // 요청 거절
@@ -687,6 +687,7 @@ export default {
               "getRequestitems0",
               "/request/req/" + this.$session.get("nickname") + "/0"
             );
+          this.setDateClean();
         });
     },
     // 요청 완료
@@ -722,7 +723,7 @@ export default {
               "/request/req/" + this.$session.get("nickname") + "/2"
             );
           }
-          this.setInprogressDate();
+          this.setProgressDate();
         });
     },
     // 후기 완료
@@ -752,11 +753,6 @@ export default {
         });
     },
 
-    // 캘린더 날짜 셋팅
-    setCalendarDate(start, end) {
-      this.events.start = start.substring(0, 10);
-      this.events.end = end.substring(0, 10);
-    },
     setUserInfo(data) {
       this.nickname = data.nickname;
     },
@@ -792,31 +788,35 @@ export default {
         });
     },
     setRequestDate(start, end) {
-      this.events[this.events.length - 1].start = start.substring(0, 10);
-      this.events[this.events.length - 1].end = end.substring(0, 10);
+      if (this.events[this.events.length-1].start == start.substring(0, 10)
+          && this.events[this.events.length-1].end == end.substring(0, 10)) {
+        this.setDateClean();
+        return;
+      }
+      this.events[this.events.length-1].start = start.substring(0, 10);
+      this.events[this.events.length-1].end = end.substring(0, 10);
     },
-    setInprogressDate() {
-      let items = this.$store.state.requestitems1;
-      items.forEach((item) => {
-        let event = {
-          title: "In Progress",
-          start: "",
-          end: "",
-          repeat: "montly",
-          categoryId: 1,
-        };
-        event.start = item.start_date.substring(0, 10);
-        event.end = item.end_date.substring(0, 10);
-        this.events.push(event);
-      });
+    setDateClean(){
+      this.events[this.events.length-1].start = "";
+      this.events[this.events.length-1].end = "";
+    },
+    setProgressDate(){
+      if (this.$session.get("auth") == "editor") {
+        store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
+        store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
+        this.events = this.$store.state.progressdate.concat(this.$store.state.holidaydate);
+      }
+      else if (this.$session.get("auth") == "noneditor") {
+        store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
+        this.events = this.$store.state.progressdate;
+      }
       this.events.push({
-        title: "Request",
         start: "",
         end: "",
-        repeat: "montly",
         categoryId: 2,
       });
-    },
+    }
+
   },
 };
 </script>

@@ -30,6 +30,9 @@ export default new Vuex.Store({
 
     tagitem: "",
 
+    progressdate: [],
+    holidaydate: [],
+
     requests: {
       category: null,
       theme: null,
@@ -65,6 +68,13 @@ export default new Vuex.Store({
     requestitem(state) {
       return state.requestitem;
     },
+    progressdate(state) {
+        return state.progressdate;
+    },
+    holidaydate(state) {
+        return state.holidaydate;
+    },
+
 
     tagitem(state) {
       return state.tagitem;
@@ -131,6 +141,12 @@ export default new Vuex.Store({
     },
     mutateSetRequestitem(state, requestitem) {
       state.requestitem = requestitem;
+    },
+    mutateSetProgressdate(state, progressdate) {
+        state.progressdate = progressdate
+    },
+    mutateSetHolidaydate(state, holidaydate) {
+        state.holidaydate = holidaydate
     },
 
     mutateSetTagitem(state, tagitem) {
@@ -222,6 +238,16 @@ export default new Vuex.Store({
     getRequestitem(context, payload) {
       http.get(payload).then(({ data }) => {
         context.commit("mutateSetRequestitem", data);
+      });
+    },
+    getProgressdate(context, payload) {
+      http.get(payload).then(({ data }) => {
+        context.commit('mutateSetProgressdate', data);
+      });
+    },
+    getHolidaydate(context, payload) {
+      http.get(payload).then(({ data }) => {
+        context.commit('mutateSetHolidaydate', data);
       });
     },
 
