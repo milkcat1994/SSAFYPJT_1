@@ -1,6 +1,5 @@
 package com.web.editor.model.service.user.schedule;
 
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HolidayDateServiceImpl implements HolidayDateService {
-
+    
     @Autowired
     ScheduleMapper scheduleMapper;
 
@@ -27,5 +26,4 @@ public class HolidayDateServiceImpl implements HolidayDateService {
             return null;
         }
     }
-
 }
