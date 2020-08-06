@@ -130,9 +130,9 @@ public class RequestServiceImpl implements RequestService {
 	// 알림
 	// 요청 알림리스트 조회(일반회원)
 	@Override
-	public List<NotifyDto> searchNotify(String notify_nickname) {
+	public List<NotifyDto> searchNotify(String response_nickname) {
 		try {
-			return requestMapper.searchNotify(notify_nickname);
+			return requestMapper.searchNotify(response_nickname);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -177,9 +177,9 @@ public class RequestServiceImpl implements RequestService {
 	}
 	// 알림 수정2(회원이 알림을 모두 읽음)
 	@Override
-	public int updateAllNotify(String notify_nickname) {
+	public int updateAllNotify(String response_nickname) {
 		try {
-			return requestMapper.updateAllNotify(notify_nickname);
+			return requestMapper.updateAllNotify(response_nickname);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return -1;

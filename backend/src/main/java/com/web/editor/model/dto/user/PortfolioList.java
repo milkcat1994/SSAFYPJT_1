@@ -1,5 +1,7 @@
 package com.web.editor.model.dto.user;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.springframework.stereotype.Repository;
@@ -15,8 +17,10 @@ import lombok.Setter;
 @Setter
 @Repository
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PortfolioTag {
-    private int tagNo;
-    private int portfolioUid;
-    private String tagName;
+public class PortfolioList {
+    private int uid;
+    private String nickname;
+    private String payMin;
+    // private int bookmarkCount;
+    private List<String> tags;
 }

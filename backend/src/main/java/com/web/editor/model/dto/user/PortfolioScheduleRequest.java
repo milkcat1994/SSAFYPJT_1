@@ -1,5 +1,8 @@
 package com.web.editor.model.dto.user;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -12,28 +15,20 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class PortfolioReviewSaveRequest {
+public class PortfolioScheduleRequest {
     @ApiModelProperty(required = true)
     @NotNull
-    private String portfolioNickname;
+    private int portfolioUid;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private String nickname;
+    private List<Date> startDate;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private int videoScore;
+    private List<Date> endDate;
 
     @ApiModelProperty(required = true)
     @NotNull
-    private int kindnessScore;
-
-    @ApiModelProperty(required = true)
-    @NotNull
-    private int finishScore;
-
-    @ApiModelProperty(required = true)
-    @NotNull
-    private String comment;
+    private int scheduleType;
 }

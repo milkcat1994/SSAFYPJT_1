@@ -1,4 +1,4 @@
-package com.web.editor.model.dto.user;
+package com.web.editor.model.dto.user.bookmark;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -15,8 +15,7 @@ import lombok.Setter;
 @Setter
 @Repository
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PortfolioTag {
-    private int tagNo;
-    private int portfolioUid;
-    private String tagName;
+public class BookmarkUid {
+    // 북마크에 등록된 편집자 id
+    private int muid;
 }

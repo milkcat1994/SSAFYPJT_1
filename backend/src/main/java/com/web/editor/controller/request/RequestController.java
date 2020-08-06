@@ -126,7 +126,7 @@ public class RequestController {
 		
    	   	if (result > 0) {
 			// 알림 함께 등록
-			addNotify(requestDto);
+			addNotify(requestDto, "request");
 			// 태그 함께 등록
 			addTag(requestDto.getTag_list(), requestDto.getRid());
 
@@ -143,6 +143,14 @@ public class RequestController {
    		int result = requestService.acceptRequest(rid);
     	
    	   	if (result > 0) {
+			// 요청 수락 시 일반회원이 알림을 받음
+			RequestDto dto = requestService.searchRequest(rid);
+			String reqNickname = dto.getResponse_nickname();	
+			String resNickname = dto.getRequest_nickname();		// 일반회원이 알림받는 사람이됨
+			dto.setRequest_nickname(reqNickname);
+			dto.setResponse_nickname(resNickname);
+
+			addNotify(dto, "accepted");
    			return new ResponseEntity<String>("success", HttpStatus.OK);
    		} else {
    			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
@@ -190,9 +198,9 @@ public class RequestController {
 	
 	// 알림 조회
 	@ApiOperation(value = "회원의 알림 리스트(limit 5)")
-	@GetMapping("/notify/{notify_nickname}")	// 일반회원 (요청자)
-	public Object searchNotify(@PathVariable String notify_nickname) throws UnsupportedEncodingException {
-		List<NotifyDto> notifyList = requestService.searchNotify(decodeURL(notify_nickname));
+	@GetMapping("/notify/{response_nickname}")	// 일반회원 (요청자)
+	public Object searchNotify(@PathVariable String response_nickname) throws UnsupportedEncodingException {
+		List<NotifyDto> notifyList = requestService.searchNotify(decodeURL(response_nickname));
 		if (notifyList.size() >= 0) {
 			return new ResponseEntity<>(notifyList, HttpStatus.OK);
 		} else {
@@ -228,10 +236,10 @@ public class RequestController {
 
 	// 알림 수정2(회원이 알림을 전부 읽음)
 	@ApiOperation(value = "회원이 요청알림을 전부 읽음,  \"success\" 또는 \"fail\"반환")
-	@PutMapping("/notify/read/{notify_nickname}")
-	public ResponseEntity<String> updateAllNotify(@PathVariable String notify_nickname)
+	@PutMapping("/notify/read/{response_nickname}")
+	public ResponseEntity<String> updateAllNotify(@PathVariable String response_nickname)
 			throws UnsupportedEncodingException {
-		int result = requestService.updateAllNotify(decodeURL(notify_nickname));
+		int result = requestService.updateAllNotify(decodeURL(response_nickname));
 
 		if (result > 0) {
 			return new ResponseEntity<String>("success", HttpStatus.OK);
@@ -245,24 +253,14 @@ public class RequestController {
 	}
 
 	// 알림 등록
-	private void addNotify(RequestDto dto){
-		// 일반회원 알림 등록
-		NotifyDto notifyDtoStd = new NotifyDto();
-		notifyDtoStd.setNotify_nickname(dto.getRequest_nickname());
-		notifyDtoStd.setRead_flag(0);
-		notifyDtoStd.setNotify_type("request");	// 알림 타입은 request
-		notifyDtoStd.setRequest_nickname(dto.getRequest_nickname());
-		notifyDtoStd.setResponse_nickname(dto.getResponse_nickname());
-		requestService.insertNotify(notifyDtoStd);
-		
+	private void addNotify(RequestDto dto, String type){
 		// 편집자 알림 등록
-		NotifyDto notifyDtoEdi = new NotifyDto();
-		notifyDtoEdi.setNotify_nickname(dto.getResponse_nickname());
-		notifyDtoEdi.setRead_flag(0);
-		notifyDtoEdi.setNotify_type("request");	// 알림 타입은 request
-		notifyDtoEdi.setRequest_nickname(dto.getRequest_nickname());
-		notifyDtoEdi.setResponse_nickname(dto.getResponse_nickname());
-		requestService.insertNotify(notifyDtoEdi);
+		NotifyDto notifyDto = new NotifyDto();
+		notifyDto.setRead_flag(0);
+		notifyDto.setNotify_type(type);	// 알림 타입은 request
+		notifyDto.setRequest_nickname(dto.getRequest_nickname());	// 알림 요청한사람
+		notifyDto.setResponse_nickname(dto.getResponse_nickname());	// 알림 받는사람
+		requestService.insertNotify(notifyDto);
 	}
 
 	// 태그 검색
