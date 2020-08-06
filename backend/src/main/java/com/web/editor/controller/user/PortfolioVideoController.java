@@ -115,11 +115,14 @@ public class PortfolioVideoController {
 
         List<String> urlList = portfolioVideoRequest.getUrl();
         int size = urlList.size();
+        String url = "";
         for(int i=0; i<size;i++){
             temp = urlList.get(i).split("=");
-            // System.out.println(temp.length);
-            String url = URL + temp[1];
-            // System.out.println(i + ":" + url);
+            if(temp.length > 1){
+                url = URL + temp[1];
+            } else {
+                url = urlList.get(i);
+            }
             urlList.set(i, url);
         }
         portfolioVideoRequest.setUrl(urlList);
