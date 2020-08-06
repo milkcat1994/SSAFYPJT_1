@@ -8,6 +8,9 @@ import { auth } from "./auth.module";
 import createPersistedState from "vuex-persistedstate";
 import alertify from "alertifyjs";
 
+import Vuelidate from "vuelidate";
+
+Vue.use(Vuelidate);
 Vue.use(Vuex);
 
 export default new Vuex.Store({
