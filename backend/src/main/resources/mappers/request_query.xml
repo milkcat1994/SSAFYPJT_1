@@ -78,6 +78,15 @@
 				done_flag = 2
 		where rid = #{rid}
 	</update>
+
+	
+	<!-- 후기완료 -->
+	<update id="doneReview">
+		update request_form set
+				done_flag = 3
+		where rid = #{rid}
+	</update>
+
 	<!-- 요청거절 -->
 	<update id="denyRequest">
 		update request_form set

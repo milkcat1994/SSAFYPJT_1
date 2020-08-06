@@ -34,22 +34,22 @@ public class RequestServiceImpl implements RequestService {
 	@Override
 	public List<RequestDto> searchListRequest(String request_nickname) {
 		try {
-			return requestMapper.searchListRequest(request_nickname);	
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	@Override
-	public List<RequestDto> searchListFlagRequest(RequestStatusDto statusDto) {
-		try {
-			return requestMapper.searchListFlagRequest(statusDto);	
+			return requestMapper.searchListRequest(request_nickname);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	@Override
+	public List<RequestDto> searchListFlagRequest(RequestStatusDto statusDto) {
+		try {
+			return requestMapper.searchListFlagRequest(statusDto);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	// 요청서 리스트(편집자)
 	@Override
@@ -59,8 +59,9 @@ public class RequestServiceImpl implements RequestService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
-		}	
+		}
 	}
+
 	@Override
 	public List<RequestDto> searchListFlagResponse(RequestStatusDto statusDto) {
 		try {
@@ -68,7 +69,7 @@ public class RequestServiceImpl implements RequestService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
-		}	
+		}
 	}
 
 	// 요청서 등록
@@ -80,7 +81,7 @@ public class RequestServiceImpl implements RequestService {
 			e.printStackTrace();
 			return -1;
 		}
-	
+
 	}
 
 	// 요청 수락
@@ -93,7 +94,7 @@ public class RequestServiceImpl implements RequestService {
 			return -1;
 		}
 	}
-	
+
 	// 요청 완료
 	@Override
 	public int doneRequest(int rid) {
@@ -104,6 +105,18 @@ public class RequestServiceImpl implements RequestService {
 			return -1;
 		}
 	}
+
+	// 후기 완료
+	@Override
+	public int doneReview(int rid) {
+		try {
+			return requestMapper.doneReview(rid);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
 	// 요청 거절
 	@Override
 	public int denyRequest(int rid) {
@@ -137,9 +150,9 @@ public class RequestServiceImpl implements RequestService {
 			e.printStackTrace();
 			return null;
 		}
-	
+
 	}
-	
+
 	// 알림 등록
 	@Override
 	public int insertNotify(NotifyDto notifyDto) {
@@ -149,7 +162,7 @@ public class RequestServiceImpl implements RequestService {
 			e.printStackTrace();
 			return -1;
 		}
-	
+
 	}
 
 	// 알림 삭제
@@ -173,8 +186,9 @@ public class RequestServiceImpl implements RequestService {
 			e.printStackTrace();
 			return -1;
 		}
-	
+
 	}
+
 	// 알림 수정2(회원이 알림을 모두 읽음)
 	@Override
 	public int updateAllNotify(String response_nickname) {
@@ -183,7 +197,7 @@ public class RequestServiceImpl implements RequestService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return -1;
-		}	
+		}
 	}
 
 	// 태그
@@ -196,7 +210,7 @@ public class RequestServiceImpl implements RequestService {
 			e.printStackTrace();
 			return null;
 		}
-	
+
 	}
 
 	// 태그 등록
@@ -208,7 +222,7 @@ public class RequestServiceImpl implements RequestService {
 			e.printStackTrace();
 			return -1;
 		}
-	
+
 	}
 
 	// 해당 요청서의 태그 삭제
@@ -219,7 +233,7 @@ public class RequestServiceImpl implements RequestService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return -1;
-		}	
+		}
 	}
 
 }
