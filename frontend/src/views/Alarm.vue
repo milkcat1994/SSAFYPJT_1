@@ -577,6 +577,7 @@ export default {
     };
   },
   created() {
+    if (!this.$session.exists()) this.events = [];
     //생성 시 로그인 상태 확인
     if (this.$session.exists()) {
       store
