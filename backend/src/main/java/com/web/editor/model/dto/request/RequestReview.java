@@ -1,4 +1,4 @@
-package com.web.editor.model.dto.user;
+package com.web.editor.model.dto.request;
 
 import java.util.Date;
 
@@ -10,22 +10,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Repository
-@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PortfolioReview {
+public class RequestReview {
     private int reviewNo;
+    private int requestFormRid;
     private String nickname;
     private Date createdDate;
     private int videoScore;
     private int kindnessScore;
     private int finishScore;
     private String comment;
-
 }

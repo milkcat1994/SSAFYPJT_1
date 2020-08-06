@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.editor.model.dto.request.NotifyDto;
 import com.web.editor.model.dto.request.RequestDto;
+import com.web.editor.model.dto.request.RequestReview;
+import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
 import com.web.editor.model.service.request.RequestService;
@@ -320,4 +322,44 @@ public class RequestController {
 		return tagStr.toString();
 	}
 
+	
+	// 요청서의 리뷰 조회
+	@ApiOperation(value = "요청서의 리뷰 조회")
+	@GetMapping("/review/{rid}")
+	public Object searchReview(@PathVariable String rid) {
+		RequestReview review = requestService.searchReview(Integer.parseInt(rid));
+
+		if (review == null) {
+			return new ResponseEntity<>(review, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
+		}
+	}
+
+	
+	// 요청서의 리뷰
+	@ApiOperation(value = "요청서의 리뷰 등록")
+	@PostMapping("/review")
+	public Object insertReview(@RequestBody RequestReviewSaveRequest requestReviewSaveRequest) {
+		int result = requestService.insertReview(requestReviewSaveRequest);
+
+		if (result > 0) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
+		}
+	}
+	
+	// 요청서의 리뷰
+	@ApiOperation(value = "요청서의 리뷰 삭제")
+	@DeleteMapping("/review/{rid}")
+	public Object deleteReview(@PathVariable String rid) {
+		int result = requestService.deleteReview(Integer.parseInt(rid));
+
+		if (result > 0) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
+		}
+	}
 }

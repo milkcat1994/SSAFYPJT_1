@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.web.editor.model.dto.request.NotifyDto;
 import com.web.editor.model.dto.request.RequestDto;
+import com.web.editor.model.dto.request.RequestReview;
+import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
+import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.mapper.request.RequestMapper;
 
 @Service
@@ -235,5 +238,49 @@ public class RequestServiceImpl implements RequestService {
 			return -1;
 		}
 	}
+
+	// 해당 요청서의 리뷰 조회
+	@Override
+	public RequestReview searchReview(int rid) {
+		try {
+			return requestMapper.searchReview(rid);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<PortfolioReview> searchReviewList(String responseNickname) {
+		try {
+			return requestMapper.searchReviewList(responseNickname);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// 해당 요청서에 리뷰 등록
+	@Override
+	public int insertReview(RequestReviewSaveRequest requestReviewSaveRequest) {
+		try {
+			return requestMapper.insertReview(requestReviewSaveRequest);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	// 해당 요청서의 리뷰 삭제
+	@Override
+	public int deleteReview(int rid) {
+		try {
+			return requestMapper.deleteReview(rid);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
 
 }

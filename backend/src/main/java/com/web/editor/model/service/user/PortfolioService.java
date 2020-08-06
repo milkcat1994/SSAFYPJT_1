@@ -30,7 +30,7 @@ public interface PortfolioService {
     public List<PortfolioSchedule> findScheduleByUid(String uid);
     
     // 리뷰 조회
-    public List<PortfolioReview> findReviewByUid(String uid);
+    // public List<PortfolioReview> findReviewByUid(String uid);
     
     // 포트폴리오 초기 등록
     // uid를 이용해 uid, nickname 설정
@@ -44,9 +44,6 @@ public interface PortfolioService {
     
     // 스케쥴 등록
     public int scheduleSave(PortfolioScheduleSaveRequest scheduleSaveRequest);
-
-    // 리뷰 등록
-    public int reviewSave(PortfolioReviewSaveRequest portfolioReviewSaveRequest);
 
     // 포트폴리오 수정
     public int portfolioUpdate(PortfolioInfo portfolioInfo);
