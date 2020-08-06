@@ -53,7 +53,7 @@
       <tabs fill class="flex-column flex-md-row">
         <card shadow>
           <tab-pane>
-            <span slot="title" @click="setDateClean">
+            <span slot="title">
               <div v-if="$session.get('auth') == 'editor'">요청된 작업</div>
               <div v-if="$session.get('auth') == 'noneditor'">요청한 작업</div>
             </span>
@@ -188,7 +188,7 @@
           </tab-pane>
 
           <tab-pane title="Profile">
-            <span slot="title" @click="setDateClean">
+            <span slot="title">
               <div>진행중 작업</div>
             </span>
             <div role="tablist">
@@ -283,7 +283,7 @@
           </tab-pane>
 
           <tab-pane>
-            <span slot="title" @click="setDateClean">
+            <span slot="title">
               <div>완료된 작업</div>
             </span>
             <div role="tablist">
