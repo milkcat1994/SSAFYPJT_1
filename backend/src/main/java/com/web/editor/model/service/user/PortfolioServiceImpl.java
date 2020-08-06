@@ -91,21 +91,21 @@ public class PortfolioServiceImpl implements PortfolioService {
         }
     }
 
-    @Override
-    public List<PortfolioReview> findReviewByUid(String uid) {
-        List<PortfolioReview> review = null;
-        try {
-            review = portfolioMapper.findReviewByUid(uid);
-            // 찾지 못한 경우
-            if (review == null) {
-                review = new ArrayList<>();
-            }
-            return review;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return review;
-        }
-    }
+    // @Override
+    // public List<PortfolioReview> findReviewByUid(String uid) {
+    //     List<PortfolioReview> review = null;
+    //     try {
+    //         review = portfolioMapper.findReviewByUid(uid);
+    //         // 찾지 못한 경우
+    //         if (review == null) {
+    //             review = new ArrayList<>();
+    //         }
+    //         return review;
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         return review;
+    //     }
+    // }
 
     @Override
     public int portfolioInitSave(String uid) {
@@ -155,17 +155,6 @@ public class PortfolioServiceImpl implements PortfolioService {
     public int scheduleSave(PortfolioScheduleSaveRequest scheduleSaveRequest) {
         try {
             int res = portfolioMapper.scheduleSave(scheduleSaveRequest);
-            return res;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    @Override
-    public int reviewSave(PortfolioReviewSaveRequest portfolioReviewSaveRequest) {
-        try {
-            int res = portfolioMapper.reviewSave(portfolioReviewSaveRequest);
             return res;
         } catch (SQLException e) {
             e.printStackTrace();

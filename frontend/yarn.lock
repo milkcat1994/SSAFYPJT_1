@@ -3082,7 +3082,7 @@ core-js-compat@^3.6.2, core-js-compat@^3.6.5:
     browserslist "^4.8.5"
     semver "7.0.0"
 
-core-js@3.6.5, core-js@^3.6.5:
+core-js@3.6.5, core-js@^3.6.4, core-js@^3.6.5:
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
   integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
@@ -5467,6 +5467,11 @@ internal-ip@^4.3.0:
     default-gateway "^4.2.0"
     ipaddr.js "^1.9.0"
 
+intersection-observer@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.7.0.tgz#ee16bee978db53516ead2f0a8154b09b400bbdc9"
+  integrity sha512-Id0Fij0HsB/vKWGeBe9PxeY45ttRiBmhFyyt/geBdDHBYNctMRTE3dC1U3ujzz3lap+hVXlEcVaB56kZP/eEUg==
+
 invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
@@ -6634,7 +6639,7 @@ mime@1.6.0:
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
   integrity sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==
 
-mime@^2.4.4:
+mime@^2.0.3, mime@^2.4.4:
   version "2.4.6"
   resolved "https://registry.yarnpkg.com/mime/-/mime-2.4.6.tgz#e5b407c90db442f2beb5b162373d07b69affa4d1"
   integrity sha512-RZKhC3EmpBchfTGBVb8fb+RL2cWyw/32lshnsETttkBAyAUXSGHxbEJWWRXc751DrIxG1q04b8QwMbAwkRPpUA==
@@ -10595,6 +10600,15 @@ urix@^0.1.0:
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
 
+url-loader@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/url-loader/-/url-loader-1.1.2.tgz#b971d191b83af693c5e3fea4064be9e1f2d7f8d8"
+  integrity sha512-dXHkKmw8FhPqu8asTc1puBfe3TehOCo2+RmOOev5suNCIYBcT626kxiWg1NBVkwc4rO8BGa7gP70W7VXuqHrjg==
+  dependencies:
+    loader-utils "^1.1.0"
+    mime "^2.0.3"
+    schema-utils "^1.0.0"
+
 url-loader@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/url-loader/-/url-loader-2.3.0.tgz#e0e2ef658f003efb8ca41b0f3ffbf76bab88658b"
@@ -10793,10 +10807,29 @@ vue-functional-data-merge@^3.1.0:
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-3.1.0.tgz#08a7797583b7f35680587f8a1d51d729aa1dc657"
   integrity sha512-leT4kdJVQyeZNY1kmnS1xiUlQ9z1B/kdBFCILIjYYQDqZgLqCLa0UhjSSeRX6c3mUe6U5qYeM8LrEqkHJ1B4LA==
 
+vue-google-oauth2@^1.5.5:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/vue-google-oauth2/-/vue-google-oauth2-1.5.5.tgz#5d26a57c07679142f9299a0f9177aa9f9cc95879"
+  integrity sha512-5+sH+bcaxbH1rWJeMOC7SljFNLvthdssF5nXmt7S+WeDOAsnZgsh/0BLf4YmkiVIiaFnBKc70nhwir83zF4vEg==
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
   integrity sha512-KmvZVtmM26BQOMK1rwUZsrqxEGeKiYSZGA7SNWE6uExx8UX/cj9hq2MRV/wWC3Cq6AoeDGk57rL9YMFRel/q+g==
+
+vue-input-tag@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/vue-input-tag/-/vue-input-tag-2.0.7.tgz#daea4db750df34a8c87605f88455dc5f64e1052b"
+  integrity sha512-MiTVXg/OQ0SEPmQRPBw77akCrANAn/MUvo8U5fXLEwwtzGAASpGSru2uBvCMakDB5zF0ZV3ynkX/V8tOfSU6qA==
+  dependencies:
+    vue "^2.5.17"
+
+vue-kakao-login@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/vue-kakao-login/-/vue-kakao-login-1.0.5.tgz#ffcde4ad4ca005542ffd01f3e7af220511da25a3"
+  integrity sha512-/p+yQS5t4DwUL+1+EVGdxJperKj6YOC9GWxEO0RIrV4EaMIjT3aK3rpm0KsfHfLvwKGlv9rofuq/+bj2N6kY2w==
+  dependencies:
+    url-loader "^1.1.1"
 
 vue-lazy-youtube-video@^2.0.0:
   version "2.0.0"
@@ -10826,10 +10859,25 @@ vue-router@3.3.4:
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.3.4.tgz#4e38abc34a11c41b6c3d8244449a2e363ba6250b"
   integrity sha512-SdKRBeoXUjaZ9R/8AyxsdTqkOfMcI5tWxPZOUX5Ie1BTL5rPSZ0O++pbiZCeYeythiZIdLEfkDiQPKIaWk5hDg==
 
+vue-scroll-loader@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/vue-scroll-loader/-/vue-scroll-loader-2.2.0.tgz#99951ee1155a31b6ccb93dcb98f0a7c1da1b8dcc"
+  integrity sha512-o5hO+YGteqOuIUzau7zeZd6emUyq8tnxbXqQyEauVAZPMCkPfwMc1VmEbhT+mQqHQXS0myyxheMNZKNx6+yFGA==
+  dependencies:
+    axios "^0.19.2"
+    core-js "^3.6.4"
+    intersection-observer "^0.7.0"
+    vue "^2.6.11"
+
 vue-session@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vue-session/-/vue-session-1.0.0.tgz#ca642c751f569a48f8dd66f356f1727fbe081f7c"
   integrity sha512-Ep9lRKGgCZdcGV3In3R3zoSp5Wr+hlcIc8WJ9BG+QKzibwaFZnnvp9HBVdd+dU8d6HGLSi5sWywDmd5MkrkfoQ==
+
+vue-star-rating@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/vue-star-rating/-/vue-star-rating-1.6.1.tgz#160cf66e6af4597180fd2552df5d03d590ec40d4"
+  integrity sha512-JSmVx16rcxyw4Ma6YQ5DnIExyjF4IFf/ypxh3zfmtFZzE/hjswDT0fLn1vF4ERxDbAp0nHA3u51BYFbA8gyYyQ==
 
 vue-stepper@^1.4.2:
   version "1.4.2"
@@ -10855,6 +10903,11 @@ vue-sweet-calendar@^0.3.1:
     core-js "^2.6.5"
     vue "^2.6.6"
 
+vue-tags@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/vue-tags/-/vue-tags-1.0.4.tgz#c77685d051e48d734eb9dd044f0433468a5b4bfb"
+  integrity sha512-sudYn87lBP/n5MBAzHyMjEiJ53AaZF4RyYsnfZQcqgUdIr8r3PUGJOx6KQgwiB18ewJ4WdV1Zam59wHFqp/V3w==
+
 vue-template-compiler@2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.6.11.tgz#c04704ef8f498b153130018993e56309d4698080"
@@ -10873,7 +10926,7 @@ vue2-transitions@0.3.0:
   resolved "https://registry.yarnpkg.com/vue2-transitions/-/vue2-transitions-0.3.0.tgz#765fc0d743103fcfe2d10f431697d8873a075c17"
   integrity sha512-m1ad8K8kufqiEhj5gXHkkqOioI5sW0FaMbRiO0Tv2WFfGbO2eIKrfkFiO3HPQtMJboimaLCN4p/zL81clLbG4w==
 
-vue@2.6.11, vue@^2.5.16, vue@^2.5.17, vue@^2.5.21, vue@^2.6.10, vue@^2.6.6:
+vue@2.6.11, vue@^2.5.16, vue@^2.5.17, vue@^2.5.21, vue@^2.6.10, vue@^2.6.11, vue@^2.6.6:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
@@ -10882,6 +10935,11 @@ vuelidate@^0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/vuelidate/-/vuelidate-0.7.5.tgz#ff48c75ae9d24ea24c24e9ea08065eda0a0cba0a"
   integrity sha512-GAAG8QAFVp7BFeQlNaThpTbimq3+HypBPNwdkCkHZZeVaD5zmXXfhp357dcUJXHXTZjSln0PvP6wiwLZXkFTwg==
+
+vuescroll@^4.16.1:
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/vuescroll/-/vuescroll-4.16.1.tgz#498099fd0e0a47bf09e1d0cb91fc3533a6804e58"
+  integrity sha512-7fRsG2Yw5Z07LUz/IIu9barpmYiN9q+ZTC+CrVamvCbmsxyhz8mU1OuYFbfORysaUskioNMxTGDo+HOzeDfSyQ==
 
 vuex-persistedstate@^3.0.1:
   version "3.0.1"

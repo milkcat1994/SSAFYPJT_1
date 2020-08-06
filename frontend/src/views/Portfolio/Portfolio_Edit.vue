@@ -109,7 +109,7 @@
                     v-model='disableDates'
                     :disabled-dates='disableDates'
                   />
-                  <!-- {{disableDates}} -->
+                  {{disableDates}}
                 </div>
               </div>
             </div>
@@ -124,6 +124,7 @@ import InputTag from 'vue-input-tag';
 //axios 초기 설정파일
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
+import { getFormatDate } from "@/util/day-common";
 
   export default {
     name: 'portfolio_edit',
@@ -240,10 +241,9 @@ import alertify from "alertifyjs";
         .then(({data}) => {
           if(data.data == 'success'){
             this.haveSchedule = true;
-            // scheduleType=0 기본
             let result = data.object.filter(schedule => schedule.scheduleType == 0);
             this.disableDates = this.makeScheduleArray(result);
-            // console.log(result);
+            console.log(this.disableDates);
             return;
           } else {
             this.haveSchedule = false;
@@ -348,6 +348,7 @@ import alertify from "alertifyjs";
         }
       },
       updateSchedule(){
+        this.disableDates = this.disableDates.map(x => getFormatDate(x));
         // 스케줄이 없는 경우 최초등록
         // 스케줄 타입 0: 기본, 1: 개인일정(휴가 등등), 2: 다른 작업중
         if(!this.haveSchedule){
@@ -430,6 +431,7 @@ import alertify from "alertifyjs";
       makeScheduleArray(result){
         let res = [];
         result.forEach(element => {
+          // getFormatDate(element.startDate);
           res.push(element.startDate);
         })
         return res;
