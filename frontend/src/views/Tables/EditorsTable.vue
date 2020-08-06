@@ -1,8 +1,8 @@
 <template>
-  <div style="max-height: 700px;">
+  <div style="max-height: 1200px;">
     <div class="card p-4">
       <ul class="list-unstyled mt-4">
-        <li class="mb-4" v-for="editor in editorsData" :key="editor.id">
+        <li class="mb-4" v-for="editor in currentEditors" :key="editor.id">
           <router-link :to="`/portfolio?no=${editor.id}`">
           <div class="container">
             <div class="row">
@@ -33,14 +33,19 @@
           </router-link>
         </li>
       </ul>
-      <scroll-loader :loader-method="fetchEditors">
-        <div>불러오는 중...</div>
-      </scroll-loader>
+      <div class="card-footer d-flex justify-content-end"
+         :class="type === 'dark' ? 'bg-transparent': ''">
+        <base-pagination
+          :total="editorsData.length"
+          :perPage="editorsPerPage"
+          :value="currentPage"
+          @input="fetchPage"
+        ></base-pagination>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import ScrollLoader from "vue-scroll-loader"
 
 export default {
   name: 'editors-table',
@@ -51,120 +56,103 @@ export default {
     title: String,
   },
   components:{
-    ScrollLoader
+  },
+  computed: {
+    currentEditors() {
+      let start = (this.currentPage-1) * this.editorsPerPage
+      let end = this.currentPage * this.editorsPerPage
+      return this.editorsData.slice(start, end)
+    },
   },
   data() {
     return {
       // 태그들
       tags:[],
       tag: '',
-
+      editorsPerPage: 3,
+      currentPage: 1,
       // 편집자 리스트
-      loadMore: true,
       editorsData: [
         // {
         //   id: portfolio.uid,
         //   nickname: portfolio.nickname,
         //   skills: portfolio.skills,
+        //   tags: portfolio.tags,
         //   pay: portfolio.pay_min
         // },
         {
           id: 1,
-          imgURL: 'img/theme/ryan.jpg',
+          imgURL: 'img/theme/kakaofriends/ryan.jpg',
           nickname: '라이언',
           bookmarks: 555,
-          status: 'pending',
           tags: '#화려한조명이감싸는#내가제일잘나가',
           pay: 60000
         },
         {
           id: 2,
-          imgURL: 'img/theme/tube.png',
+          imgURL: 'img/theme/kakaofriends/tube.png',
           nickname: '튜브',
           bookmarks: 222,
-          status: 'completed',
           tags: '#흙수저#대충그까이꺼뭐#일단재생#가성비',
           pay: 10000
         },
         {
           id: 3,
-          imgURL: 'img/theme/apeach.jpg',
+          imgURL: 'img/theme/kakaofriends/apeach.jpg',
           nickname: '어피치',
           bookmarks: 531,
-          status: 'delayed',
           tags: '#고객중심#원하는대로#심플',
           pay: 72000
         },
         {
           id: 4,
-          imgURL: 'img/theme/frodo.png',
+          imgURL: 'img/theme/kakaofriends/frodo.png',
           nickname: '프로도',
           bookmarks: 333,
-          status: 'on schedule',
           tags: '#그냥믿고맡기는#베테랑',
           pay: 90000
         },
         {
           id: 5,
-          imgURL: 'img/theme/muzi.png',
+          imgURL: 'img/theme/kakaofriends/muzi.png',
           nickname: '무지',
           bookmarks: 444,
-          status: 'completed',
           tags: '#알지#믿지#예술의경지',
           pay: 100000
-        }
+        },
+        {
+          id: 6,
+          imgURL: 'img/theme/kakaofriends/jay-g.jpg',
+          nickname: '제이지',
+          bookmarks: 321,
+          tags: '#아재감성#하지만실력은진짜',
+          pay: 80000
+        },
+        {
+          id: 7,
+          imgURL: 'img/theme/kakaofriends/neo.jfif',
+          nickname: '네오',
+          bookmarks: 777,
+          tags: '#네#넹#넵#네ㅠ#넴#넼#네!',
+          pay: 30000
+        },
+        {
+          id: 7,
+          imgURL: 'img/theme/kakaofriends/concon.jfif',
+          nickname: '콘',
+          bookmarks: 456,
+          tags: '#무지챙기는것처럼#편집도세심하게',
+          pay: 40000
+        },
       ]
     }
   },
   methods: {
     fetchEditors() {
-      this.editorsData.concat([
-        {
-          id: this.editorsData.length + 1,
-          imgURL: 'img/theme/ryan.jpg',
-          nickname: '라이언',
-          bookmarks: 555,
-          status: 'pending',
-          tags: '#화려한조명이감싸는#내가제일잘나가',
-          pay: 60000
-        },
-        {
-          id: this.editorsData.length + 2,
-          imgURL: 'img/theme/tube.png',
-          nickname: '튜브',
-          bookmarks: 222,
-          status: 'completed',
-          tags: '#흙수저#대충그까이꺼뭐#일단재생#가성비',
-          pay: 10000
-        },
-        {
-          id: this.editorsData.length + 3,
-          imgURL: 'img/theme/apeach.jpg',
-          nickname: '어피치',
-          bookmarks: 531,
-          status: 'delayed',
-          tags: '#고객중심#원하는대로#심플',
-          pay: 72000
-        },
-        {
-          id: this.editorsData.length + 4,
-          imgURL: 'img/theme/frodo.png',
-          nickname: '프로도',
-          bookmarks: 333,
-          status: 'on schedule',
-          tags: '#그냥믿고맡기는#베테랑',
-          pay: 90000
-        },
-        {
-          id: this.editorsData.length + 5,
-          imgURL: 'img/theme/muzi.png',
-          nickname: '무지',
-          bookmarks: 444,
-          status: 'completed',
-          tags: '#알지#믿지#예술의경지',
-          pay: 100000
-        }
-      ])
+      // BE API를 불러오는 방식으로 변경해야 함
+    },
+    fetchPage(val) {
+      this.currentPage = val
     }
   }
 }
