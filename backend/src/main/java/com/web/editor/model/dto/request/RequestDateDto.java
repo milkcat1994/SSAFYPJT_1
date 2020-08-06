@@ -11,4 +11,5 @@ public class RequestDateDto {
     private String end;
     private String repeat = "montly";
     private int categoryId = 1;
+
 }
