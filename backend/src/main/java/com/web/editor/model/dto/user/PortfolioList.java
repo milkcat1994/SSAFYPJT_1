@@ -21,6 +21,7 @@ public class PortfolioList {
     private int uid;
     private String nickname;
     private String payMin;
-    // private int bookmarkCount;
+    private List<String> URLs;
+    private int bookmarkCount;
     private List<String> tags;
 }
