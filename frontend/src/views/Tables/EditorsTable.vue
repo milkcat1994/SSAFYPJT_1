@@ -2,14 +2,15 @@
   <div style="max-height: 1200px;">
     <div class="card p-4">
       <ul class="list-unstyled mt-4">
-        <li class="mb-4" v-for="editor in currentEditors" :key="editor.id">
-          <router-link :to="`/portfolio?no=${editor.id}`">
+        <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
+          <router-link :to="`/portfolio?no=${editor.uid}`">
           <div class="container">
             <div class="row">
-              <div class="col-2">
-                <img :src="editor.imgURL" :alt="editor.nickname" class="mr-3" style="max-width: 180px;">
+              <div class="col-3">
+                <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%" />
+                <!-- <img :src="editor.imgURL" :alt="editor.nickname" class="mr-3" style="max-width: 180px;"> -->
               </div>
-              <div class="col-10">
+              <div class="col-9">
                 <div class="d-flex align-items-stretch mt-4">
                   <div class="d-inline-flex ml-2">
                     <!-- nickname and bookmarks -->
@@ -17,14 +18,16 @@
                   </div>
                   <div class="d-inline-flex flex-column ml-3 mt-3">
                     <div><i class="display-4 ni ni-like-2"></i></div>
-                    <div>{{editor.bookmarks}}</div>
+                    <div>{{editor.bookmarkCount}}</div>
                   </div>
                 </div>
                 <div class="ml-2 mt-4">
                   <!-- tags and estimated price -->
                   <div class="row">
-                    <div class="col-6">{{editor.tags}}</div>
-                    <div class="col-6 text-danger">예상 견적: 분당 {{editor.pay}}원</div>
+                    <div class="col-6">
+                      <button class="btn btn-info btn-sm" :key="index" v-for="(tag, index) in editor.tags">{{tag}}</button>
+                      </div>
+                    <div class="col-6 text-danger">예상 견적: 분당 {{editor.payMin}}원</div>
                   </div>
                 </div>
               </div>
@@ -46,6 +49,8 @@
   </div>
 </template>
 <script>
+import http from "@/util/http-common"
+import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 export default {
   name: 'editors-table',
@@ -56,6 +61,7 @@ export default {
     title: String,
   },
   components:{
+    LazyYoutubeVideo,
   },
   computed: {
     currentEditors() {
@@ -69,92 +75,41 @@ export default {
       // 태그들
       tags:[],
       tag: '',
-      editorsPerPage: 3,
+      editorsPerPage: 4,
       currentPage: 1,
-      // 편집자 리스트
       editorsData: [
+        // 백엔드 API 호출 시 반환 자료형
         // {
-        //   id: portfolio.uid,
-        //   nickname: portfolio.nickname,
-        //   skills: portfolio.skills,
-        //   tags: portfolio.tags,
-        //   pay: portfolio.pay_min
-        // },
-        {
-          id: 1,
-          imgURL: 'img/theme/kakaofriends/ryan.jpg',
-          nickname: '라이언',
-          bookmarks: 555,
-          tags: '#화려한조명이감싸는#내가제일잘나가',
-          pay: 60000
-        },
-        {
-          id: 2,
-          imgURL: 'img/theme/kakaofriends/tube.png',
-          nickname: '튜브',
-          bookmarks: 222,
-          tags: '#흙수저#대충그까이꺼뭐#일단재생#가성비',
-          pay: 10000
-        },
-        {
-          id: 3,
-          imgURL: 'img/theme/kakaofriends/apeach.jpg',
-          nickname: '어피치',
-          bookmarks: 531,
-          tags: '#고객중심#원하는대로#심플',
-          pay: 72000
-        },
-        {
-          id: 4,
-          imgURL: 'img/theme/kakaofriends/frodo.png',
-          nickname: '프로도',
-          bookmarks: 333,
-          tags: '#그냥믿고맡기는#베테랑',
-          pay: 90000
-        },
-        {
-          id: 5,
-          imgURL: 'img/theme/kakaofriends/muzi.png',
-          nickname: '무지',
-          bookmarks: 444,
-          tags: '#알지#믿지#예술의경지',
-          pay: 100000
-        },
-        {
-          id: 6,
-          imgURL: 'img/theme/kakaofriends/jay-g.jpg',
-          nickname: '제이지',
-          bookmarks: 321,
-          tags: '#아재감성#하지만실력은진짜',
-          pay: 80000
-        },
-        {
-          id: 7,
-          imgURL: 'img/theme/kakaofriends/neo.jfif',
-          nickname: '네오',
-          bookmarks: 777,
-          tags: '#네#넹#넵#네ㅠ#넴#넼#네!',
-          pay: 30000
-        },
-        {
-          id: 7,
-          imgURL: 'img/theme/kakaofriends/concon.jfif',
-          nickname: '콘',
-          bookmarks: 456,
-          tags: '#무지챙기는것처럼#편집도세심하게',
-          pay: 40000
-        },
+        //   uid: "포트폴리오 UID",
+        //   nickname: "편집자 닉네임",
+        //   payMin: "분당 가격",
+        //   bookmarkCount: "북마크 개수",
+        //   tags: ["편집자 관련 태그", ...],
+        //   urls: ["편집자 대표 URL", "기타 URL1", ...]
       ]
     }
   },
+  created() {
+    this.fetchEditors()
+  },
   methods: {
     fetchEditors() {
-      // BE API를 불러오는 방식으로 변경해야 함
+      http.get('/search/listAll')
+        .then(res => {
+          // console.log(res)
+          if (res.data.status){
+            // console.log(res.data.object)
+            this.editorsData = res.data.object
+          } else {
+            console.log(res.data.status)
+          }
+        })
+        .catch(err => console.error(err))
     },
     fetchPage(val) {
       this.currentPage = val
     }
-  }
+  },
 }
 </script>
 <style>
