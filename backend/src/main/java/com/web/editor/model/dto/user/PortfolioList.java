@@ -1,4 +1,4 @@
-package com.web.editor.model.dto.search;
+package com.web.editor.model.dto.user;
 
 import java.util.List;
 
@@ -21,6 +21,6 @@ public class PortfolioList {
     private int uid;
     private String nickname;
     private String payMin;
-    private int bookmarkCount;
+    // private int bookmarkCount;
     private List<String> tags;
 }
