@@ -50,10 +50,10 @@
             <p class="card-text">
               <!-- 해당 포트폴리오의 pay/min 불러와서 작성 -->
               가격: {{getPayMin(bookmark.payMin)}}
-              <br />
+              <!-- <br /> -->
               <!-- 해당 포트폴리오의 평점 계산해서 작성 --> 
               <!-- <h3> -->
-                평점: {{getAvg(bookmark)}}
+                <!-- 평점: {{getAvg(bookmark)}} -->
               <!-- </h3> -->
             </p>
             <!-- 아래는 평점을 별로 나타내려 하였으나 2줄로 출력되어 보류 -->
@@ -111,9 +111,9 @@ export default {
             nickname:'',
             payMin:'',
             mainUrl:'',
-            avgV:'',
-            avgK:'',
-            avgF:'',
+            // avgV:'',
+            // avgK:'',
+            // avgF:'',
             tags:[],
           }
         */
@@ -147,9 +147,9 @@ export default {
         });
     },
     // 평점의 평균 구하기
-    getAvg(bookmark){
-      return ((Number(bookmark.avgV) + Number(bookmark.avgK)+ Number(bookmark.avgF))/3).toFixed(1);
-    },
+    // getAvg(bookmark){
+    //   return ((Number(bookmark.avgV) + Number(bookmark.avgK)+ Number(bookmark.avgF))/3).toFixed(1);
+    // },
     getPayMin(payMin){
       if(payMin == ''){
         return '미정';

@@ -8,29 +8,29 @@
     <!-- 해당 사용자의 북마크 모두 선택 -->
     <!-- 북마크된 에디터 uid, 에디터의 mainUrl, 리뷰의 각 평균 점수 -->
     <select id="findBookmarkByUid" resultType="Bookmark">
-
-        SELECT B.`mark_uid` as muid, U.nickname as nickname, P.pay_min as payMin, V.url as mainUrl, R.avgV as avgV, R.avgK as avgK, R.avgF as avgF
+        SELECT B.`mark_uid` as muid, U.nickname as nickname, P.pay_min as payMin, V.url as mainUrl
         FROM 
         (SELECT `user_info_uid`, `mark_uid` FROM bookmark WHERE `user_info_uid` = #{uid}) B
         LEFT JOIN user_info U ON U.uid = B.mark_uid
         LEFT JOIN portfolio P ON P.uid = B.mark_uid
         LEFT JOIN video_info V ON B.mark_uid = V.portfolio_uid AND V.main_flag = 1
-        LEFT JOIN (SELECT portfolio_uid, AVG(video_score) as avgV, AVG(kindness_score) as avgK, AVG(finish_score) as avgF FROM review WHERE portfolio_uid 
-        in (SELECT `mark_uid` FROM bookmark WHERE `user_info_uid` = #{uid}) ) R ON B.mark_uid = R.portfolio_uid
-
     </select>
 
+    <!-- 해당 사용자의 북마크 갯수 -->
     <select id="cntBookmarkByUid" resultType="BookmarkInfo">
         SELECT user_info_uid, mark_uid FROM bookmark
         WHERE mark_uid = #{muid}
     </select>
-        <!-- SELECT B.`mark_uid` as muid, U.nickname as nickname, P.pay_min as payMin, V.url as mainUrl, AVG(R.video_score) as avgV, AVG(R.kindness_score) as avgK, AVG(R.finish_score) as avgF
-        FROM 
-        (SELECT `user_info_uid`, `mark_uid` FROM bookmark WHERE `user_info_uid` = #{uid}) B
-        LEFT JOIN user_info U ON U.uid = B.mark_uid
-        LEFT JOIN portfolio P ON P.uid = B.mark_uid
-        LEFT JOIN video_info V ON B.mark_uid = V.portfolio_uid AND V.main_flag = 1
-        LEFT JOIN review R ON B.mark_uid = R.portfolio_uid -->
+        <!-- 
+            SELECT B.`mark_uid` as muid, U.nickname as nickname, P.pay_min as payMin, V.url as mainUrl, R.avgV as avgV, R.avgK as avgK, R.avgF as avgF
+            FROM 
+            (SELECT `user_info_uid`, `mark_uid` FROM bookmark WHERE `user_info_uid` = #{uid}) B
+            LEFT JOIN user_info U ON U.uid = B.mark_uid
+            LEFT JOIN portfolio P ON P.uid = B.mark_uid
+            LEFT JOIN video_info V ON B.mark_uid = V.portfolio_uid AND V.main_flag = 1
+            LEFT JOIN (SELECT portfolio_uid, AVG(video_score) as avgV, AVG(kindness_score) as avgK, AVG(finish_score) as avgF FROM review WHERE portfolio_uid 
+            in (SELECT `mark_uid` FROM bookmark WHERE `user_info_uid` = #{uid}) ) R ON B.mark_uid = R.portfolio_uid
+         -->
 
     <!-- 북마크 된  -->
 <!-- SELECT url FROM `portfolio` as p LEFT JOIN `video_info` as v
