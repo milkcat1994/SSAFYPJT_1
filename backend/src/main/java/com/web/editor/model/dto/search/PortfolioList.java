@@ -1,4 +1,6 @@
-package com.web.editor.model.dto.user;
+package com.web.editor.model.dto.search;
+
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -15,9 +17,10 @@ import lombok.Setter;
 @Setter
 @Repository
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Portfolio {
+public class PortfolioList {
     private int uid;
     private String nickname;
     private String payMin;
-    private String description;
+    private int bookmarkCount;
+    private List<String> tags;
 }

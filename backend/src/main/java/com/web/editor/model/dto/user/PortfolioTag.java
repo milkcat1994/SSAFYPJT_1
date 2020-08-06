@@ -19,5 +19,4 @@ public class PortfolioTag {
     private int tagNo;
     private int portfolioUid;
     private String tagName;
-    
 }
