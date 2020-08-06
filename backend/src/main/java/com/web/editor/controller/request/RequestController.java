@@ -67,6 +67,7 @@ public class RequestController {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}
 	}
+
 	// done_flag 0~2, nickname
 	@ApiOperation(value = "일반회원의 요청 리스트 done_flag(0: 요청, 1: 진행, 2: 완료))")
 	@GetMapping("/req/{nickname}/{done_flag}")
@@ -83,21 +84,22 @@ public class RequestController {
 		} else {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}
-	} 
-	
+	}
+
 	// 요청받는사람(편집자)의 리스트
 	@ApiOperation(value = "요청받는사람(편집자)의 리스트")
 	@GetMapping("/res/{response_nickname}")
 	public Object searchListResponse(@PathVariable String response_nickname) throws UnsupportedEncodingException {
-		
+
 		List<RequestDto> responseList = requestService.searchListResponse(decodeURL(response_nickname));
-		
+
 		if (!responseList.isEmpty()) {
 			return new ResponseEntity<>(responseList, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}
 	}
+
 	@ApiOperation(value = "편집자의 요청 리스트 done_flag(0: 요청, 1: 진행, 2: 완료))")
 	@GetMapping("/res/{nickname}/{done_flag}")
 	public Object searchListFlagResponse(@PathVariable String nickname, @PathVariable int done_flag)
@@ -115,7 +117,6 @@ public class RequestController {
 		}
 	}
 
-
 	// 요청 등록 및 알림 등록
 	@ApiOperation(value = "요청 및 알림(type은 request) 등록, \"success\" 또는 \"fail\"반환")
 	@PostMapping
@@ -123,82 +124,97 @@ public class RequestController {
 		int result = requestService.insertRequest(requestDto);
 		// 등록시 기본값 0
 		requestDto.setDone_flag(0);
-		
-   	   	if (result > 0) {
+
+		if (result > 0) {
 			// 알림 함께 등록
 			addNotify(requestDto, "request");
 			// 태그 함께 등록
 			addTag(requestDto.getTag_list(), requestDto.getRid());
 
-   			return new ResponseEntity<String>("success", HttpStatus.OK);
-   		} else {
-   			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-   		}
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
 	}
-	
+
 	// 요청 수락
-    @ApiOperation(value = "해당 요청서 수락(done_flag를 1로), \"success\" 또는 \"fail\"반환")
-   	@PutMapping("/accept/{rid}")
-   	public ResponseEntity<String> acceptRequest(@PathVariable int rid) {
-   		int result = requestService.acceptRequest(rid);
-    	
-   	   	if (result > 0) {
+	@ApiOperation(value = "해당 요청서 수락(done_flag를 1로), \"success\" 또는 \"fail\"반환")
+	@PutMapping("/accept/{rid}")
+	public ResponseEntity<String> acceptRequest(@PathVariable int rid) {
+		int result = requestService.acceptRequest(rid);
+
+		if (result > 0) {
 			// 요청 수락 시 일반회원이 알림을 받음
 			RequestDto dto = requestService.searchRequest(rid);
-			String reqNickname = dto.getResponse_nickname();	
-			String resNickname = dto.getRequest_nickname();		// 일반회원이 알림받는 사람이됨
+			String reqNickname = dto.getResponse_nickname();
+			String resNickname = dto.getRequest_nickname(); // 일반회원이 알림받는 사람이됨
 			dto.setRequest_nickname(reqNickname);
 			dto.setResponse_nickname(resNickname);
 
 			addNotify(dto, "accepted");
-   			return new ResponseEntity<String>("success", HttpStatus.OK);
-   		} else {
-   			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-   		}
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
 	}
+
 	// 요청 완료
-    @ApiOperation(value = "해당 요청서 완료(done_flag를 2로), \"success\" 또는 \"fail\"반환")
-   	@PutMapping("/done/{rid}")
-   	public ResponseEntity<String> doneRequest(@PathVariable int rid) {
-   		int result = requestService.doneRequest(rid);
-    	
-   	   	if (result > 0) {
-   			return new ResponseEntity<String>("success", HttpStatus.OK);
-   		} else {
-   			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-   		}
-   	}
+	@ApiOperation(value = "해당 요청서 완료(done_flag를 2로), \"success\" 또는 \"fail\"반환")
+	@PutMapping("/done/{rid}")
+	public ResponseEntity<String> doneRequest(@PathVariable int rid) {
+		int result = requestService.doneRequest(rid);
+
+		if (result > 0) {
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// 리뷰 완료
+	@ApiOperation(value = "해당 요청서 리뷰 완료(done_flag를 3로), \"success\" 또는 \"fail\"반환")
+	@PutMapping("/doneReview/{rid}")
+	public ResponseEntity<String> doneReview(@PathVariable int rid) {
+		int result = requestService.doneReview(rid);
+
+		if (result > 0) {
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
+	}
+
 	// 요청 거절
-    @ApiOperation(value = "해당 요청서 거절(done_flag를 5로), \"success\" 또는 \"fail\"반환")
-   	@PutMapping("/deny/{rid}")
-   	public ResponseEntity<String> denyRequest(@PathVariable int rid) {
-   		int result = requestService.denyRequest(rid);
-    	
-   	   	if (result > 0) {
-   			return new ResponseEntity<String>("success", HttpStatus.OK);
-   		} else {
-   			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-   		}
-   	}
+	@ApiOperation(value = "해당 요청서 거절(done_flag를 5로), \"success\" 또는 \"fail\"반환")
+	@PutMapping("/deny/{rid}")
+	public ResponseEntity<String> denyRequest(@PathVariable int rid) {
+		int result = requestService.denyRequest(rid);
+
+		if (result > 0) {
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
+	}
 
 	// 요청 삭제
-    @ApiOperation(value = "rid에 해당하는 요청 삭제, \"success\" 또는 \"fail\"반환")
-   	@DeleteMapping("{rid}")
-   	public ResponseEntity<String> deleteRequest(@PathVariable int rid) {
+	@ApiOperation(value = "rid에 해당하는 요청 삭제, \"success\" 또는 \"fail\"반환")
+	@DeleteMapping("{rid}")
+	public ResponseEntity<String> deleteRequest(@PathVariable int rid) {
 		// 해당 요청서의 태그들 삭제
 		requestService.deleteReqTag(rid);
-    	int result = requestService.deleteRequest(rid);
-    	
-  	   	if (result > 0) {
-   			return new ResponseEntity<String>("success", HttpStatus.OK);
-   		} else {
-   			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-   		}
+		int result = requestService.deleteRequest(rid);
+
+		if (result > 0) {
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
 	}
-	
+
 	// 알림 조회
 	@ApiOperation(value = "회원의 알림 리스트(limit 5)")
-	@GetMapping("/notify/{response_nickname}")	// 일반회원 (요청자)
+	@GetMapping("/notify/{response_nickname}") // 일반회원 (요청자)
 	public Object searchNotify(@PathVariable String response_nickname) throws UnsupportedEncodingException {
 		List<NotifyDto> notifyList = requestService.searchNotify(decodeURL(response_nickname));
 		if (notifyList.size() >= 0) {
@@ -209,16 +225,16 @@ public class RequestController {
 	}
 
 	// 알림 삭제
-    @ApiOperation(value = "nid에 해당하는 요청알림 삭제, \"success\" 또는 \"fail\"반환")
-   	@DeleteMapping("/notify/{nid}")
-   	public ResponseEntity<String> deleteNotify(@PathVariable int nid) {
-    	int result = requestService.deleteNotify(nid);
-    	
-  	   	if (result > 0) {
-   			return new ResponseEntity<String>("success", HttpStatus.OK);
-   		} else {
-   			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-   		}
+	@ApiOperation(value = "nid에 해당하는 요청알림 삭제, \"success\" 또는 \"fail\"반환")
+	@DeleteMapping("/notify/{nid}")
+	public ResponseEntity<String> deleteNotify(@PathVariable int nid) {
+		int result = requestService.deleteNotify(nid);
+
+		if (result > 0) {
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
 	}
 
 	// 알림 수정(읽음)
@@ -226,12 +242,12 @@ public class RequestController {
 	@PutMapping("/notify/{nid}")
 	public ResponseEntity<String> updateNotify(@PathVariable int nid) {
 		int result = requestService.updateNotify(nid);
-    	
+
 		if (result > 0) {
-		  	return new ResponseEntity<String>("success", HttpStatus.OK);
-	  	} else {
-		  	return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-	  	}
+			return new ResponseEntity<String>("success", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+		}
 	}
 
 	// 알림 수정2(회원이 알림을 전부 읽음)
@@ -243,7 +259,7 @@ public class RequestController {
 
 		if (result > 0) {
 			return new ResponseEntity<String>("success", HttpStatus.OK);
-		}else {
+		} else {
 			return new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
 		}
 	}
@@ -253,13 +269,13 @@ public class RequestController {
 	}
 
 	// 알림 등록
-	private void addNotify(RequestDto dto, String type){
+	private void addNotify(RequestDto dto, String type) {
 		// 편집자 알림 등록
 		NotifyDto notifyDto = new NotifyDto();
 		notifyDto.setRead_flag(0);
-		notifyDto.setNotify_type(type);	// 알림 타입은 request
-		notifyDto.setRequest_nickname(dto.getRequest_nickname());	// 알림 요청한사람
-		notifyDto.setResponse_nickname(dto.getResponse_nickname());	// 알림 받는사람
+		notifyDto.setNotify_type(type); // 알림 타입은 request
+		notifyDto.setRequest_nickname(dto.getRequest_nickname()); // 알림 요청한사람
+		notifyDto.setResponse_nickname(dto.getResponse_nickname()); // 알림 받는사람
 		requestService.insertNotify(notifyDto);
 	}
 
@@ -272,18 +288,17 @@ public class RequestController {
 
 		return new ResponseEntity<String>(tag, HttpStatus.OK);
 
-	}		
-	
+	}
 
 	// 태그 파싱, 등록
-	private void addTag(String tags, int rid){
-		tags = tags.trim();	// 앞뒤 공백 제거
+	private void addTag(String tags, int rid) {
+		tags = tags.trim(); // 앞뒤 공백 제거
 		// #기준으로 나눔
 		StringTokenizer st = new StringTokenizer(tags, "#");
-		
-		while(st.hasMoreTokens()) {
+
+		while (st.hasMoreTokens()) {
 			// 태그 생성
-			String tag = st.nextToken().trim();		// 앞뒤 공백 제거
+			String tag = st.nextToken().trim(); // 앞뒤 공백 제거
 			RequestTagDto tagDto = new RequestTagDto();
 			tagDto.setTag_name(tag.toString());
 			tagDto.setRequest_form_rid(rid);
@@ -293,14 +308,14 @@ public class RequestController {
 	}
 
 	// 요청서의 태그들을 문자열로
-	private String TagsToString(int rid){
+	private String TagsToString(int rid) {
 		// 해당 요청서의 태그 리스트
 		List<RequestTagDto> tagList = requestService.searchTag(rid);
 
 		// 태그 문자열
 		StringBuilder tagStr = new StringBuilder();
-		for (RequestTagDto tag : tagList){
-			tagStr.append("#" + tag.getTag_name()+" ");
+		for (RequestTagDto tag : tagList) {
+			tagStr.append("#" + tag.getTag_name() + " ");
 		}
 		return tagStr.toString();
 	}
