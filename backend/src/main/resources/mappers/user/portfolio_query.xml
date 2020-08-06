@@ -35,7 +35,7 @@
     
     <!-- 리뷰 조회 -->
     <select id="findReviewByUid" resultType="PortfolioReview">
-        SELECT `review_no`, `portfolio_uid`, `nickname`, `created_date`, `video_score`, `kindness_score`, `finish_score`, `comment`
+        SELECT `review_no`, `nickname`, `created_date`, `video_score`, `kindness_score`, `finish_score`, `comment`
         FROM review
         WHERE `portfolio_uid` = #{uid}
     </select>
@@ -72,16 +72,6 @@
     <insert id="scheduleSave">
         INSERT INTO schedule_info (`portfolio_uid`, `start_date`, `end_date`, `schedule_type`)
                         VALUES (#{portfolioUid}, #{startDate}, #{endDate}, #{scheduleType})
-    </insert>
-    
-    <!-- 포트폴리오에 리뷰 등록 -->
-    <insert id="reviewSave">
-        INSERT INTO review (`portfolio_uid`, `nickname`, `video_score`, `kindness_score`, `finish_score`, `comment`)
-                        VALUES 
-                        ((SELECT `uid`
-                         FROM user_info
-                         WHERE `nickname` = #{portfolioNickname}),
-                        #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
     </insert>
 
     <!-- 포트폴리오 기본정보 수정 -->

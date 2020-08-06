@@ -5,7 +5,9 @@ import java.util.List;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.response.BasicResponse;
+import com.web.editor.model.service.request.RequestService;
 import com.web.editor.model.service.user.PortfolioService;
+import com.web.editor.model.service.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,10 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/portfolio/review")
 public class PortfolioReviewController {
     @Autowired
-    PortfolioService portfolioService;
+    private UserService userService;
+
+    @Autowired
+    private RequestService requestService;
     
     
     @GetMapping("/{uid}")
@@ -33,42 +38,28 @@ public class PortfolioReviewController {
     public Object findReviewByUid(@PathVariable String uid){
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
-
-        List<PortfolioReview> review = portfolioService.findReviewByUid(uid);
-
-        //포트폴리오의 태그가 있을 경우
-        if(review != null){
-                result.status = true;
-                result.data = "success";
-                result.object = review;
+        String nickname;
+        List<PortfolioReview> review;
+        try{
+            nickname = userService.findByUid(uid).getNickname();
+            review = requestService.searchReviewList(nickname);
+            //포트폴리오의 태그가 있을 경우
+            if(review != null){
+                    result.status = true;
+                    result.data = "success";
+                    result.object = review;
+                    response = new ResponseEntity<>(result, HttpStatus.OK);
+            } else {
+                result.status = false;
+                result.data = "fail";
                 response = new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            result.status = false;
-            result.data = "fail";
-            response = new ResponseEntity<>(result, HttpStatus.OK);
+            }
         }
-        return response;
-    }
-    
-    // 리뷰등록
-    @PostMapping("/{uid}")
-    @ApiOperation(value="리뷰 등록")
-    public Object scheduleSave(@PathVariable String uid, @RequestBody PortfolioReviewSaveRequest portfolioReviewSaveRequest){
-        ResponseEntity response = null;
-        final BasicResponse result = new BasicResponse();
-
-        int res = portfolioService.reviewSave(portfolioReviewSaveRequest);
-
-        // 저장에 성공
-        if(res != -1){
-            result.status = true;
-            result.data = "success";
-            response = new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            result.status = false;
-            result.data = "fail";
-            response = new ResponseEntity<>(result, HttpStatus.OK);
+        // 해당하는 uid를 가지는 user없음.
+        catch(NullPointerException npe){
+            npe.printStackTrace();
         }
+
         return response;
     }
 }
