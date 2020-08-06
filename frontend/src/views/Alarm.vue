@@ -27,25 +27,12 @@
         <div style="display: table-cell; text-align:center;">
           <calendar
             :eventCategories="eventCategories"
-            :events="events"
+            :events="events=scheduledate"
             ref="calendar"
           />
-          <i
-            class="fas fa-circle"
-            style="color: #f29661; margin: 15px;"
-            >선택된 작업</i
-          >
-          <i
-            class="fas fa-circle"
-            style="color: #6699ff; margin: 15px"
-            >진행중 작업</i
-          >
-          <i
-            class="fas fa-circle"
-            style="color: #ff0066; margin: 15px"
-            v-if="$session.get('auth') == 'editor'"
-            >개인 일정</i
-          >
+          <i class="fas fa-circle" style="color: #f29661; margin: 15px;">선택된 작업</i>
+          <i class="fas fa-circle" style="color: #6699ff; margin: 15px" >진행중 작업</i>
+          <i class="fas fa-circle" style="color: #ff0066; margin: 15px" v-if="$session.get('auth') == 'editor'">개인 일정</i>
         </div>
       </div>
 
@@ -577,7 +564,6 @@ export default {
     };
   },
   created() {
-    if (!this.$session.exists()) this.events = [];
     //생성 시 로그인 상태 확인
     if (this.$session.exists()) {
       store
@@ -590,6 +576,8 @@ export default {
           this.$router.push("/");
         });
       if (this.$session.get("auth") == "editor") {
+        store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
+        store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
         store.dispatch(
           "getRequestitems0",
           "/request/res/" + this.$session.get("nickname") + "/0"
@@ -603,6 +591,8 @@ export default {
           "/request/res/" + this.$session.get("nickname") + "/2"
         );
       } else if (this.$session.get("auth") == "noneditor") {
+        store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
+        store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
         store.dispatch(
           "getRequestitems0",
           "/request/req/" + this.$session.get("nickname") + "/0"
@@ -624,7 +614,6 @@ export default {
       this.$router.push("/");
       alertify.error("로그인이 필요한페이지 입니다.", 3);
     }
-    this.setProgressDate();
   },
   computed: {
     ...mapGetters(["requestitems0"]),
@@ -634,6 +623,7 @@ export default {
     ...mapGetters(["requestitem"]),
     ...mapGetters(["progressdate"]),
     ...mapGetters(["holidaydate"]),
+    ...mapGetters(["scheduledate"]),
   },
   methods: {
     getDetail(rid) {
@@ -802,20 +792,12 @@ export default {
       this.events[this.events.length-1].end = "";
     },
     setProgressDate(){
-      if (this.$session.get("auth") == "editor") {
+      if (this.$session.get("auth") == "editor")
         store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
-        store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
-        this.events = this.$store.state.progressdate.concat(this.$store.state.holidaydate);
-      }
-      else if (this.$session.get("auth") == "noneditor") {
+      else if (this.$session.get("auth") == "noneditor")
         store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
-        this.events = this.$store.state.progressdate;
-      }
-      this.events.push({
-        start: "",
-        end: "",
-        categoryId: 2,
-      });
+      store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
+      this.events = this.scheduledate;
     }
 
   },

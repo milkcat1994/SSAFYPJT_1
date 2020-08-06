@@ -32,6 +32,7 @@ export default new Vuex.Store({
 
     progressdate: [],
     holidaydate: [],
+    scheduledate: [],
 
     requests: {
       category: null,
@@ -73,6 +74,15 @@ export default new Vuex.Store({
     },
     holidaydate(state) {
         return state.holidaydate;
+    },
+    scheduledate(state) {
+      if (state.holidaydate.length > 0 && state.progressdate.length > 0) 
+        return state.holidaydate.concat(state.progressdate).concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+      if (state.holidaydate.length > 0 && state.progressdate.length <= 0) 
+        return state.holidaydate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+      if (state.progressdate.length > 0 && state.holidaydate.length <= 0) 
+        return state.progressdate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+      return state.scheduledate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
     },
 
 
@@ -147,6 +157,10 @@ export default new Vuex.Store({
     },
     mutateSetHolidaydate(state, holidaydate) {
         state.holidaydate = holidaydate
+    },
+
+    mutateSetScheduledate(state, data) {
+        state.holidaydate = data
     },
 
     mutateSetTagitem(state, tagitem) {
