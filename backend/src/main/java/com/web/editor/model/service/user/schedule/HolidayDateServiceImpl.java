@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class HolidayDateServiceImpl implements HolidayDateService {
-
+    
     @Autowired
     ScheduleMapper scheduleMapper;
 
@@ -26,5 +26,4 @@ public class HolidayDateServiceImpl implements HolidayDateService {
             return null;
         }
     }
-
 }
