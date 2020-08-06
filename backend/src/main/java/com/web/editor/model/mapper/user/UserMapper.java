@@ -23,6 +23,14 @@ public class UserMapper {
     public User normalLogin(NormalLoginRequest normalLoginRequest) throws SQLException{
         return sqlSession.selectOne("normalLogin", normalLoginRequest);
     }
+    // 구글 로그인
+    public User googleLogin(String email) throws SQLException{
+        return sqlSession.selectOne("googleLogin", email);
+    }
+    // 구글 연동
+    public int googleConnect(int uid) throws SQLException{
+        return sqlSession.update("googleConnect", uid);
+    }
 
     // 일반 회원가입
     public int normalRegister(User user) throws SQLException{

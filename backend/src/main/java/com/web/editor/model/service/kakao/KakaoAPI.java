@@ -68,7 +68,6 @@ public class KakaoAPI {
             br.close();
             bw.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } 
         
@@ -114,7 +113,6 @@ public class KakaoAPI {
             userInfo.put("email", email);
             
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
@@ -142,7 +140,6 @@ public class KakaoAPI {
             }
             System.out.println(result);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
