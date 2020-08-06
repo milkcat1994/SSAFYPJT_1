@@ -44,7 +44,7 @@
             class="fas fa-circle"
             style="color: #ff0066; margin: 15px"
             v-if="$session.get('auth') == 'editor'"
-            >내 휴일</i
+            >개인 일정</i
           >
         </div>
       </div>
@@ -448,15 +448,21 @@ export default {
       eventCategories: [
         {
           id: 1,
-          title: "Personal",
+          title: "holiday",
           textColor: "white",
-          backgroundColor: "#6699ff",
+          backgroundColor: "#ff0066",
         },
         {
           id: 2,
-          title: "Company-wide",
+          title: "selected",
           textColor: "white",
           backgroundColor: "#f29661",
+        },
+        {
+          id: 3,
+          title: "In Progress",
+          textColor: "white",
+          backgroundColor: "#6699ff",
         },
       ],
       events: [],
@@ -523,6 +529,7 @@ export default {
     ...mapGetters(["requestitems2"]),
     ...mapGetters(["requestitem"]),
     ...mapGetters(["progressdate"]),
+    ...mapGetters(["holidaydate"]),
   },
   methods: {
     getDetail(rid) {
@@ -651,25 +658,28 @@ export default {
         });
     },
     setRequestDate(start, end) {
-      // if (this.events[this.$store.state.progressdate.length].start != "") {
-      //   this.setDateClean();
-      //   return;
-      // }
-      this.events[this.$store.state.progressdate.length].start = start.substring(0, 10);
-      this.events[this.$store.state.progressdate.length].end = end.substring(0, 10);
+      if (this.events[this.events.length-1].start == start.substring(0, 10)
+          && this.events[this.events.length-1].end == end.substring(0, 10)) {
+        this.setDateClean();
+        return;
+      }
+      this.events[this.events.length-1].start = start.substring(0, 10);
+      this.events[this.events.length-1].end = end.substring(0, 10);
     },
     setDateClean(){
-      this.events[this.$store.state.progressdate.length].start = "";
-      this.events[this.$store.state.progressdate.length].end = "";
+      this.events[this.events.length-1].start = "";
+      this.events[this.events.length-1].end = "";
     },
     setProgressDate(){
       if (this.$session.get("auth") == "editor") {
         store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
+        store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
+        this.events = this.$store.state.progressdate.concat(this.$store.state.holidaydate);
       }
       else if (this.$session.get("auth") == "noneditor") {
         store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
+        this.events = this.$store.state.progressdate;
       }
-      this.events = this.$store.state.progressdate;
       this.events.push({
         start: "",
         end: "",

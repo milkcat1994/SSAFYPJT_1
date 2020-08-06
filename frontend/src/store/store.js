@@ -27,6 +27,7 @@ export default new Vuex.Store({
     tagitem: "",
 
     progressdate: [],
+    holidaydate: [],
 
     requests: {
       category: null,
@@ -62,6 +63,9 @@ export default new Vuex.Store({
     },
     progressdate(state) {
         return state.progressdate;
+    },
+    holidaydate(state) {
+        return state.holidaydate;
     },
 
 
@@ -123,6 +127,9 @@ export default new Vuex.Store({
     },
     mutateSetProgressdate(state, progressdate) {
         state.progressdate = progressdate
+    },
+    mutateSetHolidaydate(state, holidaydate) {
+        state.holidaydate = holidaydate
     },
 
     mutateSetTagitem(state, tagitem){
@@ -210,6 +217,11 @@ export default new Vuex.Store({
     getProgressdate(context, payload) {
       http.get(payload).then(({ data }) => {
         context.commit('mutateSetProgressdate', data);
+      });
+    },
+    getHolidaydate(context, payload) {
+      http.get(payload).then(({ data }) => {
+        context.commit('mutateSetHolidaydate', data);
       });
     },
 
