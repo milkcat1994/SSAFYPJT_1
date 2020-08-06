@@ -477,6 +477,7 @@ import { getFormatDate } from "@/util/day-common";
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
                   this.reviews = data.object;
+                  console.log(data.object);
                   //평균계산
                   let videoAvg=0, kindnessAvg=0, finishAvg=0;
                   data.object.forEach(obj => {

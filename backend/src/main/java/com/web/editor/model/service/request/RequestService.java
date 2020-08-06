@@ -4,8 +4,11 @@ import java.util.List;
 
 import com.web.editor.model.dto.request.NotifyDto;
 import com.web.editor.model.dto.request.RequestDto;
+import com.web.editor.model.dto.request.RequestReview;
+import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
+import com.web.editor.model.dto.user.PortfolioReview;
 
 public interface RequestService {
 	// 요청 검색
@@ -62,4 +65,16 @@ public interface RequestService {
 
 	// 태그 삭제
 	public int deleteReqTag(int rid);
+
+	// 리뷰 조회 - 요청서의 리뷰 조회
+	public RequestReview searchReview(int rid);
+
+	// 리뷰 모두 조회 - 해당 편집자의 모든 리뷰 조회
+	public List<PortfolioReview> searchReviewList(String responseNickname);
+
+	// 리뷰 등록 - 요청서의 리뷰 등록
+	public int insertReview(RequestReviewSaveRequest requestReviewSaveRequest);
+
+	// 리뷰 삭제 - 요청서의 리뷰 삭제
+	public int deleteReview(int rid);
 }

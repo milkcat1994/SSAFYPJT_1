@@ -159,5 +159,37 @@
 		delete from request_tag where request_form_rid = #{rid}
 	</delete>
 
+	<!-- 요청서의 리뷰 조회 -->
+	<select id="searchReview" resultType="RequestReview">
+        SELECT `review_no`, `request_form_rid`, `nickname`, `created_date`, `video_score`, `kindness_score`, `finish_score`, `comment`
+        FROM review
+        WHERE `request_form_rid` = #{rid}
+    </select>
+
+	<!-- 해당 편집자의 모든 리뷰 조회 -->
+	<select id="searchReviewList" resultType="com.web.editor.model.dto.user.PortfolioReview">
+        SELECT `review_no` as `reviewNo`,
+		`nickname`,
+		`created_date` as `createdDate`,
+		`video_score` as `videoScore`,
+		`kindness_score` as `kindnessScore`,
+		`finish_score` as `finishScore`,
+		`comment`
+        FROM review
+        WHERE `request_form_rid` in (SELECT `rid` FROM request_form WHERE response_nickname = #{responseNickname})
+    </select>
+
+	<!-- 요청서에 리뷰 등록 -->
+	<insert id="insertReview">
+        INSERT INTO review (`request_form_rid`, `nickname`, `video_score`, `kindness_score`, `finish_score`, `comment`)
+                        VALUES 
+                        (#{requestFormRid}, #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
+    </insert>
+
+	<!-- 요청서에 리뷰 삭제 -->
+    <delete id="deleteReview">
+        DELETE FROM review
+        WHERE `request_form_rid` = #{rid}
+	</delete>
 
 </mapper>
