@@ -25,10 +25,7 @@
               <div v-if="$session.get('auth') == 'noneditor'">요청한 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem0, index) in requestitems0"
-                :key="index + '_requestitems0'"
-              >
+              <div v-for="(requestitem0, index) in requestitems0" :key="index + '_requestitems0'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -71,10 +68,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 60%"
-                        >
+                        <table class="table table-hover" style="float:left; width: 60%">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -100,9 +94,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem0.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -127,45 +119,28 @@
                           style="float:left; width: 40%; height: 100%"
                         />
                         <div style="float:left; width: 40%; height: 100%">
-                          <i
-                            class="fas fa-circle"
-                            style="color: #f29661; margin: 15px"
-                            >요청 작업</i
-                          >
-                          <i
-                            class="fas fa-circle"
-                            style="color: #6699ff; margin: 15px"
-                            >진행중 작업</i
-                          >
+                          <i class="fas fa-circle" style="color: #f29661; margin: 15px">요청 작업</i>
+                          <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
                         </div>
                       </b-card-text>
-                      <div
-                        id="editorBtn"
-                        v-if="$session.get('auth') == 'editor'"
-                      >
+                      <div id="editorBtn" v-if="$session.get('auth') == 'editor'">
                         <b-button
                           class="statusBtn"
                           style="background-color: #0099ff"
                           @click="acceptRequest(requestitem0.rid)"
-                          >요청 수락</b-button
-                        >
+                        >요청 수락</b-button>
                         <b-button
                           class="statusBtn"
                           style="background-color: #aaaaaa"
                           @click="denyRequest(requestitem0.rid)"
-                          >요청 거절</b-button
-                        >
+                        >요청 거절</b-button>
                       </div>
-                      <div
-                        id="noneditorBtn"
-                        v-if="$session.get('auth') == 'noneditor'"
-                      >
+                      <div id="noneditorBtn" v-if="$session.get('auth') == 'noneditor'">
                         <b-button
                           class="statusBtn"
                           style="background-color: #aaaaaa"
                           @click="denyRequest(requestitem0.rid)"
-                          >요청 취소</b-button
-                        >
+                        >요청 취소</b-button>
                       </div>
                     </b-card-body>
                   </b-collapse>
@@ -179,10 +154,7 @@
               <div>진행중 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem1, index) in requestitems1"
-                :key="index + '_requestitems1'"
-              >
+              <div v-for="(requestitem1, index) in requestitems1" :key="index + '_requestitems1'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -208,10 +180,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 60%"
-                        >
+                        <table class="table table-hover" style="float:left; width: 60%">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -237,9 +206,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem1.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -264,24 +231,15 @@
                           style="float:left; width: 40%; height: 100%"
                         />
                         <div style="float:left; width: 40%; height: 100%">
-                          <i
-                            class="fas fa-circle"
-                            style="color: #f29661; margin: 15px"
-                            >현재 선택된 작업</i
-                          >
-                          <i
-                            class="fas fa-circle"
-                            style="color: #6699ff; margin: 15px"
-                            >진행중 작업</i
-                          >
+                          <i class="fas fa-circle" style="color: #f29661; margin: 15px">현재 선택된 작업</i>
+                          <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
                         </div>
                       </b-card-text>
                       <b-button
                         class="statusBtn"
                         style="background-color: #0099ff"
                         @click="doneRequest(requestitem1.rid)"
-                        >요청 완료</b-button
-                      >
+                      >요청 완료</b-button>
                     </b-card-body>
                   </b-collapse>
                 </b-card>
@@ -294,10 +252,7 @@
               <div>완료된 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem2, index) in requestitems2"
-                :key="index + '_requestitems2'"
-              >
+              <div v-for="(requestitem2, index) in requestitems2" :key="index + '_requestitems2'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -323,10 +278,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 100%"
-                        >
+                        <table class="table table-hover" style="float:left; width: 100%">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -352,9 +304,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem2.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -376,8 +326,7 @@
                         style="background-color: #0099ff"
                         v-if="$session.get('auth') == 'noneditor'"
                         @click="$bvModal.show('review')"
-                        >후기 남기기</b-button
-                      >
+                      >후기 남기기</b-button>
                       <b-modal id="review" hide-footer>
                         <template v-slot:modal-title>후기 작성</template>
                         <div class="d-block text-center">
@@ -385,48 +334,36 @@
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="videoScore"></star-rating>
                           </div>
-                          <hr />
-                          *편집자가 친절하게 소통했나요?
+                          <hr />*편집자가 친절하게 소통했나요?
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="kindnessScore"></star-rating>
                           </div>
-                          <hr />
-                          *편집자가 마감 기한을 잘 지켰나요?
+                          <hr />*편집자가 마감 기한을 잘 지켰나요?
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="finishScore"></star-rating>
                           </div>
-                          <hr />
-                          *솔직한 한 줄 평을 남겨주세요.
+                          <hr />*솔직한 한 줄 평을 남겨주세요.
                           <div class="d-flex justify-content-center">
-                            <textarea
-                              class="form-control"
-                              v-model="comment"
-                            ></textarea>
+                            <textarea class="form-control" v-model="comment"></textarea>
                           </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
                           <b-button
                             @click="
                               writeReview(
-                                requestitems2.response_nickname,
+                                requestitem2.response_nickname,
                                 requestitem2.rid
                               )
                             "
-                            >작성 완료</b-button
-                          >
-                          <b-button @click="$bvModal.hide('review')"
-                            >창닫기</b-button
-                          >
+                          >작성 완료</b-button>
+                          <b-button @click="$bvModal.hide('review')">창닫기</b-button>
                         </div>
                       </b-modal>
                     </b-card-body>
                   </b-collapse>
                 </b-card>
               </div>
-              <div
-                v-for="(requestitem3, index) in requestitems3"
-                :key="index + '_requestitems3'"
-              >
+              <div v-for="(requestitem3, index) in requestitems3" :key="index + '_requestitems3'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -452,10 +389,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 100%"
-                        >
+                        <table class="table table-hover" style="float:left; width: 100%">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -481,9 +415,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem3.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -504,16 +436,14 @@
                         class="statusBtn"
                         style="background-color: #0099ff"
                         v-if="$session.get('auth') == 'noneditor'"
-                        @click="$bvModal.show('donereview')"
-                        >후기 보기</b-button
-                      >
+                        @click="getReview(requestitem3.rid)"
+                      >후기 보기</b-button>
                       <b-modal id="donereview" hide-footer>
                         <template v-slot:modal-title>내가 쓴 후기</template>
                         <div class="d-block text-center"></div>
                         <div class="d-flex justify-content-center mt-3">
-                          <b-button @click="$bvModal.hide('donereview')"
-                            >창닫기</b-button
-                          >
+                          <b-button variant="danger" @click="deleteReview(requestitem3.rid)">삭제하기</b-button>
+                          <b-button @click="$bvModal.hide('donereview')">창닫기</b-button>
                         </div>
                       </b-modal>
                     </b-card-body>
@@ -760,12 +690,43 @@ export default {
     setUserInfo(data) {
       this.nickname = data.nickname;
     },
-    writeReview(portfolioid, rid) {
-      let msg = "리뷰 작성에 실패하였습니다.";
+    getReview(rid) {
       http
-        .post("/portfolio/review/" + this.uid, {
-          portfolioUid: portfolioid,
-          nickname: this.nickname,
+        .get("request/review/" + rid)
+        .then(({ data }) => {
+          console.log(data);
+          this.$bvModal.show("donereview");
+          return;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    // getReview(rid) {
+    //   http
+    //     .get("request/review/" + rid)
+    //     .then(({ data }) => {
+    //       if (data != null) {
+    //         this.$bvModal.show("donereview");
+    //         return;
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       return;
+    //     });
+    //   // .finally(() => {
+    //   //   store.dispatch("getReviewitems", "/request/review/" + rid);
+    //   // });
+    // },
+    writeReview(editor_nickname, rid) {
+      let msg = "리뷰 작성에 실패하였습니다.";
+      console.log(editor_nickname, rid);
+      http
+        .post("/request/review", {
+          requestFormRid: rid,
+          nickname: editor_nickname,
           videoScore: this.videoScore,
           kindnessScore: this.kindnessScore,
           finishScore: this.finishScore,
@@ -773,7 +734,7 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
-          if (data.data == "success") {
+          if (data == 1) {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
             this.$bvModal.hide("review");
@@ -790,6 +751,36 @@ export default {
           alertify.error(msg, 3);
           return;
         });
+    },
+    deleteReview(rid) {
+      let msg = "리뷰 삭제 실패했습니다.";
+      alertify.confirm(
+        "리뷰 삭제",
+        "삭제 하시겠습니까?",
+        function () {
+          http
+            .delete("/request/review/" + rid)
+            .then(({ data }) => {
+              if (data == 1) {
+                msg = "삭제가 완료되었습니다.";
+                alertify.notify(msg, "success", 3);
+                return;
+              } else {
+                msg = "삭제에 실패하였습니다.";
+                alertify.error(msg, 3);
+                return;
+              }
+            })
+            .catch(() => {
+              msg = "서버 통신 실패";
+              alertify.error(msg, 3);
+              return;
+            });
+        },
+        function () {
+          alertify.error("취소되었습니다.");
+        }
+      );
     },
     setRequestDate(start, end) {
       this.events[this.events.length - 1].start = start.substring(0, 10);
