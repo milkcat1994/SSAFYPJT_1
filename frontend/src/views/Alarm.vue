@@ -440,7 +440,24 @@
                       >후기 보기</b-button>
                       <b-modal id="donereview" hide-footer>
                         <template v-slot:modal-title>내가 쓴 후기</template>
-                        <div class="d-block text-center"></div>
+                        <div class="d-block text-center">
+                          영상만족도
+                          <div class="d-flex justify-content-center">
+                            <star-rating :rating="EvideoScore" :read-only="true"></star-rating>
+                          </div>
+                          <hr />친절도
+                          <div class="d-flex justify-content-center">
+                            <star-rating :rating="EkindnessScore" :read-only="true"></star-rating>
+                          </div>
+                          <hr />마감속도
+                          <div class="d-flex justify-content-center">
+                            <star-rating :rating="EfinishScore" :read-only="true"></star-rating>
+                          </div>
+                          <hr />한줄평
+                          <div class="d-flex justify-content-center">
+                            <textarea class="form-control" v-model="Ecomment"></textarea>
+                          </div>
+                        </div>
                         <div class="d-flex justify-content-center mt-3">
                           <b-button variant="danger" @click="deleteReview(requestitem3.rid)">삭제하기</b-button>
                           <b-button @click="$bvModal.hide('donereview')">창닫기</b-button>
@@ -505,6 +522,10 @@ export default {
       uid: 0,
       nickname: "",
 
+      EvideoScore: 0,
+      EkindnessScore: 0,
+      EfinishScore: 0,
+      Ecomment: "",
       complete: false,
     };
   },
@@ -695,31 +716,16 @@ export default {
         .get("request/review/" + rid)
         .then(({ data }) => {
           console.log(data);
+          (this.EvideoScore = data.videoScore),
+            (this.EkindnessScore = data.kindnessScore),
+            (this.EfinishScore = data.finishScore),
+            (this.Ecomment = data.comment);
           this.$bvModal.show("donereview");
-          return;
         })
         .catch((err) => {
           console.log(err);
         });
     },
-
-    // getReview(rid) {
-    //   http
-    //     .get("request/review/" + rid)
-    //     .then(({ data }) => {
-    //       if (data != null) {
-    //         this.$bvModal.show("donereview");
-    //         return;
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       return;
-    //     });
-    //   // .finally(() => {
-    //   //   store.dispatch("getReviewitems", "/request/review/" + rid);
-    //   // });
-    // },
     writeReview(editor_nickname, rid) {
       let msg = "리뷰 작성에 실패하였습니다.";
       console.log(editor_nickname, rid);
@@ -733,7 +739,7 @@ export default {
           comment: this.comment,
         })
         .then(({ data }) => {
-          console.log(data);
+          console.log(this.videoScore);
           if (data == 1) {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
