@@ -102,6 +102,23 @@ public class UserController {
         }
     }
 
+    @PostMapping("/nickname/check")
+    @ApiOperation(value = "nickname 중복체크")
+    public Object nicknamecheck(@RequestBody NormalRegisterRequest request) {
+
+        final BasicResponse result = new BasicResponse();
+        User user = userService.findByNickname(request.getNickname());
+        if (user == null) {
+            result.status = true;
+            result.data = "success";
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        result.status = true;
+        result.data = "nickname";
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }   
+
     @PostMapping("/user/{uid}")
     @ApiOperation(value = "user정보 반환")
     public Object findByUid(@PathVariable String uid) {
