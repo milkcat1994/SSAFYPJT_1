@@ -407,11 +407,111 @@
                         <div class="d-flex justify-content-center mt-3">
                           <b-button
                             @click="
-                              writeReview(requestitems2.response_nickname)
+                              writeReview(
+                                requestitems2.response_nickname,
+                                requestitem2.rid
+                              )
                             "
                             >작성 완료</b-button
                           >
                           <b-button @click="$bvModal.hide('review')"
+                            >창닫기</b-button
+                          >
+                        </div>
+                      </b-modal>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+              <div
+                v-for="(requestitem3, index) in requestitems3"
+                :key="index + '_requestitems3'"
+              >
+                <b-card no-body class="m-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle="'accordion-' + requestitem3.uid"
+                      variant="info"
+                      @click="
+                        getDetail(requestitem3.rid);
+                        setRequestDate(
+                          requestitem3.start_date,
+                          requestitem3.end_date
+                        );
+                      "
+                    >
+                      {{ requestitem3.request_nickname }}님과의 작업이
+                      완료되었습니다.
+                    </b-button>
+                  </b-card-header>
+                  <b-collapse
+                    :id="'accordion-' + requestitem3.uid"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-card-text>
+                        <table
+                          class="table table-hover"
+                          style="float:left; width: 100%"
+                        >
+                          <tbody>
+                            <tr v-if="$session.get('auth') == 'editor'">
+                              <th>요청자</th>
+                              <td>{{ requestitem3.request_nickname }}</td>
+                            </tr>
+                            <tr v-if="$session.get('auth') == 'noneditor'">
+                              <th>편집자</th>
+                              <td>{{ requestitem3.response_nickname }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 타입</th>
+                              <td>{{ requestitem3.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>원본 동영상 길이</th>
+                              <td>{{ requestitem3.video_origin_length }}</td>
+                            </tr>
+                            <tr>
+                              <th>원하는 동영상 길이</th>
+                              <td>{{ requestitem3.video_result_length }}</td>
+                            </tr>
+                            <tr>
+                              <th>동영상 스타일</th>
+                              <td>
+                                {{ requestitem3.video_style }}
+                                <div style="color: blue; float: right">
+                                  {{ requestitem.tag_list }}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>진행 날짜</th>
+                              <td>
+                                {{ requestitem3.start_date.substring(0, 10) }} ~
+                                {{ requestitem3.end_date.substring(0, 10) }}
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>기타 요청사항</th>
+                              <td>{{ requestitem3.request_description }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </b-card-text>
+                      <b-button
+                        class="statusBtn"
+                        style="background-color: #0099ff"
+                        v-if="$session.get('auth') == 'noneditor'"
+                        @click="$bvModal.show('donereview')"
+                        >후기 보기</b-button
+                      >
+                      <b-modal id="donereview" hide-footer>
+                        <template v-slot:modal-title>내가 쓴 후기</template>
+                        <div class="d-block text-center"></div>
+                        <div class="d-flex justify-content-center mt-3">
+                          <b-button @click="$bvModal.hide('donereview')"
                             >창닫기</b-button
                           >
                         </div>
@@ -474,6 +574,8 @@ export default {
       comment: "",
       uid: 0,
       nickname: "",
+
+      complete: false,
     };
   },
   created() {
@@ -514,6 +616,10 @@ export default {
           "getRequestitems2",
           "/request/req/" + this.$session.get("nickname") + "/2"
         );
+        store.dispatch(
+          "getRequestitems3",
+          "/request/req/" + this.$session.get("nickname") + "/3"
+        );
       }
       this.setInprogressDate();
     } else {
@@ -525,6 +631,7 @@ export default {
     ...mapGetters(["requestitems0"]),
     ...mapGetters(["requestitems1"]),
     ...mapGetters(["requestitems2"]),
+    ...mapGetters(["requestitems3"]),
     ...mapGetters(["requestitem"]),
   },
   methods: {
@@ -618,6 +725,32 @@ export default {
           this.setInprogressDate();
         });
     },
+    // 후기 완료
+    doneReview(rid) {
+      http
+        .put("/request/doneReview/" + rid)
+        .then(({ data }) => {
+          if (data == "success") {
+            // alertify.notify("후기 작성이 완료되었습니다.", "success", 3);
+          }
+        })
+        .catch(() => {
+          // alert('요청 거절중 에러가 발생했습니다.');
+        })
+        .finally(() => {
+          // 목록 새로고침
+          if (this.$session.get("auth") == "noneditor") {
+            store.dispatch(
+              "getRequestitems2",
+              "/request/req/" + this.$session.get("nickname") + "/2"
+            );
+            store.dispatch(
+              "getRequestitems3",
+              "/request/req/" + this.$session.get("nickname") + "/3"
+            );
+          }
+        });
+    },
 
     // 캘린더 날짜 셋팅
     setCalendarDate(start, end) {
@@ -627,7 +760,7 @@ export default {
     setUserInfo(data) {
       this.nickname = data.nickname;
     },
-    writeReview(portfolioid) {
+    writeReview(portfolioid, rid) {
       let msg = "리뷰 작성에 실패하였습니다.";
       http
         .post("/portfolio/review/" + this.uid, {
@@ -644,6 +777,7 @@ export default {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
             this.$bvModal.hide("review");
+            this.doneReview(rid);
             return;
           } else {
             alertify.error(msg, 3);
@@ -673,7 +807,6 @@ export default {
         };
         event.start = item.start_date.substring(0, 10);
         event.end = item.end_date.substring(0, 10);
-        console.log(event);
         this.events.push(event);
       });
       this.events.push({

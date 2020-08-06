@@ -477,6 +477,7 @@ import { getFormatDate } from "@/util/day-common";
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
                   this.reviews = data.object;
+                  console.log(data.object);
                   //평균계산
                   let videoAvg=0, kindnessAvg=0, finishAvg=0;
                   data.object.forEach(obj => {
@@ -557,13 +558,11 @@ import { getFormatDate } from "@/util/day-common";
             data.object.forEach(obj => {
               if(obj.userInfoUid == this.$session.get('uid')){
                 this.togleBookmark = true;
-                console.log(this.$session.get('uid') + " 여기");
                 return;
               } else {
                 this.togleBookmark = false;
               }
             })
-            console.log(this.togleBookmark);
             return;
           } else {
             return;
@@ -584,7 +583,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({data}) => {
             if(data.data == "success"){
               this.togleBookmark = true;
-              // this.portfolio.markCnt += 1;
               this.getBookmarkCount();
               return;
             } else {
@@ -624,7 +622,6 @@ import { getFormatDate } from "@/util/day-common";
         let res = [];
         result.forEach(element => {
           res.push(getFormatDate(element.startDate));
-          // console.log(element.startDate);
         })
         return res;
       },
