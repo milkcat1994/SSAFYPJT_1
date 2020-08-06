@@ -7,7 +7,7 @@
 
     <!-- 포트폴리오 조회 -->
     <select id="findPortfolioByUid" resultType="Portfolio">
-        SELECT `nickname`, `pay_min`, `description`
+        SELECT `nickname`, `pay_min`, `skill`, `description`
         FROM portfolio
         WHERE `uid` = #{uid}
     </select>
@@ -84,6 +84,13 @@
                         #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
     </insert>
 
+    <!-- 포트폴리오 기본정보 수정 -->
+    <update id="portfolioUpdate">
+        UPDATE portfolio
+        SET pay_min = #{payMin}, skill = #{skill}, description=#{description}
+        WHERE uid = #{uid}
+    </update>
+
     <delete id="deleteVideos">
         DELETE FROM video_info
         WHERE portfolio_uid = #{uid}
@@ -94,5 +101,10 @@
         DELETE FROM schedule_info
         WHERE portfolio_uid = #{uid}
         AND schedule_type = #{scheduleType}
+    </delete>
+
+    <delete id="deleteTags">
+        DELETE FROM portfolio_tag
+        WHERE portfolio_uid = #{uid}
     </delete>
 </mapper>

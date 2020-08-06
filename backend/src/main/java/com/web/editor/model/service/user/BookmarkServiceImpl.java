@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.web.editor.model.dto.user.bookmark.Bookmark;
 import com.web.editor.model.dto.user.bookmark.BookmarkDeleteRequest;
+import com.web.editor.model.dto.user.bookmark.BookmarkInfo;
 import com.web.editor.model.dto.user.bookmark.BookmarkSaveRequest;
 import com.web.editor.model.mapper.user.BookmarkMapper;
 
@@ -53,6 +54,25 @@ public class BookmarkServiceImpl implements BookmarkService {
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    @Override
+    public List<BookmarkInfo> cntBookmarkByUid(String muid) {
+        List<BookmarkInfo> bookmarks = null;
+        try {
+            // int res = 0;
+            bookmarks = bookmarkMapper.cntBookmarkByUid(muid);
+            // res = bookmarks.size();
+            // 찾지 못한 경우
+            if (bookmarks.isEmpty()) {
+                // res = 0;
+                bookmarks = new ArrayList<>();
+            }
+            return bookmarks;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return bookmarks;
         }
     }
     

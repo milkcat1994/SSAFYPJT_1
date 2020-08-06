@@ -1,6 +1,7 @@
 package com.web.editor.controller.user;
 
 import com.web.editor.model.dto.user.Portfolio;
+import com.web.editor.model.dto.user.PortfolioInfo;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.user.PortfolioService;
 
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,10 +57,6 @@ public class PortfolioController {
         return response;
     }
 
-    
-    
-    
-
     @PostMapping("/{uid}")
     @ApiOperation(value="첫 가입시 포트폴리오 초기 등록")
     public Object portfolioInitRegister(@PathVariable String uid){
@@ -100,4 +99,22 @@ public class PortfolioController {
         return response;
     }
 
+    @PutMapping("/{uid}")
+    @ApiOperation(value="포트폴리오 수정")
+    public Object updatePortfolio(@PathVariable String uid, @RequestBody PortfolioInfo portfolioInfo){
+        ResponseEntity response = null;
+        final BasicResponse result = new BasicResponse();
+
+        int res = portfolioService.portfolioUpdate(portfolioInfo);
+        if(res != -1){
+            result.status = true;
+            result.data = "success";
+        } else {
+            result.status = false;
+            result.data = "fail";
+        }
+        
+        response = new ResponseEntity<>(result, HttpStatus.OK);
+        return response;
+    }
 }
