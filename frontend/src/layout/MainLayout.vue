@@ -26,7 +26,7 @@
           :link="{
             name: '포트폴리오',
             icon: 'ni ni-collection text-primary',
-            path: '/portfolio?no='+this.$session.get('uid'),
+            path: '/portfolio?no=' + this.$session.get('uid'),
           }"
         />
         <sidebar-item
@@ -79,7 +79,7 @@ export default {
       // console.log("watch!!")
       if (this.$session.exists()) {
         this.isLogin = true;
-        this.isEditor = (this.$session.get("auth") == 'editor')
+        this.isEditor = this.$session.get("auth") == "editor";
         // console.log(this.$session.get("auth"))
         // console.log(this.$session.get("nickname"))
       } else {
@@ -95,14 +95,14 @@ export default {
     };
   },
   created() {
-      if (this.$session.exists()) {
-        this.isLogin = true;
-        this.isEditor = (this.$session.get("auth") == 'editor')
-        // console.log(this.$session.get("auth"))
-        // console.log(this.$session.get("nickname"))
-      } else {
-        this.isLogin = false;
-      }
+    if (this.$session.exists()) {
+      this.isLogin = true;
+      this.isEditor = this.$session.get("auth") == "editor";
+      // console.log(this.$session.get("auth"))
+      // console.log(this.$session.get("nickname"))
+    } else {
+      this.isLogin = false;
+    }
   },
   methods: {
     toggleSidebar() {
