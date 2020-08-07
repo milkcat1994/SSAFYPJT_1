@@ -2,6 +2,7 @@ package com.web.editor.model.service.request;
 
 import java.util.List;
 
+import com.web.editor.model.dto.request.NicknameUpdateDto;
 import com.web.editor.model.dto.request.NotifyDto;
 import com.web.editor.model.dto.request.RequestDto;
 import com.web.editor.model.dto.request.RequestReview;
@@ -80,4 +81,11 @@ public interface RequestService {
 
 	// 리뷰 삭제 - 요청서의 상태 변경
 	public int deleteReviewAndUpdateRequest(int rid);
+
+
+	public int updateNicknameReq(NicknameUpdateDto nicknameUpdateDto);
+	public int updateNicknameRes(NicknameUpdateDto nicknameUpdateDto);
+	public int updateReqNoti(NicknameUpdateDto nicknameUpdateDto);
+	public int updateResNoti(NicknameUpdateDto nicknameUpdateDto);
+	
 }

@@ -115,8 +115,10 @@ export default {
         })
         .then(({ data }) => {
           if (data.data == "success") {
+            this.$session.set("nickname", this.nickname);
             msg = "회원 정보가 수정되었습니다";
             alertify.notify(msg, "success", 3);
+
             return;
           } else {
             alertify.error(msg, 3);
