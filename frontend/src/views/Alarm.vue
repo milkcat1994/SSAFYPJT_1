@@ -615,10 +615,7 @@ export default {
         );
       }
       this.readNotify();
-    } else {
-      this.$router.push("/");
-      alertify.error("로그인이 필요한페이지 입니다.", 3);
-    }
+    } 
   },
   computed: {
     ...mapGetters(["requestitems0"]),

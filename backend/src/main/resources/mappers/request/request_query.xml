@@ -233,7 +233,7 @@
 		where request_nickname = #{orgNickname}
 	</update>
 	<!-- 알람 닉네임 변경 -->
-	<update id="updatResNoti">
+	<update id="updateResNoti">
 		update notify set
 			response_nickname = #{nickname}
 		where response_nickname = #{orgNickname}
