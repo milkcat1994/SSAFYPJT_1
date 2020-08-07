@@ -124,13 +124,6 @@ export default {
       this.model.email = "";
       this.model.password = "";
     },
-    emailCheck(email) {
-      let exptext = /^[\w]+@[\w]+[\w]+/;
-      if (exptext.test(email) == false) {
-        return false;
-      }
-      return true;
-    },
     login() {
       store
         .dispatch("auth/login", {

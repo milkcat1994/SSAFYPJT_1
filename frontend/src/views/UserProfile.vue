@@ -27,9 +27,9 @@
                         v-model="nickname"
                       />
                     </div>
-                    <!-- <div class="col-2">
-                      <base-button type="default" class style="white-space: nowrap;">중복확인</base-button>
-                    </div>-->
+                    <div class="col-2">
+                      <base-button type="default" class style="white-space: nowrap;" @click="checkNickname()">중복확인</base-button>
+                    </div>
 
                     <div class="col-lg-12">
                       <base-input
@@ -90,7 +90,23 @@ export default {
       this.nickname = data.nickname;
       this.email = data.email;
     },
-
+    checkNickname() {
+      http
+        .post("/user/nickname/check", {
+          nickname: this.nickname,
+        })
+        .then(({ data }) => {
+          if (data.data != "nickname") {
+            alertify.notify("닉네임 사용이 가능합니다!!!!!", "nickname", 3);
+          } else {
+            alertify.error("이미 사용 중인 닉네임입니다.", 3);
+          }
+        })
+        .catch((error) => {
+          alertify.error(error, 3);
+          return;
+        });
+    },
     updateProfile() {
       let msg = "회원 정보 수정에 실패하였습니다.";
       http
