@@ -149,6 +149,12 @@ export default new Vuex.Store({
       // state.requestitems = requestitems;
       state.requestitems3 = obj;
     },
+    mutateSetRequestitems0123(state, requestitems) {
+      state.requestitems0 = requestitems
+      state.requestitems1 = requestitems
+      state.requestitems2 = requestitems
+      state.requestitems3 = requestitems
+    },
     mutateSetRequestitem(state, requestitem) {
       state.requestitem = requestitem;
     },
@@ -262,6 +268,11 @@ export default new Vuex.Store({
       http.get(payload).then(({ data }) => {
         context.commit('mutateSetHolidaydate', data);
       });
+    },
+    initDataOnAlarm(context) {
+      context.commit('mutateSetProgressdate', []);
+      context.commit('mutateSetHolidaydate', []);
+      context.commit('mutateSetRequestitems0123', []);
     },
 
     getTagitem(context, payload) {
