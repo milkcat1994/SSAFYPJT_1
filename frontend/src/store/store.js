@@ -30,6 +30,10 @@ export default new Vuex.Store({
 
     tagitem: "",
 
+    progressdate: [],
+    holidaydate: [],
+    scheduledate: [],
+
     requests: {
       category: null,
       theme: null,
@@ -65,6 +69,22 @@ export default new Vuex.Store({
     requestitem(state) {
       return state.requestitem;
     },
+    progressdate(state) {
+        return state.progressdate;
+    },
+    holidaydate(state) {
+        return state.holidaydate;
+    },
+    scheduledate(state) {
+      if (state.holidaydate.length > 0 && state.progressdate.length > 0) 
+        return state.holidaydate.concat(state.progressdate).concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+      if (state.holidaydate.length > 0 && state.progressdate.length <= 0) 
+        return state.holidaydate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+      if (state.progressdate.length > 0 && state.holidaydate.length <= 0) 
+        return state.progressdate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+      return state.scheduledate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+    },
+
 
     tagitem(state) {
       return state.tagitem;
@@ -131,6 +151,16 @@ export default new Vuex.Store({
     },
     mutateSetRequestitem(state, requestitem) {
       state.requestitem = requestitem;
+    },
+    mutateSetProgressdate(state, progressdate) {
+        state.progressdate = progressdate
+    },
+    mutateSetHolidaydate(state, holidaydate) {
+        state.holidaydate = holidaydate
+    },
+
+    mutateSetScheduledate(state, data) {
+        state.holidaydate = data
     },
 
     mutateSetTagitem(state, tagitem) {
@@ -223,6 +253,17 @@ export default new Vuex.Store({
         context.commit("mutateSetRequestitem", data);
       });
     },
+    getProgressdate(context, payload) {
+      http.get(payload).then(({ data }) => {
+        context.commit('mutateSetProgressdate', data);
+      });
+    },
+    getHolidaydate(context, payload) {
+      http.get(payload).then(({ data }) => {
+        context.commit('mutateSetHolidaydate', data);
+      });
+    },
+
     getTagitem(context, payload) {
       http.get(payload).then(({ data }) => {
         context.commit("mutateSetTagitem", data);

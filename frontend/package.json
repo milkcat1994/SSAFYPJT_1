@@ -34,7 +34,6 @@
     "vue-lazy-youtube-video": "^2.0.0",
     "vue-rate": "^2.4.0",
     "vue-router": "3.3.4",
-    "vue-scroll-loader": "^2.2.0",
     "vue-session": "^1.0.0",
     "vue-star-rating": "^1.6.1",
     "vue-stepper": "^1.4.2",
@@ -42,7 +41,6 @@
     "vue-tags": "^1.0.4",
     "vue2-transitions": "0.3.0",
     "vuelidate": "^0.7.5",
-    "vuescroll": "^4.16.1",
     "vuex": "^3.5.1",
     "vuex-persistedstate": "^3.0.1",
     "yarn": "^1.22.4"
