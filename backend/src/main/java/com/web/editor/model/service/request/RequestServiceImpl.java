@@ -282,5 +282,15 @@ public class RequestServiceImpl implements RequestService {
 		}
 	}
 
+	@Override
+	public int deleteReviewAndUpdateRequest(int rid) {
+		try {
+			return requestMapper.deleteReviewAndUpdateRequest(rid);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
 
 }
