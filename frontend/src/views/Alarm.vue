@@ -384,7 +384,7 @@
                     <b-button
                       block
                       v-b-toggle="'accordion-' + requestitem3.uid"
-                      variant="info"
+                      variant="primary"
                       @click="
                         getDetail(requestitem3.rid);
                         setRequestDate(
@@ -504,7 +504,6 @@ import { mapGetters } from "vuex";
 import store from "@/store/store.js";
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
-
 // for calenggar
 import { Calendar } from "vue-sweet-calendar";
 import "vue-sweet-calendar/dist/SweetCalendar.css";
