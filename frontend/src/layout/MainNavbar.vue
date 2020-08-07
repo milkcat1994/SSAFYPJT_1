@@ -84,9 +84,9 @@
               <img alt="Image placeholder" src="img/theme/avatar.svg" />
             </span>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold text-default">{{
-                nickname
-              }}</span>
+              <span class="mb-0 text-sm font-weight-bold text-default">
+                {{nickname}}
+              </span>
             </div>
           </div>
 
@@ -140,14 +140,14 @@ export default {
       notifyNum: "",
 
       isLogin: false,
-      nickname: "",
+      // nickname: "",
     };
   },
   created() {
     //생성 시 로그인 상태 확인
     if (this.$session.exists()) {
       this.isLogin = true;
-      this.nickname = this.$session.get("nickname");
+      // this.nickname = this.$session.get("nickname");
       // 로그인이 되어있으면 알림 가져옴
       store.dispatch(
         "getNotifyitems",
@@ -161,6 +161,9 @@ export default {
   computed: {
     ...mapGetters(["notifyitems"]),
     ...mapGetters(["notifyitem"]),
+    nickname() {
+      return this.$session.get("nickname")
+    }
   },
   watch: {
     // route 경로가 바뀔때마다 로그인 상태인지 확인
