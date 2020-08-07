@@ -5,6 +5,8 @@ import javax.validation.Valid;
 import com.web.editor.model.dto.request.NicknameUpdateDto;
 import com.web.editor.model.dto.user.NormalLoginRequest;
 import com.web.editor.model.dto.user.NormalRegisterRequest;
+import com.web.editor.model.dto.user.Portfolio;
+import com.web.editor.model.dto.user.PortfolioNicknameUpdateRequest;
 import com.web.editor.model.dto.user.User;
 import com.web.editor.model.dto.user.UserConfirm;
 import com.web.editor.model.dto.user.UserUpdateRequest;
@@ -162,6 +164,8 @@ public class UserController {
         String message = "uid_need_int";
         try {
             user.setUid(Integer.parseInt(uid));
+            //포트폴리오에 해당 uid있다면 nickname수정할 것.
+            
         } catch (NumberFormatException nfe) {
             nfe.printStackTrace();
             result.status = false;
@@ -170,7 +174,8 @@ public class UserController {
         }
         user.setNickname(nickname);
         int res = userService.updateUser(user);
-
+        portfolioService.portfolioNicknameUpdate(new PortfolioNicknameUpdateRequest(Integer.parseInt(uid), request.getNickname()));
+        
         if (res > 0) {
             result.status = true;
             result.data = "success";

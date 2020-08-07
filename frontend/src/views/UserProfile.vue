@@ -117,6 +117,7 @@ export default {
           if (data.data == "success") {
             this.$session.set("nickname", this.nickname);
             msg = "회원 정보가 수정되었습니다";
+            this.$session.set("nickname", this.nickname);
             alertify.notify(msg, "success", 3);
 
             return;

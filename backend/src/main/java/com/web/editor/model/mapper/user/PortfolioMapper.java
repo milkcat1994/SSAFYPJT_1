@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioInfo;
+import com.web.editor.model.dto.user.PortfolioNicknameUpdateRequest;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
@@ -87,5 +88,10 @@ public class PortfolioMapper {
     // 태그 모두 삭제
     public int deleteTags(int uid) throws SQLException {
         return sqlSession.delete("deleteTags", uid);
+    }
+
+    
+    public int portfolioNicknameUpdate(PortfolioNicknameUpdateRequest portfolioNicknameUpdateRequest) throws SQLException {
+        return sqlSession.update("portfolioNicknameUpdate", portfolioNicknameUpdateRequest);
     }
 }
