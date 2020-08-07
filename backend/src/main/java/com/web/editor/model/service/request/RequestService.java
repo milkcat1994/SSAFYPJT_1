@@ -77,4 +77,7 @@ public interface RequestService {
 
 	// 리뷰 삭제 - 요청서의 리뷰 삭제
 	public int deleteReview(int rid);
+
+	// 리뷰 삭제 - 요청서의 상태 변경
+	public int deleteReviewAndUpdateRequest(int rid);
 }

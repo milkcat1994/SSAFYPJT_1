@@ -12,17 +12,15 @@
       <span class="mask bg-gradient-success opacity-8"></span>
     </base-header>
 
-
-
     <br />
     <hr />
     <!-- <h2 class="text-center">알림창</h2> -->
     <br />
 
     <div class="container-fluid mt--7 mb-5">
-
       <!-- for calendar -->
-      <br><br>
+      <br />
+      <br />
       <div style="display: table; width:100%">
         <div style="display: table-cell; text-align:center;">
           <calendar
@@ -31,11 +29,14 @@
             ref="calendar"
           />
           <i class="fas fa-circle" style="color: #f29661; margin: 15px;">선택된 작업</i>
-          <i class="fas fa-circle" style="color: #6699ff; margin: 15px" >진행중 작업</i>
-          <i class="fas fa-circle" style="color: #ff0066; margin: 15px" v-if="$session.get('auth') == 'editor'">개인 일정</i>
+          <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
+          <i
+            class="fas fa-circle"
+            style="color: #ff0066; margin: 15px"
+            v-if="$session.get('auth') == 'editor'"
+          >개인 일정</i>
         </div>
       </div>
-
 
       <tabs fill class="flex-column flex-md-row">
         <card shadow>
@@ -77,13 +78,13 @@
                       "
                       v-if="$session.get('auth') == 'noneditor'"
                     >
-                    <span v-if="$session.get('auth') == 'editor'">
-                      {{ requestitem0.request_nickname }}님과의 작업이
-                      요청했습니다.
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem0.request_nickname }}님과의 작업이
+                        요청했습니다.
                       </span>
-                    <span v-if="$session.get('auth') == 'noneditor'">
-                      {{ requestitem0.response_nickname }}님과의 작업이
-                      요청했습니다.
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem0.response_nickname }}님과의 작업이
+                        요청했습니다.
                       </span>
                     </b-button>
                   </b-card-header>
@@ -94,9 +95,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                        >
+                        <table class="table table-hover">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -138,7 +137,6 @@
                             </tr>
                           </tbody>
                         </table>
-
                       </b-card-text>
                       <div id="editorBtn" v-if="$session.get('auth') == 'editor'">
                         <b-button
@@ -186,13 +184,13 @@
                         );
                       "
                     >
-                    <span v-if="$session.get('auth') == 'editor'">
-                      {{ requestitem1.request_nickname }}님과의 작업이
-                      진행중입니다.
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem1.request_nickname }}님과의 작업이
+                        진행중입니다.
                       </span>
-                    <span v-if="$session.get('auth') == 'noneditor'">
-                      {{ requestitem1.response_nickname }}님과의 작업이
-                      진행중입니다.
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem1.response_nickname }}님과의 작업이
+                        진행중입니다.
                       </span>
                     </b-button>
                   </b-card-header>
@@ -203,9 +201,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                        >
+                        <table class="table table-hover">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -247,7 +243,6 @@
                             </tr>
                           </tbody>
                         </table>
-
                       </b-card-text>
                       <b-button
                         class="statusBtn"
@@ -281,13 +276,13 @@
                         );
                       "
                     >
-                    <span v-if="$session.get('auth') == 'editor'">
-                      {{ requestitem2.request_nickname }}님과의 작업이
-                      완료되었습니다.
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem2.request_nickname }}님과의 작업이
+                        완료되었습니다.
                       </span>
-                    <span v-if="$session.get('auth') == 'noneditor'">
-                      {{ requestitem2.response_nickname }}님과의 작업이
-                      완료되었습니다.
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem2.response_nickname }}님과의 작업이
+                        완료되었습니다.
                       </span>
                     </b-button>
                   </b-card-header>
@@ -298,9 +293,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                        >
+                        <table class="table table-hover">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -400,14 +393,13 @@
                         );
                       "
                     >
-                    
-                    <span v-if="$session.get('auth') == 'editor'">
-                      {{ requestitem3.request_nickname }}님과의 작업이
-                      완료되었습니다.
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem3.request_nickname }}님과의 작업이
+                        완료되었습니다.
                       </span>
-                    <span v-if="$session.get('auth') == 'noneditor'">
-                      {{ requestitem3.response_nickname }}님과의 작업이
-                      완료되었습니다.
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem3.response_nickname }}님과의 작업이
+                        완료되었습니다.
                       </span>
                     </b-button>
                   </b-card-header>
@@ -577,8 +569,14 @@ export default {
           this.$router.push("/");
         });
       if (this.$session.get("auth") == "editor") {
-        store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
-        store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/res/" + this.$session.get("nickname")
+        );
+        store.dispatch(
+          "getHolidaydate",
+          "/schedule/holiday/" + this.$session.get("uid")
+        );
         store.dispatch(
           "getRequestitems0",
           "/request/res/" + this.$session.get("nickname") + "/0"
@@ -592,8 +590,14 @@ export default {
           "/request/res/" + this.$session.get("nickname") + "/2"
         );
       } else if (this.$session.get("auth") == "noneditor") {
-        store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
-        store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/req/" + this.$session.get("nickname")
+        );
+        store.dispatch(
+          "getHolidaydate",
+          "/schedule/holiday/" + this.$session.get("uid")
+        );
         store.dispatch(
           "getRequestitems0",
           "/request/req/" + this.$session.get("nickname") + "/0"
@@ -652,7 +656,7 @@ export default {
             "getRequestitems1",
             "/request/res/" + this.$session.get("nickname") + "/1"
           );
-          this.setProgressDate()
+          this.setProgressDate();
         });
     },
     // 요청 거절
@@ -752,7 +756,6 @@ export default {
       http
         .get("request/review/" + rid)
         .then(({ data }) => {
-          // console.log(data);
           (this.EvideoScore = data.videoScore),
             (this.EkindnessScore = data.kindnessScore),
             (this.EfinishScore = data.finishScore),
@@ -780,7 +783,7 @@ export default {
           if (data == 1) {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
-            this.$bvModal.hide("review-"+rid);
+            this.$bvModal.hide("review-" + rid);
             this.doneReview(rid);
             return;
           } else {
@@ -802,7 +805,7 @@ export default {
         "삭제 하시겠습니까?",
         function () {
           http
-            .delete("/request/review/" + rid)
+            .delete("request/review/" + rid)
             .then(({ data }) => {
               if (data == 1) {
                 msg = "삭제가 완료되었습니다.";
@@ -826,27 +829,37 @@ export default {
       );
     },
     setRequestDate(start, end) {
-      if (this.events[this.events.length-1].start == start.substring(0, 10)
-          && this.events[this.events.length-1].end == end.substring(0, 10)) {
+      if (
+        this.events[this.events.length - 1].start == start.substring(0, 10) &&
+        this.events[this.events.length - 1].end == end.substring(0, 10)
+      ) {
         this.setDateClean();
         return;
       }
-      this.events[this.events.length-1].start = start.substring(0, 10);
-      this.events[this.events.length-1].end = end.substring(0, 10);
+      this.events[this.events.length - 1].start = start.substring(0, 10);
+      this.events[this.events.length - 1].end = end.substring(0, 10);
     },
-    setDateClean(){
-      this.events[this.events.length-1].start = "";
-      this.events[this.events.length-1].end = "";
+    setDateClean() {
+      this.events[this.events.length - 1].start = "";
+      this.events[this.events.length - 1].end = "";
     },
-    setProgressDate(){
+    setProgressDate() {
       if (this.$session.get("auth") == "editor")
-        store.dispatch("getProgressdate", "/request/date/res/" + this.$session.get("nickname"));
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/res/" + this.$session.get("nickname")
+        );
       else if (this.$session.get("auth") == "noneditor")
-        store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
-      store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/req/" + this.$session.get("nickname")
+        );
+      store.dispatch(
+        "getHolidaydate",
+        "/schedule/holiday/" + this.$session.get("uid")
+      );
       this.events = this.scheduledate;
-    }
-
+    },
   },
 };
 </script>
