@@ -76,12 +76,12 @@ export default {
   watch: {
     // session이 바뀔때마다 로그인 상태인지 확인
     $route() {
-      console.log("watch!!")
+      // console.log("watch!!")
       if (this.$session.exists()) {
         this.isLogin = true;
         this.isEditor = (this.$session.get("auth") == 'editor')
-        console.log(this.$session.get("auth"))
-        console.log(this.$session.get("nickname"))
+        // console.log(this.$session.get("auth"))
+        // console.log(this.$session.get("nickname"))
       } else {
         this.isLogin = false;
       }
@@ -98,8 +98,8 @@ export default {
       if (this.$session.exists()) {
         this.isLogin = true;
         this.isEditor = (this.$session.get("auth") == 'editor')
-        console.log(this.$session.get("auth"))
-        console.log(this.$session.get("nickname"))
+        // console.log(this.$session.get("auth"))
+        // console.log(this.$session.get("nickname"))
       } else {
         this.isLogin = false;
       }

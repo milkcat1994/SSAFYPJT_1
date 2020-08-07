@@ -325,9 +325,9 @@
                         class="statusBtn"
                         style="background-color: #0099ff"
                         v-if="$session.get('auth') == 'noneditor'"
-                        @click="$bvModal.show('review')"
+                        @click="$bvModal.show('review-'+requestitem2.rid)"
                       >후기 남기기</b-button>
-                      <b-modal id="review" hide-footer>
+                      <b-modal :id="'review-'+requestitem2.rid" hide-footer>
                         <template v-slot:modal-title>후기 작성</template>
                         <div class="d-block text-center">
                           *편집된 영상에 만족하셨나요?
@@ -356,7 +356,7 @@
                               )
                             "
                           >작성 완료</b-button>
-                          <b-button @click="$bvModal.hide('review')">창닫기</b-button>
+                          <b-button @click="$bvModal.hide('review-'+requestitem2.rid)">창닫기</b-button>
                         </div>
                       </b-modal>
                     </b-card-body>
@@ -715,7 +715,7 @@ export default {
       http
         .get("request/review/" + rid)
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           (this.EvideoScore = data.videoScore),
             (this.EkindnessScore = data.kindnessScore),
             (this.EfinishScore = data.finishScore),
@@ -728,7 +728,7 @@ export default {
     },
     writeReview(editor_nickname, rid) {
       let msg = "리뷰 작성에 실패하였습니다.";
-      console.log(editor_nickname, rid);
+      // console.log(editor_nickname, rid);
       http
         .post("/request/review", {
           requestFormRid: rid,
@@ -739,11 +739,11 @@ export default {
           comment: this.comment,
         })
         .then(({ data }) => {
-          console.log(this.videoScore);
+          // console.log(this.videoScore);
           if (data == 1) {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
-            this.$bvModal.hide("review");
+            this.$bvModal.hide("review-"+rid);
             this.doneReview(rid);
             return;
           } else {
