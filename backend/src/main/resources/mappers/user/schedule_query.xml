@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.editor.model.mapper.user.ScheduleMapper">
+
+    <!-- 휴일 조회 -->
+    <select id="holidayDates" resultType="HolidayDate">
+        SELECT start_date as start, end_date as end
+        FROM schedule_info
+        WHERE portfolio_uid= #{uid}
+        AND schedule_type = 1
+    </select>
+    
+</mapper>
