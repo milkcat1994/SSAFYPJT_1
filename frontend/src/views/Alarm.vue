@@ -609,6 +609,7 @@ export default {
           "/request/req/" + this.$session.get("nickname") + "/3"
         );
       }
+      this.readNotify();
     } else {
       this.$router.push("/");
       alertify.error("로그인이 필요한페이지 입니다.", 3);
@@ -797,7 +798,26 @@ export default {
         store.dispatch("getProgressdate", "/request/date/req/" + this.$session.get("nickname"));
       store.dispatch("getHolidaydate", "/schedule/holiday/" + this.$session.get("uid"));
       this.events = this.scheduledate;
-    }
+    },
+
+
+    // 알림 읽음 처리
+    readNotify(){
+      http
+        .put('/request/notify/read/' + this.$session.get('nickname'))
+        .then(({ data }) => {
+          if (data == 'success'){
+            // alert('알람 읽음 완료');
+            }
+        })
+        .catch(() => {
+          // alert('요청 거절중 에러가 발생했습니다.');
+        })
+        .finally(() => {
+          // 목록 새로고침
+          store.dispatch('getNotifyitems', '/request/notify/' + this.$session.get('nickname'));
+        });
+    },
 
   },
 };
