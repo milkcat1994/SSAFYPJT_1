@@ -104,12 +104,12 @@
                     mode='multiple'
                     v-model='disableDates'>
                   </vc-date-picker>
-                  <vc-calendar
+                  <!-- <vc-calendar
                     title-position="left"
                     v-model='disableDates'
                     :disabled-dates='disableDates'
                   />
-                  {{disableDates}}
+                  {{disableDates}} -->
                 </div>
               </div>
             </div>
