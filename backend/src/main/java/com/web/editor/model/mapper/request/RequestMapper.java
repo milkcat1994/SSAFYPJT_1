@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.web.editor.model.dto.request.NicknameUpdateDto;
 import com.web.editor.model.dto.request.NotifyDto;
 import com.web.editor.model.dto.request.RequestDto;
 import com.web.editor.model.dto.request.RequestReview;
@@ -140,4 +141,19 @@ public class RequestMapper {
 	public int deleteReviewAndUpdateRequest(int rid) throws SQLException {
 		return sqlSession.delete("deleteReviewAndUpdateRequest", rid);
 	}
+
+	public int updateNicknameReq(NicknameUpdateDto nicknameUpdateDto) throws SQLException {
+		return sqlSession.update("updateNicknameReq", nicknameUpdateDto);
+	}
+	public int updateNicknameRes(NicknameUpdateDto nicknameUpdateDto) throws SQLException {
+		return sqlSession.update("updateNicknameRes", nicknameUpdateDto);
+	}
+
+	public int updateReqNoti(NicknameUpdateDto nicknameUpdateDto) throws SQLException {
+		return sqlSession.update("updateReqNoti", nicknameUpdateDto);
+	}
+	public int updateResNoti(NicknameUpdateDto nicknameUpdateDto) throws SQLException {
+		return sqlSession.update("updateResNoti", nicknameUpdateDto);
+	}
+
 }

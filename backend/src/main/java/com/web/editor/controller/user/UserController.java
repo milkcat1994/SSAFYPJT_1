@@ -2,6 +2,7 @@ package com.web.editor.controller.user;
 
 import javax.validation.Valid;
 
+import com.web.editor.model.dto.request.NicknameUpdateDto;
 import com.web.editor.model.dto.user.NormalLoginRequest;
 import com.web.editor.model.dto.user.NormalRegisterRequest;
 import com.web.editor.model.dto.user.Portfolio;
@@ -10,6 +11,7 @@ import com.web.editor.model.dto.user.User;
 import com.web.editor.model.dto.user.UserConfirm;
 import com.web.editor.model.dto.user.UserUpdateRequest;
 import com.web.editor.model.response.BasicResponse;
+import com.web.editor.model.service.request.RequestService;
 import com.web.editor.model.service.user.PortfolioService;
 import com.web.editor.model.service.user.UserService;
 
@@ -36,6 +38,9 @@ public class UserController {
 
     @Autowired
     PortfolioService portfolioService;
+
+    @Autowired
+    RequestService requestService;
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인")
@@ -149,6 +154,10 @@ public class UserController {
         ResponseEntity response = null;
         String nickname = request.getNickname();
         User user = new User();
+        User orgUser = new User();
+        orgUser = userService.findByUid(uid);
+        String orgNickname = orgUser.getNickname();
+        String auth = orgUser.getAuth();
 
         final BasicResponse result = new BasicResponse();
         // uid가 int로 변하지 못합니다.
@@ -170,6 +179,20 @@ public class UserController {
         if (res > 0) {
             result.status = true;
             result.data = "success";
+
+            // request notify 의 닉네임 변경
+            NicknameUpdateDto nicknameUpdateDto = new NicknameUpdateDto();
+            nicknameUpdateDto.setOrgNickname(orgNickname);
+            nicknameUpdateDto.setNickname(nickname);
+           
+            if (auth.equals("editor")){
+                requestService.updateNicknameRes(nicknameUpdateDto);
+            }else if (auth.equals("noneditor")){
+                requestService.updateNicknameReq(nicknameUpdateDto);
+            }
+            requestService.updateReqNoti(nicknameUpdateDto);
+            requestService.updateResNoti(nicknameUpdateDto);
+
             response = new ResponseEntity<>(result, HttpStatus.OK);
         } else {
             result.status = false;
