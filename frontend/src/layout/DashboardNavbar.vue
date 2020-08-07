@@ -1,6 +1,13 @@
 <template>
-  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
-    <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+  <base-nav
+    class="navbar-top navbar-dark"
+    id="navbar-main"
+    :show-toggle-button="false"
+    expand
+  >
+    <form
+      class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto"
+    >
       <div class="form-group mb-0">
         <base-input
           placeholder="Search"
@@ -26,7 +33,10 @@
             <div class="dropdown-header noti-title">
               <h6 class="text-overflow m-0">Welcome!</h6>
             </div>
-            <router-link :to="{name: 'profile', params: {uid: uid} }" class="dropdown-item">
+            <router-link
+              :to="{ name: 'profile', params: { uid: uid } }"
+              class="dropdown-item"
+            >
               <i class="ni ni-single-02"></i>
               <span>My profile</span>
             </router-link>

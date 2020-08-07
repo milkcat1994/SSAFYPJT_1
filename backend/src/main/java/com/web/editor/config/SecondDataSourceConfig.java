@@ -33,7 +33,7 @@ public class SecondDataSourceConfig {
         sqlSessionFactoryBean.setTypeAliasesPackage("com.web.editor.model.dto.request");
         sqlSessionFactoryBean.setVfs(SpringBootVFS.class); 
         sqlSessionFactoryBean.setConfiguration(configuration);
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mappers/request_query.xml")); 
+        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mappers/request/*.xml")); 
         return sqlSessionFactoryBean.getObject(); 
     }
 

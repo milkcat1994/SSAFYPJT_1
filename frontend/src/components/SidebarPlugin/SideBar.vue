@@ -61,14 +61,6 @@
               <i class="ni ni-settings-gear-65"></i>
               <span>계정 설정</span>
             </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>작업 일정</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-support-16"></i>
-              <span>도움말</span>
-            </router-link>
             <div class="dropdown-divider"></div>
             <a href="#!" class="dropdown-item">
               <i class="ni ni-user-run"></i>
@@ -91,7 +83,9 @@
               </router-link>
             </div>
             <div class="col-6 collapse-close">
-              <navbar-toggle-button @click.native="closeSidebar"></navbar-toggle-button>
+              <navbar-toggle-button
+                @click.native="closeSidebar"
+              ></navbar-toggle-button>
             </div>
           </div>
         </div>
