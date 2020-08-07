@@ -3,37 +3,43 @@
     <div class="card p-4">
       <ul class="list-unstyled mt-4">
         <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
-          <router-link :to="`/portfolio?no=${editor.uid}`">
+          
           <div class="container">
             <div class="row">
               <div class="col-3">
-                <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%" />
+                <router-link :to="`/portfolio?no=${editor.uid}`">
+                  <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%" />
+                </router-link>
                 <!-- <img :src="editor.imgURL" :alt="editor.nickname" class="mr-3" style="max-width: 180px;"> -->
               </div>
               <div class="col-9">
-                <div class="d-flex align-items-stretch mt-4">
-                  <div class="d-inline-flex ml-2">
-                    <!-- nickname and bookmarks -->
-                    <span class="display-1 mt-0 mb-1 text-default">{{editor.nickname}}</span>
-                  </div>
+                <div class="d-flex align-items-stretch">
+                  <router-link :to="`/portfolio?no=${editor.uid}`">
+                    <div class="d-inline-flex ml-2">
+                      <!-- nickname and bookmarks -->
+                      <span class="display-1 mt-0 mb-1 text-default">{{editor.nickname}}</span>
+                    </div>
+                  </router-link>
                   <div class="d-inline-flex flex-column ml-3 mt-3">
-                    <div><i class="display-4 ni ni-like-2"></i></div>
-                    <div>{{editor.bookmarkCount}}</div>
+                    <!-- <base-button :outline="!isBookmarked(editor.uid)" type="danger" size="sm" icon="ni ni-favourite-28" @click="addBookmark()"> -->
+                    <base-button outline disabled type="danger" size="sm" icon="ni ni-favourite-28">
+                      {{editor.bookmarkCount}}
+                    </base-button>
                   </div>
                 </div>
                 <div class="ml-2 mt-4">
                   <!-- tags and estimated price -->
                   <div class="row">
-                    <div class="col-6">
+                    <div class="col-8">
                       <button class="btn btn-info btn-sm" :key="index" v-for="(tag, index) in editor.tags">{{tag}}</button>
                       </div>
-                    <div class="col-6 text-danger">예상 견적: 분당 {{editor.payMin}}원</div>
+                    <div class="col-4 text-danger">예상 견적: 분당 {{editor.payMin}}원</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          </router-link>
+          
         </li>
       </ul>
       <div class="card-footer d-flex justify-content-end"
@@ -108,6 +114,39 @@ export default {
     },
     fetchPage(val) {
       this.currentPage = val
+    },
+    // 북마크 로직(미완성)
+    isBookmarked(portfolioUID){
+      // login 되어있는 사용자만?
+      http.get('/bookmark/cnt/' + portfolioUID)
+        .then(res => {
+          if(res.data == 'success'){
+            let isBooked = false
+            res.object.forEach(obj => {
+              if(obj.userInfoUid == this.$session.get('uid')){
+                isBooked = true;
+              }
+            })
+            return isBooked;
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    addBookmark(portfolioUID) {
+      if (!this.isBookmarked(portfolioUID)) {
+        http.post('/bookmark', {
+          uid: this.$session.get('uid'),
+          muid: portfolioUID
+        })
+          .then(res => {
+            // 리스트 전체 돌면서
+            // 리스트에 있는 개별 포트폴리오 UID == 북마크한 포트폴리오 UID
+            // 일 경우 북마크 개수 업데이트? (아니면 Vue.js가 자동으로 업데이트해주는지?)
+            console.log(res)
+          })
+      }
     }
   },
 }
