@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.editor.model.dto.user.Portfolio;
+import com.web.editor.model.dto.user.PortfolioList;
 import com.web.editor.model.dto.user.SearchPageBean;
 import com.web.editor.model.mapper.user.SearchMapper;
 
@@ -19,16 +20,25 @@ public class SearchServiceImpl implements SearchService{
 	@Autowired
 	private SearchMapper searchMapper;
 
-	public List<Portfolio> searchAll(int currentPage, int sizePerPage, SearchPageBean bean){
-		List<Portfolio> list = new ArrayList<>();
+	// public List<Portfolio> searchAll(int currentPage, int sizePerPage, SearchPageBean bean){
+	// 	List<Portfolio> list = new ArrayList<>();
+	// 	try {
+	// 		currentPage = (currentPage-1) * sizePerPage;
+	// 		Map<String, Object> map = new HashMap<>();
+	// 		map.put("nickname", bean.getNickname());
+	// 		map.put("payMin", bean.getPayMin());
+	// 		map.put("currentPage", currentPage);
+	// 		map.put("sizePerPage", sizePerPage);
+	// 		return searchMapper.searchAll(map);
+	// 	} catch (Exception e) {
+	// 		// throw new SearchException("포트폴리오 조회 중 오류 발생");			
+	// 	}
+	// 	return list;
+	// }
+	public List<PortfolioList> searchAll(){
+		List<PortfolioList> list = new ArrayList<>();
 		try {
-			currentPage = (currentPage-1) * sizePerPage;
-			Map<String, Object> map = new HashMap<>();
-			map.put("nickname", bean.getNickname());
-			map.put("payMin", bean.getPayMin());
-			map.put("currentPage", currentPage);
-			map.put("sizePerPage", sizePerPage);
-			return searchMapper.searchAll(map);
+			return searchMapper.searchAll();
 		} catch (Exception e) {
 			// throw new SearchException("포트폴리오 조회 중 오류 발생");			
 		}

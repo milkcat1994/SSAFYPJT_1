@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioInfo;
+import com.web.editor.model.dto.user.PortfolioNicknameUpdateRequest;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.dto.user.PortfolioReviewSaveRequest;
 import com.web.editor.model.dto.user.PortfolioSchedule;
@@ -26,8 +27,7 @@ public class PortfolioMapper {
     @Autowired
     @Qualifier("firstSqlSessionTemplate")
     private SqlSession sqlSession;
-
-    
+   
     // 포트폴리오 조회
     public Portfolio findPortfolioByUid(String uid) throws SQLException{
         return sqlSession.selectOne("findPortfolioByUid", uid);
@@ -48,10 +48,6 @@ public class PortfolioMapper {
         return sqlSession.selectList("findScheduleByUid", uid);
     }
     
-    // 리뷰 조회
-    public List<PortfolioReview> findReviewByUid(String uid) throws SQLException{
-        return sqlSession.selectList("findReviewByUid", uid);
-    }
     
     // 포트폴리오 초기 등록
     // uid를 이용해 uid, nickname 설정
@@ -73,11 +69,6 @@ public class PortfolioMapper {
     public int scheduleSave(PortfolioScheduleSaveRequest scheduleSaveRequest) throws SQLException{
 		return sqlSession.insert("scheduleSave", scheduleSaveRequest);
 	}
-
-    // 리뷰 등록
-    public int reviewSave(PortfolioReviewSaveRequest portfolioReviewSaveRequest) throws SQLException{
-		return sqlSession.insert("reviewSave", portfolioReviewSaveRequest);
-	}
     
     // 포트폴리오 수정
     public int portfolioUpdate(PortfolioInfo portfolioInfo) throws SQLException {
@@ -97,5 +88,10 @@ public class PortfolioMapper {
     // 태그 모두 삭제
     public int deleteTags(int uid) throws SQLException {
         return sqlSession.delete("deleteTags", uid);
+    }
+
+    
+    public int portfolioNicknameUpdate(PortfolioNicknameUpdateRequest portfolioNicknameUpdateRequest) throws SQLException {
+        return sqlSession.update("portfolioNicknameUpdate", portfolioNicknameUpdateRequest);
     }
 }

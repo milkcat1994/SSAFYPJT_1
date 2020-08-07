@@ -16,7 +16,28 @@
     <hr />
     <!-- <h2 class="text-center">알림창</h2> -->
     <br />
+
     <div class="container-fluid mt--7 mb-5">
+      <!-- for calendar -->
+      <br />
+      <br />
+      <div style="display: table; width:100%">
+        <div style="display: table-cell; text-align:center;">
+          <calendar
+            :eventCategories="eventCategories"
+            :events="events=scheduledate"
+            ref="calendar"
+          />
+          <i class="fas fa-circle" style="color: #f29661; margin: 15px;">선택된 작업</i>
+          <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
+          <i
+            class="fas fa-circle"
+            style="color: #ff0066; margin: 15px"
+            v-if="$session.get('auth') == 'editor'"
+          >개인 일정</i>
+        </div>
+      </div>
+
       <tabs fill class="flex-column flex-md-row">
         <card shadow>
           <tab-pane>
@@ -25,10 +46,7 @@
               <div v-if="$session.get('auth') == 'noneditor'">요청한 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem0, index) in requestitems0"
-                :key="index + '_requestitems0'"
-              >
+              <div v-for="(requestitem0, index) in requestitems0" :key="index + '_requestitems0'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -60,8 +78,14 @@
                       "
                       v-if="$session.get('auth') == 'noneditor'"
                     >
-                      {{ requestitem0.response_nickname }}님에게 작업을
-                      요청했습니다.
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem0.request_nickname }}님과의 작업이
+                        요청했습니다.
+                      </span>
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem0.response_nickname }}님과의 작업이
+                        요청했습니다.
+                      </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
@@ -71,10 +95,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 60%"
-                        >
+                        <table class="table table-hover">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -100,9 +121,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem0.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -118,54 +137,25 @@
                             </tr>
                           </tbody>
                         </table>
-
-                        <!-- for calendar -->
-                        <calendar
-                          :eventCategories="eventCategories"
-                          :events="events"
-                          ref="calendar"
-                          style="float:left; width: 40%; height: 100%"
-                        />
-                        <div style="float:left; width: 40%; height: 100%">
-                          <i
-                            class="fas fa-circle"
-                            style="color: #f29661; margin: 15px"
-                            >요청 작업</i
-                          >
-                          <i
-                            class="fas fa-circle"
-                            style="color: #6699ff; margin: 15px"
-                            >진행중 작업</i
-                          >
-                        </div>
                       </b-card-text>
-                      <div
-                        id="editorBtn"
-                        v-if="$session.get('auth') == 'editor'"
-                      >
+                      <div id="editorBtn" v-if="$session.get('auth') == 'editor'">
                         <b-button
                           class="statusBtn"
                           style="background-color: #0099ff"
                           @click="acceptRequest(requestitem0.rid)"
-                          >요청 수락</b-button
-                        >
+                        >요청 수락</b-button>
                         <b-button
                           class="statusBtn"
                           style="background-color: #aaaaaa"
                           @click="denyRequest(requestitem0.rid)"
-                          >요청 거절</b-button
-                        >
+                        >요청 거절</b-button>
                       </div>
-                      <div
-                        id="noneditorBtn"
-                        v-if="$session.get('auth') == 'noneditor'"
-                      >
+                      <div id="noneditorBtn" v-if="$session.get('auth') == 'noneditor'">
                         <b-button
                           class="statusBtn"
                           style="background-color: #aaaaaa"
                           @click="denyRequest(requestitem0.rid)"
-                          >요청 취소</b-button
-                        >
+                        >요청 취소</b-button>
                       </div>
                     </b-card-body>
                   </b-collapse>
@@ -179,10 +169,7 @@
               <div>진행중 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem1, index) in requestitems1"
-                :key="index + '_requestitems1'"
-              >
+              <div v-for="(requestitem1, index) in requestitems1" :key="index + '_requestitems1'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -197,8 +184,14 @@
                         );
                       "
                     >
-                      {{ requestitem1.request_nickname }}님과의 작업이
-                      진행중입니다.
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem1.request_nickname }}님과의 작업이
+                        진행중입니다.
+                      </span>
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem1.response_nickname }}님과의 작업이
+                        진행중입니다.
+                      </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
@@ -208,10 +201,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 60%"
-                        >
+                        <table class="table table-hover">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -237,9 +227,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem1.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -255,33 +243,12 @@
                             </tr>
                           </tbody>
                         </table>
-
-                        <!-- for calendar -->
-                        <calendar
-                          :eventCategories="eventCategories"
-                          :events="events"
-                          ref="calendar"
-                          style="float:left; width: 40%; height: 100%"
-                        />
-                        <div style="float:left; width: 40%; height: 100%">
-                          <i
-                            class="fas fa-circle"
-                            style="color: #f29661; margin: 15px"
-                            >현재 선택된 작업</i
-                          >
-                          <i
-                            class="fas fa-circle"
-                            style="color: #6699ff; margin: 15px"
-                            >진행중 작업</i
-                          >
-                        </div>
                       </b-card-text>
                       <b-button
                         class="statusBtn"
                         style="background-color: #0099ff"
                         @click="doneRequest(requestitem1.rid)"
-                        >요청 완료</b-button
-                      >
+                      >요청 완료</b-button>
                     </b-card-body>
                   </b-collapse>
                 </b-card>
@@ -294,10 +261,7 @@
               <div>완료된 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem2, index) in requestitems2"
-                :key="index + '_requestitems2'"
-              >
+              <div v-for="(requestitem2, index) in requestitems2" :key="index + '_requestitems2'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -312,8 +276,14 @@
                         );
                       "
                     >
-                      {{ requestitem2.request_nickname }}님과의 작업이
-                      완료되었습니다.
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem2.request_nickname }}님과의 작업이
+                        완료되었습니다.
+                      </span>
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem2.response_nickname }}님과의 작업이
+                        완료되었습니다.
+                      </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
@@ -323,10 +293,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 100%"
-                        >
+                        <table class="table table-hover">
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">
                               <th>요청자</th>
@@ -352,9 +319,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem2.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -375,45 +340,148 @@
                         class="statusBtn"
                         style="background-color: #0099ff"
                         v-if="$session.get('auth') == 'noneditor'"
-                        @click="$bvModal.show('review')"
-                        >후기 남기기</b-button
-                      >
-                      <b-modal id="review" hide-footer>
+                        @click="$bvModal.show('review-'+requestitem2.rid)"
+                      >후기 남기기</b-button>
+                      <b-modal :id="'review-'+requestitem2.rid" hide-footer>
                         <template v-slot:modal-title>후기 작성</template>
                         <div class="d-block text-center">
                           *편집된 영상에 만족하셨나요?
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="videoScore"></star-rating>
                           </div>
-                          <hr />
-                          *편집자가 친절하게 소통했나요?
+                          <hr />*편집자가 친절하게 소통했나요?
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="kindnessScore"></star-rating>
                           </div>
-                          <hr />
-                          *편집자가 마감 기한을 잘 지켰나요?
+                          <hr />*편집자가 마감 기한을 잘 지켰나요?
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="finishScore"></star-rating>
                           </div>
-                          <hr />
-                          *솔직한 한 줄 평을 남겨주세요.
+                          <hr />*솔직한 한 줄 평을 남겨주세요.
                           <div class="d-flex justify-content-center">
-                            <textarea
-                              class="form-control"
-                              v-model="comment"
-                            ></textarea>
+                            <textarea class="form-control" v-model="comment"></textarea>
                           </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
                           <b-button
                             @click="
-                              writeReview(requestitems2.response_nickname)
+                              writeReview(
+                                requestitem2.response_nickname,
+                                requestitem2.rid
+                              )
                             "
-                            >작성 완료</b-button
-                          >
-                          <b-button @click="$bvModal.hide('review')"
-                            >창닫기</b-button
-                          >
+                          >작성 완료</b-button>
+                          <b-button @click="$bvModal.hide('review-'+requestitem2.rid)">창닫기</b-button>
+                        </div>
+                      </b-modal>
+                    </b-card-body>
+                  </b-collapse>
+                </b-card>
+              </div>
+              <div v-for="(requestitem3, index) in requestitems3" :key="index + '_requestitems3'">
+                <b-card no-body class="m-1">
+                  <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button
+                      block
+                      v-b-toggle="'accordion-' + requestitem3.uid"
+                      variant="primary"
+                      @click="
+                        getDetail(requestitem3.rid);
+                        setRequestDate(
+                          requestitem3.start_date,
+                          requestitem3.end_date
+                        );
+                      "
+                    >
+                      <span v-if="$session.get('auth') == 'editor'">
+                        {{ requestitem3.request_nickname }}님과의 작업이
+                        완료되었습니다.
+                      </span>
+                      <span v-if="$session.get('auth') == 'noneditor'">
+                        {{ requestitem3.response_nickname }}님과의 작업이
+                        완료되었습니다.
+                      </span>
+                    </b-button>
+                  </b-card-header>
+                  <b-collapse
+                    :id="'accordion-' + requestitem3.uid"
+                    accordion="my-accordion"
+                    role="tabpanel"
+                  >
+                    <b-card-body>
+                      <b-card-text>
+                        <table class="table table-hover" style="float:left; width: 100%">
+                          <tbody>
+                            <tr v-if="$session.get('auth') == 'editor'">
+                              <th>요청자</th>
+                              <td>{{ requestitem3.request_nickname }}</td>
+                            </tr>
+                            <tr v-if="$session.get('auth') == 'noneditor'">
+                              <th>편집자</th>
+                              <td>{{ requestitem3.response_nickname }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 타입</th>
+                              <td>{{ requestitem3.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>원본 동영상 길이</th>
+                              <td>{{ requestitem3.video_origin_length }}</td>
+                            </tr>
+                            <tr>
+                              <th>원하는 동영상 길이</th>
+                              <td>{{ requestitem3.video_result_length }}</td>
+                            </tr>
+                            <tr>
+                              <th>동영상 스타일</th>
+                              <td>
+                                {{ requestitem3.video_style }}
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>진행 날짜</th>
+                              <td>
+                                {{ requestitem3.start_date.substring(0, 10) }} ~
+                                {{ requestitem3.end_date.substring(0, 10) }}
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>기타 요청사항</th>
+                              <td>{{ requestitem3.request_description }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </b-card-text>
+                      <b-button
+                        class="statusBtn"
+                        style="background-color: #0099ff"
+                        v-if="$session.get('auth') == 'noneditor'"
+                        @click="getReview(requestitem3.rid)"
+                      >후기 보기</b-button>
+                      <b-modal id="donereview" hide-footer>
+                        <template v-slot:modal-title>내가 쓴 후기</template>
+                        <div class="d-block text-center">
+                          영상만족도
+                          <div class="d-flex justify-content-center">
+                            <star-rating :rating="EvideoScore" :read-only="true"></star-rating>
+                          </div>
+                          <hr />친절도
+                          <div class="d-flex justify-content-center">
+                            <star-rating :rating="EkindnessScore" :read-only="true"></star-rating>
+                          </div>
+                          <hr />마감속도
+                          <div class="d-flex justify-content-center">
+                            <star-rating :rating="EfinishScore" :read-only="true"></star-rating>
+                          </div>
+                          <hr />한줄평
+                          <div class="d-flex justify-content-center">
+                            <textarea class="form-control" v-model="Ecomment"></textarea>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                          <b-button variant="danger" @click="deleteReview(requestitem3.rid)">삭제하기</b-button>
+                          <b-button @click="$bvModal.hide('donereview')">창닫기</b-button>
                         </div>
                       </b-modal>
                     </b-card-body>
@@ -436,7 +504,6 @@ import { mapGetters } from "vuex";
 import store from "@/store/store.js";
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
-
 // for calenggar
 import { Calendar } from "vue-sweet-calendar";
 import "vue-sweet-calendar/dist/SweetCalendar.css";
@@ -456,15 +523,21 @@ export default {
       eventCategories: [
         {
           id: 1,
-          title: "Personal",
+          title: "holiday",
           textColor: "white",
-          backgroundColor: "#6699ff",
+          backgroundColor: "#ff0066",
         },
         {
           id: 2,
-          title: "Company-wide",
+          title: "selected",
           textColor: "white",
           backgroundColor: "#f29661",
+        },
+        {
+          id: 3,
+          title: "In Progress",
+          textColor: "white",
+          backgroundColor: "#6699ff",
         },
       ],
       events: [],
@@ -474,6 +547,12 @@ export default {
       comment: "",
       uid: 0,
       nickname: "",
+
+      EvideoScore: 0,
+      EkindnessScore: 0,
+      EfinishScore: 0,
+      Ecomment: "",
+      complete: false,
     };
   },
   created() {
@@ -490,6 +569,14 @@ export default {
         });
       if (this.$session.get("auth") == "editor") {
         store.dispatch(
+          "getProgressdate",
+          "/request/date/res/" + this.$session.get("nickname")
+        );
+        store.dispatch(
+          "getHolidaydate",
+          "/schedule/holiday/" + this.$session.get("uid")
+        );
+        store.dispatch(
           "getRequestitems0",
           "/request/res/" + this.$session.get("nickname") + "/0"
         );
@@ -503,6 +590,14 @@ export default {
         );
       } else if (this.$session.get("auth") == "noneditor") {
         store.dispatch(
+          "getProgressdate",
+          "/request/date/req/" + this.$session.get("nickname")
+        );
+        store.dispatch(
+          "getHolidaydate",
+          "/schedule/holiday/" + this.$session.get("uid")
+        );
+        store.dispatch(
           "getRequestitems0",
           "/request/req/" + this.$session.get("nickname") + "/0"
         );
@@ -514,18 +609,23 @@ export default {
           "getRequestitems2",
           "/request/req/" + this.$session.get("nickname") + "/2"
         );
+        store.dispatch(
+          "getRequestitems3",
+          "/request/req/" + this.$session.get("nickname") + "/3"
+        );
       }
-      this.setInprogressDate();
-    } else {
-      this.$router.push("/");
-      alertify.error("로그인이 필요한페이지 입니다.", 3);
-    }
+      this.readNotify();
+    } 
   },
   computed: {
     ...mapGetters(["requestitems0"]),
     ...mapGetters(["requestitems1"]),
     ...mapGetters(["requestitems2"]),
+    ...mapGetters(["requestitems3"]),
     ...mapGetters(["requestitem"]),
+    ...mapGetters(["progressdate"]),
+    ...mapGetters(["holidaydate"]),
+    ...mapGetters(["scheduledate"]),
   },
   methods: {
     getDetail(rid) {
@@ -553,7 +653,7 @@ export default {
             "getRequestitems1",
             "/request/res/" + this.$session.get("nickname") + "/1"
           );
-          this.setInprogressDate();
+          this.setProgressDate();
         });
     },
     // 요청 거절
@@ -580,6 +680,7 @@ export default {
               "getRequestitems0",
               "/request/req/" + this.$session.get("nickname") + "/0"
             );
+          this.setDateClean();
         });
     },
     // 요청 완료
@@ -615,35 +716,72 @@ export default {
               "/request/req/" + this.$session.get("nickname") + "/2"
             );
           }
-          this.setInprogressDate();
+          this.setProgressDate();
+        });
+    },
+    // 후기 완료
+    doneReview(rid) {
+      http
+        .put("/request/doneReview/" + rid)
+        .then(({ data }) => {
+          if (data == "success") {
+            // alertify.notify("후기 작성이 완료되었습니다.", "success", 3);
+          }
+        })
+        .catch(() => {
+          // alert('요청 거절중 에러가 발생했습니다.');
+        })
+        .finally(() => {
+          // 목록 새로고침
+          if (this.$session.get("auth") == "noneditor") {
+            store.dispatch(
+              "getRequestitems2",
+              "/request/req/" + this.$session.get("nickname") + "/2"
+            );
+            store.dispatch(
+              "getRequestitems3",
+              "/request/req/" + this.$session.get("nickname") + "/3"
+            );
+          }
         });
     },
 
-    // 캘린더 날짜 셋팅
-    setCalendarDate(start, end) {
-      this.events.start = start.substring(0, 10);
-      this.events.end = end.substring(0, 10);
-    },
     setUserInfo(data) {
       this.nickname = data.nickname;
     },
-    writeReview(portfolioid) {
-      let msg = "리뷰 작성에 실패하였습니다.";
+    getReview(rid) {
       http
-        .post("/portfolio/review/" + this.uid, {
-          portfolioUid: portfolioid,
-          nickname: this.nickname,
+        .get("request/review/" + rid)
+        .then(({ data }) => {
+          (this.EvideoScore = data.videoScore),
+            (this.EkindnessScore = data.kindnessScore),
+            (this.EfinishScore = data.finishScore),
+            (this.Ecomment = data.comment);
+          this.$bvModal.show("donereview");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    writeReview(editor_nickname, rid) {
+      let msg = "리뷰 작성에 실패하였습니다.";
+      // console.log(editor_nickname, rid);
+      http
+        .post("/request/review", {
+          requestFormRid: rid,
+          nickname: editor_nickname,
           videoScore: this.videoScore,
           kindnessScore: this.kindnessScore,
           finishScore: this.finishScore,
           comment: this.comment,
         })
         .then(({ data }) => {
-          console.log(data);
-          if (data.data == "success") {
+          // console.log(this.videoScore);
+          if (data == 1) {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
-            this.$bvModal.hide("review");
+            this.$bvModal.hide("review-" + rid);
+            this.doneReview(rid);
             return;
           } else {
             alertify.error(msg, 3);
@@ -657,33 +795,87 @@ export default {
           return;
         });
     },
+    deleteReview(rid) {
+      let msg = "리뷰 삭제 실패했습니다.";
+      alertify.confirm(
+        "리뷰 삭제",
+        "삭제 하시겠습니까?",
+        function () {
+          http
+            .delete("request/review/" + rid)
+            .then(({ data }) => {
+              if (data == 1) {
+                msg = "삭제가 완료되었습니다.";
+                alertify.notify(msg, "success", 3);
+                return;
+              } else {
+                msg = "삭제에 실패하였습니다.";
+                alertify.error(msg, 3);
+                return;
+              }
+            })
+            .catch(() => {
+              msg = "서버 통신 실패";
+              alertify.error(msg, 3);
+              return;
+            });
+        },
+        function () {
+          alertify.error("취소되었습니다.");
+        }
+      );
+    },
     setRequestDate(start, end) {
+      if (
+        this.events[this.events.length - 1].start == start.substring(0, 10) &&
+        this.events[this.events.length - 1].end == end.substring(0, 10)
+      ) {
+        this.setDateClean();
+        return;
+      }
       this.events[this.events.length - 1].start = start.substring(0, 10);
       this.events[this.events.length - 1].end = end.substring(0, 10);
     },
-    setInprogressDate() {
-      let items = this.$store.state.requestitems1;
-      items.forEach((item) => {
-        let event = {
-          title: "In Progress",
-          start: "",
-          end: "",
-          repeat: "montly",
-          categoryId: 1,
-        };
-        event.start = item.start_date.substring(0, 10);
-        event.end = item.end_date.substring(0, 10);
-        console.log(event);
-        this.events.push(event);
-      });
-      this.events.push({
-        title: "Request",
-        start: "",
-        end: "",
-        repeat: "montly",
-        categoryId: 2,
-      });
+    setDateClean() {
+      this.events[this.events.length - 1].start = "";
+      this.events[this.events.length - 1].end = "";
     },
+    setProgressDate() {
+      if (this.$session.get("auth") == "editor")
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/res/" + this.$session.get("nickname")
+        );
+      else if (this.$session.get("auth") == "noneditor")
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/req/" + this.$session.get("nickname")
+        );
+      store.dispatch(
+        "getHolidaydate",
+        "/schedule/holiday/" + this.$session.get("uid")
+      );
+      this.events = this.scheduledate;
+    },
+
+    // 알림 읽음 처리
+    readNotify(){
+      http
+        .put('/request/notify/read/' + this.$session.get('nickname'))
+        .then(({ data }) => {
+          if (data == 'success'){
+            // alert('알람 읽음 완료');
+            }
+        })
+        .catch(() => {
+          // alert('요청 거절중 에러가 발생했습니다.');
+        })
+        .finally(() => {
+          // 목록 새로고침
+          store.dispatch('getNotifyitems', '/request/notify/' + this.$session.get('nickname'));
+        });
+    },
+
   },
 };
 </script>

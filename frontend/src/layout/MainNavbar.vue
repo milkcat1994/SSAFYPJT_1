@@ -1,5 +1,10 @@
 <template>
-  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
+  <base-nav
+    class="navbar-top navbar-dark"
+    id="navbar-main"
+    :show-toggle-button="false"
+    expand
+  >
     <!-- <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
       <div class="form-group mb-0">
         <base-input
@@ -25,15 +30,17 @@
             <div class="dropdown-header noti-title">
               <h6 class="text-overflow m-0">최근 매칭 내역</h6>
             </div>
-            <div
-              v-for="(notifyitem, index) in notifyitems"
-              :key="index + '_notifyitems'"
-              @click="readNotify()"
-            >
+            <div  v-for="(notifyitem, index) in notifyitems.object" :key="index + '_notifyitems'"  @click="readNotify()">
               <router-link to="/alarm" class="dropdown-item">
                 <i class="ni ni-bulb-61 text-yellow"></i>
-                <span v-if="notifyitem.notify_type=='request'">{{ notifyitem.request_nickname }}님께서 영상편집을 요청하셨습니다</span>
-                <span v-if="notifyitem.notify_type=='accepted'">{{ notifyitem.request_nickname }}님께서 요청을 수락하셨습니다</span>
+                <span v-if="notifyitem.notify_type == 'request'"
+                  >{{ notifyitem.request_nickname }}님께서 영상편집을
+                  요청하셨습니다</span
+                >
+                <span v-if="notifyitem.notify_type == 'accepted'"
+                  >{{ notifyitem.request_nickname }}님께서 요청을
+                  수락하셨습니다</span
+                >
               </router-link>
             </div>
             <div class="dropdown-divider"></div>
@@ -66,15 +73,20 @@
     </ul>
 
     <!-- 마이페이지 -->
-    <ul v-if="isLogin" class="navbar-nav align-items-center ml-2 d-none d-md-flex">
+    <ul
+      v-if="isLogin"
+      class="navbar-nav align-items-center ml-2 d-none d-md-flex"
+    >
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
             <span class="avatar avatar-sm rounded-circle">
-              <img alt="Image placeholder" src="img/theme/team-4-800x800.jpg" />
+              <img alt="Image placeholder" src="img/theme/avatar.svg" />
             </span>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold text-default">{{nickname}}</span>
+              <span class="mb-0 text-sm font-weight-bold text-default">
+                {{nickname}}
+              </span>
             </div>
           </div>
 
@@ -82,7 +94,7 @@
             <div class="dropdown-header noti-title">
               <h6 class="text-overflow m-0">환영합니다!</h6>
             </div>
-            <router-link :to="{name: 'profile', params: {uid: uid}}" class="dropdown-item">
+            <router-link :to="'/profile'" class="dropdown-item">
               <i class="ni ni-single-02"></i>
               <span>내 정보</span>
             </router-link>
@@ -99,7 +111,11 @@
               <span>도움말</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <span style="cursor:pointer;" class="dropdown-item" @click="logout()">
+            <span
+              style="cursor:pointer;"
+              class="dropdown-item"
+              @click="logout()"
+            >
               <i class="ni ni-lock-circle-open"></i>
               <span>로그아웃</span>
             </span>
@@ -122,17 +138,16 @@ export default {
       showMenu: false,
       searchQuery: "",
       notifyNum: "",
+
       isLogin: false,
-      nickname: "",
-      uid: "",
+      // nickname: "",
     };
   },
   created() {
     //생성 시 로그인 상태 확인
     if (this.$session.exists()) {
       this.isLogin = true;
-      this.nickname = this.$session.get("nickname");
-      this.uid = this.$session.get("uid");
+      // this.nickname = this.$session.get("nickname");
       // 로그인이 되어있으면 알림 가져옴
       store.dispatch(
         "getNotifyitems",
@@ -146,6 +161,9 @@ export default {
   computed: {
     ...mapGetters(["notifyitems"]),
     ...mapGetters(["notifyitem"]),
+    nickname() {
+      return this.$session.get("nickname")
+    }
   },
   watch: {
     // route 경로가 바뀔때마다 로그인 상태인지 확인
@@ -167,8 +185,8 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
-    getNotifyNum() {
-      this.notifyNum = this.notifyitems.length;
+    getNotifyNum(){
+      this.notifyNum = this.notifyitems.data;
       return this.notifyNum;
     },
     // 요청 읽음
@@ -194,6 +212,7 @@ export default {
 
     logout() {
       this.$session.destroy();
+      store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
     },

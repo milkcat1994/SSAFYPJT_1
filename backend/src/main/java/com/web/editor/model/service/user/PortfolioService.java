@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioInfo;
+import com.web.editor.model.dto.user.PortfolioNicknameUpdateRequest;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.dto.user.PortfolioReview;
@@ -30,7 +31,7 @@ public interface PortfolioService {
     public List<PortfolioSchedule> findScheduleByUid(String uid);
     
     // 리뷰 조회
-    public List<PortfolioReview> findReviewByUid(String uid);
+    // public List<PortfolioReview> findReviewByUid(String uid);
     
     // 포트폴리오 초기 등록
     // uid를 이용해 uid, nickname 설정
@@ -45,9 +46,6 @@ public interface PortfolioService {
     // 스케쥴 등록
     public int scheduleSave(PortfolioScheduleSaveRequest scheduleSaveRequest);
 
-    // 리뷰 등록
-    public int reviewSave(PortfolioReviewSaveRequest portfolioReviewSaveRequest);
-
     // 포트폴리오 수정
     public int portfolioUpdate(PortfolioInfo portfolioInfo);
     
@@ -59,4 +57,6 @@ public interface PortfolioService {
 
     // 태그 모두 삭제
     public int deleteTags(String uid);
+
+    public int portfolioNicknameUpdate(PortfolioNicknameUpdateRequest portfolioNicknameUpdateRequest);
 }
