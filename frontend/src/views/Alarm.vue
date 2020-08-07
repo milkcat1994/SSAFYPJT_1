@@ -91,8 +91,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
+                        <table class="table table-hover"
                         >
                           <tbody>
                             <tr v-if="$session.get('auth') == 'editor'">

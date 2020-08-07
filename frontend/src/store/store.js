@@ -264,6 +264,14 @@ export default new Vuex.Store({
         context.commit('mutateSetHolidaydate', data);
       });
     },
+    initDataOnAlarm(context) {
+      context.commit('mutateSetProgressdate', []);
+      context.commit('mutateSetHolidaydate', []);
+      context.commit('mutateSetRequestitems0', []);
+      context.commit('mutateSetRequestitems1', []);
+      context.commit('mutateSetRequestitems2', []);
+      context.commit('mutateSetRequestitems3', []);
+    },
 
     getTagitem(context, payload) {
       http.get(payload).then(({ data }) => {

@@ -25,7 +25,7 @@
             <div class="dropdown-header noti-title">
               <h6 class="text-overflow m-0">최근 매칭 내역</h6>
             </div>
-            <div  v-for="(notifyitem, index) in notifyitems" :key="index + '_notifyitems'"  @click="readNotify()">
+            <div  v-for="(notifyitem, index) in notifyitems.object" :key="index + '_notifyitems'"  @click="readNotify()">
               <router-link to="/alarm" class="dropdown-item">
                 <i class="ni ni-bulb-61 text-yellow"></i>
                 <span v-if="notifyitem.notify_type=='request'">{{ notifyitem.request_nickname }}님께서 영상편집을 요청하셨습니다</span>
@@ -161,7 +161,7 @@ export default {
       this.showMenu = !this.showMenu;
     },
     getNotifyNum(){
-      this.notifyNum = this.notifyitems.length;
+      this.notifyNum = this.notifyitems.data;
       return this.notifyNum;
     },
     // 요청 읽음
@@ -186,6 +186,7 @@ export default {
       this.$session.destroy();
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
+      store.dispatch("initDataOnAlarm");
     },
   },
 };
