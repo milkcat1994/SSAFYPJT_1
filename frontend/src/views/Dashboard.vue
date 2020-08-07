@@ -126,8 +126,6 @@
 <script>
 import http from '@/util/http-common.js'
 
-const URL = 'http://localhost:8080'
-
 export default {
   components: {
   },
@@ -138,9 +136,9 @@ export default {
   },
   methods: {
     keywordSearch(keyword) {
-      console.log(URL, keyword)
+      // console.log(keyword)
       // BE URL 확인 후 변경
-      http.get(URL, `/search/${keyword}`)
+      http.get(`/search/${keyword}`)
         .then(res => {
           console.log(res)
           this.$router.push({name: 'search'})

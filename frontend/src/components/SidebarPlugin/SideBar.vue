@@ -45,7 +45,7 @@
             <a slot="title" class="nav-link" href="#" role="button">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img alt="Image placeholder" src="img/theme/team-1-800x800.jpg" />
+                  <img alt="Image placeholder" src="img/theme/avatar.svg" />
                 </span>
               </div>
             </a>
