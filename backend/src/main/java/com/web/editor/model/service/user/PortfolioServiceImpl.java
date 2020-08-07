@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioInfo;
+import com.web.editor.model.dto.user.PortfolioNicknameUpdateRequest;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.dto.user.PortfolioReview;
@@ -93,18 +94,18 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     // @Override
     // public List<PortfolioReview> findReviewByUid(String uid) {
-    //     List<PortfolioReview> review = null;
-    //     try {
-    //         review = portfolioMapper.findReviewByUid(uid);
-    //         // 찾지 못한 경우
-    //         if (review == null) {
-    //             review = new ArrayList<>();
-    //         }
-    //         return review;
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         return review;
-    //     }
+    // List<PortfolioReview> review = null;
+    // try {
+    // review = portfolioMapper.findReviewByUid(uid);
+    // // 찾지 못한 경우
+    // if (review == null) {
+    // review = new ArrayList<>();
+    // }
+    // return review;
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // return review;
+    // }
     // }
 
     @Override
@@ -134,14 +135,15 @@ public class PortfolioServiceImpl implements PortfolioService {
         try {
             // PortfolioTagSaveRequest pfts = null;
             // int uid = portfolioTagSaveRequest.getPortfolioUid();
-            // StringTokenizer st = new StringTokenizer(portfolioTagSaveRequest.getTagName().trim(), "#");
+            // StringTokenizer st = new
+            // StringTokenizer(portfolioTagSaveRequest.getTagName().trim(), "#");
 
             // int res = 0;
             // while (st.hasMoreTokens()) {
-            //     pfts = new PortfolioTagSaveRequest(uid, st.nextToken().trim());
-            //     res = portfolioMapper.tagSave(pfts);
-            //     if (res < 0)
-            //         break;
+            // pfts = new PortfolioTagSaveRequest(uid, st.nextToken().trim());
+            // res = portfolioMapper.tagSave(pfts);
+            // if (res < 0)
+            // break;
             // }
             int res = portfolioMapper.tagSave(portfolioTagSaveRequest);
             return res;
@@ -189,7 +191,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         try {
             int res = portfolioMapper.portfolioUpdate(portfolioInfo);
             return res;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return -1;
         }
@@ -197,8 +199,19 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public int deleteTags(String uid) {
-        try{
+        try {
             int res = portfolioMapper.deleteTags(Integer.parseInt(uid));
+            return res;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public int portfolioNicknameUpdate(PortfolioNicknameUpdateRequest portfolioNicknameUpdateRequest) {
+        try {
+            int res = portfolioMapper.portfolioNicknameUpdate(portfolioNicknameUpdateRequest);
             return res;
         } catch (SQLException e) {
             e.printStackTrace();
