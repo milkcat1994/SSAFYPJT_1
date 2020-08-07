@@ -57,8 +57,14 @@
                       "
                       v-if="$session.get('auth') == 'noneditor'"
                     >
-                      {{ requestitem0.response_nickname }}님에게 작업을
+                    <span v-if="$session.get('auth') == 'editor'">
+                      {{ requestitem0.request_nickname }}님과의 작업이
                       요청했습니다.
+                      </span>
+                    <span v-if="$session.get('auth') == 'noneditor'">
+                      {{ requestitem0.response_nickname }}님과의 작업이
+                      요청했습니다.
+                      </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
@@ -169,8 +175,14 @@
                         );
                       "
                     >
+                    <span v-if="$session.get('auth') == 'editor'">
                       {{ requestitem1.request_nickname }}님과의 작업이
                       진행중입니다.
+                      </span>
+                    <span v-if="$session.get('auth') == 'noneditor'">
+                      {{ requestitem1.response_nickname }}님과의 작업이
+                      진행중입니다.
+                      </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
@@ -267,8 +279,14 @@
                         );
                       "
                     >
+                    <span v-if="$session.get('auth') == 'editor'">
                       {{ requestitem2.request_nickname }}님과의 작업이
                       완료되었습니다.
+                      </span>
+                    <span v-if="$session.get('auth') == 'noneditor'">
+                      {{ requestitem2.response_nickname }}님과의 작업이
+                      완료되었습니다.
+                      </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
@@ -378,8 +396,15 @@
                         );
                       "
                     >
+                    
+                    <span v-if="$session.get('auth') == 'editor'">
                       {{ requestitem3.request_nickname }}님과의 작업이
                       완료되었습니다.
+                      </span>
+                    <span v-if="$session.get('auth') == 'noneditor'">
+                      {{ requestitem3.response_nickname }}님과의 작업이
+                      완료되었습니다.
+                      </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
