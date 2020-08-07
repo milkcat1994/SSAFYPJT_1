@@ -133,6 +133,11 @@ public class RequestMapper {
 
 	// 리뷰 삭제 - 요청서의 리뷰 삭제
 	public int deleteReview(int rid) throws SQLException {
-		return sqlSession.delete("deleteReqTag", rid);
+		return sqlSession.delete("deleteReview", rid);
+	}
+
+	// 리뷰 삭제 - 요청서의 상태 변환
+	public int deleteReviewAndUpdateRequest(int rid) throws SQLException {
+		return sqlSession.delete("deleteReviewAndUpdateRequest", rid);
 	}
 }

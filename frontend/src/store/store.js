@@ -149,6 +149,12 @@ export default new Vuex.Store({
       // state.requestitems = requestitems;
       state.requestitems3 = obj;
     },
+    mutateSetRequestitems0123(state, requestitems) {
+      state.requestitems0 = requestitems
+      state.requestitems1 = requestitems
+      state.requestitems2 = requestitems
+      state.requestitems3 = requestitems
+    },
     mutateSetRequestitem(state, requestitem) {
       state.requestitem = requestitem;
     },
@@ -166,7 +172,6 @@ export default new Vuex.Store({
     mutateSetTagitem(state, tagitem) {
       state.tagitem = tagitem;
     },
-
     // 작업 요청서 항목별 갱신
     setCategory(state, payload) {
       state.requests.category = payload.value;
@@ -267,10 +272,7 @@ export default new Vuex.Store({
     initDataOnAlarm(context) {
       context.commit('mutateSetProgressdate', []);
       context.commit('mutateSetHolidaydate', []);
-      context.commit('mutateSetRequestitems0', []);
-      context.commit('mutateSetRequestitems1', []);
-      context.commit('mutateSetRequestitems2', []);
-      context.commit('mutateSetRequestitems3', []);
+      context.commit('mutateSetRequestitems0123', []);
     },
 
     getTagitem(context, payload) {

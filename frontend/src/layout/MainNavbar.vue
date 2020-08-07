@@ -184,9 +184,9 @@ export default {
   
     logout() {
       this.$session.destroy();
+      store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
-      store.dispatch("initDataOnAlarm");
     },
   },
 };
