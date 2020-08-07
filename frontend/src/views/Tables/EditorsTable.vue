@@ -87,7 +87,7 @@ export default {
         // 백엔드 API 호출 시 반환 자료형
         // {
         //   uid: "포트폴리오 UID",
-        //   nickname: "편집자 닉네임",
+        //   nickname: "포트폴리오 닉네임",
         //   payMin: "분당 가격",
         //   bookmarkCount: "북마크 개수",
         //   tags: ["편집자 관련 태그", ...],
