@@ -13,6 +13,20 @@
             AND `password` = #{password}
     </select>
 
+    <!-- 구글 로그인(회원 이메일인지 확인) -->
+    <select id="googleLogin" resultType="User">
+        SELECT `uid`, `auth`, `nickname`, `platform_type`
+        FROM user_info
+        WHERE `email`= #{email}
+    </select>
+    
+    <!-- 구글 연동 -->
+    <update id="googleConnect">
+        UPDATE user_info
+        set `platform_type` = "google"
+        WHERE uid = #{uid}
+    </update>
+
     <!-- 일반 회원가입 -->
     <insert id="normalRegister" useGeneratedKeys="true" keyProperty="uid">
         INSERT INTO user_info (`platform_type`, `email`, `password`, `nickname`, `auth`)

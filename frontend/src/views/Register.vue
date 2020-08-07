@@ -71,12 +71,12 @@
                 v-model="model.name"
                 required
               ></base-input>
-              <!-- <base-button
+              <base-button
                 type="default"
                 class="mb-3"
                 style="white-space: nowrap;"
                 @click="checkNickname()"
-              >중복 체크</base-button>-->
+              >중복 체크</base-button>
             </div>
 
             <div class="d-flex">
@@ -261,23 +261,23 @@ export default {
           return;
         });
     },
-    // checkNickname() {
-    //   http
-    //     .post("/user", {
-    //       nickname: this.model.name,
-    //     })
-    //     .then(({ data }) => {
-    //       if (data.data == "success") {
-    //         alert("닉네임 사용이 가능합니다..", "success", 3);
-    //       } else {
-    //         alert("이미 사용 중인 닉네임입니다.", 3);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       alert(error, 3);
-    //       return;
-    //     });
-    // },
+    checkNickname() {
+      http
+        .post("/user/nickname/check", {
+          nickname: this.model.name,
+        })
+        .then(({ data }) => {
+          if (data.data != "nickname") {
+            alertify.notify("닉네임 사용이 가능합니다!!!!!", "nickname", 3);
+          } else {
+            alertify.error("이미 사용 중인 닉네임입니다.", 3);
+          }
+        })
+        .catch((error) => {
+          alertify.error(error, 3);
+          return;
+        });
+    },
     initDialog() {
       this.model.name = "";
       this.model.email = "";

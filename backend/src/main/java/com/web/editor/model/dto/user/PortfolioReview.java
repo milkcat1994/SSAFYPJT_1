@@ -10,16 +10,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Repository
+@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PortfolioReview {
     private int reviewNo;
-    private int portfolioUid;
     private String nickname;
     private Date createdDate;
     private int videoScore;

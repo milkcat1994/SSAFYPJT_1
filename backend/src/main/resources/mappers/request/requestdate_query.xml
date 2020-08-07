@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.editor.model.mapper.request.RequestDateMapper">
+
+	<!-- 진행중인 요청만 가져옴 -->
+
+	<!-- 일반회원의 진행중 일정 -->
+	<select id="progressReq" resultType="RequestDateDto" parameterType="String">
+		select start_date as start, end_date as end
+		from request_form
+		where request_nickname = #{nickname}
+		and done_flag = 1
+	</select>
+
+	<!-- 편집자 회원의 진행중 일정 -->
+	<select id="progressRes" resultType="RequestDateDto" parameterType="String">
+		select start_date as start, end_date as end
+		from request_form
+		where response_nickname = #{nickname} 
+		and done_flag = 1
+	</select>
+
+</mapper>
