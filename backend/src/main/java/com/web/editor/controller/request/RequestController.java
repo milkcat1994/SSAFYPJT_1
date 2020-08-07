@@ -355,6 +355,8 @@ public class RequestController {
 	@DeleteMapping("/review/{rid}")
 	public Object deleteReview(@PathVariable String rid) {
 		int result = requestService.deleteReview(Integer.parseInt(rid));
+		//삭제 이후 해당 request는 상태를 4(리뷰 삭제됨)로 변경해야한다.
+		result = requestService.deleteReviewAndUpdateRequest(Integer.parseInt(rid));
 
 		if (result > 0) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
