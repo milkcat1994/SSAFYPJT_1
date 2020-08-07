@@ -329,7 +329,7 @@ public class RequestController {
 	public Object searchReview(@PathVariable String rid) {
 		RequestReview review = requestService.searchReview(Integer.parseInt(rid));
 
-		if (review == null) {
+		if (review != null) {
 			return new ResponseEntity<>(review, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);

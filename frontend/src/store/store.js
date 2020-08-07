@@ -166,7 +166,6 @@ export default new Vuex.Store({
     mutateSetTagitem(state, tagitem) {
       state.tagitem = tagitem;
     },
-
     // 작업 요청서 항목별 갱신
     setCategory(state, payload) {
       state.requests.category = payload.value;
