@@ -7,7 +7,6 @@
 		select *
 		from request_form
 		where rid = #{rid} 
-	
 	</select>
 
 	<!-- 요청자의 리스트 -->
@@ -15,6 +14,7 @@
 		select *
 		from request_form
 		where request_nickname = #{request_nickname} 
+		order by rid desc
 	</select>
 	<!-- done_flag 0~2 -->
 	<select id="searchListFlagRequest" resultType="RequestDto">
@@ -22,6 +22,7 @@
 		from request_form
 		where request_nickname = #{nickname}
 		and done_flag = #{done_flag} 
+		order by rid desc
 	</select>
 
 	<!-- 요청받는사람의 리스트 -->
@@ -29,12 +30,14 @@
 		select *
 		from request_form
 		where response_nickname = #{response_nickname} 
+		order by rid desc
 	</select>
 	<select id="searchListFlagResponse" resultType="RequestDto">
 		select *
 		from request_form
 		where response_nickname = #{nickname} 
 		and done_flag = #{done_flag}
+		order by rid desc
 	</select>
 	
 	<!-- 요청 등록 태그 등록을 위한..  -->
@@ -119,6 +122,7 @@
 		select * from notify 
 		where response_nickname = #{response_nickname}
 		and read_flag = 0
+		order by nid desc
 	</select>
 
 	<!-- 알림 삭제 -->

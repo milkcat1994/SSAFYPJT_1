@@ -27,6 +27,7 @@ import com.web.editor.model.dto.request.RequestReview;
 import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
+import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.request.RequestService;
 
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +41,7 @@ public class RequestController {
 
 	@Autowired
 	private RequestService requestService;
-
+	
 	// 요청 검색
 	@ApiOperation(value = "rid로 요청상세검색")
 	@GetMapping("/{rid}")
@@ -220,7 +221,13 @@ public class RequestController {
 	public Object searchNotify(@PathVariable String response_nickname) throws UnsupportedEncodingException {
 		List<NotifyDto> notifyList = requestService.searchNotify(decodeURL(response_nickname));
 		if (notifyList.size() >= 0) {
-			return new ResponseEntity<>(notifyList, HttpStatus.OK);
+			BasicResponse result = new BasicResponse();
+			result.data = notifyList.size() + "";
+			result.status = true;
+			// 5개만 보내줌
+			if (notifyList.size() > 5) result.object = notifyList.subList(0, 5);
+			else result.object = notifyList;
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}
