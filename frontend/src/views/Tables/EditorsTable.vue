@@ -3,43 +3,41 @@
     <div class="card p-4">
       <ul class="list-unstyled mt-4">
         <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
-          
           <div class="container">
             <div class="row">
               <div class="col-3">
+                <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
-                  <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%" />
+                  <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%;" />
                 </router-link>
-                <!-- <img :src="editor.imgURL" :alt="editor.nickname" class="mr-3" style="max-width: 180px;"> -->
               </div>
-              <div class="col-9">
-                <div class="d-flex align-items-stretch">
+              <div class="col-9 d-flex flex-column justify-content-around">
+                <div class="d-flex align-items-center">
+                  <!-- 포트폴리오 닉네임 -->
                   <router-link :to="`/portfolio?no=${editor.uid}`">
-                    <div class="d-inline-flex ml-2">
-                      <!-- nickname and bookmarks -->
-                      <span class="display-1 mt-0 mb-1 text-default">{{editor.nickname}}</span>
+                    <div class="d-inline-flex">
+                      <h1 class="mt-0 mb-1">{{editor.nickname}}</h1>
                     </div>
                   </router-link>
-                  <div class="d-inline-flex flex-column ml-3 mt-3">
+                  <!-- 북마크 -->
+                  <div class="d-inline-flex flex-column ml-3">
                     <!-- <base-button :outline="!isBookmarked(editor.uid)" type="danger" size="sm" icon="ni ni-favourite-28" @click="addBookmark()"> -->
                     <base-button outline disabled type="danger" size="sm" icon="ni ni-favourite-28">
                       {{editor.bookmarkCount}}
                     </base-button>
                   </div>
                 </div>
-                <div class="ml-2 mt-4">
-                  <!-- tags and estimated price -->
-                  <div class="row">
-                    <div class="col-8">
-                      <button class="btn btn-info btn-sm" :key="index" v-for="(tag, index) in editor.tags">{{tag}}</button>
-                      </div>
-                    <div class="col-4 text-danger">예상 견적: 분당 {{editor.payMin}}원</div>
+                <div class="row">
+                  <!-- 태그 -->
+                  <div class="col-8">
+                    <button class="btn btn-info btn-sm mb-1" :key="index" v-for="(tag, index) in editor.tags">{{tag}}</button>
                   </div>
+                  <!-- 예상 견적 -->
+                  <div class="col-4 text-danger">예상 견적: 분당 {{editor.payMin}}원</div>
                 </div>
               </div>
             </div>
           </div>
-          
         </li>
       </ul>
       <div class="card-footer d-flex justify-content-end"
@@ -151,5 +149,9 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
+.nickname {
+  
+  font-size: 30px !important;
+}
 </style>
