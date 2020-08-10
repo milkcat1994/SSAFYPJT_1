@@ -90,6 +90,7 @@ $danger: $red !default;
 $light: $gray-500 !default;
 $dark: $gray-900 !default;
 $darker: darken($gray-900, 15%) !default;
+$eunjung: #04412e !default;
 
 $facebook: #3b5999 !default;
 $twitter: #1da1f2 !default;
@@ -115,6 +116,7 @@ $theme-colors: map-merge(
     "neutral": $white,
     "dark": $dark,
     "darker": $darker,
+    "eunjung": $eunjung,
   ),
   $theme-colors
 );

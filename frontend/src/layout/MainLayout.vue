@@ -2,21 +2,21 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <side-bar
       :background-color="sidebarBackground"
-      short-title="Argon"
-      title="Argon"
+      short-title="편집"
+      title="편집"
     >
       <template slot="links">
         <sidebar-item
           :link="{
             name: '메인',
             icon: 'ni ni-tv-2 text-primary',
-            path: '/dashboard',
+            path: '/mainpage',
           }"
         />
 
         <sidebar-item
           :link="{
-            name: '검색',
+            name: '편집자 찾기',
             icon: 'ni ni-zoom-split-in text-primary',
             path: '/editors',
           }"
@@ -61,14 +61,12 @@
   </div>
 </template>
 <script>
-// import DashboardNavbar from './DashboardNavbar.vue';
 import MainNavbar from "./MainNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import { FadeTransition } from "vue2-transitions";
 
 export default {
   components: {
-    // DashboardNavbar,
     MainNavbar,
     ContentFooter,
     FadeTransition,
