@@ -59,17 +59,17 @@
 
     <div class="container-fluid mt--7 mb-5">
       <!-- 편집자 목록 -->
-      <editors-table title="편집자"></editors-table>
+      <editors-list title="편집자"></editors-list>
     </div>
   </div>
 </template>
 <script>
-import EditorsTable from "./Tables/EditorsTable";
+import EditorsList from "./Editors/EditorsList";
 // import http from "@/util/http-common"
 export default {
   name: "editors",
   components: {
-    EditorsTable,
+    EditorsList,
   },
   data() {
     return {

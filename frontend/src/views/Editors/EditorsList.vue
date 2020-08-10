@@ -8,6 +8,7 @@
               <div class="col-3">
                 <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
+                  <img src="" alt="">
                   <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%;" />
                 </router-link>
               </div>
@@ -57,7 +58,7 @@ import http from "@/util/http-common"
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 export default {
-  name: 'editors-table',
+  name: 'editors-list',
   props: {
     type: {
       type: String
@@ -79,7 +80,7 @@ export default {
       // 태그들
       tags:[],
       tag: '',
-      editorsPerPage: 4,
+      editorsPerPage: 5,
       currentPage: 1,
       editorsData: [
         // 백엔드 API 호출 시 반환 자료형
