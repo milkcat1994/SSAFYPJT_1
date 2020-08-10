@@ -3,7 +3,7 @@
    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.happyhouse.mapper.HouseMapper">
+<mapper namespace="com.web.editor.model.mapper.user.SearchMapper">
 	<!-- <select id="searchAll" resultType="Portfolio" parameterType="Map">
 		select * from portfolio
 		<where>
@@ -38,5 +38,21 @@
 				and payMin like concat('%', #{payMin}, '%')
 			</if>
 		</where>
+	</select>
+
+	<!-- Redis에 올려두기 위한 Join문 -->
+	<!-- 포트폴리오 - 북마크 -->
+	<select id="joinBookmarks" resultType="SearchPortfolioJoinBookmark">
+		SELECT P.uid as uid, P.nickname as nickname, P.pay_min as payMin, P.skill as skill, COUNT(B.user_info_uid) as bookmarkNumber
+		FROM `portfolio` P
+		LEFT JOIN `bookmark` B ON P.uid = B.mark_uid
+		GROUP BY P.uid
+	</select>
+
+	<!-- 포트폴리오 - 영상 -->
+	<select id="joinVideos" resultType="SearchPortfolioJoinVideo">
+		SELECT P.uid as uid, V.url as mainUrl
+		FROM `portfolio` P
+		LEFT JOIN `video_info` V ON P.uid = V.portfolio_uid AND V.main_flag = 1
 	</select>
 </mapper>

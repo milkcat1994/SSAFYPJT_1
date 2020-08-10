@@ -81,6 +81,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Redis CacheServer 설정 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
 		<!--Multipart File Up&Download -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

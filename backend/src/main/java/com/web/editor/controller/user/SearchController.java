@@ -19,7 +19,7 @@ import com.web.editor.model.dto.user.bookmark.Bookmark;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.user.BookmarkService;
 import com.web.editor.model.service.user.PortfolioService;
-import com.web.editor.model.service.user.SearchService;
+import com.web.editor.model.service.user.search.SearchService;
 
 @CrossOrigin(origins = "*")
 @RestController

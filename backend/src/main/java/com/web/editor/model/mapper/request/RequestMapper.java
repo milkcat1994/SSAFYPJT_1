@@ -15,6 +15,7 @@ import com.web.editor.model.dto.request.RequestReview;
 import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
+import com.web.editor.model.dto.request.SearchAverageScore;
 import com.web.editor.model.dto.user.PortfolioReview;
 
 @Repository
@@ -156,4 +157,9 @@ public class RequestMapper {
 		return sqlSession.update("updateResNoti", nicknameUpdateDto);
 	}
 
+	// 평점평균
+	// nickname, avg(avg(video), avg(kindness), avg(finish))
+	public List<SearchAverageScore> joinScores() throws SQLException{
+		return sqlSession.selectList("joinScores");
+	}
 }

@@ -239,6 +239,13 @@
 		where response_nickname = #{orgNickname}
 	</update>
 
-
+	<!-- 평점 평균 -->
+	<select id="joinScores" resultType="SearchAverageScore">
+		SELECT RF.response_nickname as nickname, (AVG(R.video_score)+AVG(R.kindness_score)+AVG(R.finish_score))/3 as avgScore
+		FROM `request_form` RF
+		LEFT JOIN review R ON RF.rid = R.request_form_rid
+		where done_flag = 3
+		GROUP BY RF.response_nickname
+	</select>
 
 </mapper>
