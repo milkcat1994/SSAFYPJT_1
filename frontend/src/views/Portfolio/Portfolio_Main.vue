@@ -24,8 +24,8 @@
                       <base-button outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
                       {{portfolio.markCnt}}
                       </base-button>
-                      <!-- 에디터 본인 일 경우에만 비활성화 되어야한다. -->
-                      <base-button size="sm" type="default float-right" @click="modal.show=true"> 작업 요청하기 </base-button>
+                      <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
+                      <base-button v-if="$session.get('auth') == 'noneditor'" size="sm" type="default float-right" @click="modal.show=true"> 작업 요청하기 </base-button>
                     </h1>
                     <h3>
                       Skills: {{portfolio.skill}}
@@ -231,7 +231,35 @@
          <base-button type="secondary" @click="modal.show = false">Close</base-button>
          <base-button type="primary" @click="checkRequestForm()">요청하기</base-button>
      </template>
-   </modal>
+    </modal>
+
+    <modal :show.sync="alertModal.show"
+      gradient="danger"
+      modal-classes="modal-danger modal-dialog-centered">
+            <!-- <h6 slot="header" class="modal-title" id="modal-title-notification">Your attention is required</h6> -->
+
+      <div class="py-3 text-center">
+        <i class="ni ni-bell-55 ni-3x"></i>
+        <h4 class="heading mt-4">로그인 후 이용이 가능한 서비스입니다.</h4>
+      </div>
+
+      <template slot="footer">
+        <router-link to="/login">
+          <base-button type="white float-right" @click="alertModal.show = false">로그인</base-button>
+        </router-link>
+        <hr>
+        아직 회원이 아니십니까?
+        <router-link to="/user">
+          <base-button type="white float-right" @click="alertModal.show = false">회원가입</base-button>
+        </router-link>
+        <base-button type="link"
+          text-color="white"
+          class="ml-auto"
+          @click="alertModal.show = false">
+          Close
+        </base-button>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -271,6 +299,9 @@ import { getFormatDate } from "@/util/day-common";
     data() {
       return {
         uid:'',
+        isLogin: false,
+        userType: '',
+
         //닉네임, 소개
         portfolio: {
           nickname:'',
@@ -312,6 +343,10 @@ import { getFormatDate } from "@/util/day-common";
         modal: {
           show: false
         },
+        alertModal: {
+          show: false
+        },
+
         dates: {
           range: ""
         },
@@ -340,10 +375,9 @@ import { getFormatDate } from "@/util/day-common";
         return;
       }
 
-      // store.dispatch(
-      //   "getRequestitems1",
-      //   "/request/res/" + this.portfolio.nickname + "/1"
-      // );
+      if(this.$session.exists()){
+        this.isLogin = true;
+      }
 
       this.uid = this.$route.query.no;
       this.request_info.request_nickname = this.$session.get('nickname');
