@@ -112,6 +112,10 @@
                               <td>{{ requestitem0.video_type }}</td>
                             </tr>
                             <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem0.video_skill }}</td>
+                            </tr>
+                            <tr>
                               <th>원본 동영상 길이</th>
                               <td>{{ requestitem0.video_origin_length }}</td>
                             </tr>
@@ -219,6 +223,10 @@
                               <td>{{ requestitem1.video_type }}</td>
                             </tr>
                             <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem1.video_skill }}</td>
+                            </tr>
+                            <tr>
                               <th>원본 동영상 길이</th>
                               <td>{{ requestitem1.video_origin_length }}</td>
                             </tr>
@@ -310,6 +318,10 @@
                             <tr>
                               <th>영상 타입</th>
                               <td>{{ requestitem2.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem2.video_skill }}</td>
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
@@ -428,6 +440,10 @@
                             <tr>
                               <th>영상 타입</th>
                               <td>{{ requestitem3.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem3.video_skill }}</td>
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
