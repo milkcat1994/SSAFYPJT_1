@@ -79,11 +79,11 @@
                       v-if="$session.get('auth') == 'noneditor'"
                     >
                       <span v-if="$session.get('auth') == 'editor'">
-                        {{ requestitem0.request_nickname }}님과의 작업이
+                        {{ requestitem0.request_nickname }}님이 작업이
                         요청했습니다.
                       </span>
                       <span v-if="$session.get('auth') == 'noneditor'">
-                        {{ requestitem0.response_nickname }}님과의 작업이
+                        {{ requestitem0.response_nickname }}님께 작업을
                         요청했습니다.
                       </span>
                     </b-button>
