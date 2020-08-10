@@ -28,10 +28,10 @@
   </div>
 </template>
 <script>
-import Stepper from './Search/Stepper'
+import Stepper from './Request/Stepper'
 
 export default {
-  name: "search",
+  name: "request",
   components: {
     Stepper,
   }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.web.editor.model.dto.request.NicknameUpdateDto;
 import com.web.editor.model.dto.request.NotifyDto;
 import com.web.editor.model.dto.request.RequestDto;
 import com.web.editor.model.dto.request.RequestReview;
@@ -287,6 +288,46 @@ public class RequestServiceImpl implements RequestService {
 		try {
 			return requestMapper.deleteReviewAndUpdateRequest(rid);
 		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	@Override
+	public int updateNicknameReq(NicknameUpdateDto nicknameUpdateDto) {
+		try {
+			return requestMapper.updateNicknameReq(nicknameUpdateDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	@Override
+	public int updateNicknameRes(NicknameUpdateDto nicknameUpdateDto) {
+		try {
+			return requestMapper.updateNicknameRes(nicknameUpdateDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	@Override
+	public int updateReqNoti(NicknameUpdateDto nicknameUpdateDto) {
+		try {
+			return requestMapper.updateReqNoti(nicknameUpdateDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	@Override
+	public int updateResNoti(NicknameUpdateDto nicknameUpdateDto) {
+		try {
+			return requestMapper.updateResNoti(nicknameUpdateDto);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
 		}

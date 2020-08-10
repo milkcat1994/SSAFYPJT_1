@@ -12,7 +12,7 @@
             <h1 class="display-3">어떤 편집자를 찾으시나요?</h1>
             <base-input
               placeholder="편집할 영상의 스타일을 입력해보세요!"
-              addon-left-icon="ni ni-zoom-split-in"
+              addon-left-icon="fas fa-search"
               v-model="keyword"
               @keyup.enter="createRequest"
               >
@@ -126,8 +126,6 @@
 <script>
 import http from '@/util/http-common.js'
 
-const URL = 'http://localhost:8080'
-
 export default {
   components: {
   },
@@ -138,9 +136,9 @@ export default {
   },
   methods: {
     keywordSearch(keyword) {
-      console.log(URL, keyword)
+      // console.log(keyword)
       // BE URL 확인 후 변경
-      http.get(URL, `/search/${keyword}`)
+      http.get(`/search/${keyword}`)
         .then(res => {
           console.log(res)
           this.$router.push({name: 'search'})

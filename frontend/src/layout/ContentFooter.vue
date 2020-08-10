@@ -11,16 +11,7 @@
       <div class="col-lg-6">
         <ul class="nav nav-footer justify-content-center justify-content-lg-end">
           <li class="nav-item">
-            <a href="https://www.creative-tim.com" class="nav-link" target="_blank">1로와</a>
-          </li>
-          <li class="nav-item">
-            <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
-          </li>
-          <li class="nav-item">
-            <a href="https://www.creative-tim.com/license" class="nav-link" target="_blank">License</a>
+            <a href="https://lab.ssafy.com/s03-webmobile1-sub3/s03p13a509/wikis/home" class="nav-link" target="_blank">About Us</a>
           </li>
         </ul>
       </div>

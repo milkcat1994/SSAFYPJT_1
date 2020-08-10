@@ -45,7 +45,7 @@
             <a slot="title" class="nav-link" href="#" role="button">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img alt="Image placeholder" src="img/theme/team-1-800x800.jpg" />
+                  <img alt="Image placeholder" src="img/theme/avatar.svg" />
                 </span>
               </div>
             </a>
@@ -60,14 +60,6 @@
             <router-link to="/profile" class="dropdown-item">
               <i class="ni ni-settings-gear-65"></i>
               <span>계정 설정</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>작업 일정</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-support-16"></i>
-              <span>도움말</span>
             </router-link>
             <div class="dropdown-divider"></div>
             <a href="#!" class="dropdown-item">
@@ -91,7 +83,9 @@
               </router-link>
             </div>
             <div class="col-6 collapse-close">
-              <navbar-toggle-button @click.native="closeSidebar"></navbar-toggle-button>
+              <navbar-toggle-button
+                @click.native="closeSidebar"
+              ></navbar-toggle-button>
             </div>
           </div>
         </div>

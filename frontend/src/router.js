@@ -36,17 +36,17 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "dashboard",
+      redirect: "mainpage",
       component: MainLayout,
       children: [
         {
-          path: "/dashboard",
-          name: "dashboard",
+          path: "/mainpage",
+          name: "mainpage",
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
           component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Dashboard.vue"),
+            import(/* webpackChunkName: "demo" */ "./views/MainPage.vue"),
         },
         {
           path: "/icons",
@@ -67,10 +67,10 @@ export default new Router({
             import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
         },
         {
-          path: "/search",
-          name: "search",
+          path: "/request",
+          name: "request",
           component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
+            import(/* webpackChunkName: "demo" */ "./views/Request.vue"),
         },
         {
           path: "/editors",

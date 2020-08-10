@@ -115,17 +115,17 @@
               </li>
               <li class="nav-item">
                 <a
-                  href="https://www.creative-tim.com/presentation"
+                  href="#"
                   class="nav-link"
                   target="_blank"
                 >About Us</a>
               </li>
               <li class="nav-item">
-                <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+                <a href="#" class="nav-link" target="_blank">Blog</a>
               </li>
               <li class="nav-item">
                 <a
-                  href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md"
+                  href="#"
                   class="nav-link"
                   target="_blank"
                 >MIT License</a>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioInfo;
+import com.web.editor.model.dto.user.PortfolioNicknameUpdateRequest;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioTagSaveRequest;
 import com.web.editor.model.dto.user.PortfolioReview;
@@ -56,4 +57,6 @@ public interface PortfolioService {
 
     // 태그 모두 삭제
     public int deleteTags(String uid);
+
+    public int portfolioNicknameUpdate(PortfolioNicknameUpdateRequest portfolioNicknameUpdateRequest);
 }

@@ -81,6 +81,12 @@
         WHERE uid = #{uid}
     </update>
 
+    <update id="portfolioNicknameUpdate">
+        UPDATE portfolio
+        SET nickname = #{nickname}
+        WHERE uid = #{uid}
+    </update>
+
     <delete id="deleteVideos">
         DELETE FROM video_info
         WHERE portfolio_uid = #{uid}

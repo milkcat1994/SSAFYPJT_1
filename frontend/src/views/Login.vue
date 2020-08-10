@@ -66,7 +66,7 @@
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <router-link to="/dashboard" class="text-light">
+          <router-link to="/mainpage" class="text-light">
             <small>메인화면</small>
           </router-link>
         </div>
@@ -204,12 +204,8 @@ export default {
         .then(({ data }) => {
           if (data.data == "success") {
             alertify.success("연동이 완료되었습니다.");
-            this.$session.start();
-            this.$session.set("uid", data.object.uid);
-            this.$session.set("nickname", data.object.nickname);
-            this.$session.set("auth", data.object.auth);
-            this.initInputL();
-            this.$router.push("/");
+            this.googleLogin();
+            this.modal.show = false;
           } else if (data == "fail") {
             alertify.warning("연동시 에러가 발생했습니다.");
             this.modal.show = false;
