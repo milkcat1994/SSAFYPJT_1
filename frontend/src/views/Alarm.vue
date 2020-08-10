@@ -57,7 +57,8 @@
                         getDetail(requestitem0.rid);
                         setRequestDate(
                           requestitem0.start_date,
-                          requestitem0.end_date
+                          requestitem0.end_date,
+                          requestitem0.rid
                         );
                       "
                       v-if="$session.get('auth') == 'editor'"
@@ -73,7 +74,8 @@
                         getDetail(requestitem0.rid);
                         setRequestDate(
                           requestitem0.start_date,
-                          requestitem0.end_date
+                          requestitem0.end_date,
+                          requestitem0.rid
                         );
                       "
                       v-if="$session.get('auth') == 'noneditor'"
@@ -180,7 +182,8 @@
                         getDetail(requestitem1.rid);
                         setRequestDate(
                           requestitem1.start_date,
-                          requestitem1.end_date
+                          requestitem1.end_date,
+                          requestitem1.rid
                         );
                       "
                     >
@@ -272,7 +275,8 @@
                         getDetail(requestitem2.rid);
                         setRequestDate(
                           requestitem2.start_date,
-                          requestitem2.end_date
+                          requestitem2.end_date,
+                          requestitem2.rid
                         );
                       "
                     >
@@ -389,7 +393,8 @@
                         getDetail(requestitem3.rid);
                         setRequestDate(
                           requestitem3.start_date,
-                          requestitem3.end_date
+                          requestitem3.end_date,
+                          requestitem3.rid
                         );
                       "
                     >
@@ -540,6 +545,9 @@ export default {
           backgroundColor: "#6699ff",
         },
       ],
+
+      ridDetail: "",
+
       events: [],
       videoScore: 0,
       kindnessScore: 0,
@@ -825,14 +833,13 @@ export default {
         }
       );
     },
-    setRequestDate(start, end) {
-      if (
-        this.events[this.events.length - 1].start == start.substring(0, 10) &&
-        this.events[this.events.length - 1].end == end.substring(0, 10)
-      ) {
+    setRequestDate(start, end, rid) {
+      if (this.ridDetail == rid) {  // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
         this.setDateClean();
+        this.ridDetail = "";
         return;
       }
+      this.ridDetail = rid;
       this.events[this.events.length - 1].start = start.substring(0, 10);
       this.events[this.events.length - 1].end = end.substring(0, 10);
     },
