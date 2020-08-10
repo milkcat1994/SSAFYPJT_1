@@ -75,12 +75,11 @@
           <div class="d-flex flex-column justify-content-around">
             
             <!-- 슈퍼 편집자 -->
-            <div @click="findSuper">
+            <div class="find-super mb-4" @click="findSuper">
               <stats-card title="어떤 영상이라도 문제없다!"
                           type="gradient-red"
                           sub-title="슈퍼 편집자 찾아보기"
                           icon="ni ni-like-2"
-                          class="mb-4 mb-xl-4"
               >
 
                   <template slot="footer">
@@ -92,12 +91,11 @@
             </div>
 
             <!-- 맞춤 편집자 -->
-            <div @click="getSuggestion">
+            <div class="suggest" @click="getSuggestion">
               <stats-card title="얼마나 맞을지 궁금하죠?"
                           type="gradient-green"
                           sub-title="맞춤 편집자 추천받기"
                           icon="ni ni-compass-04"
-                          class="mb-4 mb-xl-0"
               >
 
                   <template slot="footer">
@@ -180,7 +178,7 @@ export default {
     },
     getSuggestion() {
       // 현재 로그인한 사용자의 태그나 이용정보 바탕으로 검색 조건 + router로 push
-      this.$router.push({name: 'search'})
+      this.$router.push({name: 'stepper'})
     }
   },
   computed: {
@@ -201,5 +199,13 @@ export default {
   /* display: inline-block; */
   width: 50px;
   height: 50px;
+}
+
+.find-super:hover {
+  cursor: pointer;
+}
+
+.suggest:hover {
+  cursor: pointer;
 }
 </style>

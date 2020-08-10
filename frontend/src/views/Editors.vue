@@ -18,7 +18,7 @@
             <span class="text-eunjung font-weight-bold">영상 특징</span>
           </div>
           <div class="d-inline-flex m-2 p-2">
-            <button class="btn btn-sm" :class="{'btn-success': !!theme.status, 'btn-outline-eunjung': !theme.status}" v-for="theme in videoTheme" :key="theme.name" @click="toggleFilter(theme)"><span class="mx-2">{{theme.name}}</span></button>
+            <button class="btn btn-sm" :class="{'btn-success': !!theme.status, 'btn-outline-eunjung': !theme.status}" v-for="theme in videoStyle" :key="theme.name" @click="toggleFilter(theme)"><span class="mx-2">{{theme.name}}</span></button>
           </div>
         </div>
         <!-- 편집 기술 -->
@@ -75,13 +75,28 @@ export default {
     return {
       editors: {},
       videoTypes: [
-        {name: '개인', status: false}, {name: '사업', status: false}, {name: '기념일', status: false},
+        {name: '개인', status: false}, 
+        {name: '상업', status: false},
       ],
-      videoTheme: [
-        {name: '코믹', status: false}, {name: '화려', status: false}, {name: '갬성', status: false},
+      videoStyle: [
+        {name: '키즈', status: false}, 
+        {name: '게임', status: false}, 
+        {name: '음악/댄스', status: false}, 
+        {name: '푸드/쿠킹', status: false},
+        {name: 'V-log', status: false},
+        {name: '영화/애니메이션', status: false},
+        {name: '동물', status: false},
+        {name: '뷰티/패션', status: false},
+        {name: '스포츠', status: false},
+        {name: '기타', status: false},
       ],
       editSkills: [
-        {name: '밝기/대비', status: false}, {name: '색', status: false}, {name: '오디오', status: false}, {name: '모션그래픽', status: false}, {name: '자막', status: false}, {name: '인트로/아웃트로', status: false}, 
+        {name: '색/밝기 조정', status: false}, 
+        {name: '자막', status: false}, 
+        {name: '오디오/음악', status: false}, 
+        {name: '인트로', status: false}, 
+        {name: '아웃트로', status: false}, 
+        {name: '모션그래픽', status: false}, 
       ],
       // 검색 기준
       searchBy: '검색',
@@ -127,7 +142,7 @@ export default {
           filter.status = false
         }
       })
-      this.videoTheme.forEach(filter => {
+      this.videoStyle.forEach(filter => {
         if (filter.name === value) {
           filter.status = false
         }
@@ -143,7 +158,7 @@ export default {
       this.videoTypes = [
         {name: '개인', status: false}, {name: '사업', status: false}, {name: '기념일', status: false},
       ],
-      this.videoTheme = [
+      this.videoStyle = [
         {name: '코믹', status: false}, {name: '화려', status: false}, {name: '갬성', status: false},
       ],
       this.editSkills = [

@@ -41,12 +41,13 @@
           </div>
         </li>
       </ul>
-      <div class="card-footer d-flex justify-content-end"
+      <div class="card-footer d-flex justify-content-center"
          :class="type === 'dark' ? 'bg-transparent': ''">
         <base-pagination
           :total="editorsData.length"
           :perPage="editorsPerPage"
           :value="currentPage"
+          align="center"
           @input="fetchPage"
         ></base-pagination>
       </div>
