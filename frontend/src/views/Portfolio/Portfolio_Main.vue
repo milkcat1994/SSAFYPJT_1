@@ -101,21 +101,12 @@
                   </h3>
                 </div>
                 <div class="col-xl-4 col-lg-6">
-                  <vc-calendar
-                    
-                    
-                    :disabled-dates='disableDates'
-                    :attributes='events'
-                  />
-                  {{events[1]}}
-                  <!-- {{events.dates}} -->
-                  <!-- <calendar
+                  <calendar
                     :eventCategories="eventCategories"
                     :events="events"
-                    :offDays="disableDates"
                     ref="calendar"
-                    style="float:left; width: 40%; height: 100%"
-                  /> -->
+                    style="width: 100%; height: 100%"
+                  />
                 </div>
                 <div class="col-xl-4 col-lg-6">
                   <h3>한줄평</h3>
@@ -236,8 +227,6 @@
     <modal :show.sync="alertModal.show"
       gradient="danger"
       modal-classes="modal-danger modal-dialog-centered">
-            <!-- <h6 slot="header" class="modal-title" id="modal-title-notification">Your attention is required</h6> -->
-
       <div class="py-3 text-center">
         <i class="ni ni-bell-55 ni-3x"></i>
         <h4 class="heading mt-4">로그인 후 이용이 가능한 서비스입니다.</h4>
@@ -271,19 +260,16 @@ import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
 
-// import { Calendar } from "vue-sweet-calendar";
-// import "vue-sweet-calendar/dist/SweetCalendar.css";
+import { Calendar } from "vue-sweet-calendar";
+import "vue-sweet-calendar/dist/SweetCalendar.css";
 
 import alertify from "alertifyjs"
 
 // axios 초기 설정파일
 import http from "@/util/http-common";
 // 날짜 계산 파일
-import { getFormatDate } from "@/util/day-common";
+// import { getFormatDate } from "@/util/day-common";
 // import { getEndDate, getFormatDate } from "@/util/day-common";
-
-// import { mapGetters } from "vuex";
-// import store from "@/store/store.js";
 
   export default {
     name: 'user-portfolio',
@@ -294,7 +280,7 @@ import { getFormatDate } from "@/util/day-common";
       BadgerAccordionItem,
       flatPicker,
       InputTag,
-      // Calendar
+      Calendar
     },
     data() {
       return {
@@ -326,16 +312,27 @@ import { getFormatDate } from "@/util/day-common";
         togleBookmark: false,
 
         // 스케줄
-        disableDates: [],
-        events: [
+        eventCategories: [
           {
-            highlight: {
-              backgroundColor: '#ff8080',
-              },
-            dates: [
-            ],
-          }
+            id: 1,
+            title: "holiday",
+            textColor: "white",
+            backgroundColor: "#ff0066",
+          },
+          {
+            id: 2,
+            title: "selected",
+            textColor: "white",
+            backgroundColor: "#f29661",
+          },
+          {
+            id: 3,
+            title: "In Progress",
+            textColor: "white",
+            backgroundColor: "#6699ff",
+          },
         ],
+        events: [],
         
         mainVideo: 'https://www.youtube.com/embed/',
         videos: [],
@@ -491,9 +488,7 @@ import { getFormatDate } from "@/util/day-common";
         http
         .get("/request/res/"+this.portfolio.nickname+"/1")
         .then(({data}) => {
-          // console.log(data);
-          this.events.dates = this.makeInprogressDateArray(data);
-          console.log(this.events.dates);
+          this.events = this.makeInprogressDateArray(data);
           return;
         })
         .catch(error => {
@@ -508,7 +503,7 @@ import { getFormatDate } from "@/util/day-common";
           if(data.data == 'success'){
             // scheduleType=0 기본
             let result = data.object.filter(schedule => schedule.scheduleType == 0);
-            this.disableDates = this.makeScheduleArray(result);
+            this.events = this.makeScheduleArray(result);
             // console.log(result);
             return;
           } else {
@@ -691,9 +686,15 @@ import { getFormatDate } from "@/util/day-common";
         return res;
       },
       makeScheduleArray(result){
+        let date;
         let res = [];
         result.forEach(element => {
-          res.push(getFormatDate(element.startDate));
+          date = new Object();
+          date.start = new Date(element.startDate);
+          date.end = new Date(element.endDate);
+          date.categoryId = 1;
+          date.repeat = "montly";
+          res.push(date);
         })
         return res;
       },
@@ -702,8 +703,10 @@ import { getFormatDate } from "@/util/day-common";
         let dates = [];
         result.forEach(element => {
           obj = new Object();
-          obj.start = element.start_date;
-          obj.end = element.end_date;
+          obj.start = new Date(element.start_date);
+          obj.end = new Date(element.end_date);
+          obj.categoryId = 3;
+          obj.repeat = "never";
           dates.push(obj);
         })
         return dates;
