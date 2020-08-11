@@ -155,9 +155,6 @@ public class UserController {
         String nickname = request.getNickname();
         User user = new User();
         User orgUser = new User();
-        orgUser = userService.findByUid(uid);
-        String orgNickname = orgUser.getNickname();
-        String auth = orgUser.getAuth();
 
         final BasicResponse result = new BasicResponse();
         // uid가 int로 변하지 못합니다.
@@ -172,24 +169,34 @@ public class UserController {
             result.data = message;
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
+    
+        // 유저의 이전 정보 가져오기
+        orgUser = userService.findByUid(uid);
+
         user.setNickname(nickname);
         int res = userService.updateUser(user);
         portfolioService.portfolioNicknameUpdate(new PortfolioNicknameUpdateRequest(Integer.parseInt(uid), request.getNickname()));
         
+
         if (res > 0) {
             result.status = true;
             result.data = "success";
 
-            // request notify 의 닉네임 변경
             NicknameUpdateDto nicknameUpdateDto = new NicknameUpdateDto();
-            nicknameUpdateDto.setOrgNickname(orgNickname);
+            // request notify 의 이전 닉네임
+            nicknameUpdateDto.setOrgNickname(orgUser.getNickname());
+            // 유저의 타입(편집자, 일반회원)
+            String auth = orgUser.getAuth();
+            // 새로운 닉네임
             nicknameUpdateDto.setNickname(nickname);
-           
+            
+            // 요청서의 닉네임 변경
             if (auth.equals("editor")){
                 requestService.updateNicknameRes(nicknameUpdateDto);
             }else if (auth.equals("noneditor")){
                 requestService.updateNicknameReq(nicknameUpdateDto);
             }
+            // 알람 닉네임 변경
             requestService.updateReqNoti(nicknameUpdateDto);
             requestService.updateResNoti(nicknameUpdateDto);
 
