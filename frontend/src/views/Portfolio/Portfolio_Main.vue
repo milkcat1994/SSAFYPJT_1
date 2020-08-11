@@ -106,7 +106,6 @@
                     ref="calendar"
                     style="width: 100%; height: 100%"
                   />
-                  <!-- {{events}} -->
                 </div>
                 <div class="col-xl-4 col-lg-6">
                   <h3>한줄평</h3>
@@ -267,6 +266,8 @@ import alertify from "alertifyjs"
 
 // axios 초기 설정파일
 import http from "@/util/http-common";
+
+// import store from "@/store/store.js";
 // 날짜 계산 파일
 // import { getFormatDate } from "@/util/day-common";
 // import { getEndDate, getFormatDate } from "@/util/day-common";
@@ -406,6 +407,8 @@ import http from "@/util/http-common";
 
       // 북마크 정보 가져와서 북마크 한 인원수 보여주기
       this.getBookmarkCount();
+
+      // console.log(store.getRequests());
     },
     methods: {
       checkRequestForm(){

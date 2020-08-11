@@ -30,24 +30,55 @@
                       v-model="portfolio.description"
                     />
                     <label>편집할 수 있는 기술을 선택해주세요</label>
-                    <base-checkbox class="mb-3" v-model="checkboxes.unchecked">
+                    <!-- <br>
+                    <input type="checkbox" name="video_skill" id="video_skill" value="color">
+                    <label for="color">
+                      색, 밝기 조정
+                    </label>
+                    <br>
+                    <input type="checkbox" name="video_skill" id="video_skill" value="audio">
+                    <label for="audio">
+                      음향(오디오, 음악)
+                    </label>
+                    <br>
+                    <input type="checkbox" name="video_skill" id="video_skill" value="motion">
+                    <label for="motion">
+                      모션그래픽
+                    </label>
+                    <br>
+                    <input type="checkbox" name="video_skill" id="video_skill" value="caption">
+                    <label for="caption">
+                      자막
+                    </label>
+                    <br>
+                    <input type="checkbox" name="video_skill" id="video_skill" value="intro">
+                    <label for="intro">
+                      인트로
+                    </label>
+                    <br>
+                    <input type="checkbox" name="video_skill" id="video_skill" value="outro">
+                    <label for="outro">
+                      아웃트로
+                    </label> -->
+                    <base-checkbox class="mb-3" name="video_skill" value="color" v-model="checkboxes.color">
                       색, 밝기 조정
                     </base-checkbox>
-                    <base-checkbox class="mb-3" v-model="checkboxes.unchecked">
+                    <base-checkbox class="mb-3" name="video_skill" value="audio" v-model="checkboxes.audio">
+                      음향(오디오, 음악)
+                    </base-checkbox>
+                    <base-checkbox class="mb-3" name="video_skill" value="motion" v-model="checkboxes.motion">
+                      모션그래픽
+                    </base-checkbox>
+                    <base-checkbox class="mb-3" name="video_skill" value="caption" v-model="checkboxes.caption">
                       자막
                     </base-checkbox>
-                    <base-checkbox class="mb-3" v-model="checkboxes.unchecked">
+                    <base-checkbox class="mb-3" name="video_skill" value="intro" v-model="checkboxes.intro">
                       인트로
                     </base-checkbox>
-                    <base-checkbox class="mb-3" v-model="checkboxes.unchecked">
+                    <base-checkbox class="mb-3" name="video_skill" value="outro" v-model="checkboxes.outro">
                       아웃트로
                     </base-checkbox>
-                    <base-checkbox class="mb-3" v-model="checkboxes.unchecked">
-                      오디오, 음악
-                    </base-checkbox>
-                    <base-checkbox class="mb-3" v-model="checkboxes.unchecked">
-                      모션 그래픽
-                    </base-checkbox>
+                    <!-- {{checkboxes}} -->
                     <base-input
                       alternative
                       label="분당 페이가격을 적어주세요."
@@ -57,7 +88,7 @@
                     />
                     <div class="tags-input">
                       <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="updateTags()"> 수정하기 </base-button>
-                      <input-tag placeholder="Add Tag" v-model="tags" :limit="limit"></input-tag>
+                      <input-tag placeholder="Add Tag" v-model="tags" :limit="20"></input-tag>
                     </div>
                   </div>
                 </div>
@@ -158,7 +189,7 @@ import { getFormatDate } from "@/util/day-common";
 
         portfolio: {
           nickname: '',
-          skills: [],
+          skills: "",
           payMin: "",
           HeadURL: [],
           URLs: [],
@@ -171,15 +202,12 @@ import { getFormatDate } from "@/util/day-common";
         //checkedDays - 요일들
         disableDates: [],
         checkboxes: {
-          weekday: false,
-          weekend: false,
-          mon: false,
-          tue: false,
-          wed: false,
-          thur: false,
-          fri: false,
-          sat: false,
-          sun: false
+          color: false,
+          audio: false,
+          motion: false,
+          caption: false,
+          intro: false,
+          outro: false
         }
       }
     },
@@ -288,7 +316,21 @@ import { getFormatDate } from "@/util/day-common";
                 if (data.data == 'success') {
                   this.portfolio.description = data.object.description;
                   this.portfolio.payMin = data.object.payMin;
-                  this.portfolio.skills = data.object.skill;
+                  let skills = data.object.skill.split(',');
+                  skills.forEach(skill => {
+                    if(skill === "색/밝기 조정")
+                      this.checkboxes.color = true;
+                    else if(skill === "음향")
+                      this.checkboxes.audio = true;
+                    else if(skill === "모션그래픽")
+                      this.checkboxes.motion = true;
+                    else if(skill === "자막")
+                      this.checkboxes.caption = true;
+                    else if(skill === "인트로")
+                      this.checkboxes.intro = true;
+                    else if(skill === "아웃트로")
+                      this.checkboxes.outro = true;
+                  })
                   return;
                 } else {
                   // fail 
@@ -413,6 +455,30 @@ import { getFormatDate } from "@/util/day-common";
         }
       },
       updatePortfolio(){
+        // Object.keys(this.checkboxes).forEach(key => {
+        //   if(this.checkboxes[key])
+        //     // console.log(Object.values(this.checkboxes[key]));
+        //     this.portfolio.skills += this.checkboxes[key] + ",";
+        // })
+        if(this.checkboxes.color){
+          this.portfolio.skills += ",color";
+        }
+        if(this.checkboxes.audio){
+          this.portfolio.skills += ",audio";
+        }
+        if(this.checkboxes.motion){
+          this.portfolio.skills += ",motion";
+        }
+        if(this.checkboxes.caption){
+          this.portfolio.skills += ",caption";
+        }
+        if(this.checkboxes.intro){
+          this.portfolio.skills += ",intro";
+        }
+        if(this.checkboxes.outro){
+          this.portfolio.skills += ",outro";
+        }
+        // console.log(this.portfolio.skills);
         http
         .put('/portfolio/portfolio/'+this.uid, {
           uid: this.uid,
