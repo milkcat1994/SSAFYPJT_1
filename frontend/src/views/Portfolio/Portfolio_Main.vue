@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-xl-7 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 295px;">
+            <div class="card-body pt-0 pt-md-4" style="height: 303px;">
               <div class="row">
                 <div class="col">
                   <div class="text">
@@ -78,7 +78,20 @@
                   />
                 </div>
               </div>
-
+              <hr>
+              <div class="row" style="margin-top: 30px">
+                <!-- <div class="col"> -->
+                  <calendar
+                    :eventCategories="eventCategories"
+                    :events="events"
+                    :offDays="offdays"
+                    ref="calendar"
+                    style="width: 100%; height: 100%"
+                  />
+                  <!-- {{events}} -->
+                <!-- </div> -->
+              </div>
+              <hr>
               <div class="row" style="margin-top: 30px">
                 <div class="col-xl-4 col-lg-6">
                   <h3>
@@ -99,15 +112,7 @@
                     <rate :length="5" :value="finishAvg" :disabled="true" />
                   </h3>
                 </div>
-                <div class="col-xl-4 col-lg-6">
-                  <calendar
-                    :eventCategories="eventCategories"
-                    :events="events"
-                    ref="calendar"
-                    style="width: 100%; height: 100%"
-                  />
-                </div>
-                <div class="col-xl-4 col-lg-6">
+                <div class="col">
                   <h3>한줄평</h3>
                   <badger-accordion>
                     <badger-accordion-item v-for="(review, index) in reviews" :key="index">
@@ -337,11 +342,12 @@ import http from "@/util/http-common";
           {
             id: 4,
             title: "DisabledDates",
-            textColor: "white",
+            textColor: "black",
             backgroundColor: "#c9c9c9",
           }
         ],
         events: [],
+        offdays: [],
         
         mainVideo: 'https://www.youtube.com/embed/',
         videos: [],
@@ -408,7 +414,7 @@ import http from "@/util/http-common";
       // 북마크 정보 가져와서 북마크 한 인원수 보여주기
       this.getBookmarkCount();
 
-      // console.log(store.getRequests());
+      console.log(this.events);
     },
     methods: {
       checkRequestForm(){
@@ -495,7 +501,7 @@ import http from "@/util/http-common";
         .get("/request/res/"+this.portfolio.nickname+"/1")
         .then(({data}) => {
           if(data.length > 0)
-            this.events = this.makeInprogressDateArray(data);
+            this.makeInprogressDateArray(data);
           return;
         })
         .catch(error => {
@@ -509,8 +515,9 @@ import http from "@/util/http-common";
         .then(({data}) => {
           if(data.data == 'success'){
             // scheduleType=0 기본
-            let result = data.object.filter(schedule => schedule.scheduleType == 0);
-            this.events = this.makeScheduleArray(result);
+            // let result = data.object.filter(schedule => schedule.scheduleType == 0);
+            this.makeScheduleArray(data.object);
+            console.log(data.object);
             return;
           } else {
             return;
@@ -692,29 +699,25 @@ import http from "@/util/http-common";
       },
       makeScheduleArray(result){
         let date;
-        let res = [];
         result.forEach(element => {
           date = new Object();
           date.start = new Date(element.startDate);
           date.end = new Date(element.endDate);
-          date.categoryId = 4;
-          date.repeat = "montly";
-          res.push(date);
+          date.categoryId = element.scheduleType;
+          date.repeat = "never";
+          this.events.push(date);
         })
-        return res;
       },
       makeInprogressDateArray(result){
         let obj;
-        let dates = [];
         result.forEach(element => {
           obj = new Object();
           obj.start = new Date(element.start_date);
           obj.end = new Date(element.end_date);
           obj.categoryId = 3;
           obj.repeat = "never";
-          dates.push(obj);
+          this.events.push(obj);
         })
-        return dates;
       },
       goToday() {
         this.$refs.calendar.goToday();

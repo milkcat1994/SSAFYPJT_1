@@ -148,6 +148,17 @@
                 <div class="col">
                   <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
                   <label for="schedule"> 근무가 불가능한 날짜를 골라주세요. </label>
+                  <!-- <div class="row"> -->
+                    <!-- <base-checkbox class="mb-3" v-model="offDays.weekday">평일</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.weekend">주말</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.mon">월</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.tue">화</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.wed">수</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.thur">목</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.fri">금</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.sat">토</base-checkbox>
+                    <base-checkbox class="mb-3" v-model="offDays.sun">일</base-checkbox> -->
+                  <!-- </div> -->
                   <vc-date-picker
                     mode='multiple'
                     v-model='disableDates'>
@@ -208,6 +219,17 @@ import { getFormatDate } from "@/util/day-common";
           caption: false,
           intro: false,
           outro: false
+        },
+        offDays: {
+          weekday: false,
+          weekend: false,
+          mon: false,
+          tue: false,
+          wed: false,
+          thur: false,
+          fri: false,
+          sat: false,
+          sun: false
         }
       }
     },
@@ -417,14 +439,14 @@ import { getFormatDate } from "@/util/day-common";
       updateSchedule(){
         this.disableDates = this.disableDates.map(x => getFormatDate(x));
         // 스케줄이 없는 경우 최초등록
-        // 스케줄 타입 0: 기본, 1: 개인일정(휴가 등등), 2: 다른 작업중
+        // 스케줄 타입 4: 기본, 1: 개인일정(휴가 등등), 2: 다른 작업중
         if(!this.haveSchedule){
           http
           .post('/portfolio/schedule/'+this.uid, {
             portfolioUid: this.uid,
             startDate: this.disableDates,
             endDate: this.disableDates,
-            scheduleType: 0
+            scheduleType: 4
           })
           .then(({ data }) => {
             if(data.data == "success"){
@@ -441,7 +463,7 @@ import { getFormatDate } from "@/util/day-common";
             portfolioUid: this.uid,
             startDate: this.disableDates,
             endDate: this.disableDates,
-            scheduleType: 0
+            scheduleType: 4
           })
           .then(({ data }) => {
             if(data.data == "success"){
