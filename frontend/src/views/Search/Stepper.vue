@@ -17,14 +17,14 @@
 
 <script>
 import HorizontalStepper from "vue-stepper";
-import { mapGetters } from 'vuex';
+// import { mapGetters, mapMutations } from 'vuex';
 
-import VideoCategory from './VideoCategory.vue';
-import VideoTheme from './VideoTheme.vue';
+import VideoType from './VideoType.vue';
+import VideoStyle from './VideoStyle.vue';
 import VideoOriginLength from './VideoOriginLength.vue';
 import VideoFinalLength from './VideoFinalLength.vue';
-import EditSkill from './EditSkill.vue';
-import EditTerm from './EditTerm.vue';
+import VideoSkill from './VideoSkill.vue';
+import DateToFinish from './DateToFinish.vue';
 
 export default {
   name: "stepper",
@@ -39,7 +39,7 @@ export default {
           name: "first",
           title: "편집 목적",
           subtitle: "",
-          component: VideoCategory,
+          component: VideoType,
           completed: false,
         },
         {
@@ -47,7 +47,7 @@ export default {
           name: "second",
           title: "영상 종류",
           subtitle: "",
-          component: VideoTheme,
+          component: VideoStyle,
           completed: false,
         },
         {
@@ -71,7 +71,7 @@ export default {
           name: "fifth",
           title: "편집 기술",
           subtitle: "",
-          component: EditSkill,
+          component: VideoSkill,
           completed: false,
         },
         {
@@ -79,15 +79,15 @@ export default {
           name: "sixth",
           title: "희망 기한",
           subtitle: "",
-          component: EditTerm,
+          component: DateToFinish,
           completed: false,
         },
       ],
     };
   },
-  computed: {
-    ...mapGetters(['getRequests']),
-  },
+  // computed: {
+  //   ...mapGetters(['getRequests']),
+  // },
   methods: {
     // Executed when @completed-step event is triggered
     completeStep(payload) {
@@ -110,12 +110,11 @@ export default {
     // Executed when @stepper-finished event is triggered
     sendRequest() {
       // 종료되었을 때 현재 작업요청서에 저장된 내용을 보내기
-      console.log(this.getRequests)
+      // console.log(this.getRequests)
+      this.$store.commit('setStatus', {value: true})
       this.$router.push("/editors");
     },
   },
-  created() {
-  }
 };
 </script>
 

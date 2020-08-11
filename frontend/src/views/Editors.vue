@@ -39,12 +39,12 @@
                 'btn-success': !!theme.status,
                 'btn-outline-eunjung': !theme.status,
               }"
-              v-for="theme in videoTheme"
+              v-for="theme in videoStyle"
               :key="theme.name"
               @click="toggleFilter(theme)"
             >
               <span class="mx-2">{{ theme.name }}</span>
-            </button>
+            </button>ㅂ
           </div>
         </div>
         <!-- 편집 기술 -->
@@ -61,7 +61,7 @@
                 'btn-success': !!skill.status,
                 'btn-outline-eunjung': !skill.status,
               }"
-              v-for="skill in editSkills"
+              v-for="skill in videoSkills"
               :key="skill.name"
               @click="toggleFilter(skill)"
             >
@@ -72,15 +72,15 @@
         <!-- 선택된 필터 표시 바 -->
         <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
         <!-- 전체 해제 -->
-        <!-- <div class="m-2 p-2">
+          <!-- <div class="m-2 p-2">
             <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
           </div> -->
         <!-- 필터들 -->
-        <!-- <div class="m-2 p-2">
-            <button class="btn btn-success btn-sm" v-for="category in selectedCategories" :key="category" @click="clearFilter(category)">{{category}}</button>
+          <!-- <div class="m-2 p-2">
+            <button class="btn btn-success btn-sm" v-for="category in selectedFilters" :key="category" @click="clearFilter(category)">{{category}}</button>
           </div> -->
         <!-- 적용 버튼 -->
-        <!-- <div class="m-2 p-2">
+          <!-- <div class="m-2 p-2">
             <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;">적용</button>
           </div> -->
         <!-- </div> -->
@@ -114,8 +114,8 @@
   </div>
 </template>
 <script>
+// import http from "@/util/http-common";
 import EditorsList from "./Editors/EditorsList";
-// import http from "@/util/http-common"
 export default {
   name: "editors",
   components: {
@@ -123,12 +123,12 @@ export default {
   },
   data() {
     return {
-      editors: {},
+      // 검색 필터 모음
       videoTypes: [
-        {name: '개인', status: false}, 
+        {name: '개인', status: false},
         {name: '상업', status: false},
       ],
-      videoTheme: [
+      videoStyle: [
         {name: '키즈', status: false}, 
         {name: '게임', status: false}, 
         {name: '음악/댄스', status: false}, 
@@ -140,7 +140,7 @@ export default {
         {name: '스포츠', status: false},
         {name: '기타', status: false},
       ],
-      editSkills: [
+      videoSkills: [
         {name: '색/밝기 조정', status: false}, 
         {name: '자막', status: false}, 
         {name: '오디오/음악', status: false}, 
@@ -152,24 +152,53 @@ export default {
       searchBy: "검색",
       // 검색 단어
       keyword: "",
-      // 검색하고자 하는 카테고리 모음
-      selectedCategories: [],
+      // 선택한 필터들
+      selectedFilters: [],
     };
   },
+  computed: {
+    filtersFromStepper() {
+      return this.$store.getters.getRequests
+    }
+  },
+  created() {
+    // console.log(this.filtersFromStepper)
+    if (this.filtersFromStepper.status) {
+      this.videoTypes.forEach(item => {
+        if (item.name == this.filtersFromStepper.videoTypes) {
+          item.status = true
+        }
+      })
+      this.videoStyle.forEach(item => {
+        if (item.name == this.filtersFromStepper.videoStyle) {
+          item.status = true
+        }
+      })
+      this.videoSkills.forEach(item => {
+        if (item.name == this.filtersFromStepper.videoSkills) {
+          item.status = true
+        }
+      })
+    }
+  },
+  updated() {
+
+  },
   methods: {
-    fetchList() {
-      // http.get('/search/list')
-      //   .then(res => {
-      //     console.log(res)
-      //   })
-      //   .catch(err => {
-      //     console.error(err)
-      //   })
-      // return
-    },
     // 이름 또는 단어 검색
     searchKeyword() {
       console.log(this.keyword);
+    },
+    fetchFilter() {
+      // requests: {
+      //   videoType: null,
+      //   videoStyle: null,
+      //   originLength: null,
+      //   finalLength: null,
+      //   videoSkills: null,
+      //   term: null, 
+      // }
+      console.log(this.filtersFromStepper)
     },
     toggleFilter(category) {
       // 로직 수정 필요
@@ -178,26 +207,26 @@ export default {
         this.clearFilter(category.name);
         category.status = false;
       } else {
-        this.selectedCategories.push(category.name);
+        this.selectedFilters.push(category.name);
         category.status = true;
       }
     },
     clearFilter(value) {
-      let index = this.selectedCategories.indexOf(value);
+      let index = this.selectedFilters.indexOf(value);
       if (index > -1) {
-        this.selectedCategories.splice(index, 1);
+        this.selectedFilters.splice(index, 1);
       }
       this.videoTypes.forEach((filter) => {
         if (filter.name === value) {
           filter.status = false;
         }
       });
-      this.videoTheme.forEach((filter) => {
+      this.videoStyle.forEach((filter) => {
         if (filter.name === value) {
           filter.status = false;
         }
       });
-      this.editSkills.forEach((filter) => {
+      this.videoSkills.forEach((filter) => {
         if (filter.name === value) {
           filter.status = false;
         }
@@ -209,7 +238,7 @@ export default {
         { name: "개인용", status: false },
         { name: "상업용", status: false },
       ]),
-        (this.videoTheme = [
+        (this.videoStyle = [
           { name: "키즈", status: false },
           { name: "게임", status: false },
           { name: "음악/댄스", status: false },
@@ -221,7 +250,7 @@ export default {
           { name: "스포츠", status: false },
           { name: "기타", status: false },
         ]),
-        (this.editSkills = [
+        (this.videoSkills = [
           { name: "색, 밝기 조정", status: false },
           { name: "자막", status: false },
           { name: "오디오/음악", status: false },
@@ -229,12 +258,9 @@ export default {
           { name: "인트로", status: false },
           { name: "아웃트로", status: false },
         ]),
-        // selectedCategories 배열 clear
-        (this.selectedCategories.length = 0);
+        // selectedFilters 배열 clear
+        (this.selectedFilters.length = 0);
     },
-  },
-  mounted() {
-    // this.fetchList()
   },
 };
 </script>

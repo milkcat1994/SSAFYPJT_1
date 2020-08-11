@@ -99,7 +99,6 @@ export default {
     clickedNext(val) {
       if (val === true) {
         this.$v.final.$touch();
-        this.setFinalLength()
       }
     },
     final(val) {

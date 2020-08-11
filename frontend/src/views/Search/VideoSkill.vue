@@ -13,10 +13,10 @@
           <div class="card-body">
             <img class="icon" :src="skill.img" :alt="skill.name">
             <h2 class="card-text mt-2">{{skill.description}}</h2>
-            <span v-if="skill.name === 'motion'"
-                  :data-tooltip-text="tooltip">
-              <i class="far fa-question-circle fa-md"></i>
-            </span>
+            <!-- <span v-if="skill.name === 'motion'"
+                  :data-tooltip-text="tooltip"> -->
+              <!-- <i class="far fa-question-circle fa-md"></i>
+            </span> -->
           </div>
           <!-- <i v-if="!!skill.status" class="fas fa-check-circle fa-sm"></i> -->
         </div>
@@ -146,7 +146,7 @@ export default {
 .selected {
   border: solid thick darkblue;
 }
-[data-tooltip-text]:hover {
+/* [data-tooltip-text]:hover {
   position: relative;
 }
 [data-tooltip-text]:hover:after {
@@ -164,5 +164,5 @@ export default {
 	font-size: 12px;
 
 	z-index: 1;
-}
+} */
 </style>

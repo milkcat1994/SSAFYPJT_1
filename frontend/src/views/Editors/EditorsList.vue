@@ -113,16 +113,15 @@ export default {
       tag: "",
       editorsPerPage: 5,
       currentPage: 1,
-      editorsData: [
-        // 백엔드 API 호출 시 반환 자료형
-        // {
-        //   uid: "포트폴리오 UID",
-        //   nickname: "포트폴리오 닉네임",
-        //   payMin: "분당 가격",
-        //   bookmarkCount: "북마크 개수",
-        //   tags: ["편집자 관련 태그", ...],
-        //   urls: ["편집자 대표 URL", "기타 URL1", ...]
-      ],
+      editorsData: [],
+      // 백엔드 API 호출 시 반환 자료형
+      // {
+      //   uid: "포트폴리오 UID",
+      //   nickname: "포트폴리오 닉네임",
+      //   payMin: "분당 가격",
+      //   bookmarkCount: "북마크 개수",
+      //   tags: ["편집자 관련 태그", ...],
+      //   urls: ["편집자 대표 URL", "기타 URL1", ...]
     };
   },
   created() {
