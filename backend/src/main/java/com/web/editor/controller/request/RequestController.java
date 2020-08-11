@@ -27,6 +27,7 @@ import com.web.editor.model.dto.request.RequestReview;
 import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
+import com.web.editor.model.dto.request.VideoSkillDto;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.request.RequestService;
 
@@ -49,7 +50,7 @@ public class RequestController {
 		RequestDto dto = requestService.searchRequest(rid);
 		if (dto != null) {
 			// 태그 검색(태그 리스트를 문자열로 변환)
-			String tags = TagsToString(rid);
+			String tags = tagsToString(rid);
 			dto.setTag_list(tags);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} else {
@@ -127,6 +128,10 @@ public class RequestController {
 	public ResponseEntity<String> insertRequest(@Valid @RequestBody RequestDto requestDto) {
 		// 등록시 기본값 0
 		requestDto.setDone_flag(0);
+		// vedio_skills 객체 리스트 스트링으로 변환 및 video_skill에 저장
+		if(requestDto.getVideo_skills().size() > 0) 
+			requestDto.setVideo_skill(skillsToString(requestDto.getVideo_skills()));
+		// 등록
 		int result = requestService.insertRequest(requestDto);
 
 		if (result > 0) {
@@ -291,17 +296,6 @@ public class RequestController {
 		requestService.insertNotify(notifyDto);
 	}
 
-	// 태그 검색
-	@ApiOperation(value = "해당 요청서의 태그(rid)")
-	@GetMapping("/tag/{rid}")
-	public ResponseEntity<String> searchTag(@PathVariable int rid) {
-		// 태그 검색(태그 리스트를 문자열로 변환)
-		String tag = TagsToString(rid);
-
-		return new ResponseEntity<String>(tag, HttpStatus.OK);
-
-	}
-
 	// 태그 파싱, 등록
 	private int addTag(List<String> tags, int rid) {
 
@@ -320,7 +314,7 @@ public class RequestController {
 	}
 
 	// 요청서의 태그들을 문자열로
-	private String TagsToString(int rid) {
+	private String tagsToString(int rid) {
 		// 해당 요청서의 태그 리스트
 		List<RequestTagDto> tagList = requestService.searchTag(rid);
 
@@ -374,4 +368,19 @@ public class RequestController {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}
 	}
+
+	// 요청서의 비디오스킬들을 문자열로
+	private String skillsToString(List<VideoSkillDto> skills) {
+
+		// 비디오 스킬 문자열
+		StringBuilder skillStr = new StringBuilder();
+		for (int i = 0; i < skills.size(); i++){
+			skillStr.append(skills.get(i).getDescription());
+			if (i < skills.size() -1){
+				skillStr.append(", ");
+			}
+		}
+		return skillStr.toString();
+	}
+	
 }

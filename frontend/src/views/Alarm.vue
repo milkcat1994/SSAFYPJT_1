@@ -562,7 +562,7 @@ export default {
         },
       ],
 
-      ridDetail: "",
+      ridDetail: -1,
 
       events: [],
       videoScore: 0,
@@ -677,6 +677,7 @@ export default {
             "getRequestitems1",
             "/request/res/" + this.$session.get("nickname") + "/1"
           );
+          this.ridDetail = -1;
           this.setProgressDate();
         });
     },
@@ -704,6 +705,7 @@ export default {
               "getRequestitems0",
               "/request/req/" + this.$session.get("nickname") + "/0"
             );
+          this.ridDetail = -1;
           this.setDateClean();
         });
     },
@@ -740,6 +742,7 @@ export default {
               "/request/req/" + this.$session.get("nickname") + "/2"
             );
           }
+          this.ridDetail = -1;
           this.setProgressDate();
         });
     },
@@ -766,6 +769,7 @@ export default {
               "getRequestitems3",
               "/request/req/" + this.$session.get("nickname") + "/3"
             );
+            this.ridDetail = -1;
           }
         });
     },
@@ -850,7 +854,7 @@ export default {
       );
     },
     setRequestDate(start, end, rid) {
-      if (this.ridDetail == rid) {  // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
+      if (this.ridDetail == rid || this.ridDetail == -1) {  // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
         this.setDateClean();
         this.ridDetail = "";
         return;
