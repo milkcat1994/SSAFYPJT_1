@@ -107,6 +107,7 @@ public class RequestController {
 	@GetMapping("/res/{nickname}/{done_flag}")
 	public Object searchListFlagResponse(@PathVariable String nickname, @PathVariable int done_flag)
 			throws UnsupportedEncodingException {
+		
 		RequestStatusDto statusDto = new RequestStatusDto();
 		statusDto.setDone_flag(done_flag);
 		statusDto.setNickname(decodeURL(nickname));

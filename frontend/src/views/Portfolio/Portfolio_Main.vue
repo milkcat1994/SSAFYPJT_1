@@ -102,10 +102,20 @@
                 </div>
                 <div class="col-xl-4 col-lg-6">
                   <vc-calendar
-                    title-position="left"
-                    v-model='disableDates'
+                    
+                    
                     :disabled-dates='disableDates'
+                    :attributes='events'
                   />
+                  {{events[1]}}
+                  <!-- {{events.dates}} -->
+                  <!-- <calendar
+                    :eventCategories="eventCategories"
+                    :events="events"
+                    :offDays="disableDates"
+                    ref="calendar"
+                    style="float:left; width: 40%; height: 100%"
+                  /> -->
                 </div>
                 <div class="col-xl-4 col-lg-6">
                   <h3>한줄평</h3>
@@ -232,7 +242,10 @@ import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
 import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
-import "vue-sweet-calendar/dist/SweetCalendar.css";
+
+// import { Calendar } from "vue-sweet-calendar";
+// import "vue-sweet-calendar/dist/SweetCalendar.css";
+
 import alertify from "alertifyjs"
 
 // axios 초기 설정파일
@@ -240,6 +253,10 @@ import http from "@/util/http-common";
 // 날짜 계산 파일
 import { getFormatDate } from "@/util/day-common";
 // import { getEndDate, getFormatDate } from "@/util/day-common";
+
+// import { mapGetters } from "vuex";
+// import store from "@/store/store.js";
+
   export default {
     name: 'user-portfolio',
     components: {
@@ -248,7 +265,8 @@ import { getFormatDate } from "@/util/day-common";
       BadgerAccordion,
       BadgerAccordionItem,
       flatPicker,
-      InputTag
+      InputTag,
+      // Calendar
     },
     data() {
       return {
@@ -278,31 +296,24 @@ import { getFormatDate } from "@/util/day-common";
 
         // 스케줄
         disableDates: [],
-
-        eventCategories: [
+        events: [
           {
-            id: 1,
-            title: 'Request',
-            textColor: 'white',
-            backgroundColor: 'Blue'
-          },
-          {
-            id: 2,
-            title: 'Personal',
-            textColor: 'white',
-            backgroundColor: 'red'
+            highlight: {
+              backgroundColor: '#ff8080',
+              },
+            dates: [
+            ],
           }
         ],
-        events: [
-        ],
+        
         mainVideo: 'https://www.youtube.com/embed/',
+        videos: [],
+
+        modal: {
+          show: false
+        },
         dates: {
           range: ""
-        },
-
-        videos: []
-        ,modal: {
-          show: false
         },
         request_info:{
           request_nickname: '',
@@ -328,6 +339,12 @@ import { getFormatDate } from "@/util/day-common";
         this.$router.push("/");
         return;
       }
+
+      // store.dispatch(
+      //   "getRequestitems1",
+      //   "/request/res/" + this.portfolio.nickname + "/1"
+      // );
+
       this.uid = this.$route.query.no;
       this.request_info.request_nickname = this.$session.get('nickname');
       let URL = '/portfolio';
@@ -343,13 +360,19 @@ import { getFormatDate } from "@/util/day-common";
 
       // 포트폴리오 스케쥴
       this.getScheduleInfo(URL);
-      
+
+      // 현재 진행중인 작업 스케줄
+      // this.getInprogressDate();
+
       // 포트폴리오 태그
       this.getTagInfo(URL);
 
       // 북마크 정보 가져와서 북마크 한 인원수 보여주기
       this.getBookmarkCount();
     },
+    // computed: {
+    //   ...mapGetters(["requestitems1"]),
+    // },
     methods: {
       checkRequestForm(){
                 let valid = true;
@@ -430,6 +453,20 @@ import { getFormatDate } from "@/util/day-common";
         }
         this.modal.show = false;
       },
+      getInprogressDate(){
+        http
+        .get("/request/res/"+this.portfolio.nickname+"/1")
+        .then(({data}) => {
+          // console.log(data);
+          this.events.dates = this.makeInprogressDateArray(data);
+          console.log(this.events.dates);
+          return;
+        })
+        .catch(error => {
+          console.log(error);
+          return;
+        })
+      },
       getScheduleInfo(URL){
         http
         .get(URL+'/schedule/'+this.uid)
@@ -477,7 +514,7 @@ import { getFormatDate } from "@/util/day-common";
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
                   this.reviews = data.object;
-                  console.log(data.object);
+                  // console.log(data.object);
                   //평균계산
                   let videoAvg=0, kindnessAvg=0, finishAvg=0;
                   data.object.forEach(obj => {
@@ -538,6 +575,7 @@ import { getFormatDate } from "@/util/day-common";
                   this.portfolio.description = data.object.description;
                   this.portfolio.payMin = data.object.payMin;
                   this.portfolio.skill = data.object.skill;
+                  this.getInprogressDate();
                   return;
                 } else {
                   // fail 
@@ -624,6 +662,17 @@ import { getFormatDate } from "@/util/day-common";
           res.push(getFormatDate(element.startDate));
         })
         return res;
+      },
+      makeInprogressDateArray(result){
+        let obj;
+        let dates = [];
+        result.forEach(element => {
+          obj = new Object();
+          obj.start = element.start_date;
+          obj.end = element.end_date;
+          dates.push(obj);
+        })
+        return dates;
       },
       goToday() {
         this.$refs.calendar.goToday();

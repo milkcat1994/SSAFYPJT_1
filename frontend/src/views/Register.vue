@@ -173,7 +173,7 @@
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <router-link to="/dashboard" class="text-light">
+          <router-link to="/mainpage" class="text-light">
             <small>메인화면</small>
           </router-link>
         </div>

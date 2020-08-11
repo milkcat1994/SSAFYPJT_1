@@ -9,7 +9,12 @@
         <span class="navbar-toggler-icon"></span>
       </navbar-toggle-button>
       <router-link class="navbar-brand" to="/">
-        <img :src="logo" class="navbar-brand-img" alt="..." />
+        <img
+          :src="logo"
+          class="navbar-brand-img"
+          alt="편집"
+          style="width:90px; height:50px"
+        />
       </router-link>
 
       <slot name="mobile-right">
