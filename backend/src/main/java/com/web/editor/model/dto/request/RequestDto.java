@@ -1,6 +1,9 @@
 package com.web.editor.model.dto.request;
 
 import lombok.Setter;
+
+import java.util.List;
+
 import lombok.Getter;
 
 @Getter
@@ -21,6 +24,7 @@ public class RequestDto {
 	private String request_description;
 	private int done_flag;
 
+	private List<String> tags;
 	private String tag_list;
 
 	

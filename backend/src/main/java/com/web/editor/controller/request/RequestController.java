@@ -49,8 +49,8 @@ public class RequestController {
 		RequestDto dto = requestService.searchRequest(rid);
 		if (dto != null) {
 			// 태그 검색(태그 리스트를 문자열로 변환)
-			String tag = TagsToString(rid);
-			dto.setTag_list(tag);
+			String tags = TagsToString(rid);
+			dto.setTag_list(tags);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("not exist", HttpStatus.NO_CONTENT);
@@ -125,15 +125,17 @@ public class RequestController {
 	@ApiOperation(value = "요청 및 알림(type은 request) 등록, \"success\" 또는 \"fail\"반환")
 	@PostMapping
 	public ResponseEntity<String> insertRequest(@Valid @RequestBody RequestDto requestDto) {
-		int result = requestService.insertRequest(requestDto);
 		// 등록시 기본값 0
 		requestDto.setDone_flag(0);
+		int result = requestService.insertRequest(requestDto);
 
 		if (result > 0) {
 			// 알림 함께 등록
 			addNotify(requestDto, "request");
 			// 태그 함께 등록
-			addTag(requestDto.getTag_list(), requestDto.getRid());
+			int res = addTag(requestDto.getTags(), requestDto.getRid());
+
+			if (res < 0) return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
 
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		} else {
@@ -301,20 +303,20 @@ public class RequestController {
 	}
 
 	// 태그 파싱, 등록
-	private void addTag(String tags, int rid) {
-		tags = tags.trim(); // 앞뒤 공백 제거
-		// #기준으로 나눔
-		StringTokenizer st = new StringTokenizer(tags, "#");
+	private int addTag(List<String> tags, int rid) {
 
-		while (st.hasMoreTokens()) {
-			// 태그 생성
-			String tag = st.nextToken().trim(); // 앞뒤 공백 제거
+		for (String tag : tags){
 			RequestTagDto tagDto = new RequestTagDto();
-			tagDto.setTag_name(tag.toString());
+			tagDto.setTag_name(tag);
 			tagDto.setRequest_form_rid(rid);
-			// 태그 등록
-			requestService.insertTag(tagDto);
+			
+			int res = requestService.insertTag(tagDto);
+			if (res < 0) {
+				return -1;
+			}
 		}
+		return 1;
+
 	}
 
 	// 요청서의 태그들을 문자열로
