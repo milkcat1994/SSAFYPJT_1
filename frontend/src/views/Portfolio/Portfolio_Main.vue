@@ -5,9 +5,8 @@
       <span class="mask bg-gradient-success opacity-8"></span>
       <!-- 에디터 본인 일 경우에만 활성화 되어야한다. -->
       <router-link v-if="uid == $session.get('uid') " :to="'/portfolio/edit?no='+this.uid">
-        <base-button size="sm" type="info" class="btn btn-info float-right"
-          >Edit profile</base-button
-        >
+        <base-button v-if="!haveTags && !haveVideo" type="info" class="btn btn-info float-right"> 포트폴리오 등록하기</base-button>
+        <base-button v-if="haveTags || haveVideo" size="sm" type="info" class="btn btn-info float-right">Edit profile</base-button>
       </router-link>
     </base-header>
 
@@ -21,7 +20,7 @@
                   <div class="text">
                     <h1>
                       {{portfolio.nickname}}
-                      <base-button outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                      <base-button v-if="uid != $session.get('uid')" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
                       {{portfolio.markCnt}}
                       </base-button>
                       <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
@@ -107,6 +106,7 @@
                     ref="calendar"
                     style="width: 100%; height: 100%"
                   />
+                  <!-- {{events}} -->
                 </div>
                 <div class="col-xl-4 col-lg-6">
                   <h3>한줄평</h3>
@@ -287,6 +287,8 @@ import http from "@/util/http-common";
         uid:'',
         isLogin: false,
         userType: '',
+        haveVideo: true,
+        haveTags: true,
 
         //닉네임, 소개
         portfolio: {
@@ -331,6 +333,12 @@ import http from "@/util/http-common";
             textColor: "white",
             backgroundColor: "#6699ff",
           },
+          {
+            id: 4,
+            title: "DisabledDates",
+            textColor: "white",
+            backgroundColor: "#c9c9c9",
+          }
         ],
         events: [],
         
@@ -379,6 +387,7 @@ import http from "@/util/http-common";
       this.uid = this.$route.query.no;
       this.request_info.request_nickname = this.$session.get('nickname');
       let URL = '/portfolio';
+
       //포트폴리오 정보, 영상, 리뷰, 스케쥴, 태그 가져오기
       //포트폴리오 정보
       this.getPortfolio(URL);
@@ -392,18 +401,12 @@ import http from "@/util/http-common";
       // 포트폴리오 스케쥴
       this.getScheduleInfo(URL);
 
-      // 현재 진행중인 작업 스케줄
-      // this.getInprogressDate();
-
       // 포트폴리오 태그
       this.getTagInfo(URL);
 
       // 북마크 정보 가져와서 북마크 한 인원수 보여주기
       this.getBookmarkCount();
     },
-    // computed: {
-    //   ...mapGetters(["requestitems1"]),
-    // },
     methods: {
       checkRequestForm(){
                 let valid = true;
@@ -488,7 +491,8 @@ import http from "@/util/http-common";
         http
         .get("/request/res/"+this.portfolio.nickname+"/1")
         .then(({data}) => {
-          this.events = this.makeInprogressDateArray(data);
+          if(data.length > 0)
+            this.events = this.makeInprogressDateArray(data);
           return;
         })
         .catch(error => {
@@ -504,7 +508,6 @@ import http from "@/util/http-common";
             // scheduleType=0 기본
             let result = data.object.filter(schedule => schedule.scheduleType == 0);
             this.events = this.makeScheduleArray(result);
-            // console.log(result);
             return;
           } else {
             return;
@@ -521,14 +524,15 @@ import http from "@/util/http-common";
             .then(({data}) => {
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
+                  this.haveTags = true;
                   this.tags = [];
                   data.object.forEach(obj => {
                     this.tags.push(obj.tagName);
                   });
                   return;
                 } else {
-                  // fail 
-                    return;
+                  this.haveTags = false;
+                  return;
                 }
             })
             .catch(error => {
@@ -543,8 +547,6 @@ import http from "@/util/http-common";
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
                   this.reviews = data.object;
-                  // console.log(data.object);
-                  //평균계산
                   let videoAvg=0, kindnessAvg=0, finishAvg=0;
                   data.object.forEach(obj => {
                     videoAvg += obj.videoScore;
@@ -574,16 +576,17 @@ import http from "@/util/http-common";
             .then(({data}) => {
                 //성공시 video 추출 필요
                 if (data.data == 'success') {
+                  this.haveVideo = true;
                   //main이 아닌것들만 추출
                   let result = data.object.filter(video => video.mainFlag == 0);
                   this.videos = this.makeVideosArray(result);
                   
                   result = data.object.filter(video => video.mainFlag == 1);
                   this.mainVideo = result[0].url;
-                    return;
+                  return;
                 } else {
-                  // fail 
-                    return;
+                  this.haveVideo = false;
+                  return;
                 }
             })
             .catch(error => {
@@ -607,8 +610,7 @@ import http from "@/util/http-common";
                   this.getInprogressDate();
                   return;
                 } else {
-                  // fail 
-                    return;
+                  return;
                 }
             })
             .catch(error => {
@@ -692,7 +694,7 @@ import http from "@/util/http-common";
           date = new Object();
           date.start = new Date(element.startDate);
           date.end = new Date(element.endDate);
-          date.categoryId = 1;
+          date.categoryId = 4;
           date.repeat = "montly";
           res.push(date);
         })
