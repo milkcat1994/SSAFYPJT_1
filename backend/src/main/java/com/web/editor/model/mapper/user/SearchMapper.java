@@ -7,6 +7,7 @@ import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioList;
 import com.web.editor.model.dto.user.search.SearchPortfolioJoinBookmark;
 import com.web.editor.model.dto.user.search.SearchPortfolioJoinVideo;
+import com.web.editor.model.dto.user.search.SearchTag;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,10 @@ public class SearchMapper {
 		return sqlSession.selectList("joinVideos");
 	}
 
+	// 포트폴리오에 등록된 tag
+	public List<SearchTag> searchPortfolioTag() throws SQLException{
+		return sqlSession.selectList("searchPortfolioTag");
+	}
 	
 	// 아무 검색, 필터 없을때 모든 정보 불러오기-> Redis로만 연동 할건데 필요한가?
 	public List<PortfolioList> searchAll() throws SQLException {
@@ -50,5 +55,6 @@ public class SearchMapper {
 		return sqlSession.selectOne("search", uid);
 	}
 
+	
 
 }

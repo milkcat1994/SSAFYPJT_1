@@ -9,17 +9,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.models.Response;
 
 import com.web.editor.model.dto.user.PortfolioList;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioVideo;
 import com.web.editor.model.dto.user.bookmark.Bookmark;
+import com.web.editor.model.dto.user.search.SearchPortfolio;
+import com.web.editor.model.dto.user.search.SearchRequest;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.user.BookmarkService;
 import com.web.editor.model.service.user.PortfolioService;
 import com.web.editor.model.service.user.search.SearchService;
+import com.web.editor.model.service.user.search.redis.SearchRedisService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -35,6 +42,23 @@ public class SearchController {
 	@Autowired
     BookmarkService bookmarkService;
 	
+	// Redis 이용 위한 service
+	@Autowired
+	SearchRedisService searchRedisService;
+
+	@PostMapping("")
+	public Object search(@RequestBody SearchRequest searchRequest){
+		//Redis에서 해당 검색 수행하기
+		ResponseEntity response = null;
+		final BasicResponse result = new BasicResponse();
+		List<SearchPortfolio> searchList = null;
+		result.status = true;
+		result.data = "success";
+		result.object = searchList;
+		return result;
+	}
+
+
 	@GetMapping("/listAll")
 	public Object searchAll() {
 		ResponseEntity response = null;

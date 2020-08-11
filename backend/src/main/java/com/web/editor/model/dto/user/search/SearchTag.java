@@ -15,12 +15,7 @@ import lombok.Setter;
 @Setter
 @Repository
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SearchPortfolioJoinBookmark {
-    private int uid;
-    private String nickname;
-    private int payMin;
-    // private String skill;
-    private int bookmarkNumber;
-    private int avgScore;
-    private String tagKey;
+public class SearchTag {
+    int uid;
+    String tag;
 }

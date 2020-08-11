@@ -13,6 +13,7 @@ import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioList;
 import com.web.editor.model.dto.user.search.SearchPortfolioJoinBookmark;
 import com.web.editor.model.dto.user.search.SearchPortfolioJoinVideo;
+import com.web.editor.model.dto.user.search.SearchTag;
 import com.web.editor.model.mapper.user.SearchMapper;
 
 @Service
@@ -69,7 +70,7 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			return searchMapper.joinBookmarks();
 		} catch (Exception e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 		return list;
 	}
@@ -80,7 +81,18 @@ public class SearchServiceImpl implements SearchService {
 		try {
 			return searchMapper.joinVideos();
 		} catch (Exception e) {
-            e.printStackTrace();
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<SearchTag> searchPortfolioTag() {
+		List<SearchTag> list = new ArrayList<>();
+		try {
+			return searchMapper.searchPortfolioTag();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return list;
 	}

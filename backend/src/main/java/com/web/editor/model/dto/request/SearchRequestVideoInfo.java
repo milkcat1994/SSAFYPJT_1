@@ -1,4 +1,4 @@
-package com.web.editor.model.dto.user.search;
+package com.web.editor.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -15,12 +15,9 @@ import lombok.Setter;
 @Setter
 @Repository
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SearchPortfolioJoinBookmark {
-    private int uid;
-    private String nickname;
-    private int payMin;
-    // private String skill;
-    private int bookmarkNumber;
-    private int avgScore;
-    private String tagKey;
+public class SearchRequestVideoInfo {
+    String nickname;
+    String videoType;
+    String videoStyle;
+    String videoSkill;
 }

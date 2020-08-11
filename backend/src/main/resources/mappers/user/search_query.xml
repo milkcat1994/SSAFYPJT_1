@@ -42,8 +42,9 @@
 
 	<!-- Redis에 올려두기 위한 Join문 -->
 	<!-- 포트폴리오 - 북마크 -->
+	<!-- , P.skill as skill -->
 	<select id="joinBookmarks" resultType="SearchPortfolioJoinBookmark">
-		SELECT P.uid as uid, P.nickname as nickname, P.pay_min as payMin, P.skill as skill, COUNT(B.user_info_uid) as bookmarkNumber
+		SELECT P.uid as uid, P.nickname as nickname, P.pay_min as payMin, COUNT(B.user_info_uid) as bookmarkNumber
 		FROM `portfolio` P
 		LEFT JOIN `bookmark` B ON P.uid = B.mark_uid
 		GROUP BY P.uid
@@ -54,5 +55,10 @@
 		SELECT P.uid as uid, V.url as mainUrl
 		FROM `portfolio` P
 		LEFT JOIN `video_info` V ON P.uid = V.portfolio_uid AND V.main_flag = 1
+	</select>
+
+	<select id="searchPortfolioTag">
+		SELECT portfolio_uid as uid, tag_name as tagName
+		FROM `portfolio_tag`
 	</select>
 </mapper>

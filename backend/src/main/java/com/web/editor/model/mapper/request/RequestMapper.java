@@ -16,6 +16,7 @@ import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
 import com.web.editor.model.dto.request.SearchAverageScore;
+import com.web.editor.model.dto.request.SearchRequestVideoInfo;
 import com.web.editor.model.dto.user.PortfolioReview;
 
 @Repository
@@ -161,5 +162,10 @@ public class RequestMapper {
 	// nickname, avg(avg(video), avg(kindness), avg(finish))
 	public List<SearchAverageScore> joinScores() throws SQLException{
 		return sqlSession.selectList("joinScores");
+	}
+
+	// video_type과 video_style, video_skill 검색 -> ','로 구분
+	public List<SearchRequestVideoInfo> searchRequestVideoInfo() throws SQLException{
+		return sqlSession.selectList("searchRequestVideoInfo");
 	}
 }

@@ -1,5 +1,7 @@
 package com.web.editor.model.dto.user.search;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.springframework.stereotype.Repository;
@@ -15,12 +17,12 @@ import lombok.Setter;
 @Setter
 @Repository
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SearchPortfolioJoinBookmark {
+public class SearchPortfolio {
     private int uid;
     private String nickname;
+    private String url;
     private int payMin;
-    // private String skill;
     private int bookmarkNumber;
     private int avgScore;
-    private String tagKey;
+    private List<String> tags;
 }

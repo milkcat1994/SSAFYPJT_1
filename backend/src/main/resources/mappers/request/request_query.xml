@@ -248,4 +248,8 @@
 		GROUP BY RF.response_nickname
 	</select>
 
+	<select id="searchRequestVideoInfo">
+		SELECT response_nickname as nickname, video_type as videoType, video_style as videoStyle, video_skill as videoSkill
+		FROM `request_form`
+	</select>
 </mapper>

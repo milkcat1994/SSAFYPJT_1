@@ -1,6 +1,7 @@
 package com.web.editor.model.service.request;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import com.web.editor.model.dto.request.RequestReview;
 import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
+import com.web.editor.model.dto.request.SearchAverageScore;
+import com.web.editor.model.dto.request.SearchRequestVideoInfo;
 import com.web.editor.model.dto.user.PortfolioReview;
 import com.web.editor.model.mapper.request.RequestMapper;
 
@@ -331,6 +334,28 @@ public class RequestServiceImpl implements RequestService {
 			e.printStackTrace();
 			return -1;
 		}
+	}
+
+	@Override
+	public List<SearchAverageScore> joinScores() {
+		List<SearchAverageScore> list = new ArrayList<>();
+		try {
+			return requestMapper.joinScores();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<SearchRequestVideoInfo> searchRequestVideoInfo() {
+		List<SearchRequestVideoInfo> list = new ArrayList<>();
+		try {
+			return requestMapper.searchRequestVideoInfo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 
