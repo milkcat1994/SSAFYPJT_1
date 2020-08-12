@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.validation.Valid;
 
@@ -128,10 +127,6 @@ public class RequestController {
 	public ResponseEntity<String> insertRequest(@Valid @RequestBody RequestDto requestDto) {
 		// 등록시 기본값 0
 		requestDto.setDone_flag(0);
-		// vedio_skills 객체 리스트 스트링으로 변환 및 video_skill에 저장
-		if(requestDto.getVideo_skills().size() > 0) 
-			requestDto.setVideo_skill(skillsToString(requestDto.getVideo_skills()));
-		// 등록
 		int result = requestService.insertRequest(requestDto);
 
 		if (result > 0) {

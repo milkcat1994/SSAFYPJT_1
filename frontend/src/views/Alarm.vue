@@ -94,6 +94,7 @@
                     :id="'accordion-' + requestitem0.rid"
                     accordion="my-accordion"
                     role="tabpanel"
+                    
                   >
                     <b-card-body>
                       <b-card-text>

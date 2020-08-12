@@ -19,6 +19,6 @@ public class Portfolio {
     private int uid;
     private String nickname;
     private String skill;
-    private String payMin;
+    private int payMin;
     private String description;
 }

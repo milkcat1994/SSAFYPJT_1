@@ -5,9 +5,8 @@
       <span class="mask bg-gradient-success opacity-8"></span>
       <!-- 에디터 본인 일 경우에만 활성화 되어야한다. -->
       <router-link v-if="uid == $session.get('uid') " :to="'/portfolio/edit?no='+this.uid">
-        <base-button size="sm" type="info" class="btn btn-info float-right"
-          >Edit profile</base-button
-        >
+        <base-button v-if="!haveTags && !haveVideo" type="info" class="btn btn-info float-right"> 포트폴리오 등록하기</base-button>
+        <base-button v-if="haveTags || haveVideo" size="sm" type="info" class="btn btn-info float-right" icon="ni ni-settings">Edit profile</base-button>
       </router-link>
     </base-header>
 
@@ -15,17 +14,17 @@
       <div class="row">
         <div class="col-xl-7 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 295px;">
+            <div class="card-body pt-0 pt-md-4" style="height: 303px;">
               <div class="row">
                 <div class="col">
                   <div class="text">
                     <h1>
                       {{portfolio.nickname}}
-                      <base-button outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                      <base-button v-if="uid != $session.get('uid')" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
                       {{portfolio.markCnt}}
                       </base-button>
-                      <!-- 에디터 본인 일 경우에만 비활성화 되어야한다. -->
-                      <base-button size="sm" type="default float-right" @click="modal.show=true"> 작업 요청하기 </base-button>
+                      <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
+                      <base-button v-if="$session.get('auth') == 'noneditor'" size="sm" type="default float-right" @click="modal.show=true"> 작업 요청하기 </base-button>
                     </h1>
                     <h3>
                       Skills: {{portfolio.skill}}
@@ -79,7 +78,20 @@
                   />
                 </div>
               </div>
-
+              <hr>
+              <div class="row" style="margin-top: 30px">
+                <!-- <div class="col"> -->
+                  <calendar
+                    :eventCategories="eventCategories"
+                    :events="events"
+                    :offDays="offdays"
+                    ref="calendar"
+                    style="width: 100%; height: 100%"
+                  />
+                  <!-- {{events}} -->
+                <!-- </div> -->
+              </div>
+              <hr>
               <div class="row" style="margin-top: 30px">
                 <div class="col-xl-4 col-lg-6">
                   <h3>
@@ -100,29 +112,14 @@
                     <rate :length="5" :value="finishAvg" :disabled="true" />
                   </h3>
                 </div>
-                <div class="col-xl-4 col-lg-6">
-                  <vc-calendar
-                    
-                    
-                    :disabled-dates='disableDates'
-                    :attributes='events'
-                  />
-                  {{events[1]}}
-                  <!-- {{events.dates}} -->
-                  <!-- <calendar
-                    :eventCategories="eventCategories"
-                    :events="events"
-                    :offDays="disableDates"
-                    ref="calendar"
-                    style="float:left; width: 40%; height: 100%"
-                  /> -->
-                </div>
-                <div class="col-xl-4 col-lg-6">
-                  <h3>한줄평</h3>
+                <div class="col">
+                  <h3>한줄평
+                    <base-button size="sm" type="float-right">후기 더보기</base-button>
+                  </h3>
                   <badger-accordion>
                     <badger-accordion-item v-for="(review, index) in reviews" :key="index">
-                      <template slot="header">{{review.comment}}</template>    
-                      <template slot="content">
+                      <template slot="header" >{{review.comment}}</template>    
+                      <template slot="content" >
                         <h3>
                           영상만족도
                           <rate
@@ -184,6 +181,54 @@
           />
         </div>
         <div class="row">
+          <h3>편집 목적</h3>
+        </div>
+        <div class="row">
+          <base-checkbox class="mb-3" name="video_type" value="personal" v-model="video_type.personal"> 개인용 </base-checkbox>
+          <base-checkbox class="mb-3" name="video_type" value="commercial" v-model="video_type.commercial">상업용</base-checkbox>
+        </div>
+        <div class="row">
+          <h3>영상 종류</h3>
+        </div>
+        <div class="row">
+          <base-checkbox class="mb-3" name="video_style" value="kids" v-model="video_style.personal"> 
+            키즈
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="game" v-model="video_style.game"> 
+            게임
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="music" v-model="video_style.music"> 
+            음악/댄스
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="food" v-model="video_style.food"> 
+            푸드/쿠킹
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="vlog" v-model="video_style.vlog"> 
+            V-log
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="movie" v-model="video_style.movie"> 
+            영화/애니메이션
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="animal" v-model="video_style.animal"> 
+            동물
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="beauty" v-model="video_style.beauty"> 
+            뷰티/패션
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="sports" v-model="video_style.sports"> 
+            스포츠
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="etc" v-model="video_style.etc"> 
+            기타
+          </base-checkbox>
+          <base-input
+            alternative
+            placeholder="기타 선택 시 영상 종류를 입력해주세요"
+            input-classes="form-control-alternative"
+            v-model="request_info.video_style"
+          />
+        </div>
+        <div class="row">
           <h3>작업 기간</h3>
           <base-input addon-left-icon="ni ni-calendar-grid-50">
             <flat-picker
@@ -216,22 +261,62 @@
           />
         </div>
         <div class="row">
-          <h3>원하는 영상</h3>
-          <base-input
-            alternative
-            placeholder="인트로"
-            input-classes="form-control-alternative"
-            v-model="request_info.video_type"
-          />
+          <h3>원하는 영상 편집 기술</h3>
         </div>
-          <label for="description">기타 요구사항</label>
+        <div class="row">
+          <base-checkbox class="mb-3" name="video_skill" value="color" v-model="video_skill.color">
+            색, 밝기 조정
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_skill" value="audio" v-model="video_skill.audio">
+            음향(오디오, 음악)
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_skill" value="motion" v-model="video_skill.motion">
+            모션그래픽
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_skill" value="caption" v-model="video_skill.caption">
+            자막
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_skill" value="intro" v-model="video_skill.intro">
+            인트로
+          </base-checkbox>
+          <base-checkbox class="mb-3" name="video_skill" value="outro" v-model="video_skill.outro">
+            아웃트로
+          </base-checkbox>
+        </div>
+          <h3>기타 요구사항</h3>
           <textarea class="form-control form-control-alternative" id="description" v-model="request_info.request_description" rows="3" placeholder="기타 요구사항을 작성해주세요."></textarea>
         </div>
      <template slot="footer">
          <base-button type="secondary" @click="modal.show = false">Close</base-button>
          <base-button type="primary" @click="checkRequestForm()">요청하기</base-button>
      </template>
-   </modal>
+    </modal>
+
+    <modal :show.sync="alertModal.show"
+      gradient="danger"
+      modal-classes="modal-danger modal-dialog-centered">
+      <div class="py-3 text-center">
+        <i class="ni ni-bell-55 ni-3x"></i>
+        <h4 class="heading mt-4">로그인 후 이용이 가능한 서비스입니다.</h4>
+      </div>
+
+      <template slot="footer">
+        <router-link to="/login">
+          <base-button type="white float-right" @click="alertModal.show = false">로그인</base-button>
+        </router-link>
+        <hr>
+        아직 회원이 아니십니까?
+        <router-link to="/user">
+          <base-button type="white float-right" @click="alertModal.show = false">회원가입</base-button>
+        </router-link>
+        <base-button type="link"
+          text-color="white"
+          class="ml-auto"
+          @click="alertModal.show = false">
+          Close
+        </base-button>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -243,19 +328,19 @@ import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
 
-// import { Calendar } from "vue-sweet-calendar";
-// import "vue-sweet-calendar/dist/SweetCalendar.css";
+import { Calendar } from "vue-sweet-calendar";
+import "vue-sweet-calendar/dist/SweetCalendar.css";
 
 import alertify from "alertifyjs"
 
 // axios 초기 설정파일
 import http from "@/util/http-common";
-// 날짜 계산 파일
-import { getFormatDate } from "@/util/day-common";
-// import { getEndDate, getFormatDate } from "@/util/day-common";
 
 // import { mapGetters } from "vuex";
 // import store from "@/store/store.js";
+// 날짜 계산 파일
+// import { getFormatDate } from "@/util/day-common";
+// import { getEndDate, getFormatDate } from "@/util/day-common";
 
   export default {
     name: 'user-portfolio',
@@ -266,11 +351,16 @@ import { getFormatDate } from "@/util/day-common";
       BadgerAccordionItem,
       flatPicker,
       InputTag,
-      // Calendar
+      Calendar
     },
     data() {
       return {
         uid:'',
+        isLogin: false,
+        userType: '',
+        haveVideo: true,
+        haveTags: true,
+
         //닉네임, 소개
         portfolio: {
           nickname:'',
@@ -295,16 +385,34 @@ import { getFormatDate } from "@/util/day-common";
         togleBookmark: false,
 
         // 스케줄
-        disableDates: [],
-        events: [
+        eventCategories: [
           {
-            highlight: {
-              backgroundColor: '#ff8080',
-              },
-            dates: [
-            ],
+            id: 1,
+            title: "holiday",
+            textColor: "white",
+            backgroundColor: "#ff0066",
+          },
+          {
+            id: 2,
+            title: "selected",
+            textColor: "white",
+            backgroundColor: "#f29661",
+          },
+          {
+            id: 3,
+            title: "In Progress",
+            textColor: "white",
+            backgroundColor: "#6699ff",
+          },
+          {
+            id: 4,
+            title: "DisabledDates",
+            textColor: "black",
+            backgroundColor: "#c9c9c9",
           }
         ],
+        events: [],
+        offdays: [],
         
         mainVideo: 'https://www.youtube.com/embed/',
         videos: [],
@@ -312,6 +420,10 @@ import { getFormatDate } from "@/util/day-common";
         modal: {
           show: false
         },
+        alertModal: {
+          show: false
+        },
+
         dates: {
           range: ""
         },
@@ -330,7 +442,30 @@ import { getFormatDate } from "@/util/day-common";
           video_style: '',
           done_flag: 0,
         },
-
+        video_skill: {
+          color: false,
+          audio: false,
+          motion: false,
+          caption: false,
+          intro: false,
+          outro: false
+        },
+        video_type: {
+          personal: false,
+          commercial: false
+        },
+        video_style: {
+          kids: false,
+          game: false,
+          music: false,
+          food: false,
+          vlog: false,
+          movie: false,
+          animal: false,
+          beauty: false,
+          sports: false,
+          etc: false
+        }
       }
     },
     created() {
@@ -340,14 +475,14 @@ import { getFormatDate } from "@/util/day-common";
         return;
       }
 
-      // store.dispatch(
-      //   "getRequestitems1",
-      //   "/request/res/" + this.portfolio.nickname + "/1"
-      // );
+      if(this.$session.exists()){
+        this.isLogin = true;
+      }
 
       this.uid = this.$route.query.no;
       this.request_info.request_nickname = this.$session.get('nickname');
       let URL = '/portfolio';
+
       //포트폴리오 정보, 영상, 리뷰, 스케쥴, 태그 가져오기
       //포트폴리오 정보
       this.getPortfolio(URL);
@@ -361,17 +496,16 @@ import { getFormatDate } from "@/util/day-common";
       // 포트폴리오 스케쥴
       this.getScheduleInfo(URL);
 
-      // 현재 진행중인 작업 스케줄
-      // this.getInprogressDate();
-
       // 포트폴리오 태그
       this.getTagInfo(URL);
 
       // 북마크 정보 가져와서 북마크 한 인원수 보여주기
       this.getBookmarkCount();
+
+      // console.log(this.events);
     },
     // computed: {
-    //   ...mapGetters(["requestitems1"]),
+    //   ...mapGetters(["requests"])
     // },
     methods: {
       checkRequestForm(){
@@ -387,7 +521,7 @@ import { getFormatDate } from "@/util/day-common";
                 //숫자인지 체크
                 valid && !this.checkNumberFormat(this.request_info.video_origin_length) && ((valid = false), (message = '숫자만 입력해주세요'))
                 valid && !this.checkNumberFormat(this.request_info.video_result_length) && ((valid = false), (message = '숫자만 입력해주세요'))
-                valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
+                // valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
                 
                 if (valid) this.requestForm();
                 else {
@@ -417,16 +551,70 @@ import { getFormatDate } from "@/util/day-common";
           this.request_info.end_date = dates[1]
         }
 
+        if(this.video_type.personal){
+          this.request_info.video_type = "개인용";
+        }
+        if(this.video_type.commercial){
+          this.request_info.video_type = "상업용";
+        }
+
+        if(this.video_style.kids){
+          this.request_info.video_style = "키즈";
+        }
+        if(this.video_style.game){
+          this.request_info.video_style = "게임";
+        }
+        if(this.video_style.music){
+          this.request_info.video_style = "음악/댄스";
+        }
+        if(this.video_style.food){
+          this.request_info.video_style = "푸드/쿠킹";
+        }
+        if(this.video_style.vlog){
+          this.request_info.video_style = "V-log";
+        }
+        if(this.video_style.movie){
+          this.request_info.video_style = "영화/애니메이션";
+        }
+        if(this.video_style.animal){
+          this.request_info.video_style = "동물";
+        }
+        if(this.video_style.beauty){
+          this.request_info.video_style = "뷰티/패션";
+        }
+        if(this.video_style.sports){
+          this.request_info.video_style = "스포츠";
+        }
+
+        if(this.video_skill.color){
+          this.request_info.video_skill += ",색 보정";
+        }
+        if(this.video_skill.audio){
+          this.request_info.video_skill += ",음향";
+        }
+        if(this.video_skill.motion){
+          this.request_info.video_skill += ",모션그래픽";
+        }
+        if(this.video_skill.caption){
+          this.request_info.video_skill += ",자막";
+        }
+        if(this.video_skill.intro){
+          this.request_info.video_skill += ",인트로";
+        }
+        if(this.video_skill.outro){
+          this.request_info.video_skill += ",아웃트로";
+        }
+
         http
             .post('/request',this.request_info)
             .then(({data}) => {
                 if (data == 'success') {
-                  console.log("요청사항 완료")
+                  // console.log("요청사항 완료")
                   this.initModalRequest();
                   alertify.notify('작업 요청 완료', 'success', 3)
                   return;
                 } else {
-                  console.log("요청사항 실패")
+                  // console.log("요청사항 실패")
                   // fail 
                     return;
                 }
@@ -457,9 +645,8 @@ import { getFormatDate } from "@/util/day-common";
         http
         .get("/request/res/"+this.portfolio.nickname+"/1")
         .then(({data}) => {
-          // console.log(data);
-          this.events.dates = this.makeInprogressDateArray(data);
-          console.log(this.events.dates);
+          if(data.length > 0)
+            this.makeInprogressDateArray(data);
           return;
         })
         .catch(error => {
@@ -473,9 +660,9 @@ import { getFormatDate } from "@/util/day-common";
         .then(({data}) => {
           if(data.data == 'success'){
             // scheduleType=0 기본
-            let result = data.object.filter(schedule => schedule.scheduleType == 0);
-            this.disableDates = this.makeScheduleArray(result);
-            // console.log(result);
+            // let result = data.object.filter(schedule => schedule.scheduleType == 0);
+            this.makeScheduleArray(data.object);
+            // console.log(data.object);
             return;
           } else {
             return;
@@ -492,14 +679,15 @@ import { getFormatDate } from "@/util/day-common";
             .then(({data}) => {
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
+                  this.haveTags = true;
                   this.tags = [];
                   data.object.forEach(obj => {
                     this.tags.push(obj.tagName);
                   });
                   return;
                 } else {
-                  // fail 
-                    return;
+                  this.haveTags = false;
+                  return;
                 }
             })
             .catch(error => {
@@ -514,8 +702,6 @@ import { getFormatDate } from "@/util/day-common";
                 //성공시 평균 계산 필요 추출 필요
                 if (data.data == 'success') {
                   this.reviews = data.object;
-                  // console.log(data.object);
-                  //평균계산
                   let videoAvg=0, kindnessAvg=0, finishAvg=0;
                   data.object.forEach(obj => {
                     videoAvg += obj.videoScore;
@@ -545,16 +731,17 @@ import { getFormatDate } from "@/util/day-common";
             .then(({data}) => {
                 //성공시 video 추출 필요
                 if (data.data == 'success') {
+                  this.haveVideo = true;
                   //main이 아닌것들만 추출
                   let result = data.object.filter(video => video.mainFlag == 0);
                   this.videos = this.makeVideosArray(result);
                   
                   result = data.object.filter(video => video.mainFlag == 1);
                   this.mainVideo = result[0].url;
-                    return;
+                  return;
                 } else {
-                  // fail 
-                    return;
+                  this.haveVideo = false;
+                  return;
                 }
             })
             .catch(error => {
@@ -578,8 +765,7 @@ import { getFormatDate } from "@/util/day-common";
                   this.getInprogressDate();
                   return;
                 } else {
-                  // fail 
-                    return;
+                  return;
                 }
             })
             .catch(error => {
@@ -657,22 +843,26 @@ import { getFormatDate } from "@/util/day-common";
         return res;
       },
       makeScheduleArray(result){
-        let res = [];
+        let date;
         result.forEach(element => {
-          res.push(getFormatDate(element.startDate));
+          date = new Object();
+          date.start = new Date(element.startDate);
+          date.end = new Date(element.endDate);
+          date.categoryId = element.scheduleType;
+          date.repeat = "never";
+          this.events.push(date);
         })
-        return res;
       },
       makeInprogressDateArray(result){
         let obj;
-        let dates = [];
         result.forEach(element => {
           obj = new Object();
-          obj.start = element.start_date;
-          obj.end = element.end_date;
-          dates.push(obj);
+          obj.start = new Date(element.start_date);
+          obj.end = new Date(element.end_date);
+          obj.categoryId = 3;
+          obj.repeat = "never";
+          this.events.push(obj);
         })
-        return dates;
       },
       goToday() {
         this.$refs.calendar.goToday();
