@@ -8,6 +8,12 @@
         @click="uploadOnce()">
         등록하기
       </base-button>
+
+      <router-link :to="'/portfolio?no='+this.uid">
+        <base-button size="sm" type="info" class="btn btn-info float-right">
+          취소하기
+        </base-button>
+      </router-link>
     </base-header>
 
     <div class="container-fluid mt--7">
@@ -540,6 +546,7 @@ import { getFormatDate } from "@/util/day-common";
         this.updateSchedule();
         this.updatePortfolio();
         this.updateTags();
+        this.$router.push("/portfolio?no="+this.uid);
       },
       makeVideosArray(result){
         let res = [];
