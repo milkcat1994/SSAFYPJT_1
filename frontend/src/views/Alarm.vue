@@ -92,10 +92,8 @@
                   </b-card-header>
                   <b-collapse
                     :id="'accordion-' + requestitem0.rid"
-                    :visible="tabShow"
                     accordion="my-accordion"
                     role="tabpanel"
-                    
                   >
                     <b-card-body>
                       <b-card-text>
@@ -206,7 +204,7 @@
                   <b-collapse
                     :id="'accordion-' + requestitem1.rid"
                     accordion="my-accordion"
-                    role="tabpanel"
+                    role="tabpane1"
                   >
                     <b-card-body>
                       <b-card-text>
@@ -571,7 +569,6 @@ export default {
       ],
 
       ridDetail: "",
-      tabShow: false,
 
       events: [],
       videoScore: 0,

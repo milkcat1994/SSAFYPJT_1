@@ -138,9 +138,10 @@ public class RequestController {
 			// 알림 함께 등록
 			addNotify(requestDto, "request");
 			// 태그 함께 등록
-			int res = addTag(requestDto.getTags(), requestDto.getRid());
 
-			if (res < 0) return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
+			if (requestDto.getTags() != null || 
+				(requestDto.getTags() != null && requestDto.getTags().size() > 0))
+				addTag(requestDto.getTags(), requestDto.getRid());
 
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		} else {
