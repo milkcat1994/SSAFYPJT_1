@@ -35,6 +35,7 @@
             style="color: #ff0066; margin: 15px"
             v-if="$session.get('auth') == 'editor'"
           >개인 일정</i>
+          <i class="fas fa-circle" style="color: #c9c9c9; margin: 15px">휴일</i>
         </div>
       </div>
 
