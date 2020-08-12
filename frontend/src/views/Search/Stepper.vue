@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import http from "@/util/http-common";
 import HorizontalStepper from "vue-stepper";
 import { mapGetters } from 'vuex';
 
@@ -26,8 +25,6 @@ import VideoOriginLength from './VideoOriginLength.vue';
 import VideoFinalLength from './VideoFinalLength.vue';
 import EditSkill from './EditSkill.vue';
 import EditTerm from './EditTerm.vue';
-
-const URL = http.baseURL;
 
 export default {
   name: "stepper",
@@ -40,7 +37,7 @@ export default {
         {
           icon: "help",
           name: "first",
-          title: "영상 종류",
+          title: "편집 목적",
           subtitle: "",
           component: VideoCategory,
           completed: false,
@@ -48,7 +45,7 @@ export default {
         {
           icon: "help",
           name: "second",
-          title: "영상 특징",
+          title: "영상 종류",
           subtitle: "",
           component: VideoTheme,
           completed: false,
@@ -64,7 +61,7 @@ export default {
         {
           icon: "help",
           name: "fourth",
-          title: "영상 길이",
+          title: "최종 길이",
           subtitle: "",
           component: VideoFinalLength,
           completed: false,
@@ -118,7 +115,6 @@ export default {
     },
   },
   created() {
-    console.log(URL)
   }
 };
 </script>

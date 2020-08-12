@@ -4,9 +4,7 @@
       <!-- 검색 -->
       <div class="row align-items-center mx-lg-n5">
         <div class="col py-3 px-lg-5">
-          <div
-            class="d-flex flex-column justify-content-center col-lg-12 col-12"
-          >
+          <div class="d-flex flex-column justify-content-center col-lg-12 col-12">
             <!-- <h1 class="display-2 text-white">어떤 편집자를 찾으시나요?</h1> -->
 
             <!-- 검색 input -->
@@ -17,8 +15,7 @@
               addon-left-icon="fas fa-search"
               v-model="keyword"
               @keyup.enter="createRequest"
-            >
-            </base-input>
+            ></base-input>
 
             <!-- 카테고리 icons -->
             <div class="container px-lg-5">
@@ -30,13 +27,10 @@
                     @click="iconSearch"
                   >
                     <!-- <i class="fa fa-utensils fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img
-                      class="icon m-2"
-                      :src="iconFood"
-                      alt="food icon"
-                      id="food"
-                    />
-                    <small><strong>먹방</strong></small>
+                    <img class="icon m-2" :src="iconFood" alt="food icon" id="food" />
+                    <small>
+                      <strong>먹방</strong>
+                    </small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
@@ -45,13 +39,10 @@
                     @click="iconSearch"
                   >
                     <!-- <i class="fa fa-plane fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img
-                      class="icon m-2"
-                      :src="iconPlane"
-                      alt="plane icon"
-                      id="travel"
-                    />
-                    <small><strong>여행</strong></small>
+                    <img class="icon m-2" :src="iconPlane" alt="plane icon" id="travel" />
+                    <small>
+                      <strong>여행</strong>
+                    </small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
@@ -60,13 +51,10 @@
                     @click="iconSearch"
                   >
                     <!-- <i class="fa fa-gamepad fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img
-                      class="icon m-2"
-                      :src="iconGame"
-                      alt="game icon"
-                      id="game"
-                    />
-                    <small><strong>게임</strong></small>
+                    <img class="icon m-2" :src="iconGame" alt="game icon" id="game" />
+                    <small>
+                      <strong>게임</strong>
+                    </small>
                   </div>
                 </div>
                 <div class="w-100"></div>
@@ -76,13 +64,10 @@
                     @click="iconSearch"
                   >
                     <!-- <i class="fa fa-bicycle fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img
-                      class="icon m-2"
-                      :src="iconExercise"
-                      alt="dumbbell icon"
-                      id="exercise"
-                    />
-                    <small><strong>운동</strong></small>
+                    <img class="icon m-2" :src="iconExercise" alt="dumbbell icon" id="exercise" />
+                    <small>
+                      <strong>운동</strong>
+                    </small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
@@ -91,13 +76,10 @@
                     @click="iconSearch"
                   >
                     <!-- <i class="fa fa-microphone fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img
-                      class="icon m-2"
-                      :src="iconASMR"
-                      alt="talk icon"
-                      id="talk"
-                    />
-                    <small><strong>토크</strong></small>
+                    <img class="icon m-2" :src="iconASMR" alt="talk icon" id="talk" />
+                    <small>
+                      <strong>토크</strong>
+                    </small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
@@ -106,13 +88,10 @@
                     @click="iconSearch"
                   >
                     <!-- <i class="fa fa-music fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img
-                      class="icon m-2"
-                      :src="iconMusic"
-                      alt="guitar icon"
-                      id="music"
-                    />
-                    <small><strong>음악</strong></small>
+                    <img class="icon m-2" :src="iconMusic" alt="guitar icon" id="music" />
+                    <small>
+                      <strong>음악</strong>
+                    </small>
                   </div>
                 </div>
               </div>
@@ -134,7 +113,9 @@
               >
                 <template slot="footer">
                   <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>87%</span> -->
-                  <span class="mr-2"><strong>98%</strong></span>
+                  <span class="mr-2">
+                    <strong>98%</strong>
+                  </span>
                   <span class="text-nowrap">의 이용자가 선택합니다</span>
                 </template>
               </stats-card>
@@ -151,7 +132,9 @@
               >
                 <template slot="footer">
                   <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 96%</span> -->
-                  <span class="mr-2"><strong>96%</strong></span>
+                  <span class="mr-2">
+                    <strong>96%</strong>
+                  </span>
                   <span class="text-nowrap">의 이용자가 만족합니다.</span>
                 </template>
               </stats-card>
@@ -169,7 +152,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>-->
   </div>
 </template>
 <script>

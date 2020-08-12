@@ -77,6 +77,7 @@
           :total="editorsData.length"
           :perPage="editorsPerPage"
           :value="currentPage"
+          align="center"
           @input="fetchPage"
         ></base-pagination>
       </div>

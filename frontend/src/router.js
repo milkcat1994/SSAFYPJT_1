@@ -67,10 +67,16 @@ export default new Router({
             import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
         },
         {
-          path: "/request",
-          name: "request",
+          path: "/search",
+          name: "search",
           component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Request.vue"),
+            import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
+        },
+        {
+          path: "/stepper",
+          name: "stepper",
+          component: () =>
+            import(/* webpackChunkName: "demo" */ "./views/Stepper/Stepper.vue"),
         },
         {
           path: "/editors",
