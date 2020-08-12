@@ -42,6 +42,9 @@ public interface SearchRedisService {
     // 정렬 -> 가격 낮은, 가격 높은, 이름순, 평점순
     List<SearchPortfolio> getListByFilter(SearchRequest searchRequest);
 
+    
+    // 해당 검색 key를 가지고 있다면 Redis에서 
+    // Set<SearchPortfolio> getListIfExists(String searchKey);
 
     // key값은 "userInfo" 이다.
     // key값 field는 {uid}를 이용하여 이를 이용한 검색
@@ -58,4 +61,6 @@ public interface SearchRedisService {
     // 패턴에 일치하는 key값들을 찾기 위한 함수들
     // uid-nickname 형태 
     Set<String> hashKeys(String pattern);
+
+    long deleteAll();
 }

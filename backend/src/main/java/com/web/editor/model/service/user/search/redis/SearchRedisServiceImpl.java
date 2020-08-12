@@ -19,32 +19,51 @@ import com.web.editor.model.dto.user.search.SearchPortfolioJoinVideo;
 import com.web.editor.model.dto.user.search.SearchRequest;
 import com.web.editor.model.dto.user.search.SearchTag;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class SearchRedisServiceImpl implements SearchRedisService {
 
     private RedisTemplate<String, Object> redisTemplateHash;
-    private RedisTemplate<String, Object> redisTemplateSet;
+    private RedisTemplate<String, String> redisTemplateSet;
+    private RedisTemplate<String, Integer> redisTemplateHashUid;
     // tag 검색량 우선순위 위한 Set
     // private RedisTemplate<String, Object> redisTemplateZSet;
-
+    
     private HashOperations hashOperations;
+    private HashOperations hashUidOperations;
     private SetOperations setOperations;
-
+    private SetOperations setResultOperations;
+    private RedisOperations redisOperations;
+    
+    
     private ObjectMapper objectMapper;
 
-    public SearchRedisServiceImpl(RedisTemplate<String, Object> redisTemplateHash,
-            RedisTemplate<String, Object> redisTemplateSet) {
+    public SearchRedisServiceImpl(
+        RedisTemplate<String, Object> redisTemplateHash,
+            RedisTemplate<String, String> redisTemplateSet,
+            RedisTemplate<String, Integer> redisTemplateHashUid) {
+                objectMapper = new ObjectMapper();
         this.redisTemplateHash = redisTemplateHash;
         this.redisTemplateSet = redisTemplateSet;
         hashOperations = redisTemplateHash.opsForHash();
+
+        this.redisTemplateHash.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchPortfolio.class));
+        setResultOperations = redisTemplateHash.opsForSet();
+
         setOperations = redisTemplateSet.opsForSet();
+        this.redisTemplateHashUid = redisTemplateHashUid;
+        hashUidOperations = redisTemplateHashUid.opsForHash();
+
+        redisOperations = redisTemplateHash.opsForValue().getOperations();
     }
 
     @Override
@@ -53,24 +72,28 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // 닉네임 -> uid
         // 평점의 경우 0으로 자동 초기화 된다.
         for (SearchPortfolioJoinBookmark searchPortfolioJoinBookmark : searchPortfolioJoinBookmarks) {
+            // searchPortfolioJoinBookmark.setInit("", "");
+            // System.out.println(searchPortfolioJoinBookmark);
             hashOperations.putAll("uid:" + searchPortfolioJoinBookmark.getUid(),
                     objectMapper.convertValue(searchPortfolioJoinBookmark, Map.class));
 
             // nickname - uid 기억하는 hash
-            hashOperations.put("nickname:uid:"+searchPortfolioJoinBookmark.getNickname(), "uid", searchPortfolioJoinBookmark.getUid());
+            hashUidOperations.put("nickname:uid:"+searchPortfolioJoinBookmark.getNickname(), "uid", searchPortfolioJoinBookmark.getUid());
 
             //모든 포트폴리오 uid 저장
             setOperations.add("uids", searchPortfolioJoinBookmark.getUid());
         }
+        System.out.println("portfolioAndBookmarkSave 완료");
     }
 
     // mainUrl 해당 포트폴리오에 저장
     @Override
     public void portfolioAndVideoSave(List<SearchPortfolioJoinVideo> searchPortfolioJoinVideos) {
         for (SearchPortfolioJoinVideo searchPortfolioJoinVideo : searchPortfolioJoinVideos) {
-            hashOperations.put("uid:" + searchPortfolioJoinVideo.getUid(), "mainUrl",
+            hashOperations.put("uid:" + searchPortfolioJoinVideo.getUid(), "url",
                     searchPortfolioJoinVideo.getMainUrl());
         }
+        System.out.println("portfolioAndVideoSave 완료");
     }
 
     // 닉네임에 따른 리뷰 점수 등록
@@ -80,6 +103,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "avgScore",
                     searchAverageScore.getAvgScore());
         }
+        System.out.println("requestAndReviewSave 완료");
     }
 
     // Join된 테이블 정보를 이용하여 사용가능한 새로운 정보를 만들어낸다.
@@ -97,10 +121,11 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         while (iter.hasNext()) {
             key = iter.next();
             // 해당 nickname키들을 이용해 uid를 가져오고 해당 uid에 해당하는 Hash에 score점수를 넣는다.
-            hashOperations.put("uid:"+hashOperations.get("nickname:uid:"+hashOperations.get(key, "nickname"), "uid"), "avgScore", hashOperations.get(key, "avgScore"));
+            hashOperations.put("uid:"+hashUidOperations.get("nickname:uid:"+hashOperations.get(key, "nickname"), "uid"), "avgScore", hashOperations.get(key, "avgScore"));
 
             // hashOperations.put(key, "score", hashOperations.get("nickname:" + hashOperations.get(key, "nickname"), "score"));
         }
+        System.out.println("makeUserInfo 완료");
 
         // 모든 정보를 "uid:{uid}"에 담아냈다.
     }
@@ -109,20 +134,21 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     // video_type, video_style, video_skill - nickname으로 잘라서 저장하기
     @Override
     public void searchRequestVideoInfoSave(List<SearchRequestVideoInfo> searchRequestVideoInfos) {
-        String uid;
+        Integer uid;
         StringTokenizer st;
         // nickname:uid:{nickname} 이용하여 nickname를 통해 uid를 알아내자
         for (SearchRequestVideoInfo searchRequestVideoInfo : searchRequestVideoInfos) {
-            uid = (String) hashOperations.get("nickname:uid:"+searchRequestVideoInfo.getNickname(), "uid");
+            uid = (Integer) hashUidOperations.get("nickname:uid:" + searchRequestVideoInfo.getNickname(), "uid");
             //각 filter (video_type, video_style, video_skill)에 대해 uid를 가지고 있다.(tag와 비슷한 방식)
             setOperations.add("videoType:"+searchRequestVideoInfo.getVideoType(), uid);
             setOperations.add("videoStyle:"+searchRequestVideoInfo.getVideoStyle(), uid);
             // skill은 String 형태, ','를 기준으로 잘라 넣어야한다.
             st = new StringTokenizer(searchRequestVideoInfo.getVideoSkill(), ",");
             while(st.hasMoreTokens()){
-                setOperations.add("videoSkill:"+st.nextToken(), uid);
+                setOperations.add("videoSkill:"+st.nextToken().trim(), uid);
             }
         }
+        System.out.println("searchRequestVideoInfoSave 완료");
     }
 
     // tag-uid 저장
@@ -132,90 +158,188 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         for (SearchTag searchTag : searchTags) {
             // 태그별 uid Set 생성
             setOperations.add("tag:"+searchTag.getTag(), searchTag.getUid());
-            // 태그 기억할 Set생성
+            // 각 uid가 가지는 태그 기억할 Set생성
             setOperations.add("tags:"+searchTag.getUid(), searchTag.getTag());
-            // hashOperations.get("uid:"+searchTag.getUid(), "tags");
+            
+            hashOperations.putIfAbsent("uid:"+searchTag.getUid(), "tagKey", "tags:"+searchTag.getUid());
         }
+        System.out.println("portfolioTagSave 완료");
     }
 
+    
+	private String makeKey(SearchRequest searchRequest){
+        StringBuilder sb = new StringBuilder();
+        
+
+        if(!searchRequest.getVideoTypes().isEmpty()){
+            sb.append("videoType:");
+        }
+        // videoStyle을 모두 돌면서 해당되는 key값을 더해주기
+        for (String string : searchRequest.getVideoTypes()) {
+            sb.append(string+":");
+        }
+
+        if(!searchRequest.getVideoStyles().isEmpty()){
+            sb.append("videoStyle:");
+        }
+        // videoStyle을 모두 돌면서 해당되는 key값을 더해주기
+        for (String string : searchRequest.getVideoStyles()) {
+            sb.append(string+":");
+        }
+        if(!searchRequest.getVideoSkills().isEmpty()){
+            sb.append("videoSkill:");
+        }
+        // videoStyle을 모두 돌면서 해당되는 key값을 더해주기
+        for (String string : searchRequest.getVideoSkills()) {
+            sb.append(string+":");
+        }
+
+
+		switch (searchRequest.getSearchType()) {
+			case TAG:
+				sb.append("tag:").append(searchRequest.getSearchTags().get(0));
+				break;
+			case NICKNAME:
+				sb.append("nickname:").append(searchRequest.getSearchText());
+			break;
+			default:
+				return "";
+        }
+		return sb.toString();
+    }
+    
     // 검색결과 도출
     // filter -> video_type, video_style, video_skill
     // 검색어 -> tag, nickname
     // 정렬 -> 가격 낮은, 가격 높은, 이름순, 평점순
     public List<SearchPortfolio> getListByFilter(SearchRequest searchRequest){
+        List<SearchPortfolio> resultList = new ArrayList<>();
+        String searchKey = makeKey(searchRequest);
+        if(searchKey.isEmpty()){
+            System.out.println("key가 없음");
+            // return resultList;
+        }
+        else{
+            // Set<SearchPortfolio> tempSet = setOperations.members(searchKey);
+            //비면 찾기 아니면 만들기
+            resultList.addAll(setResultOperations.members(searchKey));
+            System.out.println("캐시에서 가져옴");
+            return resultList;
+        }
+
         // videoType, videoStyle -> 1개
         Set<String> keySet = new LinkedHashSet<>();
         String newKey;
-        if(searchRequest.getVideoType().equals("")){
-            // 필터 둘다 없을 경우
-            if(searchRequest.getVideoStyle().equals("")){
-                // videoUidSet은 모든 uid를 가질 수 있다
-                newKey = "uids:all";
-                // videoUidSet = setOperations.members(newKey);
-                if(setOperations.members(newKey).isEmpty()){
-                    keySet.add("uids");
-                    setOperations.unionAndStore(keySet, newKey);
-                }
-                // videoUidSet = setOperations.members(newKey);
-            }
-            // videoStyle만 적용할 경우
-            else{
-                newKey = "uids:"+searchRequest.getVideoStyle();
-                // videoUidSet = setOperations.members(newKey);
-                if(setOperations.members(newKey).isEmpty()){
-                    keySet.add("videoStyle:"+searchRequest.getVideoStyle());
-                    setOperations.unionAndStore(keySet, newKey);
-                }
-                // videoUidSet = setOperations.members(newKey);
-            }
+        // if(searchRequest.getVideoType().equals("")){
+        //     // 필터 둘다 없을 경우
+        //     if(searchRequest.getVideoStyle().equals("")){
+        //         // videoUidSet은 모든 uid를 가질 수 있다
+        //         newKey = "uids:all";
+        //         // videoUidSet = setOperations.members(newKey);
+        //         if(setOperations.members(newKey).isEmpty()){
+        //             keySet.add("uids");
+        //             setOperations.unionAndStore(keySet, newKey);
+        //         }
+        //         // videoUidSet = setOperations.members(newKey);
+        //     }
+        //     // videoStyle만 적용할 경우
+        //     else{
+        //         newKey = "uids:"+searchRequest.getVideoStyle();
+        //         // videoUidSet = setOperations.members(newKey);
+        //         if(setOperations.members(newKey).isEmpty()){
+        //             keySet.add("videoStyle:"+searchRequest.getVideoStyle());
+        //             setOperations.unionAndStore(keySet, newKey);
+        //         }
+        //         // videoUidSet = setOperations.members(newKey);
+        //     }
+        // }
+        // else{
+        //     // videoType만 적용할 경우
+        //     if(searchRequest.getVideoStyle().equals("")){
+        //         newKey = "uids:"+searchRequest.getVideoType();
+        //         // videoUidSet = setOperations.members(newKey);
+        //         if(setOperations.members(newKey).isEmpty()){
+        //             keySet.add("videoType:"+searchRequest.getVideoType());
+        //             setOperations.unionAndStore(keySet, newKey);
+        //         }
+        //         // videoUidSet = setOperations.members(newKey);
+        //     }
+        //     // videoStyle, videoType 둘다 적용할 경우
+        //     else{
+        //         newKey = "uids:"+searchRequest.getVideoStyle()+":"+searchRequest.getVideoType();
+        //         // videoUidSet = setOperations.members(newKey);
+        //         if(setOperations.members(newKey).isEmpty()){
+        //             keySet.add("videoStyle:"+searchRequest.getVideoStyle());
+        //             keySet.add("videoType:"+searchRequest.getVideoType());
+        //             setOperations.intersectAndStore(keySet, newKey);
+        //         }
+        //         // videoUidSet = setOperations.members(newKey);
+        //         // videoUidSet = setOperations.intersect("videoStyle:"+searchRequest.getVideoStyle(), "videoType:"+searchRequest.getVideoType());
+        //     }
+        // }
+        keySet = new LinkedHashSet<>();
+        // keySet.add(newKey);
+        System.out.println("1차 완료");
+
+        // 자료 부르기 위한 Key값 만드는 StringBuilder
+        StringBuilder sb = new StringBuilder();
+
+
+        // 자료 만들기 위한 key값 생성
+        if(!searchRequest.getVideoStyles().isEmpty()){
+            sb.append("videoStyle:");
         }
-        else{
-            // videoType만 적용할 경우
-            if(searchRequest.getVideoStyle().equals("")){
-                newKey = "uids:"+searchRequest.getVideoType();
-                // videoUidSet = setOperations.members(newKey);
-                if(setOperations.members(newKey).isEmpty()){
-                    keySet.add("videoType:"+searchRequest.getVideoType());
-                    setOperations.unionAndStore(keySet, newKey);
-                }
-                // videoUidSet = setOperations.members(newKey);
-            }
-            // videoStyle, videoType 둘다 적용할 경우
-            else{
-                newKey = "uids:"+searchRequest.getVideoStyle()+":"+searchRequest.getVideoType();
-                // videoUidSet = setOperations.members(newKey);
-                if(setOperations.members(newKey).isEmpty()){
-                    keySet.add("videoStyle:"+searchRequest.getVideoStyle());
-                    keySet.add("videoType:"+searchRequest.getVideoType());
-                    setOperations.intersectAndStore(keySet, newKey);
-                }
-                // videoUidSet = setOperations.members(newKey);
-                // videoUidSet = setOperations.intersect("videoStyle:"+searchRequest.getVideoStyle(), "videoType:"+searchRequest.getVideoType());
-            }
+        // videoStyle을 모두 돌면서 해당되는 key값을 더해주기
+        for (String string : searchRequest.getVideoStyles()) {
+            keySet.add("videoStyle:"+string);
+            sb.append(string+":");
         }
 
+
+        // 자료 만들기 위한 key값 생성
+        if(!searchRequest.getVideoTypes().isEmpty()){
+            sb.append("videoType:");
+        }
+        // videoType을 모두 돌면서 해당되는 key값을 더해주기
+        for (String string : searchRequest.getVideoTypes()) {
+            keySet.add("videoType:"+string);
+            sb.append(string+":");
+        }
+
+
+
+        // 자료 만들기 위한 key값 생성
+        if(!searchRequest.getVideoSkills().isEmpty()){
+            sb.append("videoSkill:");
+        }
         // videoSkill을 모두 돌면서 해당되는 key값을 더해주기
         for (String string : searchRequest.getVideoSkills()) {
             keySet.add("videoSkill:"+string);
+            sb.append(string+":");
         }
         // keySet.addAll(searchRequest.getVideoSkills());
-        StringBuilder sb = new StringBuilder();
-        for (String string : keySet) {
-            sb.append(string).append(':');
+        // 기존 key값 더해주기
+        // sb.append(newKey).append(':');
+        // for (String string : keySet) {
+        //     sb.append(string).append(':');
+        // }
+
+        // 길이가 1이상이라면 마지막 ':'를 없애야 하기때문에
+        if(sb.length()>1) {
+            sb.setLength(sb.length()-1);
         }
-        sb.setLength(sb.length()-1);
+        // 없다면 모든 uid가 필요하다.
+        else{
+            keySet.add("uids");
+            sb.append("uids:all");
+        }
         String filterString = sb.toString();
         sb.setLength(0);
 
-        // 교집합 구하기
-        // videoSkill -> 여러개
-        setOperations.intersectAndStore(keySet, filterString);
-        // sb.toString()으로 video filter 가능
-        // videoUidSet = setOperations.members(sb.toString());
-
-        // for (String videoSkill : searchRequest.getVideoSkills()) {
-        //     videoUidSet.retainAll(setOperations.members("videoSkill:"+videoSkill));
-        // }
+        // (videoSkill, videoType, videoStyle)의 합집합 구하기
+        if(!keySet.isEmpty())
+            setOperations.unionAndStore(keySet, filterString);
+        System.out.println("2차 완료"+filterString);
 
         // SearchType에 따라 tag, nickname 이 갈린다.
         // tag는 정확한 검색 결과 여야 하며
@@ -227,25 +351,72 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         switch (searchRequest.getSearchType()) {
             case TAG:
                 // 해당 tag를 가지는 모든 uid 더하기
+                sb.append("tag:");
                 for (String tag : searchRequest.getSearchTags()) {
                     keySet.add("tag:"+tag);
+                    sb.append(tag).append(':');
                     // typeUidSet.addAll(setOperations.members("tag:"+tag));
                 }
+                sb.setLength(sb.length());
                 break;
             case NICKNAME:
-                keySet = hashKeys(searchRequest.getSearchText());
+                sb.append("nickname:").append(searchRequest.getSearchText());
+                //해당 글자 포함하는 닉네임 가지는 Key 모두 저장
+                keySet.addAll(hashKeys("nickname:uid:*"+searchRequest.getSearchText()+"*"));
                 // for (String nickname : nicknameSet) {
                 //     typeUidSet.addAll(setOperations.members("nickname:uid:*"+nickname+"*"));
                 // }
             break;
+            case ALL:
+                sb.append("all");
+                keySet.add("uids");
+            break;
+            //잘못 들어올 경우 리턴 값 없음.
+            default:
+                return null;
         }
+        System.out.println("3차 완료");
+        // video filter와 검색 결과를 담은 key Set이다.
         keySet.add(filterString);
-        // 검색 결과 uid를 담는 Set이다.
+        String searchString = sb.toString();
+        sb.setLength(0);
+        // 검색 결과 uid를 담는 Set이다. -> 교집합 통해 uid집합 만들기
+        System.out.println("keySetSize>>>"+keySet.size());
+        // for (String string : keySet) {
+        //     System.out.println("keySet>>>>>"+string+"<<<");
+        //     Set<Object> ts = setOperations.members(string);
+        //     // System.out.println(setOperations.members(string).size());
+        //     // System.out.println(setOperations.members(string).toString());
+        //     for(Object obj : ts){
+        //         System.out.println(obj);
+        //     }
+        // }
         Set<String> resultSet = setOperations.intersect(keySet);
-        List<SearchPortfolio> resultList = new ArrayList<>();
-        for (String string : resultSet) {
-            resultList.add((SearchPortfolio)hashOperations.entries(string));
+        SearchPortfolioJoinBookmark tempResult;
+
+        for(String uid : resultSet){
+            System.out.println(uid);
         }
+        for (String uid : resultSet) {
+            tempResult = objectMapper.convertValue(hashOperations.entries("uid:"+uid), SearchPortfolioJoinBookmark.class);
+            // tempResult = (SearchPortfolioJoinBookmark)hashOperations.entries(uid);
+            // resultList.add(new SearchPortfolio(tempResult, setOperations.members(tempResult.getTagKey())));
+            System.out.println(tempResult);
+            if(tempResult.getTagKey() == null){
+                setResultOperations.add(filterString+":"+searchString, new SearchPortfolio(tempResult, Collections.emptySet()));
+            }
+            else{
+                setResultOperations.add(filterString+":"+searchString, new SearchPortfolio(tempResult, setOperations.members(tempResult.getTagKey())));
+            }
+        }
+        System.out.println("4차 완료");
+        //tagKey로 tagList로 바꾸어야한다.
+        
+        //검색 어도 key로 추가해 넣어야한다.
+        // hashOperations.put(filterString+searchString, hashKey, value);
+        resultList.addAll(setResultOperations.members(filterString+":"+searchString));
+
+        System.out.println("5차 완료");
         // videoUidSet에 중복되는 Uid가 저장된다.
         // videoUidSet.retainAll(typeUidSet);
 
@@ -260,9 +431,14 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // for (String uid : videoUidSet) {
             
         // }
+        System.out.println("디비 캐시로 저장한 뒤 가져옴");
         return resultList;
     }
 
+    // @Override
+    // public Set<SearchPortfolio> getListIfExists(String searchKey) {
+
+    // }
 
     @Override
     public Map<Integer, SearchPortfolio> findAllUsers() {
@@ -282,6 +458,10 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         return this.redisTemplateHash.keys(pattern);
     }
 
-
+    @Override
+    public long deleteAll(){
+        Set<String> allKeys = this.hashKeys("*");
+        return redisOperations.delete(allKeys);
+    }
     
 }

@@ -1,6 +1,8 @@
 package com.web.editor.model.dto.user.search;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -10,13 +12,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Repository
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@ToString
 public class SearchPortfolio {
     private int uid;
     private String nickname;
@@ -25,4 +28,15 @@ public class SearchPortfolio {
     private int bookmarkNumber;
     private int avgScore;
     private List<String> tags;
+
+    public SearchPortfolio(SearchPortfolioJoinBookmark searchPortfolioJoinBookmark, Set<String> tags){
+        this.uid = searchPortfolioJoinBookmark.getUid();
+        this.nickname = searchPortfolioJoinBookmark.getNickname();
+        this.url = searchPortfolioJoinBookmark.getUrl();
+        this.payMin = searchPortfolioJoinBookmark.getPayMin();
+        this.bookmarkNumber = searchPortfolioJoinBookmark.getBookmarkNumber();
+        this.avgScore = searchPortfolioJoinBookmark.getBookmarkNumber();
+        this.tags = new ArrayList<String>();
+        this.tags.addAll(tags);
+    }
 }

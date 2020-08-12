@@ -57,7 +57,7 @@
 		LEFT JOIN `video_info` V ON P.uid = V.portfolio_uid AND V.main_flag = 1
 	</select>
 
-	<select id="searchPortfolioTag">
+	<select id="searchPortfolioTag" resultType="SearchTag">
 		SELECT portfolio_uid as uid, tag_name as tagName
 		FROM `portfolio_tag`
 	</select>

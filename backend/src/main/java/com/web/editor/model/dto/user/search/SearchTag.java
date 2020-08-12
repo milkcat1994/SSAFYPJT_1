@@ -14,7 +14,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Repository
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchTag {
     int uid;
     String tag;

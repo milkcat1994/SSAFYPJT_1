@@ -8,19 +8,26 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Repository
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@ToString
 public class SearchPortfolioJoinBookmark {
-    private int uid;
+    private Integer uid;
     private String nickname;
-    private int payMin;
+    private Integer payMin;
+    private String url;
     // private String skill;
-    private int bookmarkNumber;
-    private int avgScore;
+    private Integer bookmarkNumber;
+    private Integer avgScore;
     private String tagKey;
+
+    public void setInit(String url, String tagKey){
+        this.url = url;
+        this.tagKey = tagKey;
+    }
 }

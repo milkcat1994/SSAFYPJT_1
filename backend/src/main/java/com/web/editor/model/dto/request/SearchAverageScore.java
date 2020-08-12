@@ -17,5 +17,5 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchAverageScore {
     String nickname;
-    int avgScore;
+    Integer avgScore;
 }

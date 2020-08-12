@@ -19,9 +19,9 @@ import lombok.ToString;
 public class SearchRequest {
     // 필터링
     // videoType, videoSkill, videoStyle
-    private String videoType;
+    private List<String> videoTypes;
     private List<String> videoSkills;
-    private String videoStyle;
+    private List<String> videoStyles;
 
     // 검색어
     // tag, nickname
