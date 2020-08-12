@@ -28,7 +28,7 @@
           <!-- 레이아웃 width가 md 이하일때는 @/components/Sidebar.vue 수정해야함 -->
           <template>
             <div class="dropdown-header noti-title">
-              <h6 class="text-overflow m-0">최근 매칭 내역</h6>
+              <h6 class="text-overflow m-0">최근 알림 내역</h6>
             </div>
             <div  v-for="(notifyitem, index) in notifyitems.object" :key="index + '_notifyitems'"  @click="readNotify()">
               <router-link to="/alarm" class="dropdown-item">
