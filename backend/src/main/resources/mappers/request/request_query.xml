@@ -206,7 +206,7 @@
 	<!-- 후기삭제 -->
 	<update id="deleteReviewAndUpdateRequest">
 		update request_form set
-				done_flag = 4
+				done_flag = 2
 		where rid = #{rid}
 	</update>
 

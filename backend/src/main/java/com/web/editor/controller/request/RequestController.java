@@ -173,6 +173,13 @@ public class RequestController {
 		int result = requestService.doneRequest(rid);
 
 		if (result > 0) {
+			// 요청자가 알림을 받는 사람이 됨
+			RequestDto dto = requestService.searchRequest(rid);
+			String reqNickname = dto.getResponse_nickname();
+			String resNickname = dto.getRequest_nickname(); // 일반회원이 알림받는 사람이됨
+			dto.setRequest_nickname(reqNickname);
+			dto.setResponse_nickname(resNickname);
+			addNotify(dto, "review");
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
@@ -287,7 +294,7 @@ public class RequestController {
 		// 편집자 알림 등록
 		NotifyDto notifyDto = new NotifyDto();
 		notifyDto.setRead_flag(0);
-		notifyDto.setNotify_type(type); // 알림 타입은 request
+		notifyDto.setNotify_type(type); // 알림 타입은 request or review
 		notifyDto.setRequest_nickname(dto.getRequest_nickname()); // 알림 요청한사람
 		notifyDto.setResponse_nickname(dto.getResponse_nickname()); // 알림 받는사람
 		requestService.insertNotify(notifyDto);

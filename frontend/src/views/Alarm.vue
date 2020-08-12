@@ -847,18 +847,34 @@ export default {
               if (data == 1) {
                 msg = "삭제가 완료되었습니다.";
                 alertify.notify(msg, "success", 3);
+                this.$bvModal.hide("review-" + rid);
                 return;
               } else {
                 msg = "삭제에 실패하였습니다.";
                 alertify.error(msg, 3);
                 return;
               }
+
             })
             .catch(() => {
               msg = "서버 통신 실패";
               alertify.error(msg, 3);
               return;
-            });
+            })
+            .finally(() => {
+            // 목록 새로고침
+              if (this.$session.get("auth") == "noneditor") {
+                store.dispatch(
+                  "getRequestitems2",
+                  "/request/req/" + this.$session.get("nickname") + "/2"
+                );
+                store.dispatch(
+                  "getRequestitems3",
+                  "/request/req/" + this.$session.get("nickname") + "/3"
+                );
+                this.ridDetail = -1;
+              }
+          });
         },
         function () {
           alertify.error("취소되었습니다.");
