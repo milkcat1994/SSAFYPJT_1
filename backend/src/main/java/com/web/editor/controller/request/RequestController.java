@@ -342,8 +342,10 @@ public class RequestController {
 	@ApiOperation(value = "요청서의 리뷰 등록")
 	@PostMapping("/review")
 	public Object insertReview(@RequestBody RequestReviewSaveRequest requestReviewSaveRequest) {
+		float avg = requestReviewSaveRequest.getFinishScore() + requestReviewSaveRequest.getKindnessScore() + requestReviewSaveRequest.getVideoScore();
+		requestReviewSaveRequest.setScoreAvg(avg/3);
 		int result = requestService.insertReview(requestReviewSaveRequest);
-
+		
 		if (result > 0) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {

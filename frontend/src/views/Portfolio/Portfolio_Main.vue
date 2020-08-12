@@ -113,11 +113,9 @@
                   </h3>
                 </div>
                 <div class="col">
-                  <h3>한줄평
-                    <base-button size="sm" type="float-right">후기 더보기</base-button>
-                  </h3>
+                  <h3>한줄평</h3>
                   <badger-accordion>
-                    <badger-accordion-item v-for="(review, index) in reviews" :key="index">
+                    <badger-accordion-item v-for="(review, index) in reviewsMain" :key="index">
                       <template slot="header" >{{review.comment}}</template>    
                       <template slot="content" >
                         <h3>
@@ -147,6 +145,7 @@
                       </template>
                     </badger-accordion-item>
                   </badger-accordion>
+                  <base-button size="sm" type="float-right" @click="reviewModal.show = true" icon="ni ni-fat-add">더보기</base-button>
                 </div>
               </div>
             </div>
@@ -292,6 +291,46 @@
      </template>
     </modal>
 
+    <modal :show.sync="reviewModal.show">
+      <h1 slot="header" class="modal-title" id="modal-title-default">한줄평</h1>
+        <badger-accordion>
+          <badger-accordion-item v-for="(review, index) in reviews" :key="index">
+            <template slot="header" >{{review.comment}}</template>    
+              <template slot="content" >
+                <h3>
+                  영상만족도
+                  <rate
+                    :length="5"
+                    :value="review.videoScore"
+                    :disabled="true"
+                  />
+                </h3>
+                <h3>
+                  친절도
+                  <rate
+                    :length="5"
+                    :value="review.kindnessScore"
+                    :disabled="true"
+                  />
+                </h3>
+                <h3>
+                  마감 속도
+                  <rate
+                    :length="5"
+                    :value="review.finishScore"
+                    :disabled="true"
+                  />
+                </h3>
+              </template>
+          </badger-accordion-item>
+        </badger-accordion>
+        <template slot="footer">
+          <base-button type="link" class="ml-auto" @click="reviewModal.show = false">
+            Close
+          </base-button>
+        </template>
+    </modal>
+
     <modal :show.sync="alertModal.show"
       gradient="danger"
       modal-classes="modal-danger modal-dialog-centered">
@@ -376,6 +415,7 @@ import http from "@/util/http-common";
 
         //리뷰들
         reviews: [],
+        reviewsMain: [],
 
         //태그들
         tags:[],
@@ -421,6 +461,9 @@ import http from "@/util/http-common";
           show: false
         },
         alertModal: {
+          show: false
+        },
+        reviewModal: {
           show: false
         },
 
@@ -697,22 +740,27 @@ import http from "@/util/http-common";
       },
       getReviewInfo(URL){
         http
-            .get(URL+'/review/'+this.uid)
-            .then(({data}) => {
-                //성공시 평균 계산 필요 추출 필요
-                if (data.data == 'success') {
-                  this.reviews = data.object;
-                  let videoAvg=0, kindnessAvg=0, finishAvg=0;
-                  data.object.forEach(obj => {
-                    videoAvg += obj.videoScore;
-                    kindnessAvg += obj.kindnessScore;
-                    finishAvg += obj.finishScore;
-                  });
-                  let length = data.object.length;
-                  this.videoAvg = videoAvg/length;
-                  this.kindnessAvg = kindnessAvg/length;
-                  this.finishAvg = finishAvg/length;
+        .get(URL+'/review/'+this.uid)
+        .then(({data}) => {
+          //성공시 평균 계산 필요 추출 필요
+          if (data.data == 'success') {
+            this.reviews = data.object;
+            let videoAvg=0, kindnessAvg=0, finishAvg=0;
+            data.object.forEach(obj => {
+              videoAvg += obj.videoScore;
+              kindnessAvg += obj.kindnessScore;
+              finishAvg += obj.finishScore;
+            });
+            let length = data.object.length;
+            this.videoAvg = videoAvg/length;
+            this.kindnessAvg = kindnessAvg/length;
+            this.finishAvg = finishAvg/length;
 
+            this.reviewsMain = this.reviews.reverse();
+            if(this.reviews.length > 5){
+              this.reviewsMain = this.reviews.slice(0,5);
+            }
+            
             return;
           } else {
             // fail

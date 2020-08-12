@@ -26,4 +26,5 @@ public class RequestReview {
     private int kindnessScore;
     private int finishScore;
     private String comment;
+    private float scoreAvg;
 }
