@@ -1,10 +1,5 @@
 <template>
-  <base-nav
-    class="navbar-top navbar-dark"
-    id="navbar-main"
-    :show-toggle-button="false"
-    expand
-  >
+  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
     <!-- <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
       <div class="form-group mb-0">
         <base-input
@@ -30,7 +25,11 @@
             <div class="dropdown-header noti-title">
               <h6 class="text-overflow m-0">최근 알림 내역</h6>
             </div>
-            <div  v-for="(notifyitem, index) in notifyitems.object" :key="index + '_notifyitems'"  @click="readNotify()">
+            <div
+              v-for="(notifyitem, index) in notifyitems.object"
+              :key="index + '_notifyitems'"
+              @click="readNotify()"
+            >
               <router-link to="/alarm" class="dropdown-item">
                 <i class="ni ni-bulb-61 text-yellow"></i>
                 <span v-if="notifyitem.notify_type == 'request'"
@@ -64,22 +63,19 @@
       <li v-if="!isLogin" class="nav-item mr-3">
         <router-link :to="{ name: 'register' }" class="nav-link">
           <i class="fas fa-user-plus"></i>
-          <span class="nav-link-inner--text"> 회원가입</span>
+          <span class="nav-link-inner--text">회원가입</span>
         </router-link>
       </li>
       <li v-if="!isLogin" class="nav-item">
         <router-link :to="{ name: 'login' }" class="nav-link">
           <i class="fas fa-user-check"></i>
-          <span class="nav-link-inner--text"> 로그인</span>
+          <span class="nav-link-inner--text">로그인</span>
         </router-link>
       </li>
     </ul>
 
     <!-- 마이페이지 -->
-    <ul
-      v-if="isLogin"
-      class="navbar-nav align-items-center ml-2 d-none d-md-flex"
-    >
+    <ul v-if="isLogin" class="navbar-nav align-items-center ml-2 d-none d-md-flex">
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
@@ -87,9 +83,7 @@
               <img alt="Image placeholder" src="img/theme/avatar.svg" />
             </span>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold text-default">
-                {{nickname}}
-              </span>
+              <span class="mb-0 text-sm font-weight-bold text-default">{{nickname}}</span>
             </div>
           </div>
 
@@ -108,17 +102,13 @@
             <router-link to="/404" class="dropdown-item">
               <i class="ni ni-calendar-grid-58"></i>
               <span>작업 일정</span>
-            </router-link> -->
+            </router-link>-->
             <router-link to="/404" class="dropdown-item">
               <i class="ni ni-support-16"></i>
               <span>도움말</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <span
-              style="cursor:pointer;"
-              class="dropdown-item"
-              @click="logout()"
-            >
+            <span style="cursor:pointer;" class="dropdown-item" @click="logout()">
               <i class="ni ni-lock-circle-open"></i>
               <span>로그아웃</span>
             </span>
@@ -165,8 +155,8 @@ export default {
     ...mapGetters(["notifyitems"]),
     ...mapGetters(["notifyitem"]),
     nickname() {
-      return this.$session.get("nickname")
-    }
+      return this.$session.get("nickname");
+    },
   },
   watch: {
     // route 경로가 바뀔때마다 로그인 상태인지 확인
@@ -188,7 +178,7 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
-    getNotifyNum(){
+    getNotifyNum() {
       this.notifyNum = this.notifyitems.data;
       return this.notifyNum;
     },
@@ -222,3 +212,8 @@ export default {
   },
 };
 </script>
+<style>
+.nav-item:hover {
+  cursor: pointer;
+}
+</style>
