@@ -95,7 +95,6 @@
                     :id="'accordion-' + requestitem0.rid"
                     accordion="my-accordion"
                     role="tabpanel"
-                    
                   >
                     <b-card-body>
                       <b-card-text>
@@ -651,7 +650,7 @@ export default {
         );
       }
       this.readNotify();
-    } 
+    }
   },
   computed: {
     ...mapGetters(["requestitems0"]),
@@ -899,23 +898,25 @@ export default {
     },
 
     // 알림 읽음 처리
-    readNotify(){
+    readNotify() {
       http
-        .put('/request/notify/read/' + this.$session.get('nickname'))
+        .put("/request/notify/read/" + this.$session.get("nickname"))
         .then(({ data }) => {
-          if (data == 'success'){
+          if (data == "success") {
             // alert('알람 읽음 완료');
-            }
+          }
         })
         .catch(() => {
           // alert('요청 거절중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침
-          store.dispatch('getNotifyitems', '/request/notify/' + this.$session.get('nickname'));
+          store.dispatch(
+            "getNotifyitems",
+            "/request/notify/" + this.$session.get("nickname")
+          );
         });
     },
-
   },
 };
 </script>
