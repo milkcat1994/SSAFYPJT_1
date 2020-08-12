@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.validation.Valid;
 
@@ -27,7 +26,6 @@ import com.web.editor.model.dto.request.RequestReview;
 import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
-import com.web.editor.model.dto.request.VideoSkillDto;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.request.RequestService;
 
@@ -128,13 +126,18 @@ public class RequestController {
 	public ResponseEntity<String> insertRequest(@Valid @RequestBody RequestDto requestDto) {
 		// 등록시 기본값 0
 		requestDto.setDone_flag(0);
+		
+		requestDto.setVideo_skill(requestDto.getVideo_skill().substring(1));
+
 		int result = requestService.insertRequest(requestDto);
 
 		if (result > 0) {
 			// 알림 함께 등록
 			addNotify(requestDto, "request");
 			// 태그 함께 등록
-			// addTag(requestDto.getTag_list(), requestDto.getRid());
+			if (requestDto.getTags() != null || 
+				(requestDto.getTags() != null && requestDto.getTags().size() > 0))
+				addTag(requestDto.getTags(), requestDto.getRid());
 
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		} else {
@@ -363,18 +366,6 @@ public class RequestController {
 		}
 	}
 
-	// 요청서의 비디오스킬들을 문자열로
-	private String skillsToString(List<VideoSkillDto> skills) {
 
-		// 비디오 스킬 문자열
-		StringBuilder skillStr = new StringBuilder();
-		for (int i = 0; i < skills.size(); i++){
-			skillStr.append(skills.get(i).getDescription());
-			if (i < skills.size() -1){
-				skillStr.append(", ");
-			}
-		}
-		return skillStr.toString();
-	}
 	
 }
