@@ -571,7 +571,6 @@ export default {
       ],
 
       ridDetail: "",
-      tabShow: false,
 
       events: [],
       videoScore: 0,

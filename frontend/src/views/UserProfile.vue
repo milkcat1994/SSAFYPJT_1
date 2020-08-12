@@ -27,8 +27,13 @@
                         v-model="nickname"
                       />
                     </div>
-                    <div class="col-2">
-                      <base-button type="default" class style="white-space: nowrap;" @click="checkNickname()">중복확인</base-button>
+                    <div class="d-flex justify-content-center">
+                      <base-button
+                        type="default"
+                        class="btn-sm"
+                        style="white-space: nowrap;"
+                        @click="checkNickname()"
+                      >중복확인</base-button>
                     </div>
 
                     <div class="col-lg-12">
