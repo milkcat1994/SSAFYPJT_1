@@ -104,7 +104,7 @@ export default {
         .then(({ data }) => {
           if (data.data != "nickname") {
             this.ischeck = true;
-            alertify.notify("닉네임 사용이 가능합니다!!!!!", "nickname", 3);
+            alertify.notify("닉네임 사용이 가능합니다", "nickname", 3);
           } else {
             alertify.error("이미 사용 중인 닉네임입니다.", 3);
           }
