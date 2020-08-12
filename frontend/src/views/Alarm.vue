@@ -95,7 +95,6 @@
                     :visible="tabShow"
                     accordion="my-accordion"
                     role="tabpanel"
-                    
                   >
                     <b-card-body>
                       <b-card-text>
@@ -571,10 +570,7 @@ export default {
       ],
 
       ridDetail: "",
-<<<<<<< HEAD
-=======
       tabShow: false,
->>>>>>> 206fa0ccde1ca7b3ed3cddc88154c515aef42844
 
       events: [],
       videoScore: 0,
@@ -651,7 +647,7 @@ export default {
         );
       }
       this.readNotify();
-    } 
+    }
   },
   computed: {
     ...mapGetters(["requestitems0"]),
@@ -866,11 +862,8 @@ export default {
       );
     },
     setRequestDate(start, end, rid) {
-<<<<<<< HEAD
-      if (this.ridDetail == rid) {  // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
-=======
-      if (this.ridDetail == rid || this.ridDetail == -1) {  // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
->>>>>>> 206fa0ccde1ca7b3ed3cddc88154c515aef42844
+      if (this.ridDetail == rid || this.ridDetail == -1) {
+        // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
         this.setDateClean();
         this.ridDetail = "";
         return;
@@ -902,23 +895,25 @@ export default {
     },
 
     // 알림 읽음 처리
-    readNotify(){
+    readNotify() {
       http
-        .put('/request/notify/read/' + this.$session.get('nickname'))
+        .put("/request/notify/read/" + this.$session.get("nickname"))
         .then(({ data }) => {
-          if (data == 'success'){
+          if (data == "success") {
             // alert('알람 읽음 완료');
-            }
+          }
         })
         .catch(() => {
           // alert('요청 거절중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침
-          store.dispatch('getNotifyitems', '/request/notify/' + this.$session.get('nickname'));
+          store.dispatch(
+            "getNotifyitems",
+            "/request/notify/" + this.$session.get("nickname")
+          );
         });
     },
-
   },
 };
 </script>

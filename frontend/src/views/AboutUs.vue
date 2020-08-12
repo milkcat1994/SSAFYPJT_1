@@ -59,7 +59,7 @@
           <div class="box mr-3" style="background: #BDBDBD;">
             <img class="profile" src="img/theme/홍주표.jpg" />
           </div>
-          <p class="d-flex align-items-center">깃헙 홍주표</p>
+          <p class="d-flex align-items-center">깃홍 홍주표</p>
         </div>
 
         <div class="col-6 mb-3 d-flex justify-content-center">
@@ -73,7 +73,7 @@
           <div class="box mr-3" style="background: #BDBDBD;">
             <img class="profile" src="img/theme/임진희.jpg" />
           </div>
-          <p class="d-flex align-items-center">땡떙 임진희</p>
+          <p class="d-flex align-items-center">나는 임진희</p>
         </div>
 
         <div class="col-6 mb-3 d-flex justify-content-center">

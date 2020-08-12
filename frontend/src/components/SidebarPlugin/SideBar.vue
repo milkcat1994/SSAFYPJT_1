@@ -13,11 +13,7 @@
           :src="logo"
           class="navbar-brand-img"
           alt="편집"
-<<<<<<< HEAD
           style="width:90px; height:50px; border:none;"
-=======
-          style="width:90px; height:50px"
->>>>>>> 206fa0ccde1ca7b3ed3cddc88154c515aef42844
         />
       </router-link>
 
