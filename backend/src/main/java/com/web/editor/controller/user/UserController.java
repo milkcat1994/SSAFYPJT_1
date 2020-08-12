@@ -188,11 +188,12 @@ public class UserController {
             String auth = orgUser.getAuth();
             // 새로운 닉네임
             nicknameUpdateDto.setNickname(nickname);
-
-            // 요청서의 닉네임 변경
-            if (auth.equals("editor")) {
+            
+            // 요청서, 리뷰의 닉네임 변경
+            if (auth.equals("editor")){
                 requestService.updateNicknameRes(nicknameUpdateDto);
-            } else if (auth.equals("noneditor")) {
+                requestService.updateNickReview(nicknameUpdateDto);
+            }else if (auth.equals("noneditor")){
                 requestService.updateNicknameReq(nicknameUpdateDto);
             }
             // 알람 닉네임 변경
