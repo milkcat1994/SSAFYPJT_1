@@ -51,7 +51,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem0.uid"
+                      v-b-toggle="'accordion-' + requestitem0.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem0.rid);
@@ -68,7 +68,7 @@
                     </b-button>
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem0.uid"
+                      v-b-toggle="'accordion-' + requestitem0.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem0.rid);
@@ -91,9 +91,11 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem0.uid"
+                    :id="'accordion-' + requestitem0.rid"
+                    :visible="tabShow"
                     accordion="my-accordion"
                     role="tabpanel"
+                    
                   >
                     <b-card-body>
                       <b-card-text>
@@ -180,7 +182,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem1.uid"
+                      v-b-toggle="'accordion-' + requestitem1.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem1.rid);
@@ -202,7 +204,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem1.uid"
+                    :id="'accordion-' + requestitem1.rid"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -277,7 +279,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem2.uid"
+                      v-b-toggle="'accordion-' + requestitem2.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem2.rid);
@@ -299,7 +301,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem2.uid"
+                    :id="'accordion-' + requestitem2.rid"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -399,7 +401,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem3.uid"
+                      v-b-toggle="'accordion-' + requestitem3.rid"
                       variant="primary"
                       @click="
                         getDetail(requestitem3.rid);
@@ -421,7 +423,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem3.uid"
+                    :id="'accordion-' + requestitem3.rid"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -560,9 +562,16 @@ export default {
           textColor: "white",
           backgroundColor: "#6699ff",
         },
+        {
+          id: 4,
+          title: "offday",
+          textColor: "white",
+          backgroundColor: "#c9c9c9",
+        },
       ],
 
-      ridDetail: -1,
+      ridDetail: "",
+      tabShow: false,
 
       events: [],
       videoScore: 0,
