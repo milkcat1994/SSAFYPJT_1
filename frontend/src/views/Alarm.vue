@@ -35,6 +35,7 @@
             style="color: #ff0066; margin: 15px"
             v-if="$session.get('auth') == 'editor'"
           >개인 일정</i>
+          <i class="fas fa-circle" style="color: #c9c9c9; margin: 15px">휴일</i>
         </div>
       </div>
 
@@ -92,7 +93,6 @@
                   </b-card-header>
                   <b-collapse
                     :id="'accordion-' + requestitem0.rid"
-                    :visible="tabShow"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -205,7 +205,7 @@
                   <b-collapse
                     :id="'accordion-' + requestitem1.rid"
                     accordion="my-accordion"
-                    role="tabpanel"
+                    role="tabpane1"
                   >
                     <b-card-body>
                       <b-card-text>
@@ -619,6 +619,10 @@ export default {
           "getRequestitems2",
           "/request/res/" + this.$session.get("nickname") + "/2"
         );
+        store.dispatch(
+          "getRequestitems3",
+          "/request/res/" + this.$session.get("nickname") + "/3"
+        );
       } else if (this.$session.get("auth") == "noneditor") {
         store.dispatch(
           "getProgressdate",
@@ -848,6 +852,7 @@ export default {
                 alertify.error(msg, 3);
                 return;
               }
+
             })
             .catch(() => {
               msg = "서버 통신 실패";

@@ -333,5 +333,15 @@ public class RequestServiceImpl implements RequestService {
 		}
 	}
 
+	@Override
+	public int updateNickReview(NicknameUpdateDto nicknameUpdateDto) {
+		try {
+			return requestMapper.updateNickReview(nicknameUpdateDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
 
 }

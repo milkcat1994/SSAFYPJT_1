@@ -156,4 +156,7 @@ public class RequestMapper {
 		return sqlSession.update("updateResNoti", nicknameUpdateDto);
 	}
 
+	public int updateNickReview(NicknameUpdateDto nicknameUpdateDto) throws SQLException {
+		return sqlSession.update("updateNickReview", nicknameUpdateDto);
+	}
 }
