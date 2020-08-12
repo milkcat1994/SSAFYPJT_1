@@ -570,7 +570,6 @@ export default {
       ],
 
       ridDetail: "",
-      tabShow: false,
 
       events: [],
       videoScore: 0,
@@ -862,8 +861,7 @@ export default {
       );
     },
     setRequestDate(start, end, rid) {
-      if (this.ridDetail == rid || this.ridDetail == -1) {
-        // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
+      if (this.ridDetail == rid || this.ridDetail == -1) {  // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
         this.setDateClean();
         this.ridDetail = "";
         return;
