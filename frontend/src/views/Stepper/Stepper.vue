@@ -18,61 +18,60 @@
     <div class="container-fluid mt--7 mb-4">
       <div class="card shadow border-0">
         <div class="card-header">
-          헤더입니다
+          <h3 class="text-center mt-2">헤더(progress bar) 들어갈 자리</h3>
         </div>
         <div class="card-body border-0">
-          바디입니다
+          <video-type v-if="currentStep === 0"></video-type>
+          <video-style v-if="currentStep === 1"></video-style>
+          <video-skills v-if="currentStep === 2"></video-skills>
+          <video-origin-length v-if="currentStep === 3"></video-origin-length>
+          <video-final-length v-if="currentStep === 4"></video-final-length>
+          <video-deadline v-if="currentStep === 5"></video-deadline>
         </div>
         <div class="card-footer d-flex justify-content-end">
           <div class="px-2">
-            <a href="#">이전</a>
-            <button class="btn btn-primary ml-4">다음</button>
+            <a href="#" @click.prevent="backStep">이전</a>
+            <button class="btn btn-primary ml-4" @click.prevent="nextStep">다음</button>
             </div>
         </div>
-        <!-- <div class="container my-4">
-          <div class="column is-8 is-offset-2">
-            <horizontal-stepper
-              :steps="searchSteps"
-              @completed-step="completeStep"
-              @active-step="isStepActive"
-              @stepper-finished="sendRequest"
-            ></horizontal-stepper>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 
-  <!-- <section class="section">
-    
-  </section> -->
 </template>
 
 <script>
 // import http from "@/util/http-common";
-import { mapGetters } from 'vuex';
+// import { mapGetters } from 'vuex';
 
-import VideoCategory from './VideoCategory.vue';
-import VideoTheme from './VideoTheme.vue';
+import VideoType from './VideoType.vue';
+import VideoStyle from './VideoStyle.vue';
+import VideoSkills from './VideoSkills.vue';
 import VideoOriginLength from './VideoOriginLength.vue';
 import VideoFinalLength from './VideoFinalLength.vue';
-import EditSkill from './EditSkill.vue';
-import EditTerm from './EditTerm.vue';
+import VideoDeadline from './VideoDeadline.vue';
 
 export default {
   name: "stepper",
   components: {
     // HorizontalStepper,
+    VideoType,
+    VideoStyle,
+    VideoSkills,
+    VideoOriginLength,
+    VideoFinalLength,
+    VideoDeadline,
   },
   data() {
     return {
+      currentStep: 0,
       searchSteps: [
         {
           icon: "help",
           name: "first",
           title: "영상 종류",
           subtitle: "",
-          component: VideoCategory,
+          component: VideoType,
           completed: false,
         },
         {
@@ -80,7 +79,15 @@ export default {
           name: "second",
           title: "영상 특징",
           subtitle: "",
-          component: VideoTheme,
+          component: VideoStyle,
+          completed: false,
+        },
+        {
+          icon: "help",
+          name: "fifth",
+          title: "편집 기술",
+          subtitle: "",
+          component: VideoSkills,
           completed: false,
         },
         {
@@ -101,54 +108,41 @@ export default {
         },
         {
           icon: "help",
-          name: "fifth",
-          title: "편집 기술",
-          subtitle: "",
-          component: EditSkill,
-          completed: false,
-        },
-        {
-          icon: "help",
           name: "sixth",
           title: "희망 기한",
           subtitle: "",
-          component: EditTerm,
+          component: VideoDeadline,
           completed: false,
         },
       ],
     };
   },
-  computed: {
-    ...mapGetters(['getRequests']),
-  },
   methods: {
-    // Executed when @completed-step event is triggered
-    completeStep(payload) {
-      this.searchSteps.forEach((step) => {
-        if (step.name === payload.name) {
-          step.completed = true;
-        }
-      });
+    backStep() {
+      if (this.currentStep > 0) {
+        this.currentStep--;
+      } else {
+        // this.currentStep = 0
+        this.$router.push({name: 'mainpage'})
+      }
     },
-    // Executed when @active-step event is triggered
-    isStepActive(payload) {
-      this.searchSteps.forEach((step) => {
-        if (step.name === payload.name) {
-          if (step.completed === true) {
-            step.completed = false;
-          }
-        }
-      });
+    nextStep() {
+      if (this.currentStep < 5) {
+        this.currentStep++;
+      } else {
+        // after final step
+        this.$router.push("/editors");
+      }
     },
-    // Executed when @stepper-finished event is triggered
-    sendRequest() {
-      // 종료되었을 때 현재 작업요청서에 저장된 내용을 보내기
-      console.log(this.getRequests)
-      this.$router.push("/editors");
-    },
+    // Vuex stepper 초기화
+    clearSteps() {
+      this.$store.commit('stepper/clearStepperStatus')
+    }
+    // 각 단계 verification 필요 ==> 다음 버튼 활성화
+
   },
   created() {
-    console.log(URL)
+    this.clearSteps()
   }
 };
 </script>

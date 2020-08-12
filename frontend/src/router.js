@@ -66,12 +66,12 @@ export default new Router({
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
         },
-        {
-          path: "/search",
-          name: "search",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
-        },
+        // {
+        //   path: "/search",
+        //   name: "search",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
+        // },
         {
           path: "/stepper",
           name: "stepper",

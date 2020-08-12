@@ -1,90 +1,45 @@
 <template>
-  <div class="container mx-auto my-4 py-4" style="width: 80%">
+  <div class="container mx-auto my-4 py-4" style="width: 90%">
     
-    <h1 class="display-3 mb-0">원본 영상의 길이는 어느 정도인가요?</h1>
+    <h1 class="display-3 mb-0 text-center">원본 영상의 길이를 선택해주세요</h1>
 
     <div class="container py-4">
-      
-      <base-radio class="custom-control-alternative" name="one-min" v-model="origin">
-        <span class="display-4">1분 이내</span>
-      </base-radio>
 
-      <base-radio class="custom-control-alternative" name="five-min" v-model="origin">
-        <span class="display-4">5분 이내</span>
-      </base-radio>
+      <div class="row d-flex justify-content-center">
 
-      <base-radio class="custom-control-alternative" name="thirty-min" v-model="origin">
-        <span class="display-4">30분 이내</span>
-      </base-radio>
-      
-      <base-radio class="custom-control-alternative" name="one-hr" v-model="origin">
-        <span class="display-4">1시간 이내</span>
-      </base-radio>
-      
-      <base-radio class="custom-control-alternative" name="over-hr" v-model="origin">
-        <span class="display-4">1시간 이상</span>
-      </base-radio>
-
+        <div class="card text-center col-sm-2 m-2" 
+            v-for="item of originLength"
+            :class="{selected: !!item.status}"
+            :key="item.name"
+            @click.prevent="setOriginLength(item.name)">
+          <div class="card-body px-0 pt-4">
+            <h2 class="card-title">{{item.name}}</h2>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
 </template>
 <script>
-import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { mapState } from "vuex";
 
 export default {
   name: "video-origin-length",
-  props: {
-    type: {
-      type: String,
-    },
-    title: String,
-    clickedNext: {
-      type: Boolean,
-    },
-    currentStep: {
-      type: Object,
-    },
+  computed: {
+    ...mapState({
+      originLength: state => state.stepper.originLength
+    }),
   },
-  mixins: [validationMixin],
-  data() {
-    return {
-      origin: null,
-    };
-  },
-  validations: {
-    origin: {
-      required,
-    },
-  },
-  watch: {
-    $v: {
-      handler: function (val) {
-        if (!val.$invalid) {
-          this.$emit("can-continue", { value: true });
-        } else {
-          this.$emit("can-continue", { value: false });
-        }
-      },
-      deep: true,
-    },
-    clickedNext(val) {
-      if (val === true) {
-        this.$v.origin.$touch();
-      }
-    },
-    origin(val) {
-      this.$store.commit('setOriginLength', {value: val})
+  methods: {
+    setOriginLength(name) {
+      this.$store.commit('stepper/setOriginLength', name)
     }
-  },
-  mounted() {
-    if (!this.$v.$invalid) {
-      this.$emit("can-continue", { value: true });
-    } else {
-      this.$emit("can-continue", { value: false });
-    }
-  },
+  }
 };
 </script>
-<style>
+<style scoped>
+.selected {
+  border: solid 1px darkblue;
+}
 </style>
