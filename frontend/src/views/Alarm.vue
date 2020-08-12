@@ -20,12 +20,13 @@
       <!-- for calendar -->
       <br />
       <br />
-      <div class="col-6 d-flex" style="display: table; width: 50% ; height: 100%" id="calendardiv">
-        <div style="display: table-cell; text-align:center;">
+      <div class="col-6 d-flex" style="  display: table;" >
+        <div style="display: table-cell; text-align:center;" id="calendardiv">
           <calendar
             :eventCategories="eventCategories"
             :events="events=scheduledate"
             ref="calendar"
+            
           />
           <i class="fas fa-circle" style="color: #f29661; margin: 15px;">선택된 작업</i>
           <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
@@ -38,7 +39,7 @@
         </div>
       </div>
 
-      <tabs fill class="col-6 flex-column flex-md-row" style="float: right; width: 50%; height: 100%">
+      <tabs fill class="col-6 flex-column flex-md-row">
         <card shadow>
           <tab-pane>
             <span slot="title">
@@ -936,7 +937,7 @@ export default {
 
 #calendardiv { 
   position:fixed; 
-  display:inline-block; 
-  }
+  /* display:inline-block;  */
+}
 
 </style>
