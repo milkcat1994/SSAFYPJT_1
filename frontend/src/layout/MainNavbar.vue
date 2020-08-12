@@ -79,9 +79,11 @@
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
-            <span class="avatar avatar-sm rounded-circle">
-              <img alt="Image placeholder" src="img/theme/avatar.svg" />
-            </span>
+            <!-- <i class="ni ni-circle-08"></i> -->
+            <!-- <img alt="Image placeholder" src="img/theme/avatar.svg" /> -->
+            <!-- <span class="avatar avatar-sm rounded-circle">
+            </span>-->
+            <i class="fas fa-user" style="color:black !important"></i>
             <div class="media-body ml-2 d-none d-lg-block">
               <span class="mb-0 text-sm font-weight-bold text-default">{{nickname}}</span>
             </div>
