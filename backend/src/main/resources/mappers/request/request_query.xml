@@ -225,7 +225,6 @@
 		where response_nickname = #{orgNickname}
 	</update>
 
-
 	<!-- 알람 닉네임 변경 -->
 	<update id="updateReqNoti">
 		update notify set
@@ -237,6 +236,12 @@
 		update notify set
 			response_nickname = #{nickname}
 		where response_nickname = #{orgNickname}
+	</update>
+	<!-- 후기닉네임 변경 -->
+	<update id="updateNickReview">
+		update review set
+			nickname = #{nickname}
+		where nickname = #{orgNickname}
 	</update>
 
 

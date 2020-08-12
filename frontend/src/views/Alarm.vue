@@ -620,6 +620,10 @@ export default {
           "getRequestitems2",
           "/request/res/" + this.$session.get("nickname") + "/2"
         );
+        store.dispatch(
+          "getRequestitems3",
+          "/request/res/" + this.$session.get("nickname") + "/3"
+        );
       } else if (this.$session.get("auth") == "noneditor") {
         store.dispatch(
           "getProgressdate",

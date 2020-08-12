@@ -190,9 +190,10 @@ public class UserController {
             // 새로운 닉네임
             nicknameUpdateDto.setNickname(nickname);
             
-            // 요청서의 닉네임 변경
+            // 요청서, 리뷰의 닉네임 변경
             if (auth.equals("editor")){
                 requestService.updateNicknameRes(nicknameUpdateDto);
+                requestService.updateNickReview(nicknameUpdateDto);
             }else if (auth.equals("noneditor")){
                 requestService.updateNicknameReq(nicknameUpdateDto);
             }
