@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header
-      class="header pb-4 pt-2 pt-lg-5 d-flex align-items-center"
+      class="header pb-4 pt-2 pt-lg-5 d-flex align-items-center mb-8"
       style="
         min-height: 100px;
         background-size: cover;
@@ -12,16 +12,15 @@
       <span class="mask bg-gradient-success opacity-8"></span>
     </base-header>
 
-    <br />
-    <hr />
     <!-- <h2 class="text-center">알림창</h2> -->
     <br />
 
-    <div class="container-fluid mt--7 mb-5">
+    <div class="container alarm mt--7 mb-5">
+      <div class="row">
       <!-- for calendar -->
       <br />
       <br />
-      <div style="display: table; width:100%">
+      <div class="col-6 d-flex" style="display: table; width: 50% ; height: 100%" id="calendardiv">
         <div style="display: table-cell; text-align:center;">
           <calendar
             :eventCategories="eventCategories"
@@ -39,7 +38,7 @@
         </div>
       </div>
 
-      <tabs fill class="flex-column flex-md-row">
+      <tabs fill class="col-6 flex-column flex-md-row" style="float: right; width: 50%; height: 100%">
         <card shadow>
           <tab-pane>
             <span slot="title">
@@ -514,6 +513,9 @@
           </tab-pane>
         </card>
       </tabs>
+
+
+      </div>
     </div>
   </div>
 </template>
@@ -927,4 +929,14 @@ export default {
   margin: 10px;
   float: right;
 }
+
+.alarm {
+  min-height: 70vh;
+}
+
+#calendardiv { 
+  position:fixed; 
+  display:inline-block; 
+  }
+
 </style>
