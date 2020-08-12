@@ -221,6 +221,12 @@
           <base-checkbox class="mb-3" name="video_style" value="etc" v-model="video_style.etc"> 
             기타
           </base-checkbox>
+          <base-input
+            alternative
+            placeholder="기타 선택 시 영상 종류를 입력해주세요"
+            input-classes="form-control-alternative"
+            v-model="request_info.video_style"
+          />
         </div>
         <div class="row">
           <h3>작업 기간</h3>
@@ -449,6 +455,7 @@ import http from "@/util/http-common";
           commercial: false
         },
         video_style: {
+          kids: false,
           game: false,
           music: false,
           food: false,
@@ -514,7 +521,7 @@ import http from "@/util/http-common";
                 //숫자인지 체크
                 valid && !this.checkNumberFormat(this.request_info.video_origin_length) && ((valid = false), (message = '숫자만 입력해주세요'))
                 valid && !this.checkNumberFormat(this.request_info.video_result_length) && ((valid = false), (message = '숫자만 입력해주세요'))
-                valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
+                // valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
                 
                 if (valid) this.requestForm();
                 else {
@@ -542,6 +549,60 @@ import http from "@/util/http-common";
         }
         else if(dates.length == 2){
           this.request_info.end_date = dates[1]
+        }
+
+        if(this.video_type.personal){
+          this.request_info.video_type = "개인용";
+        }
+        if(this.video_type.commercial){
+          this.request_info.video_type = "상업용";
+        }
+
+        if(this.video_style.kids){
+          this.request_info.video_style = "키즈";
+        }
+        if(this.video_style.game){
+          this.request_info.video_style = "게임";
+        }
+        if(this.video_style.music){
+          this.request_info.video_style = "음악/댄스";
+        }
+        if(this.video_style.food){
+          this.request_info.video_style = "푸드/쿠킹";
+        }
+        if(this.video_style.vlog){
+          this.request_info.video_style = "V-log";
+        }
+        if(this.video_style.movie){
+          this.request_info.video_style = "영화/애니메이션";
+        }
+        if(this.video_style.animal){
+          this.request_info.video_style = "동물";
+        }
+        if(this.video_style.beauty){
+          this.request_info.video_style = "뷰티/패션";
+        }
+        if(this.video_style.sports){
+          this.request_info.video_style = "스포츠";
+        }
+
+        if(this.video_skill.color){
+          this.request_info.video_skill += ",색 보정";
+        }
+        if(this.video_skill.audio){
+          this.request_info.video_skill += ",음향";
+        }
+        if(this.video_skill.motion){
+          this.request_info.video_skill += ",모션그래픽";
+        }
+        if(this.video_skill.caption){
+          this.request_info.video_skill += ",자막";
+        }
+        if(this.video_skill.intro){
+          this.request_info.video_skill += ",인트로";
+        }
+        if(this.video_skill.outro){
+          this.request_info.video_skill += ",아웃트로";
         }
 
         http

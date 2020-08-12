@@ -106,48 +106,16 @@ export default new Vuex.Store({
 
     // request
     mutateSetRequestitems0(state, requestitems0) {
-      let obj = [];
-      for (let index = 0; index < requestitems0.length; index++) {
-        let element = requestitems0[index];
-        element.uid = index + "request";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems0 = obj;
+      state.requestitems0 = requestitems0;
     },
     mutateSetRequestitems1(state, requestitems1) {
-      let obj = [];
-      for (let index = 0; index < requestitems1.length; index++) {
-        let element = requestitems1[index];
-        element.uid = index + "pogreess";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems1 = obj;
+      state.requestitems1 = requestitems1;
     },
     mutateSetRequestitems2(state, requestitems2) {
-      let obj = [];
-      for (let index = 0; index < requestitems2.length; index++) {
-        let element = requestitems2[index];
-        element.uid = index + "done";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems2 = obj;
+      state.requestitems2 = requestitems2;
     },
     mutateSetRequestitems3(state, requestitems3) {
-      let obj = [];
-      for (let index = 0; index < requestitems3.length; index++) {
-        let element = requestitems3[index];
-        element.uid = index + "review";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems3 = obj;
+      state.requestitems3 = requestitems3;
     },
     mutateSetRequestitems0123(state, requestitems) {
       state.requestitems0 = requestitems

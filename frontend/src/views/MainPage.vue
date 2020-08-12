@@ -4,7 +4,9 @@
       <!-- 검색 -->
       <div class="row align-items-center mx-lg-n5">
         <div class="col py-3 px-lg-5">
-          <div class="d-flex flex-column justify-content-center col-lg-12 col-12">
+          <div
+            class="d-flex flex-column justify-content-center col-lg-12 col-12"
+          >
             <!-- <h1 class="display-2 text-white">어떤 편집자를 찾으시나요?</h1> -->
 
             <!-- 검색 input -->
@@ -15,7 +17,7 @@
               addon-left-icon="fas fa-search"
               v-model="keyword"
               @keyup.enter="createRequest"
-              >
+            >
             </base-input>
 
             <!-- 카테고리 icons -->
@@ -23,45 +25,93 @@
               <!-- <div class="row mx-lg-n5 text-center text-white"> -->
               <div class="row mx-lg-n5">
                 <div class="col py-3 px-lg-5">
-                  <div class="d-flex flex-column align-items-center text-center" @click="iconSearch">
+                  <div
+                    class="d-flex flex-column align-items-center text-center"
+                    @click="iconSearch"
+                  >
                     <!-- <i class="fa fa-utensils fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img class="icon m-2" :src="iconFood" alt="food icon" id="food">
+                    <img
+                      class="icon m-2"
+                      :src="iconFood"
+                      alt="food icon"
+                      id="food"
+                    />
                     <small>먹방</small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
-                  <div class="d-flex flex-column align-items-center text-center" @click="iconSearch">
+                  <div
+                    class="d-flex flex-column align-items-center text-center"
+                    @click="iconSearch"
+                  >
                     <!-- <i class="fa fa-plane fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img class="icon m-2" :src="iconPlane" alt="plane icon" id="travel">
+                    <img
+                      class="icon m-2"
+                      :src="iconPlane"
+                      alt="plane icon"
+                      id="travel"
+                    />
                     <small>여행</small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
-                  <div class="d-flex flex-column align-items-center text-center" @click="iconSearch">
+                  <div
+                    class="d-flex flex-column align-items-center text-center"
+                    @click="iconSearch"
+                  >
                     <!-- <i class="fa fa-gamepad fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img class="icon m-2" :src="iconGame" alt="game icon" id="game">
+                    <img
+                      class="icon m-2"
+                      :src="iconGame"
+                      alt="game icon"
+                      id="game"
+                    />
                     <small>게임</small>
                   </div>
                 </div>
                 <div class="w-100"></div>
                 <div class="col py-3 px-lg-5">
-                  <div class="d-flex flex-column align-items-center text-center" @click="iconSearch">
+                  <div
+                    class="d-flex flex-column align-items-center text-center"
+                    @click="iconSearch"
+                  >
                     <!-- <i class="fa fa-bicycle fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img class="icon m-2" :src="iconExercise" alt="dumbbell icon" id="exercise">
+                    <img
+                      class="icon m-2"
+                      :src="iconExercise"
+                      alt="dumbbell icon"
+                      id="exercise"
+                    />
                     <small>운동</small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
-                  <div class="d-flex flex-column align-items-center text-center" @click="iconSearch">
+                  <div
+                    class="d-flex flex-column align-items-center text-center"
+                    @click="iconSearch"
+                  >
                     <!-- <i class="fa fa-microphone fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img class="icon m-2" :src="iconASMR" alt="talk icon" id="talk">
+                    <img
+                      class="icon m-2"
+                      :src="iconASMR"
+                      alt="talk icon"
+                      id="talk"
+                    />
                     <small>토크</small>
                   </div>
                 </div>
                 <div class="col py-3 px-lg-5">
-                  <div class="d-flex flex-column align-items-center text-center" @click="iconSearch">
+                  <div
+                    class="d-flex flex-column align-items-center text-center"
+                    @click="iconSearch"
+                  >
                     <!-- <i class="fa fa-music fa-4x mb-2" aria-hidden="true"></i> -->
-                    <img class="icon m-2" :src="iconMusic" alt="guitar icon" id="music">
+                    <img
+                      class="icon m-2"
+                      :src="iconMusic"
+                      alt="guitar icon"
+                      id="music"
+                    />
                     <small>음악</small>
                   </div>
                 </div>
@@ -73,43 +123,44 @@
         <!-- 추천 -->
         <div class="col py-3 px-lg-5">
           <div class="d-flex flex-column justify-content-around">
-            
             <!-- 슈퍼 편집자 -->
-            <div class="find-super mb-4" @click="findSuper">
-              <stats-card title="어떤 영상이라도 문제없다!"
-                          type="gradient-red"
-                          sub-title="슈퍼 편집자 찾아보기"
-                          icon="ni ni-like-2"
+            <div class="find" @click="findSuper">
+              <stats-card
+                title="어떤 영상이라도 문제없다!"
+                type="gradient-red"
+                sub-title="슈퍼 편집자 찾아보기"
+                icon="ni ni-like-2"
+                class="mb-4 mb-xl-4"
               >
-
-                  <template slot="footer">
-                      <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>87%</span> -->
-                      <span class="text-success mr-2">98%</span>
-                      <span class="text-nowrap">의 이용자가 선택합니다</span>
-                  </template>
+                <template slot="footer">
+                  <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>87%</span> -->
+                  <span class="text-success mr-2">98%</span>
+                  <span class="text-nowrap">의 이용자가 선택합니다</span>
+                </template>
               </stats-card>
             </div>
 
             <!-- 맞춤 편집자 -->
-            <div class="suggest" @click="getSuggestion">
-              <stats-card title="얼마나 맞을지 궁금하죠?"
-                          type="gradient-green"
-                          sub-title="맞춤 편집자 추천받기"
-                          icon="ni ni-compass-04"
+            <div class="find" @click="getSuggestion">
+              <stats-card
+                title="얼마나 맞을지 궁금하죠?"
+                type="gradient-green"
+                sub-title="맞춤 편집자 추천받기"
+                icon="ni ni-compass-04"
+                class="mb-4 mb-xl-0"
               >
-
-                  <template slot="footer">
-                      <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 96%</span> -->
-                      <span class="text-success mr-2">96%</span>
-                      <span class="text-nowrap">의 이용자가 만족합니다.</span>
-                  </template>
+                <template slot="footer">
+                  <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 96%</span> -->
+                  <span class="text-success mr-2">96%</span>
+                  <span class="text-nowrap">의 이용자가 만족합니다.</span>
+                </template>
               </stats-card>
             </div>
           </div>
         </div>
       </div>
     </base-header>
-    
+
     <!-- <div class="container-fluid mt--7 mb-4">
         <div class="row">
             <div class="col">
@@ -122,11 +173,10 @@
   </div>
 </template>
 <script>
-import http from '@/util/http-common.js'
+import http from "@/util/http-common.js";
 
 export default {
-  components: {
-  },
+  components: {},
   data() {
     return {
       keyword: null,
@@ -136,62 +186,74 @@ export default {
     keywordSearch(keyword) {
       // console.log(keyword)
       // BE URL 확인 후 변경
-      http.get(`/search/${keyword}`)
-        .then(res => {
-          console.log(res)
-          this.$router.push({name: 'search'})
-        })
+      http.get(`/search/${keyword}`).then((res) => {
+        console.log(res);
+        this.$router.push({ name: "search" });
+      });
     },
     iconSearch(event) {
       // console.log(event.target.id)
       let kw = event.target.id;
-      if (kw === 'food') {
-        this.keywordSearch(kw)
-      } else if (kw === 'travel') {
-        this.keywordSearch(kw)
-      } else if (kw === 'game') {
-        this.keywordSearch(kw)
-      } else if (kw === 'exercise') {
-        this.keywordSearch(kw)
-      } else if (kw === 'talk') {
-        this.keywordSearch(kw)
-      } else if (kw === 'music') {
-        this.keywordSearch(kw)
+      if (kw === "food") {
+        this.keywordSearch(kw);
+      } else if (kw === "travel") {
+        this.keywordSearch(kw);
+      } else if (kw === "game") {
+        this.keywordSearch(kw);
+      } else if (kw === "exercise") {
+        this.keywordSearch(kw);
+      } else if (kw === "talk") {
+        this.keywordSearch(kw);
+      } else if (kw === "music") {
+        this.keywordSearch(kw);
       } else {
-        this.keywordSearch(kw)
+        this.keywordSearch(kw);
       }
     },
     createRequest(event) {
-      console.log(event.target.value)
+      console.log(event.target.value);
       this.$router.push(
-        {name: 'search'},
+        { name: "search" }
         // {params: {
         // 둘 중 하나 사용
         //    keyword: this.keyword
         //    keyword: event.target.value
         // }}
-        )
+      );
     },
     findSuper() {
       // 슈퍼편집자 조건으로 검색 조건 + router로 push
-      this.$router.push({name: 'search'})
+      this.$router.push({ name: "search" });
     },
     getSuggestion() {
       // 현재 로그인한 사용자의 태그나 이용정보 바탕으로 검색 조건 + router로 push
-      this.$router.push({name: 'stepper'})
-    }
+      this.$router.push({ name: "search" });
+    },
   },
   computed: {
-    iconASMR() { return require('@/assets/main/mic.svg') },
-    iconCelebration() { return require('@/assets/main/balloon.svg') },
-    iconExercise() { return require('@/assets/main/dumbbell.svg') },
-    iconFood() { return require('@/assets/main/cutlery.svg') },
-    iconGame() { return require('@/assets/main/gamepad.svg') },
-    iconMusic() { return require('@/assets/main/guitar.svg') },
-    iconPlane() { return require('@/assets/main/plane.svg') },
+    iconASMR() {
+      return require("@/assets/main/mic.svg");
+    },
+    iconCelebration() {
+      return require("@/assets/main/balloon.svg");
+    },
+    iconExercise() {
+      return require("@/assets/main/dumbbell.svg");
+    },
+    iconFood() {
+      return require("@/assets/main/cutlery.svg");
+    },
+    iconGame() {
+      return require("@/assets/main/gamepad.svg");
+    },
+    iconMusic() {
+      return require("@/assets/main/guitar.svg");
+    },
+    iconPlane() {
+      return require("@/assets/main/plane.svg");
+    },
   },
-  mounted() {
-  }
+  mounted() {},
 };
 </script>
 <style scoped>
@@ -201,11 +263,7 @@ export default {
   height: 50px;
 }
 
-.find-super:hover {
-  cursor: pointer;
-}
-
-.suggest:hover {
+.find:hover {
   cursor: pointer;
 }
 </style>

@@ -7,10 +7,9 @@
 
     <!-- 휴일 조회 -->
     <select id="holidayDates" resultType="HolidayDate">
-        SELECT start_date as start, end_date as end
+        SELECT start_date as start, end_date as end, schedule_type as categoryId
         FROM schedule_info
         WHERE portfolio_uid= #{uid}
-        AND schedule_type = 1
     </select>
     
 </mapper>
