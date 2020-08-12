@@ -92,6 +92,13 @@ export default new Router({
             import(/* webpackChunkName: "demo" */ "./views/Alarm.vue"),
           beforeEnter: requireLogin,
         },
+
+        {
+          path: "/about",
+          name: "AboutUs",
+          component: () =>
+            import(/* webpackChunkName: "demo" */ "./views/AboutUs.vue"),
+        },
       ],
     },
     {
@@ -109,7 +116,7 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Main.vue"
             ),
-            // beforeEnter: requireLogin
+          // beforeEnter: requireLogin
         },
         {
           path: "/portfolio/edit",
@@ -121,9 +128,9 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Edit.vue"
             ),
-            beforeEnter: requireAuth
+          beforeEnter: requireAuth,
         },
-      ]
+      ],
     },
     {
       path: "/user",

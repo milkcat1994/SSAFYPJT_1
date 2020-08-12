@@ -13,7 +13,7 @@
           :src="logo"
           class="navbar-brand-img"
           alt="편집"
-          style="width:90px; height:50px"
+          style="width:90px; height:50px; border:none;"
         />
       </router-link>
 
@@ -88,9 +88,7 @@
               </router-link>
             </div>
             <div class="col-6 collapse-close">
-              <navbar-toggle-button
-                @click.native="closeSidebar"
-              ></navbar-toggle-button>
+              <navbar-toggle-button @click.native="closeSidebar"></navbar-toggle-button>
             </div>
           </div>
         </div>
