@@ -77,9 +77,9 @@ public class CfAlgorithm {
 
         for (String tag: tags) {
             // 태그를 포함하면
-            if (edi.contains(tag))  eq++; 
+            if (edi.contains(tag.trim()))  eq++; 
         }
-        return eq/tags.length * 1;
+        return eq/tags.length * 2;
     }
 
     // 스킬 점수화
@@ -91,11 +91,12 @@ public class CfAlgorithm {
             // 태그를 포함하지 않으면
             if (!edi.contains(skill))  eq++; 
         }
-        return eq/skills.length * 1;
+        return eq/skills.length * 2;
     }
 
     // 금액 점수화
     private double editorPay(double book, double edi){
+        if (book > edi) return 1;
         return (book - Math.abs(book-edi)) / book * 1;
     }
 
