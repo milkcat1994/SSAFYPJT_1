@@ -39,7 +39,7 @@ public class RecommendController {
         if (bookmarks == null) return new ResponseEntity<>("bookmark is empty", HttpStatus.OK);
         if (bookmarks.size() <= 0) return new ResponseEntity<>("bookmark is empty", HttpStatus.OK);
 
-        // 추천 에디터 받아옴
+        // 추천 편집자 받아옴
         List<EditorDto> recommendList = cfAlgorithm.recommendByBookmark(bookmarks, editors);
         
         return new ResponseEntity<>(recommendList, HttpStatus.OK);
