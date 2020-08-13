@@ -2,12 +2,15 @@ package com.web.editor.model.service.user.search.redis;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.editor.model.dto.request.SearchAverageScore;
@@ -28,6 +31,9 @@ import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Repository;
+
+import io.netty.util.internal.PriorityQueue;
+import reactor.core.Fuseable.SynchronousSubscription;
 
 @Repository
 public class SearchRedisServiceImpl implements SearchRedisService {
@@ -56,8 +62,11 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         this.redisTemplateSet = redisTemplateSet;
         hashOperations = redisTemplateHash.opsForHash();
 
+        // searchPortfolio 클래스 받기위한 operation
         this.redisTemplateHash.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchPortfolio.class));
         setResultOperations = redisTemplateHash.opsForSet();
+
+
 
         setOperations = redisTemplateSet.opsForSet();
         this.redisTemplateHashUid = redisTemplateHashUid;
@@ -74,8 +83,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         for (SearchPortfolioJoinBookmark searchPortfolioJoinBookmark : searchPortfolioJoinBookmarks) {
             // searchPortfolioJoinBookmark.setInit("", "");
             // System.out.println(searchPortfolioJoinBookmark);
-            hashOperations.putAll("uid:" + searchPortfolioJoinBookmark.getUid(),
-                    objectMapper.convertValue(searchPortfolioJoinBookmark, Map.class));
+            hashOperations.putAll("uid:" + searchPortfolioJoinBookmark.getUid(), objectMapper.convertValue(searchPortfolioJoinBookmark, Map.class));
 
             // nickname - uid 기억하는 hash
             hashUidOperations.put("nickname:uid:"+searchPortfolioJoinBookmark.getNickname(), "uid", searchPortfolioJoinBookmark.getUid());
@@ -100,8 +108,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     @Override
     public void requestAndReviewSave(List<SearchAverageScore> searchAverageScores) {
         for (SearchAverageScore searchAverageScore : searchAverageScores) {
-            hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "avgScore",
-                    searchAverageScore.getAvgScore());
+            hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "nickname", searchAverageScore.getNickname());
+            hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "avgScore", searchAverageScore.getAvgScore());
         }
         System.out.println("requestAndReviewSave 완료");
     }
@@ -112,7 +120,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     public void makeUserInfo() {
         // 모든 리뷰작성된 키를 가져온다.
         // nickname으로 이루어져있음.
-        Set<String> reviewKeys = this.hashKeys("nickname:review:");
+        Set<String> reviewKeys = this.hashKeys("nickname:review:*");
         Iterator<String> iter = reviewKeys.iterator();
         String key;
 
@@ -123,6 +131,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             // 해당 nickname키들을 이용해 uid를 가져오고 해당 uid에 해당하는 Hash에 score점수를 넣는다.
             hashOperations.put("uid:"+hashUidOperations.get("nickname:uid:"+hashOperations.get(key, "nickname"), "uid"), "avgScore", hashOperations.get(key, "avgScore"));
 
+            System.out.println("key>"+key+ " avgScore>"+hashOperations.get(key, "avgScore"));
             // hashOperations.put(key, "score", hashOperations.get("nickname:" + hashOperations.get(key, "nickname"), "score"));
         }
         System.out.println("makeUserInfo 완료");
@@ -156,12 +165,13 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     @Override
     public void portfolioTagSave(List<SearchTag> searchTags){
         for (SearchTag searchTag : searchTags) {
+            if(searchTag == null) continue;
             // 태그별 uid Set 생성
-            setOperations.add("tag:"+searchTag.getTag(), searchTag.getUid());
+            setOperations.add("tag:"+searchTag.getTagName(), searchTag.getUid());
             // 각 uid가 가지는 태그 기억할 Set생성
-            setOperations.add("tags:"+searchTag.getUid(), searchTag.getTag());
+            setOperations.add("tags:"+searchTag.getUid(), searchTag.getTagName());
             
-            hashOperations.putIfAbsent("uid:"+searchTag.getUid(), "tagKey", "tags:"+searchTag.getUid());
+            hashOperations.put("uid:"+searchTag.getUid(), "tagKey", "tags:"+searchTag.getUid());
         }
         System.out.println("portfolioTagSave 완료");
     }
@@ -169,7 +179,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     
 	private String makeKey(SearchRequest searchRequest){
         StringBuilder sb = new StringBuilder();
-        
+        sb.append("search:");
 
         if(!searchRequest.getVideoTypes().isEmpty()){
             sb.append("videoType:");
@@ -196,12 +206,15 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 
 
 		switch (searchRequest.getSearchType()) {
-			case TAG:
+			case "TAG":
 				sb.append("tag:").append(searchRequest.getSearchTags().get(0));
 				break;
-			case NICKNAME:
+			case "NICKNAME":
 				sb.append("nickname:").append(searchRequest.getSearchText());
 			break;
+            case "ALL":
+                sb.append("all");
+            break;
 			default:
 				return "";
         }
@@ -215,70 +228,32 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     public List<SearchPortfolio> getListByFilter(SearchRequest searchRequest){
         List<SearchPortfolio> resultList = new ArrayList<>();
         String searchKey = makeKey(searchRequest);
-        if(searchKey.isEmpty()){
+        SearchPortfolioJoinBookmark tempResult;
+        // Redis에 해당 검색 key값이 있는지 확인
+        if(hashKeys(searchKey).isEmpty()){
             System.out.println("key가 없음");
-            // return resultList;
         }
         else{
-            // Set<SearchPortfolio> tempSet = setOperations.members(searchKey);
-            //비면 찾기 아니면 만들기
+            // key가 있다면 해당 key로 값을 가져오기
+            System.out.println("캐시에서 가져옴>> "+searchKey);
+            // setResultOperations.members(searchKey) 해당 식은 uid를 가져오는 것이다.
+            // tag만 검색 했을 때 다른 searchKey를 뱉어야 한다.
+
+
+
+
+            // Set<String> uidSet = setResultOperations.members(searchKey);
+            // for (String uid : uidSet) {
+            //     tempResult = objectMapper.convertValue(hashOperations.entries("uid:"+uid));
+            //     setResultOperations.add(filterString+":"+searchString, new SearchPortfolio(tempResult, Collections.emptySet()));
+            // }
             resultList.addAll(setResultOperations.members(searchKey));
-            System.out.println("캐시에서 가져옴");
             return resultList;
         }
 
         // videoType, videoStyle -> 1개
         Set<String> keySet = new LinkedHashSet<>();
-        String newKey;
-        // if(searchRequest.getVideoType().equals("")){
-        //     // 필터 둘다 없을 경우
-        //     if(searchRequest.getVideoStyle().equals("")){
-        //         // videoUidSet은 모든 uid를 가질 수 있다
-        //         newKey = "uids:all";
-        //         // videoUidSet = setOperations.members(newKey);
-        //         if(setOperations.members(newKey).isEmpty()){
-        //             keySet.add("uids");
-        //             setOperations.unionAndStore(keySet, newKey);
-        //         }
-        //         // videoUidSet = setOperations.members(newKey);
-        //     }
-        //     // videoStyle만 적용할 경우
-        //     else{
-        //         newKey = "uids:"+searchRequest.getVideoStyle();
-        //         // videoUidSet = setOperations.members(newKey);
-        //         if(setOperations.members(newKey).isEmpty()){
-        //             keySet.add("videoStyle:"+searchRequest.getVideoStyle());
-        //             setOperations.unionAndStore(keySet, newKey);
-        //         }
-        //         // videoUidSet = setOperations.members(newKey);
-        //     }
-        // }
-        // else{
-        //     // videoType만 적용할 경우
-        //     if(searchRequest.getVideoStyle().equals("")){
-        //         newKey = "uids:"+searchRequest.getVideoType();
-        //         // videoUidSet = setOperations.members(newKey);
-        //         if(setOperations.members(newKey).isEmpty()){
-        //             keySet.add("videoType:"+searchRequest.getVideoType());
-        //             setOperations.unionAndStore(keySet, newKey);
-        //         }
-        //         // videoUidSet = setOperations.members(newKey);
-        //     }
-        //     // videoStyle, videoType 둘다 적용할 경우
-        //     else{
-        //         newKey = "uids:"+searchRequest.getVideoStyle()+":"+searchRequest.getVideoType();
-        //         // videoUidSet = setOperations.members(newKey);
-        //         if(setOperations.members(newKey).isEmpty()){
-        //             keySet.add("videoStyle:"+searchRequest.getVideoStyle());
-        //             keySet.add("videoType:"+searchRequest.getVideoType());
-        //             setOperations.intersectAndStore(keySet, newKey);
-        //         }
-        //         // videoUidSet = setOperations.members(newKey);
-        //         // videoUidSet = setOperations.intersect("videoStyle:"+searchRequest.getVideoStyle(), "videoType:"+searchRequest.getVideoType());
-        //     }
-        // }
         keySet = new LinkedHashSet<>();
-        // keySet.add(newKey);
         System.out.println("1차 완료");
 
         // 자료 부르기 위한 Key값 만드는 StringBuilder
@@ -295,7 +270,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             sb.append(string+":");
         }
 
-
         // 자료 만들기 위한 key값 생성
         if(!searchRequest.getVideoTypes().isEmpty()){
             sb.append("videoType:");
@@ -306,8 +280,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             sb.append(string+":");
         }
 
-
-
         // 자료 만들기 위한 key값 생성
         if(!searchRequest.getVideoSkills().isEmpty()){
             sb.append("videoSkill:");
@@ -317,12 +289,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             keySet.add("videoSkill:"+string);
             sb.append(string+":");
         }
-        // keySet.addAll(searchRequest.getVideoSkills());
-        // 기존 key값 더해주기
-        // sb.append(newKey).append(':');
-        // for (String string : keySet) {
-        //     sb.append(string).append(':');
-        // }
 
         // 길이가 1이상이라면 마지막 ':'를 없애야 하기때문에
         if(sb.length()>1) {
@@ -341,33 +307,30 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             setOperations.unionAndStore(keySet, filterString);
         System.out.println("2차 완료"+filterString);
 
-        // SearchType에 따라 tag, nickname 이 갈린다.
+        // SearchType에 따라 tag, nickname, all 이 갈린다.
         // tag는 정확한 검색 결과 여야 하며
-        // nickname은 포함? 하는거두 가능하나? *{nickname}* 로 pattern 주면 가능
-        // Set<String> typeUidSet = Collections.emptySet();
-        // Set<String> videoUidSet;
+        // nickname은 포함하는 방식으로 *{nickname}* 로 pattern 주면 가능
         keySet = new LinkedHashSet<>();
 
+        // System.out.println("검색이 무엇>"+searchRequest.getSearchType());
         switch (searchRequest.getSearchType()) {
-            case TAG:
+            case "TAG":
                 // 해당 tag를 가지는 모든 uid 더하기
                 sb.append("tag:");
                 for (String tag : searchRequest.getSearchTags()) {
                     keySet.add("tag:"+tag);
                     sb.append(tag).append(':');
-                    // typeUidSet.addAll(setOperations.members("tag:"+tag));
+                    System.out.println("tag>"+tag);
                 }
                 sb.setLength(sb.length());
+                System.out.println("태그검색");
                 break;
-            case NICKNAME:
+            case "NICKNAME":
                 sb.append("nickname:").append(searchRequest.getSearchText());
                 //해당 글자 포함하는 닉네임 가지는 Key 모두 저장
                 keySet.addAll(hashKeys("nickname:uid:*"+searchRequest.getSearchText()+"*"));
-                // for (String nickname : nicknameSet) {
-                //     typeUidSet.addAll(setOperations.members("nickname:uid:*"+nickname+"*"));
-                // }
             break;
-            case ALL:
+            case "ALL":
                 sb.append("all");
                 keySet.add("uids");
             break;
@@ -381,51 +344,57 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         String searchString = sb.toString();
         sb.setLength(0);
         // 검색 결과 uid를 담는 Set이다. -> 교집합 통해 uid집합 만들기
-        System.out.println("keySetSize>>>"+keySet.size());
-        // for (String string : keySet) {
-        //     System.out.println("keySet>>>>>"+string+"<<<");
-        //     Set<Object> ts = setOperations.members(string);
-        //     // System.out.println(setOperations.members(string).size());
-        //     // System.out.println(setOperations.members(string).toString());
-        //     for(Object obj : ts){
-        //         System.out.println(obj);
-        //     }
-        // }
         Set<String> resultSet = setOperations.intersect(keySet);
-        SearchPortfolioJoinBookmark tempResult;
 
-        for(String uid : resultSet){
-            System.out.println(uid);
-        }
+        // for(String uid : resultSet){
+        //     System.out.println(uid);
+        // }
+        // 모든 검색 UID를 돌면서 리스트를 띄우기 위한 양식으로 만든다.
         for (String uid : resultSet) {
             tempResult = objectMapper.convertValue(hashOperations.entries("uid:"+uid), SearchPortfolioJoinBookmark.class);
-            // tempResult = (SearchPortfolioJoinBookmark)hashOperations.entries(uid);
             // resultList.add(new SearchPortfolio(tempResult, setOperations.members(tempResult.getTagKey())));
-            System.out.println(tempResult);
+            
+            // tagKey를 이용하여 tagList를 구해야 한다.
+            // System.out.println(tempResult);
             if(tempResult.getTagKey() == null){
-                setResultOperations.add(filterString+":"+searchString, new SearchPortfolio(tempResult, Collections.emptySet()));
+                setResultOperations.add("search:"+filterString+":"+searchString, new SearchPortfolio(tempResult, Collections.emptySet()));
             }
             else{
-                setResultOperations.add(filterString+":"+searchString, new SearchPortfolio(tempResult, setOperations.members(tempResult.getTagKey())));
+                setResultOperations.add("search:"+filterString+":"+searchString, new SearchPortfolio(tempResult, setOperations.members(tempResult.getTagKey())));
             }
         }
         System.out.println("4차 완료");
-        //tagKey로 tagList로 바꾸어야한다.
         
-        //검색 어도 key로 추가해 넣어야한다.
-        // hashOperations.put(filterString+searchString, hashKey, value);
-        resultList.addAll(setResultOperations.members(filterString+":"+searchString));
+        // 검색어시 key로 추가해 넣어야한다.
+        resultList.addAll(setResultOperations.members("search:"+filterString+":"+searchString));
 
         System.out.println("5차 완료");
-        // videoUidSet에 중복되는 Uid가 저장된다.
-        // videoUidSet.retainAll(typeUidSet);
 
         // setOperations
+        // Stream으로 진행
+        // resultList = resultList.stream()
+        //     .sorted((a, b) -> a.getPayMin() - b.getPayMin())
+        //     .collect(Collectors.toList());
+
         // 정렬 -> 가격 낮은, 가격 높은, 이름순, 평점순
         // SortQuery<String> sortQuery = SortQueryBuilder.sort("key").by("hash*->nickname").build();
-        // 정렬 보류
-
-
+        // 기본 정렬 평점순
+        // 정렬
+        switch (searchRequest.getSortType()) {
+            case "PRICE_ASC":
+                Collections.sort(resultList, (a, b) -> a.getPayMin() - b.getPayMin());
+                break;
+            case "PRICE_DESC":
+                Collections.sort(resultList, (a, b) -> b.getPayMin() - a.getPayMin());
+                break;
+            case "NICKNAME_ASC":
+            Collections.sort(resultList, (a, b) -> a.getNickname().compareTo(b.getNickname()));
+                break;
+            case "SCORE_DESC":
+            default:
+            Collections.sort(resultList, (a, b) -> Float.compare(b.getAvgScore(), a.getAvgScore()));
+                break;
+        }
 
         // 검색될 uid 집합
         // for (String uid : videoUidSet) {

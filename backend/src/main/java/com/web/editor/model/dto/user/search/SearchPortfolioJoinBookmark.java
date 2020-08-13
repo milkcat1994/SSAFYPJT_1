@@ -23,7 +23,7 @@ public class SearchPortfolioJoinBookmark {
     private String url;
     // private String skill;
     private Integer bookmarkNumber;
-    private Integer avgScore;
+    private float avgScore;
     private String tagKey;
 
     public void setInit(String url, String tagKey){

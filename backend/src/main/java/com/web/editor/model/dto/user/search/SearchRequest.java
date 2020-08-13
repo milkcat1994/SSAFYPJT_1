@@ -25,11 +25,11 @@ public class SearchRequest {
 
     // 검색어
     // tag, nickname
-    private SearchType searchType;
+    private String searchType;
     private String searchText;
     private List<String> searchTags;
 
     // 정렬 방식
     @ApiModelProperty(required = true)
-    private SearchSortType sortType; 
+    private String sortType; 
 }

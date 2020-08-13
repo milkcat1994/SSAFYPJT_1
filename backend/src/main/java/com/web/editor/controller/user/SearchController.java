@@ -65,20 +65,24 @@ public class SearchController {
 		// 일단 여기에서 모든 처리 다해보기
 		// 검색시 해당 검색 결과가 존재하는지, 존재 하지 않는다면 
 		
+		//만약 Redis가 연결되지 않는다면 DataBase에서 직접 값을 뽑아와야한다.
+
 
 		// 주석의 경우 기초 작업으로 정해진 시간마다 실행 되어야한다.
-		// long res = searchRedisService.deleteAll();
-		// System.out.println("지워진수>>>>"+res);
-		// // DB내용 Redis로 끌어올 필요 있음. 
-		// searchRedisService.portfolioAndBookmarkSave(searchService.joinBookmarks());
-		// searchRedisService.portfolioAndVideoSave(searchService.joinVideos());
-		// searchRedisService.requestAndReviewSave(requestService.joinScores());
-		// searchRedisService.makeUserInfo();
-		// searchRedisService.searchRequestVideoInfoSave(requestService.searchRequestVideoInfo());
-		// searchRedisService.portfolioTagSave(searchService.searchPortfolioTag());
+		long res = searchRedisService.deleteAll();
+		System.out.println("지워진수>>>>"+res);
+		// DB내용 Redis로 끌어올 필요 있음. 
+		searchRedisService.portfolioAndBookmarkSave(searchService.joinBookmarks());
+		searchRedisService.portfolioAndVideoSave(searchService.joinVideos());
+		searchRedisService.requestAndReviewSave(requestService.joinScores());
+		searchRedisService.makeUserInfo();
+		searchRedisService.searchRequestVideoInfoSave(requestService.searchRequestVideoInfo());
+		searchRedisService.portfolioTagSave(searchService.searchPortfolioTag());
 		
-		searchList = searchRedisService.getListByFilter(searchRequest);
 		//key값을 Redis에서 먼저 찾아 값을 반환한다.
+		// getListByFilter 함수 내에서 Redis에서 Key값을 먼저 찾고
+		// key값이 없을 경우 새롭게 key를 만들고 값을 리턴한다.
+		searchList = searchRedisService.getListByFilter(searchRequest);
 		result.status = true;
 		result.data = "success";
 		result.object = searchList;
