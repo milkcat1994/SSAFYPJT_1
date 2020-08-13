@@ -12,34 +12,50 @@
 
     <div class="container-fluid mt--7">
       <div class="row">
-        <div class="col-xl-7 order-xl-2 mb-5 mb-xl-0">
+        <div class="col-xl-5 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 303px;">
+            <div class="card-body pt-0 pt-md-4" style="height: 390px;">
               <div class="row">
                 <div class="col">
                   <div class="text">
                     <h1>
                       {{portfolio.nickname}}
-                      <base-button v-if="uid != $session.get('uid')" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                      <base-button v-if="uid != $session.get('uid') && !togleBookmark" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                      {{portfolio.markCnt}}
+                      </base-button>
+                      <base-button v-if="uid != $session.get('uid') && togleBookmark" type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
                       {{portfolio.markCnt}}
                       </base-button>
                       <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
                       <base-button v-if="$session.get('auth') == 'noneditor'" size="sm" type="default float-right" @click="modal.show=true"> 작업 요청하기 </base-button>
                     </h1>
-                    <h3>
-                      Skills: {{portfolio.skill}}
-                    </h3>
-                    <h3>
-                      Pay/Wages: {{portfolio.payMin}}
-                    </h3>
+                    <h2> 편집 기술 </h2>
+                    <div class="col" v-for="(skill, index) in portfolio.skills" :key="index">
+                      <div class="row">
+                        <i class="ni ni-check-bold"></i>
+                        <h3> {{skill}} </h3>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="row">
+                        <i class="ni ni-check-bold"></i>
+                        <h3>
+                          분당 {{portfolio.payMin}}원
+                        </h3>
+                      </div>
+                    </div>
                     <h3>
                       {{portfolio.description}}
                     </h3>
                     
-                    <div class="col-xl-5 order-xl-1">
+                    <!-- <div class="col-xl-5 order-xl-1"> -->
                       <!-- <div class="row"> -->
-                      <i class="ni ni-tag"></i>
-                      <input-tag v-model="tags" :read-only="true" style="width:500px;"></input-tag>
+                      <!-- <i class="ni ni-tag"></i> -->
+                      <!-- <input-tag v-model="tags" :read-only="true" style="width:500px;"></input-tag> -->
+                      <div class="col" v-for="(tagName, index) in tags" :key="index">
+                        <!-- <div class="col"> -->
+                          #{{tagName}}
+                        <!-- </div> -->
                       </div>
                     <!-- </div> -->
                   </div>
@@ -49,12 +65,12 @@
           </div>
         </div>
 
-        <div class="col-xl-5 order-xl-1">
+        <div class="col-xl-7 order-xl-1">
           <card shadow type="secondary">
             <div class="HeadVideo">
               <LazyYoutubeVideo :src="mainVideo" style="width: 100%" />
             </div>
-            <h3 class="mb-0" style="text-align:center">대표영상</h3>
+            <!-- <h2 class="mb-0" style="text-align:center">대표영상</h2> -->
           </card>
         </div>
       </div>
@@ -65,7 +81,7 @@
         <div class="col">
           <div class="card shadow">
             <div class="card-header bg-transparent">
-              <h3 class="mb-0">그 외 영상들</h3>
+              <h2 class="mb-0">그 외 영상들</h2>
             </div>
 
             <div class="card-body">
@@ -80,72 +96,83 @@
               </div>
               <hr>
               <div class="row" style="margin-top: 30px">
-                <!-- <div class="col"> -->
-                  <calendar
-                    :eventCategories="eventCategories"
-                    :events="events"
-                    :offDays="offdays"
-                    ref="calendar"
-                    style="width: 100%; height: 100%"
-                  />
-                  <!-- {{events}} -->
-                <!-- </div> -->
+                <calendar
+                  :eventCategories="eventCategories"
+                  :events="events"
+                  :offDays="offdays"
+                  ref="calendar"
+                  style="width: 100%; height: 100%"
+                />
+                <i class="fas fa-circle" style="color: #6699ff; margin: 15px;">진행중 작업</i>
+                <i class="fas fa-circle"
+                  style="color: #ff0066; margin: 15px;"
+                  >개인 일정</i>
+                <i class="fas fa-circle" style="color: #c9c9c9; margin: 15px;">휴일</i>
               </div>
-              <hr>
-              <div class="row" style="margin-top: 30px">
-                <div class="col-xl-4 col-lg-6">
-                  <h3>
-                    영상만족도
-                    <rate
-                      id="satisfy"
-                      :length="5"
-                      :value="videoAvg"
-                      :disabled="true"
-                    />
-                  </h3>
-                  <h3>
-                    친절도
-                    <rate :length="5" :value="kindnessAvg" :disabled="true" />
-                  </h3>
-                  <h3>
-                    마감 속도
-                    <rate :length="5" :value="finishAvg" :disabled="true" />
-                  </h3>
-                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" style="margin-top: 20px; margin-bottom: 50px;">
+      <div class="row">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-header bg-transparent">
+              <h2 class="mb-0">서비스 평가</h2>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+              <div class="row" style="margin-bottom: 30px">
                 <div class="col">
-                  <h3>한줄평</h3>
+                  <h3> 영상만족도 </h3>
+                    <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
+                  <h3>친절도 </h3>
+                    <rate :length="5" :value="kindnessAvg" :disabled="true" />
+                  <h3>마감 속도 </h3>
+                    <rate :length="5" :value="finishAvg" :disabled="true" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <h3>한줄평 ({{reviews.length}})</h3>
+                  <!-- <div class="col" v-for="(review, index) in reviewsMain" :key="index">
+                    <i class="fa fa-user-circle" aria-hidden="true">{{review.comment}} {{getFormatDate(review.createdDate)}}</i>
+                  </div> -->
                   <badger-accordion>
                     <badger-accordion-item v-for="(review, index) in reviewsMain" :key="index">
-                      <template slot="header" >{{review.comment}}</template>    
+                      <template slot="header">
+                        <i class="fa fa-user-circle" aria-hidden="true" style="color:#3a578a;">{{review.comment}} 
+                          {{getFormatDate(review.createdDate)}}</i>
+                      </template>    
                       <template slot="content" >
-                        <h3>
-                          영상만족도
-                          <rate
+                        <div class="col">
+                          <div class="row">
+                            <h5 style="margin-top:10px; margin-left:40px;"> 영상만족도</h5>
+                            <rate
                             :length="5"
                             :value="review.videoScore"
                             :disabled="true"
-                          />
-                        </h3>
-                        <h3>
-                          친절도
-                          <rate
+                            />
+                            <h5 style="margin-top:10px; margin-left:40px;"> 친절도</h5>
+                            <rate
                             :length="5"
                             :value="review.kindnessScore"
                             :disabled="true"
-                          />
-                        </h3>
-                        <h3>
-                          마감 속도
-                          <rate
+                            />
+                            <h5 style="margin-top:10px; margin-left:40px;">마감 속도 </h5>
+                            <rate
                             :length="5"
                             :value="review.finishScore"
                             :disabled="true"
-                          />
-                        </h3>
+                            />
+                          </div>
+                        </div>
                       </template>
                     </badger-accordion-item>
                   </badger-accordion>
-                  <base-button size="sm" type="float-right" @click="reviewModal.show = true" icon="ni ni-fat-add">더보기</base-button>
+                  {{this.reviewMessage}}
+                  <base-button v-if="this.reviewLoad" size="sm" type="float-right" icon="ni ni-fat-add" @click="loadMoreReviews()">더보기</base-button>
                 </div>
               </div>
             </div>
@@ -284,51 +311,11 @@
         </div>
           <h3>기타 요구사항</h3>
           <textarea class="form-control form-control-alternative" id="description" v-model="request_info.request_description" rows="3" placeholder="기타 요구사항을 작성해주세요."></textarea>
-        </div>
-     <template slot="footer">
-         <base-button type="secondary" @click="modal.show = false">Close</base-button>
-         <base-button type="primary" @click="checkRequestForm()">요청하기</base-button>
-     </template>
-    </modal>
-
-    <modal :show.sync="reviewModal.show">
-      <h1 slot="header" class="modal-title" id="modal-title-default">한줄평</h1>
-        <badger-accordion>
-          <badger-accordion-item v-for="(review, index) in reviews" :key="index">
-            <template slot="header" >{{review.comment}}</template>    
-              <template slot="content" >
-                <h3>
-                  영상만족도
-                  <rate
-                    :length="5"
-                    :value="review.videoScore"
-                    :disabled="true"
-                  />
-                </h3>
-                <h3>
-                  친절도
-                  <rate
-                    :length="5"
-                    :value="review.kindnessScore"
-                    :disabled="true"
-                  />
-                </h3>
-                <h3>
-                  마감 속도
-                  <rate
-                    :length="5"
-                    :value="review.finishScore"
-                    :disabled="true"
-                  />
-                </h3>
-              </template>
-          </badger-accordion-item>
-        </badger-accordion>
-        <template slot="footer">
-          <base-button type="link" class="ml-auto" @click="reviewModal.show = false">
-            Close
-          </base-button>
-        </template>
+      </div>
+      <template slot="footer">
+        <base-button type="secondary" @click="modal.show = false">Close</base-button>
+        <base-button type="primary" @click="checkRequestForm()">요청하기</base-button>
+      </template>
     </modal>
 
     <modal :show.sync="alertModal.show"
@@ -358,8 +345,9 @@
     </modal>
   </div>
 </template>
+
 <script>
-import InputTag from 'vue-input-tag';
+// import InputTag from 'vue-input-tag';
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 import { Rate } from "vue-rate";
 import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
@@ -375,6 +363,11 @@ import alertify from "alertifyjs"
 // axios 초기 설정파일
 import http from "@/util/http-common";
 
+import moment from "moment";
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+moment.locale('ko');
+
 // import { mapGetters } from "vuex";
 // import store from "@/store/store.js";
 // 날짜 계산 파일
@@ -389,7 +382,7 @@ import http from "@/util/http-common";
       BadgerAccordion,
       BadgerAccordionItem,
       flatPicker,
-      InputTag,
+      // InputTag,
       Calendar
     },
     data() {
@@ -405,7 +398,7 @@ import http from "@/util/http-common";
           nickname:'',
           description:'',
           payMin: '',
-          skill: '',
+          skills: [],
           markCnt: 0,
         },
         // 각 평점
@@ -416,6 +409,9 @@ import http from "@/util/http-common";
         //리뷰들
         reviews: [],
         reviewsMain: [],
+        cnt: 1,
+        reviewMessage: "",
+        reviewLoad: false,
 
         //태그들
         tags:[],
@@ -461,9 +457,6 @@ import http from "@/util/http-common";
           show: false
         },
         alertModal: {
-          show: false
-        },
-        reviewModal: {
           show: false
         },
 
@@ -755,15 +748,19 @@ import http from "@/util/http-common";
             this.videoAvg = videoAvg/length;
             this.kindnessAvg = kindnessAvg/length;
             this.finishAvg = finishAvg/length;
-
-            this.reviewsMain = this.reviews.reverse();
-            if(this.reviews.length > 5){
-              this.reviewsMain = this.reviews.slice(0,5);
-            }
             
+            if(this.reviews.length == 0){
+              this.reviewLoad = false;
+              this.reviewMessage = "아직 리뷰가 존재하지 않습니다.";
+            } else {
+              this.reviewLoad = true;
+              this.reviewsMain = this.reviews.reverse();
+              if(this.reviews.length > 5){
+                this.reviewsMain = this.reviewsMain.slice(0,5);
+              }
+            }
             return;
           } else {
-            // fail
             return;
           }
         })
@@ -809,7 +806,9 @@ import http from "@/util/http-common";
                   this.request_info.response_nickname = data.object.nickname;
                   this.portfolio.description = data.object.description;
                   this.portfolio.payMin = data.object.payMin;
-                  this.portfolio.skill = data.object.skill;
+                  // this.portfolio.skill = data.object.skill;
+                  this.portfolio.skills = data.object.skill.split(",");
+                  // console.log(this.portfolio.skills);
                   this.getInprogressDate();
                   return;
                 } else {
@@ -915,15 +914,37 @@ import http from "@/util/http-common";
       goToday() {
         this.$refs.calendar.goToday();
       },
+      loadMoreReviews(){
+        this.cnt++;
+        // console.log(this.cnt);
+        if(this.reviewsMain.length < this.reviews.length){
+          let sub = this.reviews.length - this.reviewsMain.length;
+          if(sub < 5){
+            this.reviewLoad = false;
+            this.reviewsMain = this.reviews.slice(0,this.reviews.length);
+          } else {
+            this.reviewLoad = true;
+            this.reviewsMain = this.reviews.slice(0, 5*this.cnt);
+          }
+        } else {
+          this.reviewLoad = false;
+          this.reviewMessage = "더 이상 후기가 존재하지 않습니다";
+        }
+      },
       onOpenItem() {
         // Item opened
       },
       onCloseItem() {
         // Item closed
       },
+      getFormatDate(regtime) {
+        return moment(new Date(regtime)).format("YYYY-MM-DD");
+      }
   },
 };
 </script>
 <style lang="scss">
-
+#reviewDate {
+  text-align: right;
+}
 </style>
