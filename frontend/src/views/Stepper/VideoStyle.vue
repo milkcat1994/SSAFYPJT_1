@@ -1,7 +1,7 @@
 <template>
-  <div class="container mx-auto my-4 py-4" style="width: 80%">
+  <div class="container mx-auto my-4 py-4" style="width: 80%;">
     
-    <h1 class="display-3 mb-0 text-center">어떤 종류의 영상인가요?</h1>
+    <h1 class="display-3 mb-4 text-center">어떤 종류의 영상인가요?</h1>
 
     <div class="container py-4">
       <div class="row">
@@ -10,7 +10,7 @@
           <button
             type="button"
             class="btn my-2"
-            style="min-width: 200px;"
+            style="min-width: 200px; min-height: 60px; !important"
             :class="{'btn-primary': !!item.status, 'btn-outline-primary': !item.status}"
             @click="selectVideoStyle(item.value)"
           >
@@ -43,5 +43,8 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+.card {
+  min-height: 757px;
+}
 </style>

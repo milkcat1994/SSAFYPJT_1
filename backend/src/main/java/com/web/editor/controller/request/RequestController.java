@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.validation.Valid;
 
@@ -49,8 +48,8 @@ public class RequestController {
 		RequestDto dto = requestService.searchRequest(rid);
 		if (dto != null) {
 			// 태그 검색(태그 리스트를 문자열로 변환)
-			String tag = TagsToString(rid);
-			dto.setTag_list(tag);
+			String tags = tagsToString(rid);
+			dto.setTag_list(tags);
 			return new ResponseEntity<>(dto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("not exist", HttpStatus.NO_CONTENT);
@@ -125,15 +124,20 @@ public class RequestController {
 	@ApiOperation(value = "요청 및 알림(type은 request) 등록, \"success\" 또는 \"fail\"반환")
 	@PostMapping
 	public ResponseEntity<String> insertRequest(@Valid @RequestBody RequestDto requestDto) {
-		int result = requestService.insertRequest(requestDto);
 		// 등록시 기본값 0
 		requestDto.setDone_flag(0);
+		
+		requestDto.setVideo_skill(requestDto.getVideo_skill().substring(1));
+
+		int result = requestService.insertRequest(requestDto);
 
 		if (result > 0) {
 			// 알림 함께 등록
 			addNotify(requestDto, "request");
 			// 태그 함께 등록
-			addTag(requestDto.getTag_list(), requestDto.getRid());
+			if (requestDto.getTags() != null || 
+				(requestDto.getTags() != null && requestDto.getTags().size() > 0))
+				addTag(requestDto.getTags(), requestDto.getRid());
 
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		} else {
@@ -169,6 +173,13 @@ public class RequestController {
 		int result = requestService.doneRequest(rid);
 
 		if (result > 0) {
+			// 요청자가 알림을 받는 사람이 됨
+			RequestDto dto = requestService.searchRequest(rid);
+			String reqNickname = dto.getResponse_nickname();
+			String resNickname = dto.getRequest_nickname(); // 일반회원이 알림받는 사람이됨
+			dto.setRequest_nickname(reqNickname);
+			dto.setResponse_nickname(resNickname);
+			addNotify(dto, "review");
 			return new ResponseEntity<String>("success", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
@@ -283,42 +294,31 @@ public class RequestController {
 		// 편집자 알림 등록
 		NotifyDto notifyDto = new NotifyDto();
 		notifyDto.setRead_flag(0);
-		notifyDto.setNotify_type(type); // 알림 타입은 request
+		notifyDto.setNotify_type(type); // 알림 타입은 request or review
 		notifyDto.setRequest_nickname(dto.getRequest_nickname()); // 알림 요청한사람
 		notifyDto.setResponse_nickname(dto.getResponse_nickname()); // 알림 받는사람
 		requestService.insertNotify(notifyDto);
 	}
 
-	// 태그 검색
-	@ApiOperation(value = "해당 요청서의 태그(rid)")
-	@GetMapping("/tag/{rid}")
-	public ResponseEntity<String> searchTag(@PathVariable int rid) {
-		// 태그 검색(태그 리스트를 문자열로 변환)
-		String tag = TagsToString(rid);
-
-		return new ResponseEntity<String>(tag, HttpStatus.OK);
-
-	}
-
 	// 태그 파싱, 등록
-	private void addTag(String tags, int rid) {
-		tags = tags.trim(); // 앞뒤 공백 제거
-		// #기준으로 나눔
-		StringTokenizer st = new StringTokenizer(tags, "#");
+	private int addTag(List<String> tags, int rid) {
 
-		while (st.hasMoreTokens()) {
-			// 태그 생성
-			String tag = st.nextToken().trim(); // 앞뒤 공백 제거
+		for (String tag : tags){
 			RequestTagDto tagDto = new RequestTagDto();
-			tagDto.setTag_name(tag.toString());
+			tagDto.setTag_name(tag);
 			tagDto.setRequest_form_rid(rid);
-			// 태그 등록
-			requestService.insertTag(tagDto);
+			
+			int res = requestService.insertTag(tagDto);
+			if (res < 0) {
+				return -1;
+			}
 		}
+		return 1;
+
 	}
 
 	// 요청서의 태그들을 문자열로
-	private String TagsToString(int rid) {
+	private String tagsToString(int rid) {
 		// 해당 요청서의 태그 리스트
 		List<RequestTagDto> tagList = requestService.searchTag(rid);
 
@@ -372,4 +372,7 @@ public class RequestController {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}
 	}
+
+
+	
 }

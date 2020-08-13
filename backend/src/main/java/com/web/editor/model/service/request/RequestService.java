@@ -87,5 +87,6 @@ public interface RequestService {
 	public int updateNicknameRes(NicknameUpdateDto nicknameUpdateDto);
 	public int updateReqNoti(NicknameUpdateDto nicknameUpdateDto);
 	public int updateResNoti(NicknameUpdateDto nicknameUpdateDto);
+	public int updateNickReview(NicknameUpdateDto nicknameUpdateDto);
 	
 }

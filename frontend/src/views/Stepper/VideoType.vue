@@ -31,8 +31,7 @@ export default {
     }),
   },
   methods: {
-    selectVideoType(value) {
-      console.log(value)
+    selectVideoType(value) {                                            
       this.$store.commit('stepper/selectVideoType', value)
     },
   },

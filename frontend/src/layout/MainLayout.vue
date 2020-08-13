@@ -22,7 +22,7 @@
           }"
         />
         <sidebar-item
-          v-if="isEditor"
+          v-if="isEditor && isLogin"
           :link="{
             name: '포트폴리오',
             icon: 'ni ni-collection text-primary',

@@ -10,7 +10,11 @@
                   <h3 class="mb-0">회원정보</h3>
                 </div>
                 <div class="col-4 text-right">
-                  <v-btn class="btn btn-sm btn-primary" @click="updateProfile()">회원 정보 수정</v-btn>
+                  <base-button
+                    class="btn btn-sm btn-primary"
+                    :disabled="!ischeck"
+                    @click="updateProfile()"
+                  >회원 정보 수정</base-button>
                 </div>
               </div>
             </div>
@@ -27,8 +31,13 @@
                         v-model="nickname"
                       />
                     </div>
-                    <div class="col-2">
-                      <base-button type="default" class style="white-space: nowrap;" @click="checkNickname()">중복확인</base-button>
+                    <div class="d-flex justify-content-center">
+                      <base-button
+                        type="default"
+                        class="btn-sm"
+                        style="white-space: nowrap;"
+                        @click="checkNickname()"
+                      >중복확인</base-button>
                     </div>
 
                     <div class="col-lg-12">
@@ -67,6 +76,7 @@ export default {
       nickname: "",
       email: "",
       isLogin: false,
+      ischeck: false,
     };
   },
   created() {
@@ -96,8 +106,9 @@ export default {
           nickname: this.nickname,
         })
         .then(({ data }) => {
-          if (data.data != "nickname") {
-            alertify.notify("닉네임 사용이 가능합니다!!!!!", "nickname", 3);
+          if (data.data == "success") {
+            this.ischeck = true;
+            alertify.notify("닉네임 사용이 가능합니다", "nickname", 3);
           } else {
             alertify.error("이미 사용 중인 닉네임입니다.", 3);
           }
@@ -109,20 +120,25 @@ export default {
     },
     updateProfile() {
       let msg = "회원 정보 수정에 실패하였습니다.";
+      if (this.ischeck == false) {
+        alertify.error("닉네임 중복체크를 해주세요", 3);
+        return;
+      }
       http
         .put("/user/user/" + this.uid, {
           nickname: this.nickname,
         })
         .then(({ data }) => {
+          console.log(data);
           if (data.data == "success") {
             this.$session.set("nickname", this.nickname);
             msg = "회원 정보가 수정되었습니다";
-            this.$session.set("nickname", this.nickname);
+            this.ischeck = false;
             alertify.notify(msg, "success", 3);
-
             return;
           } else {
             alertify.error(msg, 3);
+            this.ischeck = false;
             return;
           }
         })
