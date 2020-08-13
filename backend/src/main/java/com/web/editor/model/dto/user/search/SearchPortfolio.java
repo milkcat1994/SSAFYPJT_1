@@ -20,13 +20,13 @@ import lombok.ToString;
 @Setter
 @Repository
 @ToString
-public class SearchPortfolio {
+public class SearchPortfolio{
     private int uid;
     private String nickname;
     private String url;
     private int payMin;
     private int bookmarkNumber;
-    private int avgScore;
+    private float avgScore;
     private List<String> tags;
 
     public SearchPortfolio(SearchPortfolioJoinBookmark searchPortfolioJoinBookmark, Set<String> tags){
@@ -35,7 +35,7 @@ public class SearchPortfolio {
         this.url = searchPortfolioJoinBookmark.getUrl();
         this.payMin = searchPortfolioJoinBookmark.getPayMin();
         this.bookmarkNumber = searchPortfolioJoinBookmark.getBookmarkNumber();
-        this.avgScore = searchPortfolioJoinBookmark.getBookmarkNumber();
+        this.avgScore = searchPortfolioJoinBookmark.getAvgScore();
         this.tags = new ArrayList<String>();
         this.tags.addAll(tags);
     }
