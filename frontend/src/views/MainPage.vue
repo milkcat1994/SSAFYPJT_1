@@ -116,7 +116,7 @@
                         v-for="editor in currentEditors"
                         :key="editor.uid"
                       >
-                        <b-card>
+                        <b-card id="maincard">
                           <router-link :to="`/portfolio?no=${editor.uid}`">
                             <img src="" alt="" />
                             <LazyYoutubeVideo
@@ -262,5 +262,9 @@ export default {
   height: 1px;
   line-height: 0px;
   margin: 0px 16px;
+}
+
+#maincard:hover {
+  cursor: pointer;
 }
 </style>

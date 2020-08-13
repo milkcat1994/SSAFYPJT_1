@@ -18,8 +18,7 @@
     <template>
       <div>
         <i v-b-toggle.sidebar-1 class="fas fa-bars"></i>
-        <!-- <b-button v-b-toggle.sidebar-1>Toggle Sidebar</b-button> -->
-        <b-sidebar id="sidebar-1" bg-variant="white">
+        <b-sidebar id="sidebar-1" class="sidebar-1" bg-variant="white">
           <div class="px-3 py-2 d-flex justify-content-center">
             <router-link class="navbar-brand" to="/">
               <img
@@ -40,13 +39,18 @@
           </div>
           <div class="ml-4 mb-2">
             <router-link to="/editors">
-              <i class="ni ni-zoom-split-in text-primary mx-2">
+              <i class="ni ni-zoom-split-in text-primary ml-2">
                 <span class="mx-2"> 편집자 찾기 </span>
               </i>
             </router-link>
           </div>
           <div class="ml-4 mb-2">
-            <router-link v-if="isEditor && isLogin" to="/portfolio">
+            <router-link
+              v-if="isEditor && isLogin"
+              :to="{
+                path: '/portfolio?no=' + this.$session.get('uid'),
+              }"
+            >
               <i class="ni ni-collection text-primary mx-2">
                 <span class="mx-2"> 내 포트폴리오 </span>
               </i>
@@ -149,10 +153,6 @@
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
-            <!-- <i class="ni ni-circle-08"></i> -->
-            <!-- <img alt="Image placeholder" src="img/theme/avatar.svg" /> -->
-            <!-- <span class="avatar avatar-sm rounded-circle">
-            </span>-->
             <i class="fas fa-user" style="color: #172b4d !important;"></i>
             <div class="media-body ml-2 d-none d-lg-block">
               <span class="mb-0 text-sm font-weight-bold text-default">{{
@@ -169,14 +169,6 @@
               <i class="ni ni-single-02"></i>
               <span>내 정보</span>
             </router-link>
-            <!-- <router-link to="/404" class="dropdown-item">
-              <i class="ni ni-settings-gear-65"></i>
-              <span>계정 설정</span>
-            </router-link>
-            <router-link to="/404" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>작업 일정</span>
-            </router-link>-->
             <router-link to="/404" class="dropdown-item">
               <i class="ni ni-support-16"></i>
               <span>도움말</span>
@@ -210,6 +202,7 @@ export default {
       searchQuery: "",
       notifyNum: "",
 
+      isEditor: "editor",
       isLogin: false,
       // nickname: "",
     };
@@ -218,7 +211,7 @@ export default {
     //생성 시 로그인 상태 확인
     if (this.$session.exists()) {
       this.isLogin = true;
-      // this.nickname = this.$session.get("nickname");
+      this.isEditor = this.$session.get("auth") == "editor";
       // 로그인이 되어있으면 알림 가져옴
       store.dispatch(
         "getNotifyitems",
@@ -298,5 +291,10 @@ export default {
 #sidebar-1 {
   width: 200px;
   background-color: white important;
+  z-index: 999;
+}
+
+router-link:hover {
+  opacity: 1;
 }
 </style>

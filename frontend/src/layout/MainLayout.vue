@@ -47,8 +47,12 @@
         />
       </template>
     </side-bar> -->
-    <div class="main-content" :data="sidebarBackground">
-      <main-navbar></main-navbar>
+    <div
+      class="main-content"
+      :data="sidebarBackground"
+      @mousedown="hide(sidebar)"
+    >
+      <main-navbar @mousedown.stop></main-navbar>
 
       <div>
         <fade-transition :duration="200" origin="center top" mode="out-in">
