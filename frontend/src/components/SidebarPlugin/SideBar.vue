@@ -3,7 +3,7 @@
     class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white"
     id="sidenav-main"
   >
-    <div class="container-fluid">
+    <div class="container sidebar">
       <!--Toggler-->
       <navbar-toggle-button @click.native="showSidebar">
         <span class="navbar-toggler-icon"></span>
@@ -88,7 +88,9 @@
               </router-link>
             </div>
             <div class="col-6 collapse-close">
-              <navbar-toggle-button @click.native="closeSidebar"></navbar-toggle-button>
+              <navbar-toggle-button
+                @click.native="closeSidebar"
+              ></navbar-toggle-button>
             </div>
           </div>
         </div>
@@ -141,3 +143,15 @@ export default {
   },
 };
 </script>
+
+<style>
+/* #sidenav-main:hover,
+#sidenav-main.expanded {
+  width: 250px;
+  overflow: visible;
+}
+
+#sidenav-main {
+  width: 30px;
+} */
+</style>
