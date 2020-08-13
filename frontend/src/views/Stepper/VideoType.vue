@@ -40,6 +40,7 @@ export default {
 <style scoped>
 .card {
   min-height: 300px;
+  cursor: pointer;
 }
 .icon {
   /* display: inline-block; */
