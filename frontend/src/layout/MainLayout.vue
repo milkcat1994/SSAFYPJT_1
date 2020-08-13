@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-    <side-bar
+    <!-- <side-bar
       :background-color="sidebarBackground"
       short-title="편집"
       title="편집"
@@ -46,7 +46,7 @@
           }"
         />
       </template>
-    </side-bar>
+    </side-bar> -->
     <div class="main-content" :data="sidebarBackground">
       <main-navbar></main-navbar>
 
@@ -90,6 +90,8 @@ export default {
       sidebarBackground: "vue", //vue|blue|orange|green|red|primary
       isLogin: false,
       isEditor: false,
+
+      collapsed: false,
     };
   },
   created() {

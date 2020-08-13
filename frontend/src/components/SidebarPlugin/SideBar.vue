@@ -3,7 +3,7 @@
     class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white"
     id="sidenav-main"
   >
-    <div class="container sidebar">
+    <div class="container collapse" id="navbarToggleExternalContent">
       <!--Toggler-->
       <navbar-toggle-button @click.native="showSidebar">
         <span class="navbar-toggler-icon"></span>
@@ -49,9 +49,7 @@
           <base-dropdown class="nav-item" position="right">
             <a slot="title" class="nav-link" href="#" role="button">
               <div class="media align-items-center">
-                <span class="avatar avatar-sm rounded-circle">
-                  <img alt="Image placeholder" src="img/theme/avatar.svg" />
-                </span>
+                <i class="fas fa-user"></i>
               </div>
             </a>
 
@@ -61,10 +59,6 @@
             <router-link to="/profile" class="dropdown-item">
               <i class="ni ni-single-02"></i>
               <span>내 정보</span>
-            </router-link>
-            <router-link to="/profile" class="dropdown-item">
-              <i class="ni ni-settings-gear-65"></i>
-              <span>계정 설정</span>
             </router-link>
             <div class="dropdown-divider"></div>
             <a href="#!" class="dropdown-item">
@@ -147,11 +141,12 @@ export default {
 <style>
 /* #sidenav-main:hover,
 #sidenav-main.expanded {
-  width: 250px;
+  width: 100%;
   overflow: visible;
 }
 
 #sidenav-main {
-  width: 30px;
+  width: 1%;
+  position: fixed;
 } */
 </style>
