@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.editor.model.mapper.user.RecommendMapper">
+
+	<!-- 진행중인 요청만 가져옴 -->
+
+	<!-- 일반회원의 진행중 일정 -->
+	<select id="searchAllEditor" resultType="EditorDto">
+		select portfolio.uid as uid, pay_min as pay, skill, GROUP_CONCAT(tag_name SEPARATOR ', ') AS tags 
+        from portfolio
+        join portfolio_tag
+        on portfolio.uid = portfolio_tag.portfolio_uid
+        GROUP BY portfolio_uid;
+	</select>
+
+	<!-- 편집자 회원의 진행중 일정 -->
+	<select id="searchBookEditorByUid" resultType="EditorDto" parameterType="String">
+		select portfolio.uid as uid, pay_min as pay, skill, GROUP_CONCAT(tag_name SEPARATOR ', ') AS tags 
+        from (
+            select portfolio.uid, pay_min, skill 
+            from bookmark 
+            join portfolio 
+            on bookmark.mark_uid = portfolio.uid 
+            where user_info_uid = #{uid}) as portfolio
+        join portfolio_tag
+        on portfolio.uid = portfolio_tag.portfolio_uid
+        GROUP BY portfolio_uid;
+	</select>
+
+</mapper>
