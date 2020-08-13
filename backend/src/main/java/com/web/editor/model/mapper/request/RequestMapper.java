@@ -168,4 +168,7 @@ public class RequestMapper {
 	public List<SearchRequestVideoInfo> searchRequestVideoInfo() throws SQLException{
 		return sqlSession.selectList("searchRequestVideoInfo");
 	}
+	public int updateNickReview(NicknameUpdateDto nicknameUpdateDto) throws SQLException {
+		return sqlSession.update("updateNickReview", nicknameUpdateDto);
+	}
 }

@@ -20,9 +20,9 @@ import io.swagger.models.Response;
 import com.web.editor.model.dto.user.PortfolioList;
 import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.PortfolioVideo;
-import com.web.editor.model.dto.user.bookmark.Bookmark;
 import com.web.editor.model.dto.user.search.SearchPortfolio;
 import com.web.editor.model.dto.user.search.SearchRequest;
+import com.web.editor.model.dto.user.bookmark.BookmarkInfo;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.request.RequestService;
 import com.web.editor.model.service.user.BookmarkService;
@@ -97,12 +97,12 @@ public class SearchController {
 		if(!searhList.isEmpty()){
 			List<PortfolioTag> portfolioTags = new ArrayList<>();
 			List<PortfolioVideo> urls = new ArrayList<>();
-			List<Bookmark> bookmarks = new ArrayList<>();
+			List<BookmarkInfo> bookmarks = new ArrayList<>();
 			for (int i = 0; i < searhList.size(); i++) {
 				String uid = String.valueOf(searhList.get(i).getUid());
 				portfolioTags = portfolioService.findTagByUid(uid);
 				urls = portfolioService.findVideoByUid(uid);
-				bookmarks = bookmarkService.findBookmarkByUid(uid);
+				bookmarks = bookmarkService.cntBookmarkByUid(uid);
 
 				searhList.get(i).setBookmarkCount(bookmarks.size());
 				searhList.get(i).setURLs(urls.stream().map(u -> u.getUrl()).collect(Collectors.toList()));

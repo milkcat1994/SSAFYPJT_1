@@ -66,11 +66,17 @@ export default new Router({
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
         },
+        // {
+        //   path: "/search",
+        //   name: "search",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
+        // },
         {
-          path: "/request",
-          name: "request",
+          path: "/stepper",
+          name: "stepper",
           component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Request.vue"),
+            import(/* webpackChunkName: "demo" */ "./views/Stepper/Stepper.vue"),
         },
         {
           path: "/editors",
@@ -92,6 +98,13 @@ export default new Router({
             import(/* webpackChunkName: "demo" */ "./views/Alarm.vue"),
           beforeEnter: requireLogin,
         },
+
+        {
+          path: "/about",
+          name: "AboutUs",
+          component: () =>
+            import(/* webpackChunkName: "demo" */ "./views/AboutUs.vue"),
+        },
       ],
     },
     {
@@ -109,7 +122,7 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Main.vue"
             ),
-            // beforeEnter: requireLogin
+          // beforeEnter: requireLogin
         },
         {
           path: "/portfolio/edit",
@@ -121,9 +134,9 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Edit.vue"
             ),
-            beforeEnter: requireAuth
+          beforeEnter: requireAuth,
         },
-      ]
+      ],
     },
     {
       path: "/user",

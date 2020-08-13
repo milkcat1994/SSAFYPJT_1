@@ -10,5 +10,5 @@ public class HolidayDate {
     private String start;
     private String end;
     private String repeat = "montly";
-    private int categoryId = 1;
+    private int categoryId;
 }

@@ -15,7 +15,7 @@ public class HolidayDateServiceImpl implements HolidayDateService {
     @Autowired
     ScheduleMapper scheduleMapper;
 
-    // 일반회원의 진행중 작업 일정 반환
+    // 일반회원의 휴일 일정 반환
 
     @Override
     public List<HolidayDate> holidayDates(int uid) {

@@ -89,6 +89,7 @@ public interface RequestService {
 	public int updateNicknameRes(NicknameUpdateDto nicknameUpdateDto);
 	public int updateReqNoti(NicknameUpdateDto nicknameUpdateDto);
 	public int updateResNoti(NicknameUpdateDto nicknameUpdateDto);
+	public int updateNickReview(NicknameUpdateDto nicknameUpdateDto);
 	
 	// 평점 평균 반환 함수 - Redis 이용하기 위한 테이블 Join
 	public List<SearchAverageScore> joinScores();
