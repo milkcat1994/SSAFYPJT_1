@@ -1,7 +1,7 @@
 <template>
   <div>
     <base-header
-      class="header pb-4 pt-2 pt-lg-5 d-flex align-items-center mb-8"
+      class="header pb-4 pt-2 pt-lg-5 d-flex align-items-center"
       style="
         min-height: 100px;
         background-size: cover;
@@ -12,21 +12,21 @@
       <span class="mask bg-gradient-success opacity-8"></span>
     </base-header>
 
+    <br />
+    <hr />
     <!-- <h2 class="text-center">알림창</h2> -->
     <br />
 
-    <div class="container alarm mt--7 mb-5">
-      <div class="row">
+    <div class="container-fluid mt--7 mb-5">
       <!-- for calendar -->
       <br />
       <br />
-      <div class="col-6 d-flex" style="  display: table;" >
-        <div style="display: table-cell; text-align:center;" id="calendardiv">
+      <div style="display: table; width:100%">
+        <div style="display: table-cell; text-align:center;">
           <calendar
             :eventCategories="eventCategories"
             :events="events=scheduledate"
             ref="calendar"
-            
           />
           <i class="fas fa-circle" style="color: #f29661; margin: 15px;">선택된 작업</i>
           <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <tabs fill class="col-6 flex-column flex-md-row">
+      <tabs fill class="flex-column flex-md-row">
         <card shadow>
           <tab-pane>
             <span slot="title">
@@ -514,9 +514,6 @@
           </tab-pane>
         </card>
       </tabs>
-
-
-      </div>
     </div>
   </div>
 </template>
@@ -930,14 +927,8 @@ export default {
   margin: 10px;
   float: right;
 }
-
 .alarm {
   min-height: 70vh;
-}
-
-#calendardiv { 
-  position:fixed; 
-  /* display:inline-block;  */
 }
 
 </style>
