@@ -86,7 +86,7 @@
 
             <div class="card-body">
               <div class="row">
-                <div class="col-xl-4 col-lg-6 mb-30" v-for="(video, index) in videos" :key="index">
+                <div class="col-xl-4 col-lg-6 mb-30" style="margin-bottom:30px;" v-for="(video, index) in videos" :key="index">
                   <LazyYoutubeVideo
                     :src="video.url"
                     :preview-image-size="video.previewImageSize"
@@ -124,21 +124,28 @@
             </div>
             <div class="card-body pt-0 pt-md-4">
               <div class="row" style="margin-bottom: 30px">
-                <div class="col">
-                  <h3> 영상만족도 </h3>
+                <div class="col-xl-4 col-lg-6 mb-30">
+                  <div class="row">
+                    <h3 style="margin-top:10px; margin-left:40px;"> 영상만족도 </h3>
                     <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
-                  <h3>친절도 </h3>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 mb-30">
+                  <div class="row">
+                    <h3 style="margin-top:10px; margin-left:40px;">친절도 </h3>
                     <rate :length="5" :value="kindnessAvg" :disabled="true" />
-                  <h3>마감 속도 </h3>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 mb-30">
+                  <div class="row">
+                    <h3 style="margin-top:10px; margin-left:40px;">마감 속도 </h3>
                     <rate :length="5" :value="finishAvg" :disabled="true" />
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col">
                   <h3>한줄평 ({{reviews.length}})</h3>
-                  <!-- <div class="col" v-for="(review, index) in reviewsMain" :key="index">
-                    <i class="fa fa-user-circle" aria-hidden="true">{{review.comment}} {{getFormatDate(review.createdDate)}}</i>
-                  </div> -->
                   <badger-accordion>
                     <badger-accordion-item v-for="(review, index) in reviewsMain" :key="index">
                       <template slot="header">
