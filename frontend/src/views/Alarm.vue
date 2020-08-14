@@ -927,4 +927,8 @@ export default {
   margin: 10px;
   float: right;
 }
+.alarm {
+  min-height: 70vh;
+}
+
 </style>
