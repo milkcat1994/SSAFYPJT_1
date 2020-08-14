@@ -24,8 +24,9 @@ public class AsyncTaskService {
      * 해당 파일에서 백그라운드에서 실행할 로직을 구현한다.
      */
 	// 초 * 1000
-	// 1시간마다 갱신으로 설정
-	@Scheduled(fixedDelay = 86400000)
+	// 1시간 : 3600000
+	// 1일 : 86400000
+	@Scheduled(fixedDelay = 3600000)
 	public void SaveDatatoRedis() {
 		System.out.println("Thread Start");
 		
@@ -34,7 +35,7 @@ public class AsyncTaskService {
 		// 검색 기록 모두 삭제
 		long deleteSearch = searchRedisService.deleteKeys("search:");
 		System.out.println("검색기록 "+deleteSearch+"개 삭제");
-		
+
 		// DB내용 Redis로 끌어올 필요 있음. 
 		searchRedisService.portfolioAndBookmarkSave(searchService.joinBookmarks());
 		searchRedisService.portfolioAndVideoSave(searchService.joinVideos());
