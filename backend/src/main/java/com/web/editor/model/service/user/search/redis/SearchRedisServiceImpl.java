@@ -90,6 +90,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 
             //모든 포트폴리오 uid 저장
             setOperations.add("uids", searchPortfolioJoinBookmark.getUid());
+            setOperations.add("nickname:uids:"+searchPortfolioJoinBookmark.getNickname(), searchPortfolioJoinBookmark.getUid());
         }
         System.out.println("portfolioAndBookmarkSave 완료");
     }
@@ -328,7 +329,10 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             case "NICKNAME":
                 sb.append("nickname:").append(searchRequest.getSearchText());
                 //해당 글자 포함하는 닉네임 가지는 Key 모두 저장
-                keySet.addAll(hashKeys("nickname:uid:*"+searchRequest.getSearchText()+"*"));
+                keySet.addAll(hashKeys("nickname:uids:*"+searchRequest.getSearchText()+"*"));
+                setOperations.unionAndStore(keySet, "nickname:uids:search:"+searchRequest.getSearchText());
+                keySet = new LinkedHashSet<>();
+                keySet.add("nickname:uids:search:"+searchRequest.getSearchText());
             break;
             case "ALL":
                 sb.append("all");
@@ -343,7 +347,11 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         keySet.add(filterString);
         String searchString = sb.toString();
         sb.setLength(0);
+        // for (String string : keySet) {
+        //     System.out.println("key>>>"+string);
+        // }
         // 검색 결과 uid를 담는 Set이다. -> 교집합 통해 uid집합 만들기
+        // nickname:uid:{nickname} 가 Hash이므로 intersect연산이 되지 않는다.
         Set<String> resultSet = setOperations.intersect(keySet);
 
         // for(String uid : resultSet){

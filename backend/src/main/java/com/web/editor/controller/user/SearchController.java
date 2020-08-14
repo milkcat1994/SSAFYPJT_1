@@ -69,15 +69,15 @@ public class SearchController {
 
 
 		// 주석의 경우 기초 작업으로 정해진 시간마다 실행 되어야한다.
-		long res = searchRedisService.deleteAll();
-		System.out.println("지워진수>>>>"+res);
-		// DB내용 Redis로 끌어올 필요 있음. 
-		searchRedisService.portfolioAndBookmarkSave(searchService.joinBookmarks());
-		searchRedisService.portfolioAndVideoSave(searchService.joinVideos());
-		searchRedisService.requestAndReviewSave(requestService.joinScores());
-		searchRedisService.makeUserInfo();
-		searchRedisService.searchRequestVideoInfoSave(requestService.searchRequestVideoInfo());
-		searchRedisService.portfolioTagSave(searchService.searchPortfolioTag());
+		// long res = searchRedisService.deleteAll();
+		// System.out.println("지워진수>>>>"+res);
+		// // DB내용 Redis로 끌어올 필요 있음. 
+		// searchRedisService.portfolioAndBookmarkSave(searchService.joinBookmarks());
+		// searchRedisService.portfolioAndVideoSave(searchService.joinVideos());
+		// searchRedisService.requestAndReviewSave(requestService.joinScores());
+		// searchRedisService.makeUserInfo();
+		// searchRedisService.searchRequestVideoInfoSave(requestService.searchRequestVideoInfo());
+		// searchRedisService.portfolioTagSave(searchService.searchPortfolioTag());
 		
 		//key값을 Redis에서 먼저 찾아 값을 반환한다.
 		// getListByFilter 함수 내에서 Redis에서 Key값을 먼저 찾고
