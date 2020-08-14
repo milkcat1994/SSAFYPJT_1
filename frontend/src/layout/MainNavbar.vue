@@ -17,13 +17,34 @@
     </form>-->
     <template>
       <div>
-        <i v-b-toggle.sidebar-1 class="fas fa-bars"></i>
-        <b-sidebar id="sidebar-1" class="sidebar-1" bg-variant="white">
+        <i v-b-toggle.sidebar-footer class="fas fa-bars" @mouseup="maskon"></i>
+        <b-sidebar
+          id="sidebar-footer"
+          aria-label="Sidebar with custom footer"
+          no-header
+          shadow
+          class="sidebar-1"
+          bg-variant="white"
+        >
+          <template v-slot:footer="{ hide }" style="display:none">
+            <div
+              class="d-flex bg-dark text-light align-items-center px-3 py-2"
+              style="display:none"
+            >
+              <b-button
+                id="closebtn"
+                size="sm"
+                style="display:none;"
+                @click="hide"
+                >Close</b-button
+              >
+            </div>
+          </template>
           <div class="px-3 py-2 d-flex justify-content-center">
             <router-link class="navbar-brand" to="/">
               <img
                 src="/img/brand/green.png"
-                class="navbar-brand-img mb-5 "
+                class="navbar-brand-img my-5 "
                 alt="편집"
                 style="width:90px; height:50px; border:none;"
               />
@@ -71,6 +92,12 @@
             </router-link>
           </div>
         </b-sidebar>
+
+        <div
+          v-if="mask"
+          style="position:fixed; top:0px; right:0px; width:100%; height:100vh; opacity:0;"
+          @click="maskoff()"
+        ></div>
       </div>
     </template>
     <router-link class="navbar-brand" to="/">
@@ -205,6 +232,7 @@ export default {
       isEditor: "editor",
       isLogin: false,
       // nickname: "",
+      mask: false,
     };
   },
   created() {
@@ -240,15 +268,26 @@ export default {
     },
   },
   methods: {
-    toggleSidebar() {
-      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    maskon() {
+      this.mask = true;
     },
-    hideSidebar() {
-      this.$sidebar.displaySidebar(false);
+    maskoff() {
+      this.mask = false;
+      document.getElementById("closebtn").click();
+      console.log("클릭함");
     },
-    toggleMenu() {
-      this.showMenu = !this.showMenu;
-    },
+    // toggleSidebar() {
+    //   console.log("toggleOn");
+    //   this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    //   this.mask = true;
+    // },
+    // hideSidebar() {
+    //   this.$sidebar.displaySidebar(false);
+    //   this.mask = false;
+    // },
+    // toggleMenu() {
+    //   this.showMenu = !this.showMenu;
+    // },
     getNotifyNum() {
       this.notifyNum = this.notifyitems.data;
       return this.notifyNum;

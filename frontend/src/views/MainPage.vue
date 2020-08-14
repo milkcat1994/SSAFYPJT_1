@@ -29,7 +29,11 @@
           </div>
         </div>
         <div class="col-6 ml-4">
-          <img src="img/theme/friends.png" alt="png from pngtree.com" style="width:90%" />
+          <img
+            src="img/theme/friends.png"
+            alt="png from pngtree.com"
+            style="width:90%"
+          />
         </div>
       </div>
     </base-header>
@@ -66,12 +70,16 @@
               ></b-carousel-slide>
 
               <!-- Slides with custom text -->
-              <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
+              <b-carousel-slide
+                img-src="https://picsum.photos/1024/480/?image=54"
+              >
                 <h1>Hello world!</h1>
               </b-carousel-slide>
 
               <!-- Slides with image only -->
-              <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
+              <b-carousel-slide
+                img-src="https://picsum.photos/1024/480/?image=58"
+              ></b-carousel-slide>
 
               <!-- Slides with img slot -->
               <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
@@ -88,7 +96,11 @@
               </b-carousel-slide>
 
               <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-              <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
+              <b-carousel-slide
+                caption="Blank Image"
+                img-blank
+                img-alt="Blank image"
+              >
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Suspendisse eros felis, tincidunt a tincidunt eget, convallis
@@ -114,7 +126,11 @@
                 <b-row>
                   <b-col cols="12">
                     <carousel :perPage="3">
-                      <slide class="p-2" v-for="editor in currentEditors" :key="editor.uid">
+                      <slide
+                        class="p-2"
+                        v-for="editor in currentEditors"
+                        :key="editor.uid"
+                      >
                         <b-card id="maincard">
                           <router-link :to="`/portfolio?no=${editor.uid}`">
                             <img src alt />
