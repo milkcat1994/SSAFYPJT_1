@@ -2,7 +2,8 @@
   <div>
     <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
       <!-- 카테고리 필터 -->
-      <div class="filter-finder d-flex flex-column mx-4 mb-4">
+      <div class="filter-finder d-flex flex-column mx-4 mb-4" style>
+
         <!-- 영상 종류 -->
         <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
           <div
@@ -69,6 +70,7 @@
             </button>
           </div>
         </div>
+
         <!-- 선택된 필터 표시 바 -->
         <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
         <!-- 전체 해제 -->
@@ -81,40 +83,63 @@
           </div> -->
         <!-- 적용 버튼 -->
           <!-- <div class="m-2 p-2">
-            <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;">적용</button>
+            <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;" @click="fetchEditors">적용</button>
           </div> -->
         <!-- </div> -->
+
+        <!-- 필터 적용 및 초기화 -->
+        <div class="d-flex justify-content-end">
+          <div class="m-2">
+            <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
+          </div>
+          <div class="m-2">
+            <button class="btn btn-primary btn-sm" @click="fetchEditors">적용</button>
+          </div>
+        </div>
       </div>
+
       <!-- 검색 바 -->
       <div class="d-flex justify-content-center mx-4 px-2">
-        <base-dropdown>
-          <base-button slot="title" type="secondary" class="dropdown-toggle">{{
-            searchBy
-          }}</base-button>
-          <a class="dropdown-item" href="#" @click.prevent="searchBy = '이름'"
-            >이름</a
-          >
-          <a class="dropdown-item" href="#" @click.prevent="searchBy = '태그'"
-            >태그</a
-          >
-        </base-dropdown>
-        <base-input
-          placeholder="검색어를 입력해보세요"
-          v-model="keyword"
-          @keyup.enter="searchKeyword"
-          style="width:100%"
-        ></base-input>
+        <div class="d-inline-flex">
+          <base-dropdown>
+            <base-button slot="title" type="secondary" class="dropdown-toggle">{{
+              searchKey
+            }}</base-button>
+            <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
+              >이름</a
+            >
+            <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'"
+              >태그</a
+            >
+          </base-dropdown>
+        </div>
+        <div class="d-inline-flex">
+          <base-input
+            placeholder="검색어를 입력해보세요"
+            v-model="keyword"
+            @keyup.enter="fetchEditors"
+            style="width:500px;"
+          ></base-input>
+        </div>
+        <div class="d-inline-flex">
+          <button class="btn btn-primary ml-1" style="max-height: 43px;" @click="fetchEditors">검색</button>
+        </div>
       </div>
     </base-header>
 
     <div class="container-fluid mt--7 mb-5">
       <!-- 편집자 목록 -->
-      <editors-list title="편집자"></editors-list>
+      <editors-list
+        title="편집자"
+        :editorsData="editors"
+        @sort-by="setSortKey"
+        @clear-sort="resetAll"
+        ></editors-list>
     </div>
   </div>
 </template>
 <script>
-// import http from "@/util/http-common";
+import http from "@/util/http-common";
 // import { mapGetters } from "vuex";
 import EditorsList from "./Editors/EditorsList";
 export default {
@@ -124,6 +149,7 @@ export default {
   },
   data() {
     return {
+      editors: [],
       // 검색 필터 모음
       videoType: [
         {name: '개인', value: 'pers', status: false},
@@ -150,65 +176,111 @@ export default {
         {name: '모션그래픽', value: 'moti', status: false}, 
       ],
       // 검색 기준
-      searchBy: "검색",
+      searchKey: "기준",
+      // searchBy: "이름",
       // 검색 단어
       keyword: "",
+      // 정렬 기준
+      sortBy: "NICKNAME_ASC",
       // 선택한 필터들
       selectedFilters: [],
     };
   },
+  computed: {
+    searchBy() {
+      if (this.searchKey == '이름') {
+        return 'NICKNAME'
+      } else if (this.searchKey == '태그') {
+        return 'TAG'
+      } else {
+        return 'ALL'
+      }
+    },
+    selectedType() {
+      let res = new Array();
+      for (const item of this.videoType) {
+        if (item.status == true) {
+          res.push(item.value)
+        }
+      }
+      return res;
+    },
+    selectedStyle() {
+      let res = new Array();
+      for (const item of this.videoStyle) {
+        if (item.status == true) {
+          res.push(item.value)
+        }
+      }
+      return res;
+    },
+    selectedSkills() {
+      let res = new Array();
+      for (const item of this.videoSkills) {
+        if (item.status == true) {
+          res.push(item.value)
+        }
+      }
+      return res;
+    },
+  },
   created() {
-    let selectedType = this.$store.getters['stepper/getSelectedVideoType']
-    if (selectedType) {
-      this.videoType.forEach(item => {
-        if (item.value == selectedType) {
-          item.status = true
-          this.selectedFilters.push(item.value)
-        }
-      })
-    }
-    let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle']
-    if (selectedStyle) {
-      this.videoStyle.forEach(item => {
-        if (item.value == selectedStyle) {
-          item.status = true
-          this.selectedFilters.push(item.value)
-        }
-      })
-    }
-    let selectedSkills = this.$store.getters['stepper/getSelectedVideoSkills']
-    console.log(selectedSkills)
-    if (selectedSkills) {
-      this.videoSkills.forEach(item => {
-        console.log(item)
-        if (selectedSkills.includes(item.value)) {
-          item.status = true
-          this.selectedFilters.push(item.value)
-        }
-      })
-    }
+    this.fetchFilter();
+    this.fetchEditors();
   },
   methods: {
-    // 이름 또는 단어 검색
-    searchKeyword() {      
-
-      // 검색어
-      // 정렬 방식 == this.searchBy
-      if (this.searchBy == '이름') {
-        console.log(this.keyword);
-        // 이름 검색 API 요청
-      } else if (this.searchBy == '태그') {
-        console.log(this.keyword);
-        // 태그 검색 API 요청
+    setSortKey(key) {
+      this.sortBy = key
+    },
+    fetchEditors() {
+      http
+        .post("/search", {
+          searchTags: this.keyword.split(" "),
+          searchText: this.keyword,
+          searchType: this.searchBy,
+          sortType: this.sortBy,
+          videoSkills: this.selectedSkills,
+          videoStyles: this.selectedStyle,
+          videoTypes: this.selectedType
+        })
+        .then((res) => {
+          if (res.data.status) {
+            console.log(res.data.object)
+            this.editors = res.data.object;
+          } else {
+            console.log(res.data.status);
+          }
+        })
+        .catch((err) => console.error(err));
+    },
+    fetchFilter() {
+      let initType = this.$store.getters['stepper/getSelectedVideoType']
+      if (initType) {
+        this.videoType.forEach(item => {
+          if (item.value == initType) {
+            item.status = true
+            this.selectedFilters.push(item.value)
+          }
+        })
       }
-
-      // Vuex가 아닌 현재 컴포넌트에 있는 필터링 데이터를 기반으로 검색
-      console.log(this.videoType);
-      console.log(this.videoStyle);
-      console.log(this.videoSkills);
-      // 버튼이 눌릴 때마다 리스트를 업데이트할 것인지,
-      // '적용' 버튼을 사용해 요청할 것인지 결정해야함
-
+      let initStyle = this.$store.getters['stepper/getSelectedVideoStyle']
+      if (initStyle) {
+        this.videoStyle.forEach(item => {
+          if (item.value == initStyle) {
+            item.status = true
+            this.selectedFilters.push(item.value)
+          }
+        })
+      }
+      let initSkills = this.$store.getters['stepper/getSelectedVideoSkills']
+      if (initSkills) {
+        this.videoSkills.forEach(item => {
+          if (initSkills.includes(item.value)) {
+            item.status = true
+            this.selectedFilters.push(item.value)
+          }
+        })
+      }
     },
     toggleFilter(val) {
       if (val.status) {
@@ -270,6 +342,10 @@ export default {
       // selectedFilters 배열 clear
       (this.selectedFilters.length = 0);
     },
+    resetAll() {
+      this.clearFilterAll();
+      this.fetchEditors();
+    }
   },
 };
 </script>

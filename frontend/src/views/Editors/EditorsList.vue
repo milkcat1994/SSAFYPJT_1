@@ -1,16 +1,22 @@
 <template>
   <div style="max-height: 1200px;">
     <div class="card p-4">
-      <div class="d-flex justify-content-end">
-        <base-dropdown>
-          <base-button slot="title" type="primary" class="dropdown-toggle"
-            >정렬</base-button
-          >
-          <a class="dropdown-item">이름순</a>
-          <a class="dropdown-item">평점순</a>
-          <a class="dropdown-item">가격낮은순</a>
-          <a class="dropdown-item">가격높은순</a>
-        </base-dropdown>
+      <div class="d-flex justify-content-between align-item-center">
+        <span>전체 {{totalPage}}페이지 중 {{currentPage}}페이지</span>
+        <div>
+          <div class="mr-2 d-inline-flex">
+            <button class="btn btn-danger" @click="$emit('clear-sort')">초기화</button>
+          </div>
+          <base-dropdown>
+            <base-button slot="title" type="primary" class="dropdown-toggle"
+              >{{sortKey}}</base-button
+            >
+            <a class="dropdown-item" @click="fetchSortKey('NICKNAME_ASC')">이름순</a>
+            <a class="dropdown-item" @click="fetchSortKey('SCORE_DESC')">평점순</a>
+            <a class="dropdown-item" @click="fetchSortKey('PRICE_ASC')">낮은 가격순</a>
+            <a class="dropdown-item" @click="fetchSortKey('PRICE_DESC')">높은 가격순</a>
+          </base-dropdown>
+        </div>
       </div>
       <ul class="list-unstyled mt-4">
         <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
@@ -21,12 +27,12 @@
                 <router-link :to="`/portfolio?no=${editor.uid}`">
                   <img src="" alt="" />
                   <LazyYoutubeVideo
-                    :src="editor.urls[0]"
+                    :src="editor.url"
                     style="width: 100%;"
                   />
                 </router-link>
               </div>
-              <div class="col-9 d-flex flex-column justify-content-around">
+              <div class="col-9 pt-2 d-flex flex-column justify-content-around">
                 <div class="d-flex align-items-center">
                   <!-- 포트폴리오 닉네임 -->
                   <router-link :to="`/portfolio?no=${editor.uid}`">
@@ -44,9 +50,12 @@
                       size="sm"
                       icon="ni ni-favourite-28"
                     >
-                      {{ editor.bookmarkCount }}
+                      {{ editor.bookmarkNumber }}
                     </base-button>
                   </div>
+                </div>
+                <div>
+                  <span><i class="fas fa-star"></i> {{editor.avgScore}}점</span>
                 </div>
                 <div class="row">
                   <!-- 태그 -->
@@ -69,10 +78,7 @@
           </div>
         </li>
       </ul>
-      <div
-        class="card-footer d-flex justify-content-center"
-        :class="type === 'dark' ? 'bg-transparent' : ''"
-      >
+      <div class="card-footer d-flex justify-content-center">
         <base-pagination
           :total="editorsData.length"
           :perPage="editorsPerPage"
@@ -91,10 +97,9 @@ import LazyYoutubeVideo from "vue-lazy-youtube-video";
 export default {
   name: "editors-list",
   props: {
-    type: {
-      type: String,
-    },
-    title: String,
+    editorsData: {
+      type: Array
+    }
   },
   components: {
     LazyYoutubeVideo,
@@ -105,6 +110,9 @@ export default {
       let end = this.currentPage * this.editorsPerPage;
       return this.editorsData.slice(start, end);
     },
+    totalPage() {
+      return Math.ceil(this.editorsData.length / this.editorsPerPage)
+    }
   },
   data() {
     return {
@@ -113,38 +121,37 @@ export default {
       tag: "",
       editorsPerPage: 5,
       currentPage: 1,
-      editorsData: [],
+      sortKey: "정렬",
+      // editorsData: [],
       // 백엔드 API 호출 시 반환 자료형
       // {
       //   uid: "포트폴리오 UID",
       //   nickname: "포트폴리오 닉네임",
       //   payMin: "분당 가격",
-      //   bookmarkCount: "북마크 개수",
+      //   bookmarkNumber: "북마크 개수",
+      //   avgScore: "평점",
       //   tags: ["편집자 관련 태그", ...],
-      //   urls: ["편집자 대표 URL", "기타 URL1", ...]
+      //   url: ["편집자 대표 URL", "기타 URL1", ...]
     };
   },
   created() {
-    this.fetchEditors();
   },
   methods: {
-    fetchEditors() {
-      http
-        .get("/search/listAll")
-        .then((res) => {
-          // console.log(res)
-          if (res.data.status) {
-            // console.log(res.data.object)
-            this.editorsData = res.data.object;
-          } else {
-            console.log(res.data.status);
-          }
-        })
-        .catch((err) => console.error(err));
-    },
     fetchPage(val) {
       this.currentPage = val;
     },
+    fetchSortKey(val) {
+      if (val == 'NICKNAME_ASC') {
+        this.sortKey = '이름순'
+      } else if (val == 'SCORE_DESC') {
+        this.sortKey = '평점순'
+      } else if (val == 'PRICE_ASC') {
+        this.sortKey = '낮은 가격순'
+      } else if (val == 'PRICE_DESC')
+        this.sortKey = '높은 가격순'
+      this.$emit('sort-by', val)
+    },
+
     // 북마크 로직(미완성)
     isBookmarked(portfolioUID) {
       // login 되어있는 사용자만?
