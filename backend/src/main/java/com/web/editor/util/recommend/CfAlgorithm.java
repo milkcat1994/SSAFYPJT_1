@@ -45,8 +45,6 @@ public class CfAlgorithm {
             // 유클리디안 거리
             double sum = 0;
             
-            // System.out.println("\nuid: " + editor.getUid());
-
             double bookTag = MaxScore;
             double ediTag =  editorTag(bookmarks.getTag(), editor.getTag());
             sum += (double)(bookTag - ediTag) * (bookTag - ediTag);
@@ -61,9 +59,6 @@ public class CfAlgorithm {
             }
 
             double sim = 1 / (1 + Math.sqrt(sum));
-            // double sim = sum;
-
-            // System.out.println("sim: " + sim);
 
             editor.setSimilarity(sim);
             recommendList.add(editor);
@@ -95,9 +90,6 @@ public class CfAlgorithm {
         }
         double tagScore = eq/(double)tagPerBookmark * MaxScore * (1 + weightTag);
 
-        // System.out.println("tag eq / tags: " + eq + "/" + bookTags.length);
-        // System.out.println("tag score: " + tagScore);
-
         if (tagScore > 1) return 1;
         return tagScore;
     }
@@ -111,8 +103,6 @@ public class CfAlgorithm {
             if (edi.trim().contains(bookSkill.trim()))  eq+=1; 
         }
         double skillScore = eq/(double)bookSkills.length * MaxScore * 1;
-        // System.out.println("skill eq / skills: " + eq + "/" + bookSkills.length);
-        // System.out.println("skill score: " + skillScore);
 
         return skillScore;
     }
