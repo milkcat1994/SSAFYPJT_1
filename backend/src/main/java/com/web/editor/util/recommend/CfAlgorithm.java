@@ -30,26 +30,31 @@ public class CfAlgorithm {
                 // 유클리디안 거리
                 double sum = 0;
                 
+                System.out.println("\nuid: " + editor.getUid());
+
                 // pay
-                double bookPay = 1;
-                double ediPay = editorPay(Double.parseDouble(bookmark.getPay()), Double.parseDouble(editor.getPay()));
-                sum +=(bookPay - ediPay) * (bookPay - ediPay);
+                // double bookPay = 1;
+                // double ediPay = editorPay(Double.parseDouble(bookmark.getPay()), Double.parseDouble(editor.getPay()));
+                // sum +=(bookPay - ediPay) * (bookPay - ediPay);
                 // tag
                 double bookTag = 1;
                 double ediTag =  editorTag(bookmark.getTags(), editor.getTags());
-                sum += (bookTag - ediTag) * (bookTag - ediTag);
+                sum += (double)(bookTag - ediTag) * (bookTag - ediTag);
                 // skill
                 double bookSkill = 1;
                 double ediSkill =  editorSkill(bookmark.getSkill(), editor.getSkill());
-                sum += (bookSkill - ediSkill) * (bookSkill - ediSkill);
+                sum += (double)(bookSkill - ediSkill) * (bookSkill - ediSkill);
 
                 double sim = 1 / (1 + Math.sqrt(sum));
+                // double sim = sum;
+
+                System.out.println("sim: " + sim);
 
                 if (sim_before < sim) {
                     editor.setSimilarity(sim);
-                // recommendList.offer(bookmark);
                     if (sim_before != 0)    recommendList.remove(recommendList.size()-1);
                     recommendList.add(editor);
+                    
                     sim_before = sim;
                 }
             }   
@@ -77,9 +82,13 @@ public class CfAlgorithm {
 
         for (String tag: tags) {
             // 태그를 포함하면
-            if (edi.contains(tag.trim()))  eq++; 
+            if (edi.contains(tag.trim()))  eq+=1; 
         }
-        return eq/tags.length * 2;
+        System.out.println("tag eq / tags: " + eq + "/" + tags.length);
+        System.out.println("tag score: " + eq/(double)tags.length * 1);
+
+        if (eq/(double)tags.length * 1 * 1.3 > 1) return 1;
+        return eq/(double)tags.length * 1 * 1.3;
     }
 
     // 스킬 점수화
@@ -89,16 +98,19 @@ public class CfAlgorithm {
 
         for (String skill: skills) {
             // 태그를 포함하지 않으면
-            if (!edi.contains(skill))  eq++; 
+            if (!edi.contains(skill))  eq+=1; 
         }
-        return eq/skills.length * 2;
+        System.out.println("skill eq / skills: " + eq + "/" + skills.length);
+        System.out.println("skill score: " + eq/(double)skills.length * 1);
+
+        return eq/(double)skills.length * 1;
     }
 
     // 금액 점수화
-    private double editorPay(double book, double edi){
-        if (book > edi) return 1;
-        return (book - Math.abs(book-edi)) / book * 1;
-    }
+    // private double editorPay(double book, double edi){
+    //     if (book > edi) return 1;
+    //     return (book - Math.abs(book-edi)) / book * 1;
+    // }
 
 
 }
