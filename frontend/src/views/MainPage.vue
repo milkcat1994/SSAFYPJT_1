@@ -24,8 +24,8 @@
             </h3>
           </div>
           <div class="d-flex mx-3">
-            <b-button variant="primary" class="mr-4">편집자 찾아보기</b-button>
-            <b-button variant="secondary">편집자 구경하기</b-button>
+            <b-button variant="primary" class="mr-4" @click="moveStepper()">편집자 찾아보기</b-button>
+            <b-button variant="secondary" @click="moveList()">편집자 구경하기</b-button>
           </div>
         </div>
         <div class="col-6 ml-4">
@@ -211,11 +211,12 @@ export default {
         // }}
       );
     },
-    findSuper() {
+    moveList() {
       // 슈퍼편집자 조건으로 검색 조건 + router로 push
-      this.$router.push({ name: "search" });
+      // this.$router.push({name: 'search'})
+      this.$router.push({name: 'editors'})
     },
-    getSuggestion() {
+    moveStepper() {
       // 현재 로그인한 사용자의 태그나 이용정보 바탕으로 검색 조건 + router로 push
       this.$router.push({ name: "search" });
     },
