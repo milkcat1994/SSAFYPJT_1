@@ -115,11 +115,13 @@
                   ref="calendar"
                   style="width: 100%; height: 100%"
                 />
-                <i class="fas fa-circle" style="color: #6699ff; margin: 15px;">진행중 작업</i>
+                <div class="row" style="margin-left: 380px;">
+                <i class="fas fa-circle" style="color: #6699ff; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;">진행중 작업</i>
                 <i class="fas fa-circle"
-                  style="color: #ff0066; margin: 15px;"
+                  style="color: #ff0066; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
                   >개인 일정</i>
-                <i class="fas fa-circle" style="color: #c9c9c9; margin: 15px;">휴일</i>
+                <i class="fas fa-circle" style="color: #c9c9c9; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;">휴일</i>
+                </div>
               </div>
             </div>
           </div>
@@ -132,66 +134,63 @@
         <div class="col">
           <div class="card shadow">
             <div class="card-header bg-transparent">
-              <h2 class="mb-0">서비스 평가</h2>
+              <h1 class="mb-0">서비스 평가</h1>
             </div>
             <div class="card-body pt-0 pt-md-4">
-              <div class="row" style="margin-bottom: 30px">
+              <!-- <div class="row">
+                <div class="col" style="text-align:center;">
+                <h3> 총 {{reviews.length}}개의 후기가 존재합니다.</h3>
+                </div>
+              </div> -->
+                <div class="row" style="margin-bottom: 30px; text-align:center;">
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
                     <h3 style="margin-top:10px; margin-left:40px;"> 영상만족도 </h3>
                     <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
+                    <p style="margin-left:50px;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
                     <h3 style="margin-top:10px; margin-left:40px;">친절도 </h3>
                     <rate :length="5" :value="kindnessAvg" :disabled="true" />
+                    <p>편집자가 얼마나 친절히 응대하고 소통하였는지에 대해
+                      <br>{{reviews.length}}분이 평가한 결과입니다.</p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
                     <h3 style="margin-top:10px; margin-left:40px;">마감 속도 </h3>
                     <rate :length="5" :value="finishAvg" :disabled="true" />
+                    <p style="margin-left:50px;">마감 기한을 잘 맞춰주었는지에 대해
+                      <br>{{reviews.length}}분이 평가한 결과입니다.</p>
                   </div>
                 </div>
-              </div>
+                </div>
+              <!-- </div> -->
               <div class="row">
                 <div class="col">
-                  <h3>한줄평 ({{reviews.length}})</h3>
-                  <badger-accordion>
-                    <badger-accordion-item v-for="(review, index) in reviewsMain" :key="index">
-                      <template slot="header">
-                        <i class="fa fa-user-circle" aria-hidden="true" style="color:#3a578a;">{{review.comment}} 
-                          {{getFormatDate(review.createdDate)}}</i>
-                      </template>    
-                      <template slot="content" >
-                        <div class="col">
-                          <div class="row">
-                            <h5 style="margin-top:10px; margin-left:40px;"> 영상만족도</h5>
-                            <rate
-                            :length="5"
-                            :value="review.videoScore"
-                            :disabled="true"
-                            />
-                            <h5 style="margin-top:10px; margin-left:40px;"> 친절도</h5>
-                            <rate
-                            :length="5"
-                            :value="review.kindnessScore"
-                            :disabled="true"
-                            />
-                            <h5 style="margin-top:10px; margin-left:40px;">마감 속도 </h5>
-                            <rate
-                            :length="5"
-                            :value="review.finishScore"
-                            :disabled="true"
-                            />
-                          </div>
-                        </div>
-                      </template>
-                    </badger-accordion-item>
-                  </badger-accordion>
+                  <h2 style="margin-bottom:20px;">한줄평({{reviews.length}})</h2>
+                  <div class="col" v-for="(review,index) in reviewsMain" :key="index">
+                    <div class="row">
+                      <img class="profile" src="img/theme/user-logos.png" width="45" height="30" style="margin-top:5px; margin-left:20px;"/>
+                      <h4 style="margin-top:11px; margin-right:10px; margin-left:7px;">{{review.nickname.slice(0,1)}}***</h4>
+                      <h5 style="margin-top:11px; margin-right:10px;">{{getFormatDate(review.createdDate)}}</h5>
+                      <rate
+                        :length="5"
+                        :value="review.scoreAvg"
+                        :disabled="true"
+                      />
+                    </div>
+                    <div class="col" style="margin-top:10px; margin-left:20px;">
+                      <h4>{{review.comment}}</h4>
+                    </div>
+                    <hr>
+                  </div>
+                  <div>
                   {{this.reviewMessage}}
                   <base-button v-if="this.reviewLoad" size="sm" type="float-right" icon="ni ni-fat-add" @click="loadMoreReviews()">더보기</base-button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -417,7 +416,7 @@
 // import InputTag from 'vue-input-tag';
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 import { Rate } from "vue-rate";
-import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
+// import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
 import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
@@ -446,8 +445,8 @@ moment.locale('ko');
     components: {
       LazyYoutubeVideo,
       Rate,
-      BadgerAccordion,
-      BadgerAccordionItem,
+      // BadgerAccordion,
+      // BadgerAccordionItem,
       flatPicker,
       // InputTag,
       Calendar
@@ -811,28 +810,6 @@ moment.locale('ko');
           }
         })
       },
-      getTagInfo(URL){
-        http
-            .get(URL+'/tag/'+this.uid)
-            .then(({data}) => {
-                //성공시 평균 계산 필요 추출 필요
-                if (data.data == 'success') {
-                  this.haveTags = true;
-                  this.tags = [];
-                  data.object.forEach(obj => {
-                    this.tags.push(obj.tagName);
-                  });
-                  return;
-                } else {
-                  this.haveTags = false;
-                  return;
-                }
-            })
-            .catch(error => {
-                console.log(error);
-                return;
-            })
-      },
       getReviewInfo(URL){
         http
         .get(URL+'/review/'+this.uid)
@@ -855,10 +832,12 @@ moment.locale('ko');
               this.reviewLoad = false;
               this.reviewMessage = "아직 리뷰가 존재하지 않습니다.";
             } else {
-              this.reviewLoad = true;
               this.reviewsMain = this.reviews.reverse();
               if(this.reviews.length > 5){
+                this.reviewLoad = true;
                 this.reviewsMain = this.reviewsMain.slice(0,5);
+              } else {
+                this.reviewLoad = false;
               }
             }
             return;
@@ -1040,7 +1019,7 @@ moment.locale('ko');
         // Item closed
       },
       getFormatDate(regtime) {
-        return moment(new Date(regtime)).format("YYYY-MM-DD");
+        return moment(new Date(regtime)).format("YY.MM.DD hh:mm");
       }
   },
 };
