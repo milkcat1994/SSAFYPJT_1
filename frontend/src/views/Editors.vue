@@ -342,35 +342,6 @@ export default {
       // selectedFilters 배열 clear
       (this.selectedFilters.length = 0);
     },
-    fetchFilter() {
-      let selectedType = this.$store.getters['stepper/getSelectedVideoType'].value
-      if (selectedType) {
-        this.videoType.forEach(item => {
-          if (item.value == selectedType) {
-            item.status = true
-            this.selectedFilters.push(item.value)
-          }
-        })
-      }
-      let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle'].value
-      if (selectedStyle) {
-        this.videoStyle.forEach(item => {
-          if (item.value == selectedStyle.value) {
-            item.status = true
-            this.selectedFilters.push(item.value)
-          }
-        })
-      }
-      let selectedSkills = this.$store.getters['stepper/getSelectedVideoSkills']
-      if (selectedSkills) {
-        this.videoSkills.forEach(item => {
-          if (selectedSkills.includes(item.value)) {
-            item.status = true
-            this.selectedFilters.push(item.value)
-          }
-        })
-      }
-    }
   },
 };
 </script>

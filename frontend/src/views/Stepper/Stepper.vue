@@ -44,6 +44,7 @@
 <script>
 // import http from "@/util/http-common";
 // import { mapGetters } from 'vuex';
+import alertify from "alertifyjs";
 
 import ProgressBar from './ProgressBar.vue';
 import VideoType from './VideoType.vue';
@@ -85,14 +86,14 @@ export default {
         switch (this.currentStep) {
           case 0:
             if (!this.$store.getters['stepper/getSelectedVideoType']) {
-              alert('선택해라')
+              alertify.notify("편집 목적을 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
             break;
           case 1:
             if (!this.$store.getters['stepper/getSelectedVideoStyle']) {
-              alert('선택해라')
+              alertify.notify("영상 종류를 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
@@ -100,7 +101,7 @@ export default {
           case 2:
             if (this.$store.getters['stepper/getSelectedVideoSkills'].length === 0) {
               // console.log(this.$store.getters['stepper/getSelectedVideoSkills'])
-              alert('선택해라')
+              alertify.notify("편집 스킬을 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
@@ -108,7 +109,7 @@ export default {
           case 3:
             if (!this.$store.getters['stepper/getOriginLength']) {
               // console.log(this.$store.getters['stepper/getOriginLength'])
-              alert('선택해라')
+              alertify.notify("원본 길이를 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
@@ -116,7 +117,7 @@ export default {
           case 4:
             if (!this.$store.getters['stepper/getFinalLength']) {
               // console.log(this.$store.getters['stepper/getFinalLength'])
-              alert('선택해라')
+              alertify.notify("완성 길이를 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
@@ -126,7 +127,7 @@ export default {
         // after final step
         console.log(this.$store.getters['stepper/checkDeadline'])
         if (this.$store.getters['stepper/checkDeadline'].length < 2) {
-          alert('선택해라')
+          alertify.notify("마감 기한을 선택해주세요", "warning", 3);
         } else {
           // this.currentStep++;
           this.$router.push("/editors");
