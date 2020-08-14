@@ -173,7 +173,7 @@
                   <h2 style="margin-bottom:20px;">한줄평({{reviews.length}})</h2>
                   <div class="col" v-for="(review,index) in reviewsMain" :key="index">
                     <div class="row">
-                      <img class="profile" src="img/theme/user-logos.png" width="45" height="30" style="margin-top:5px; margin-left:20px;"/>
+                      <img class="profile" src="img/theme/user-logos.png" style="margin-top:5px; margin-left:20px; width: 45px; height:30px;"/>
                       <h4 style="margin-top:11px; margin-right:10px; margin-left:7px;">{{review.nickname.slice(0,1)}}***</h4>
                       <h5 style="margin-top:11px; margin-right:10px;">{{getFormatDate(review.createdDate)}}</h5>
                       <rate
