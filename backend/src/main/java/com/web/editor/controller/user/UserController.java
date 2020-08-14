@@ -81,8 +81,7 @@ public class UserController {
             if (user != null) {
                 message = "nickname";
             }
-        }
-        else{
+        } else {
             message = "email";
         }
         // 중복 있을 경우 회원가입 실패
@@ -94,8 +93,8 @@ public class UserController {
             // 중복 없을경우 회원가입 진행
             user = new User(email, password, nickname, "normal", auth);
             int res = userService.normalRegister(user);
-            //editor일 때만 포트폴리오 등록
-            if(auth.equals("editor"))
+            // editor일 때만 포트폴리오 등록
+            if (auth.equals("editor"))
                 portfolioService.portfolioInitSave(String.valueOf(userService.findByNickname(nickname).getUid()));
             if (res == -1) {
                 result.status = false;
@@ -104,7 +103,7 @@ public class UserController {
                 result.status = true;
                 result.data = "success";
             }
-            
+
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
@@ -121,10 +120,10 @@ public class UserController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         result.status = true;
-        result.data = "nickname";
+        result.data = "false";
 
         return new ResponseEntity<>(result, HttpStatus.OK);
-    }   
+    }
 
     @PostMapping("/user/{uid}")
     @ApiOperation(value = "user정보 반환")
@@ -161,22 +160,22 @@ public class UserController {
         String message = "uid_need_int";
         try {
             user.setUid(Integer.parseInt(uid));
-            //포트폴리오에 해당 uid있다면 nickname수정할 것.
-            
+            // 포트폴리오에 해당 uid있다면 nickname수정할 것.
+
         } catch (NumberFormatException nfe) {
             nfe.printStackTrace();
             result.status = false;
             result.data = message;
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
-    
+
         // 유저의 이전 정보 가져오기
         orgUser = userService.findByUid(uid);
 
         user.setNickname(nickname);
         int res = userService.updateUser(user);
-        portfolioService.portfolioNicknameUpdate(new PortfolioNicknameUpdateRequest(Integer.parseInt(uid), request.getNickname()));
-        
+        portfolioService.portfolioNicknameUpdate(
+                new PortfolioNicknameUpdateRequest(Integer.parseInt(uid), request.getNickname()));
 
         if (res > 0) {
             result.status = true;
@@ -190,9 +189,10 @@ public class UserController {
             // 새로운 닉네임
             nicknameUpdateDto.setNickname(nickname);
             
-            // 요청서의 닉네임 변경
+            // 요청서, 리뷰의 닉네임 변경
             if (auth.equals("editor")){
                 requestService.updateNicknameRes(nicknameUpdateDto);
+                requestService.updateNickReview(nicknameUpdateDto);
             }else if (auth.equals("noneditor")){
                 requestService.updateNicknameReq(nicknameUpdateDto);
             }

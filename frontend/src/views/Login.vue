@@ -39,9 +39,7 @@
             <div
               v-if="!this.$v.model.email.email"
               class="text-left ml-3 mb-3 small"
-            >
-              이메일 형식이 올바르지 않습니다.
-            </div>
+            >이메일 형식이 올바르지 않습니다.</div>
 
             <base-input
               class="input-group-alternative"
@@ -57,9 +55,7 @@
               <span class="text-muted">이 사이트 기억하기</span>
             </base-checkbox>-->
             <div class="text-center">
-              <base-button type="primary" class="my-4" @click="login()"
-                >로그인</base-button
-              >
+              <base-button type="primary" class="my-4" @click="login()">로그인</base-button>
             </div>
           </form>
         </div>
@@ -83,13 +79,9 @@
       <template slot="header">
         <h5 class="modal-title" id="requestForm">Google 계정 연동 동의</h5>
       </template>
-      <div>
-        구글 계정 연동에 동의하시겠습니까?
-      </div>
+      <div>구글 계정 연동에 동의하시겠습니까?</div>
       <template slot="footer">
-        <base-button type="secondary" @click="modal.show = false"
-          >Close</base-button
-        >
+        <base-button type="secondary" @click="modal.show = false">Close</base-button>
         <base-button type="primary" @click="connectGoogle">동의</base-button>
       </template>
     </modal>

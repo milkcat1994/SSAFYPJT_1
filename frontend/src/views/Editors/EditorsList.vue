@@ -133,7 +133,7 @@ export default {
       http
         .get("/search/listAll")
         .then((res) => {
-          // console.log(res)
+          console.log(res);
           if (res.data.status) {
             // console.log(res.data.object)
             this.editorsData = res.data.object;
