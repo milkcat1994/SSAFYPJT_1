@@ -63,4 +63,6 @@ public interface SearchRedisService {
     Set<String> hashKeys(String pattern);
 
     long deleteAll();
+    
+    long deleteKeys(String pattern);
 }
