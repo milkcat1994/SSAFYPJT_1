@@ -49,7 +49,7 @@ $pink: #f3a4b5 !default;
 $red: #f5365c !default;
 $orange: #fb6340 !default;
 $yellow: #ffd600 !default;
-$green: #2dce89 !default;
+$green: #b9cced !default; // 우리 색으로 바꿈
 $teal: #11cdef !default;
 $cyan: #2bffc6 !default;
 $customblue: #89b2e9 !default;
@@ -82,7 +82,7 @@ $default: #172b4d !default; // 기본
 // $primary:       #5e72e4 !default;  // 기본
 $primary: #172b4d !default;
 // $primary:       #035aa6 !default;  // 우리 테마
-$secondary: #fcbf1e !default;
+$secondary: #fbf4f9 !default;
 $success: $green !default;
 $info: $teal !default;
 $warning: $orange !default;
@@ -90,6 +90,7 @@ $danger: $red !default;
 $light: $gray-500 !default;
 $dark: $gray-900 !default;
 $darker: darken($gray-900, 15%) !default;
+$eunjung: #04412e !default;
 
 $facebook: #3b5999 !default;
 $twitter: #1da1f2 !default;
@@ -115,6 +116,7 @@ $theme-colors: map-merge(
     "neutral": $white,
     "dark": $dark,
     "darker": $darker,
+    "eunjung": $eunjung,
   ),
   $theme-colors
 );

@@ -35,6 +35,7 @@
             style="color: #ff0066; margin: 15px"
             v-if="$session.get('auth') == 'editor'"
           >개인 일정</i>
+          <i class="fas fa-circle" style="color: #c9c9c9; margin: 15px">휴일</i>
         </div>
       </div>
 
@@ -51,13 +52,14 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem0.uid"
+                      v-b-toggle="'accordion-' + requestitem0.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem0.rid);
                         setRequestDate(
                           requestitem0.start_date,
-                          requestitem0.end_date
+                          requestitem0.end_date,
+                          requestitem0.rid
                         );
                       "
                       v-if="$session.get('auth') == 'editor'"
@@ -67,29 +69,30 @@
                     </b-button>
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem0.uid"
+                      v-b-toggle="'accordion-' + requestitem0.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem0.rid);
                         setRequestDate(
                           requestitem0.start_date,
-                          requestitem0.end_date
+                          requestitem0.end_date,
+                          requestitem0.rid
                         );
                       "
                       v-if="$session.get('auth') == 'noneditor'"
                     >
                       <span v-if="$session.get('auth') == 'editor'">
-                        {{ requestitem0.request_nickname }}님과의 작업이
+                        {{ requestitem0.request_nickname }}님이 작업이
                         요청했습니다.
                       </span>
                       <span v-if="$session.get('auth') == 'noneditor'">
-                        {{ requestitem0.response_nickname }}님과의 작업이
+                        {{ requestitem0.response_nickname }}님께 작업을
                         요청했습니다.
                       </span>
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem0.uid"
+                    :id="'accordion-' + requestitem0.rid"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -108,6 +111,10 @@
                             <tr>
                               <th>영상 타입</th>
                               <td>{{ requestitem0.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem0.video_skill }}</td>
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
@@ -174,13 +181,14 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem1.uid"
+                      v-b-toggle="'accordion-' + requestitem1.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem1.rid);
                         setRequestDate(
                           requestitem1.start_date,
-                          requestitem1.end_date
+                          requestitem1.end_date,
+                          requestitem1.rid
                         );
                       "
                     >
@@ -195,9 +203,9 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem1.uid"
+                    :id="'accordion-' + requestitem1.rid"
                     accordion="my-accordion"
-                    role="tabpanel"
+                    role="tabpane1"
                   >
                     <b-card-body>
                       <b-card-text>
@@ -214,6 +222,10 @@
                             <tr>
                               <th>영상 타입</th>
                               <td>{{ requestitem1.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem1.video_skill }}</td>
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
@@ -266,13 +278,14 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem2.uid"
+                      v-b-toggle="'accordion-' + requestitem2.rid"
                       variant="info"
                       @click="
                         getDetail(requestitem2.rid);
                         setRequestDate(
                           requestitem2.start_date,
-                          requestitem2.end_date
+                          requestitem2.end_date,
+                          requestitem2.rid
                         );
                       "
                     >
@@ -287,7 +300,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem2.uid"
+                    :id="'accordion-' + requestitem2.rid"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -306,6 +319,10 @@
                             <tr>
                               <th>영상 타입</th>
                               <td>{{ requestitem2.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem2.video_skill }}</td>
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
@@ -366,7 +383,6 @@
                           <b-button
                             @click="
                               writeReview(
-                                requestitem2.response_nickname,
                                 requestitem2.rid
                               )
                             "
@@ -383,13 +399,14 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem3.uid"
+                      v-b-toggle="'accordion-' + requestitem3.rid"
                       variant="primary"
                       @click="
                         getDetail(requestitem3.rid);
                         setRequestDate(
                           requestitem3.start_date,
-                          requestitem3.end_date
+                          requestitem3.end_date,
+                          requestitem3.rid
                         );
                       "
                     >
@@ -404,7 +421,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem3.uid"
+                    :id="'accordion-' + requestitem3.rid"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -423,6 +440,10 @@
                             <tr>
                               <th>영상 타입</th>
                               <td>{{ requestitem3.video_type }}</td>
+                            </tr>
+                            <tr>
+                              <th>영상 스킬</th>
+                              <td>{{ requestitem3.video_skill }}</td>
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
@@ -539,7 +560,16 @@ export default {
           textColor: "white",
           backgroundColor: "#6699ff",
         },
+        {
+          id: 4,
+          title: "offday",
+          textColor: "white",
+          backgroundColor: "#c9c9c9",
+        },
       ],
+
+      ridDetail: "",
+
       events: [],
       videoScore: 0,
       kindnessScore: 0,
@@ -588,6 +618,10 @@ export default {
           "getRequestitems2",
           "/request/res/" + this.$session.get("nickname") + "/2"
         );
+        store.dispatch(
+          "getRequestitems3",
+          "/request/res/" + this.$session.get("nickname") + "/3"
+        );
       } else if (this.$session.get("auth") == "noneditor") {
         store.dispatch(
           "getProgressdate",
@@ -615,7 +649,7 @@ export default {
         );
       }
       this.readNotify();
-    } 
+    }
   },
   computed: {
     ...mapGetters(["requestitems0"]),
@@ -653,6 +687,7 @@ export default {
             "getRequestitems1",
             "/request/res/" + this.$session.get("nickname") + "/1"
           );
+          this.ridDetail = -1;
           this.setProgressDate();
         });
     },
@@ -680,6 +715,7 @@ export default {
               "getRequestitems0",
               "/request/req/" + this.$session.get("nickname") + "/0"
             );
+          this.ridDetail = -1;
           this.setDateClean();
         });
     },
@@ -689,6 +725,7 @@ export default {
         .put("/request/done/" + rid)
         .then(({ data }) => {
           if (data == "success") {
+            this.$bvModal.hide("donereview");
             alertify.notify("요청이 완료되었습니다.", "success", 3);
           }
         })
@@ -716,6 +753,7 @@ export default {
               "/request/req/" + this.$session.get("nickname") + "/2"
             );
           }
+          this.ridDetail = -1;
           this.setProgressDate();
         });
     },
@@ -742,6 +780,7 @@ export default {
               "getRequestitems3",
               "/request/req/" + this.$session.get("nickname") + "/3"
             );
+            this.ridDetail = -1;
           }
         });
     },
@@ -763,13 +802,13 @@ export default {
           console.log(err);
         });
     },
-    writeReview(editor_nickname, rid) {
+    writeReview(rid) {
       let msg = "리뷰 작성에 실패하였습니다.";
       // console.log(editor_nickname, rid);
       http
         .post("/request/review", {
           requestFormRid: rid,
-          nickname: editor_nickname,
+          nickname: this.nickname,
           videoScore: this.videoScore,
           kindnessScore: this.kindnessScore,
           finishScore: this.finishScore,
@@ -825,14 +864,14 @@ export default {
         }
       );
     },
-    setRequestDate(start, end) {
-      if (
-        this.events[this.events.length - 1].start == start.substring(0, 10) &&
-        this.events[this.events.length - 1].end == end.substring(0, 10)
-      ) {
+    setRequestDate(start, end, rid) {
+      if (this.ridDetail == rid || this.ridDetail == -1) {
+        // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
         this.setDateClean();
+        this.ridDetail = "";
         return;
       }
+      this.ridDetail = rid;
       this.events[this.events.length - 1].start = start.substring(0, 10);
       this.events[this.events.length - 1].end = end.substring(0, 10);
     },
@@ -859,23 +898,25 @@ export default {
     },
 
     // 알림 읽음 처리
-    readNotify(){
+    readNotify() {
       http
-        .put('/request/notify/read/' + this.$session.get('nickname'))
+        .put("/request/notify/read/" + this.$session.get("nickname"))
         .then(({ data }) => {
-          if (data == 'success'){
+          if (data == "success") {
             // alert('알람 읽음 완료');
-            }
+          }
         })
         .catch(() => {
           // alert('요청 거절중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침
-          store.dispatch('getNotifyitems', '/request/notify/' + this.$session.get('nickname'));
+          store.dispatch(
+            "getNotifyitems",
+            "/request/notify/" + this.$session.get("nickname")
+          );
         });
     },
-
   },
 };
 </script>
@@ -886,4 +927,8 @@ export default {
   margin: 10px;
   float: right;
 }
+.alarm {
+  min-height: 70vh;
+}
+
 </style>

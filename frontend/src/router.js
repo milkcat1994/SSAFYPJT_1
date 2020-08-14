@@ -36,41 +36,47 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "dashboard",
+      redirect: "mainpage",
       component: MainLayout,
       children: [
         {
-          path: "/dashboard",
-          name: "dashboard",
+          path: "/mainpage",
+          name: "mainpage",
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
           component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Dashboard.vue"),
+            import(/* webpackChunkName: "demo" */ "./views/MainPage.vue"),
         },
-        {
-          path: "/icons",
-          name: "icons",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Icons.vue"),
-        },
-        {
-          path: "/maps",
-          name: "maps",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Maps.vue"),
-        },
-        {
-          path: "/tables",
-          name: "tables",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
-        },
+        // {
+        //   path: "/icons",
+        //   name: "icons",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Icons.vue"),
+        // },
+        // {
+        //   path: "/maps",
+        //   name: "maps",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Maps.vue"),
+        // },
+        // {
+        //   path: "/tables",
+        //   name: "tables",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
+        // },
+        // {
+        //   path: "/search",
+        //   name: "search",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
+        // },
         {
           path: "/search",
           name: "search",
           component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
+            import(/* webpackChunkName: "demo" */ "./views/Stepper/Stepper.vue"),
         },
         {
           path: "/editors",
@@ -92,6 +98,13 @@ export default new Router({
             import(/* webpackChunkName: "demo" */ "./views/Alarm.vue"),
           beforeEnter: requireLogin,
         },
+
+        {
+          path: "/about",
+          name: "AboutUs",
+          component: () =>
+            import(/* webpackChunkName: "demo" */ "./views/AboutUs.vue"),
+        },
       ],
     },
     {
@@ -109,7 +122,7 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Main.vue"
             ),
-            // beforeEnter: requireLogin
+          // beforeEnter: requireLogin
         },
         {
           path: "/portfolio/edit",
@@ -121,9 +134,9 @@ export default new Router({
             import(
               /* webpackChunkName: "demo" */ "./views/Portfolio/Portfolio_Edit.vue"
             ),
-            beforeEnter: requireAuth
+          beforeEnter: requireAuth,
         },
-      ]
+      ],
     },
     {
       path: "/user",

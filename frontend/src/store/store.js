@@ -4,11 +4,13 @@ import Vuex from "vuex";
 import http from "@/util/http-common";
 
 import { auth } from "./auth.module";
+import { stepper } from "./stepper";
 
 import createPersistedState from "vuex-persistedstate";
 import alertify from "alertifyjs";
 
 import Vuelidate from "vuelidate";
+// import { platform } from "chart.js";
 
 Vue.use(Vuelidate);
 Vue.use(Vuex);
@@ -16,6 +18,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   modules: {
     auth,
+    stepper
   },
 
   state: {
@@ -33,16 +36,7 @@ export default new Vuex.Store({
     progressdate: [],
     holidaydate: [],
     scheduledate: [],
-
-    requests: {
-      category: null,
-      theme: null,
-      originLength: null,
-      finalLength: null,
-      skills: null,
-      otherSkill: null,
-      term: null,
-    },
+    
   },
   getters: {
     // notify
@@ -90,10 +84,6 @@ export default new Vuex.Store({
       return state.tagitem;
     },
 
-    // 작업 요청서 세부사항 불러오기
-    getRequests(state) {
-      return state.requests;
-    },
   },
   mutations: {
     // notify
@@ -106,48 +96,16 @@ export default new Vuex.Store({
 
     // request
     mutateSetRequestitems0(state, requestitems0) {
-      let obj = [];
-      for (let index = 0; index < requestitems0.length; index++) {
-        let element = requestitems0[index];
-        element.uid = index + "request";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems0 = obj;
+      state.requestitems0 = requestitems0;
     },
     mutateSetRequestitems1(state, requestitems1) {
-      let obj = [];
-      for (let index = 0; index < requestitems1.length; index++) {
-        let element = requestitems1[index];
-        element.uid = index + "pogreess";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems1 = obj;
+      state.requestitems1 = requestitems1;
     },
     mutateSetRequestitems2(state, requestitems2) {
-      let obj = [];
-      for (let index = 0; index < requestitems2.length; index++) {
-        let element = requestitems2[index];
-        element.uid = index + "done";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems2 = obj;
+      state.requestitems2 = requestitems2;
     },
     mutateSetRequestitems3(state, requestitems3) {
-      let obj = [];
-      for (let index = 0; index < requestitems3.length; index++) {
-        let element = requestitems3[index];
-        element.uid = index + "review";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems3 = obj;
+      state.requestitems3 = requestitems3;
     },
     mutateSetRequestitems0123(state, requestitems) {
       state.requestitems0 = requestitems
@@ -172,28 +130,7 @@ export default new Vuex.Store({
     mutateSetTagitem(state, tagitem) {
       state.tagitem = tagitem;
     },
-    // 작업 요청서 항목별 갱신
-    setCategory(state, payload) {
-      state.requests.category = payload.value;
-    },
-    setTheme(state, payload) {
-      state.requests.theme = payload.value;
-    },
-    setOriginLength(state, payload) {
-      state.requests.originLength = payload.value;
-    },
-    setFinalLength(state, payload) {
-      state.requests.finalLength = payload.value;
-    },
-    setSkills(state, payload) {
-      state.requests.skills = payload.value;
-    },
-    setOtherSkill(state, payload) {
-      state.requests.otherSkill = payload.value;
-    },
-    setTerm(state, payload) {
-      state.requests.term = payload.value;
-    },
+    
   },
   actions: {
     // notify
@@ -281,5 +218,9 @@ export default new Vuex.Store({
       });
     },
   },
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      paths: ["auth"],
+    })
+  ],
 });
