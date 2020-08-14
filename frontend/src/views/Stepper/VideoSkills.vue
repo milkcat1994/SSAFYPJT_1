@@ -20,6 +20,12 @@
             <!-- <b-tooltip :target="'tooltip-target-'+item.value" triggers="hover">{{item.description}}</b-tooltip> -->
           </div>
           <!-- <i v-if="!!skill.status" class="fas fa-check-circle fa-sm"></i> -->
+          <div :class="'tootlip-'+item.value">
+            <i :id="'tootlip-target-'+item.value" class="far fa-question-circle fa-md"></i>
+            <div :class="'tootlip-target-'+item.value">
+              <p>{{item.description}}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -58,6 +64,7 @@ export default {
 <style scoped>
 .card {
   min-height: 100px;
+  cursor: pointer;
 }
 .icon {
   /* display: inline-block; */
@@ -67,4 +74,21 @@ export default {
 .selected {
   border: 1px solid darkblue;
 }
+
+.tooltip-moti {
+  position: relative;
+  display: inline-block;
+}
+.tooltip-moti .tooltip-target-moti {
+  visibility: hidden;
+  width: 300px;
+  background-color: orange;
+  padding: 0;
+  margin-top: 10px;
+  color: white;
+  text-align: center;
+  position: absolute;
+  z-index: 1;
+}
+/* .tooltip:hover .tooltip-content { visibility: visible; } */
 </style>

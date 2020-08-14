@@ -39,6 +39,9 @@ export default {
 };
 </script>
 <style scoped>
+.card {
+  cursor: pointer;
+}
 .selected {
   border: solid 1px darkblue;
 }

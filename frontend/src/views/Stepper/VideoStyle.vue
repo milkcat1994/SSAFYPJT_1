@@ -46,5 +46,6 @@ export default {
 <style scoped>
 .card {
   min-height: 757px;
+  cursor: pointer;
 }
 </style>
