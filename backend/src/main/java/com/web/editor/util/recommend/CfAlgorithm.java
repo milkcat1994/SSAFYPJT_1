@@ -23,8 +23,9 @@ public class CfAlgorithm {
         String[] bookmarkUid = bookmarks.getUid().split(",");
     
         int cnt = bookmarkUid.length;
-        // 북마크 하나당 평균 태그개수마다 가중치 0.05씩 증가
-        weightTag = (double)(bookmarks.getTag().split(",").length/cnt) * 0.05;
+        // 북마크 하나당 평균 태그개수마다 가중치 0.1씩 증가
+        weightTag = (double)(bookmarks.getTag().split(",").length/cnt) * 0.1;
+        if (weightTag > 1) weightTag = 0.5;
         System.out.println(weightTag);
 
         List<EditorDto> recommendList = new ArrayList<>();
