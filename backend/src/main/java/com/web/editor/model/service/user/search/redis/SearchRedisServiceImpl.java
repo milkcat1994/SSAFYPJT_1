@@ -440,5 +440,11 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         Set<String> allKeys = this.hashKeys("*");
         return redisOperations.delete(allKeys);
     }
+
+    @Override
+    public long deleteKeys(String pattern){
+        Set<String> searchKeys = this.hashKeys(pattern+"*");
+        return redisOperations.delete(searchKeys);
+    }
     
 }

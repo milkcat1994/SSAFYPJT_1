@@ -27,10 +27,13 @@ public class AsyncTaskService {
 	// 1시간마다 갱신으로 설정
 	@Scheduled(fixedDelay = 86400000)
 	public void SaveDatatoRedis() {
-        System.out.println("Thread Start");
-        
+		System.out.println("Thread Start");
+		
 		// long res = searchRedisService.deleteAll();
-		// System.out.println("지워진수>>>>"+res);
+		
+		// 검색 기록 모두 삭제
+		long deleteSearch = searchRedisService.deleteKeys("search:");
+		System.out.println("검색기록 "+deleteSearch+"개 삭제");
 		
 		// DB내용 Redis로 끌어올 필요 있음. 
 		searchRedisService.portfolioAndBookmarkSave(searchService.joinBookmarks());
@@ -39,7 +42,9 @@ public class AsyncTaskService {
 		searchRedisService.makeUserInfo();
 		searchRedisService.searchRequestVideoInfoSave(requestService.searchRequestVideoInfo());
         searchRedisService.portfolioTagSave(searchService.searchPortfolioTag());
-        
+		
+		// nickname과 uid Hash삭제
+		searchRedisService.deleteKeys("nickname:uid:");
 		System.out.println("Thread End");
 	}
 }
