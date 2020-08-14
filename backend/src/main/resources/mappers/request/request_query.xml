@@ -246,6 +246,17 @@
 		where nickname = #{orgNickname}
 	</update>
 
+	<!-- 평점 평균 평균Column에서 바로 가져오기-->
+	<select id="joinScores" resultType="SearchAverageScore">
+		SELECT RF.response_nickname as nickname, AVG(score_avg) as avgScore
+		FROM `request_form` RF
+		LEFT JOIN review R ON RF.rid = R.request_form_rid
+		where done_flag = 3
+		GROUP BY RF.response_nickname
+	</select>
 
-
+	<select id="searchRequestVideoInfo" resultType="SearchRequestVideoInfo">
+		SELECT response_nickname as nickname, video_type as videoType, video_style as videoStyle, video_skill as videoSkill
+		FROM `request_form`
+	</select>
 </mapper>

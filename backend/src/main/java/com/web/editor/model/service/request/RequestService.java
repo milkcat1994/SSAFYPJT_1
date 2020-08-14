@@ -9,6 +9,8 @@ import com.web.editor.model.dto.request.RequestReview;
 import com.web.editor.model.dto.request.RequestReviewSaveRequest;
 import com.web.editor.model.dto.request.RequestStatusDto;
 import com.web.editor.model.dto.request.RequestTagDto;
+import com.web.editor.model.dto.request.SearchAverageScore;
+import com.web.editor.model.dto.request.SearchRequestVideoInfo;
 import com.web.editor.model.dto.user.PortfolioReview;
 
 public interface RequestService {
@@ -89,4 +91,9 @@ public interface RequestService {
 	public int updateResNoti(NicknameUpdateDto nicknameUpdateDto);
 	public int updateNickReview(NicknameUpdateDto nicknameUpdateDto);
 	
+	// 평점 평균 반환 함수 - Redis 이용하기 위한 테이블 Join
+	public List<SearchAverageScore> joinScores();
+
+	// videoType, videoStyle, videoSkill 검색 -> ','로 구분
+	public List<SearchRequestVideoInfo> searchRequestVideoInfo();
 }
