@@ -39,7 +39,7 @@
                       {{portfolio.markCnt}}
                       </base-button>
                       <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
-                      <base-button v-if="$session.get('auth') == 'noneditor'" size="sm" type="default float-right" @click="modal.show=true"> 작업 요청하기 </base-button>
+                      <base-button v-if="$session.get('auth') == 'noneditor'" size="sm" type="default float-right" @click="openRequestForm()"> 작업 요청하기 </base-button>
                     </h1>
                     <h2> 편집 기술 </h2>
                     <div class="col" v-for="(skill, index) in portfolio.skills" :key="index">
@@ -231,14 +231,14 @@
           <base-checkbox
             class="mb-3"
             name="video_type"
-            value="personal"
-            v-model="video_type.personal"
+            value="pers"
+            v-model="video_type.pers"
           >개인용</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_type"
-            value="commercial"
-            v-model="video_type.commercial"
+            value="comm"
+            v-model="video_type.comm"
           >상업용</base-checkbox>
         </div>
         <div class="row">
@@ -255,8 +255,8 @@
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="music"
-            v-model="video_style.music"
+            value="musi"
+            v-model="video_style.musi"
           >음악/댄스</base-checkbox>
           <base-checkbox
             class="mb-3"
@@ -273,28 +273,28 @@
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="movie"
-            v-model="video_style.movie"
+            value="movi"
+            v-model="video_style.movi"
           >영화/애니메이션</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="animal"
-            v-model="video_style.animal"
+            value="anim"
+            v-model="video_style.anim"
           >동물</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="beauty"
-            v-model="video_style.beauty"
+            value="beau"
+            v-model="video_style.beau"
           >뷰티/패션</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="sports"
-            v-model="video_style.sports"
+            value="spor"
+            v-model="video_style.spor"
           >스포츠</base-checkbox>
-          <base-checkbox class="mb-3" name="video_style" value="etc" v-model="video_style.etc">기타</base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="etcs" v-model="video_style.etcs">기타</base-checkbox>
           <base-input
             alternative
             placeholder="기타 선택 시 영상 종류를 입력해주세요"
@@ -340,38 +340,38 @@
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="color"
-            v-model="video_skill.color"
+            value="colr"
+            v-model="video_skill.colr"
           >색, 밝기 조정</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="audio"
-            v-model="video_skill.audio"
+            value="audi"
+            v-model="video_skill.audi"
           >음향(오디오, 음악)</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="motion"
-            v-model="video_skill.motion"
+            value="moti"
+            v-model="video_skill.moti"
           >모션그래픽</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="caption"
-            v-model="video_skill.caption"
+            value="capt"
+            v-model="video_skill.capt"
           >자막</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="intro"
-            v-model="video_skill.intro"
+            value="intr"
+            v-model="video_skill.intr"
           >인트로</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="outro"
-            v-model="video_skill.outro"
+            value="outr"
+            v-model="video_skill.outr"
           >아웃트로</base-checkbox>
         </div>
           <h3>기타 요구사항</h3>
@@ -546,28 +546,28 @@ moment.locale('ko');
         done_flag: 0,
       },
       video_skill: {
-        color: false,
-        audio: false,
-        motion: false,
-        caption: false,
-        intro: false,
-        outro: false,
+        colr: false,
+        audi: false,
+        moti: false,
+        capt: false,
+        intr: false,
+        outr: false,
       },
       video_type: {
-        personal: false,
-        commercial: false,
+        pers: false,
+        comm: false,
       },
       video_style: {
         kids: false,
         game: false,
-        music: false,
+        musi: false,
         food: false,
         vlog: false,
-        movie: false,
-        animal: false,
-        beauty: false,
-        sports: false,
-        etc: false,
+        movi: false,
+        anim: false,
+        beau: false,
+        spor: false,
+        etcs: false,
       },
     };
   },
@@ -671,78 +671,78 @@ moment.locale('ko');
         this.request_info.end_date = dates[1];
       }
 
-      if (this.video_type.personal) {
-        this.request_info.video_type = "개인용";
+      if (this.video_type.pers) {
+        this.request_info.video_type = "pers";
       }
-      if (this.video_type.commercial) {
-        this.request_info.video_type = "상업용";
+      if (this.video_type.comm) {
+        this.request_info.video_type = "comm";
       }
 
       if (this.video_style.kids) {
-        this.request_info.video_style = "키즈";
+        this.request_info.video_style = "kids";
       }
       if (this.video_style.game) {
-        this.request_info.video_style = "게임";
+        this.request_info.video_style = "game";
       }
-      if (this.video_style.music) {
-        this.request_info.video_style = "음악/댄스";
+      if (this.video_style.musi) {
+        this.request_info.video_style = "musi";
       }
       if (this.video_style.food) {
-        this.request_info.video_style = "푸드/쿠킹";
+        this.request_info.video_style = "food";
       }
       if (this.video_style.vlog) {
-        this.request_info.video_style = "V-log";
+        this.request_info.video_style = "vlog";
       }
-      if (this.video_style.movie) {
-        this.request_info.video_style = "영화/애니메이션";
+      if (this.video_style.movi) {
+        this.request_info.video_style = "movi";
       }
-      if (this.video_style.animal) {
-        this.request_info.video_style = "동물";
+      if (this.video_style.anim) {
+        this.request_info.video_style = "anim";
       }
-      if (this.video_style.beauty) {
-        this.request_info.video_style = "뷰티/패션";
+      if (this.video_style.beau) {
+        this.request_info.video_style = "beau";
       }
-      if (this.video_style.sports) {
-        this.request_info.video_style = "스포츠";
-      }
-
-      if (this.video_skill.color) {
-        this.request_info.video_skill += ",색 보정";
-      }
-      if (this.video_skill.audio) {
-        this.request_info.video_skill += ",음향";
-      }
-      if (this.video_skill.motion) {
-        this.request_info.video_skill += ",모션그래픽";
-      }
-      if (this.video_skill.caption) {
-        this.request_info.video_skill += ",자막";
-      }
-      if (this.video_skill.intro) {
-        this.request_info.video_skill += ",인트로";
-      }
-      if (this.video_skill.outro) {
-        this.request_info.video_skill += ",아웃트로";
+      if (this.video_style.spor) {
+        this.request_info.video_style = "spor";
       }
 
-      http
-        .post("/request", this.request_info)
-        .then(({ data }) => {
-          if (data == "success") {
-            // console.log("요청사항 완료")
-            this.initModalRequest();
-            alertify.notify("작업 요청 완료", "success", 3);
-            return;
-          } else {
-            // console.log("요청사항 실패")
-            // fail
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return;
-        });
+      if (this.video_skill.colr) {
+        this.request_info.video_skill += ",colr";
+      }
+      if (this.video_skill.audi) {
+        this.request_info.video_skill += ",audi";
+      }
+      if (this.video_skill.moti) {
+        this.request_info.video_skill += ",moti";
+      }
+      if (this.video_skill.capt) {
+        this.request_info.video_skill += ",capt";
+      }
+      if (this.video_skill.intr) {
+        this.request_info.video_skill += ",intr";
+      }
+      if (this.video_skill.outr) {
+        this.request_info.video_skill += ",outr";
+      }
+      // console.log(dates);
+      // http
+      //   .post("/request", this.request_info)
+      //   .then(({ data }) => {
+      //     if (data == "success") {
+      //       // console.log("요청사항 완료")
+      //       this.initModalRequest();
+      //       alertify.notify("작업 요청 완료", "success", 3);
+      //       return;
+      //     } else {
+      //       // console.log("요청사항 실패")
+      //       // fail
+      //       return;
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     return;
+      //   });
     },
     initModalRequest() {
       this.request_info = {
@@ -1011,6 +1011,63 @@ moment.locale('ko');
           this.reviewLoad = false;
           this.reviewMessage = "더 이상 후기가 존재하지 않습니다";
         }
+      },
+      openRequestForm(){
+        this.modal.show=true;
+        let selectedType = this.$store.getters['stepper/getSelectedVideoType'];
+        if(selectedType){
+          if(selectedType == "pers")
+            this.video_type.pers = true;
+          else if(selectedType == "comm")
+            this.video_type.comm = true;
+        }
+        let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle'];
+        if(selectedStyle){
+          if(selectedStyle == "kids")
+            this.video_style.kids = true;
+          else if(selectedStyle == "game")
+            this.video_style.game = true;
+          else if(selectedStyle == "musi")
+            this.video_style.musi = true;
+          else if(selectedStyle == "food")
+            this.video_style.food = true;
+          else if(selectedStyle == "vlog")
+            this.video_style.vlog = true;
+          else if(selectedStyle == "movi")
+            this.video_style.movi = true;
+          else if(selectedStyle == "anim")
+            this.video_style.anim = true;
+          else if(selectedStyle == "beau")
+            this.video_style.beau = true;
+          else if(selectedStyle == "spor")
+            this.video_style.spor = true;
+          else
+            this.video_style.etcs = true;
+        }
+        let selectedSkills = this.$store.getters['stepper/getSelectedVideoSkills'];
+        if(selectedSkills){
+          selectedSkills.forEach(item => {
+            if(item == "colr")
+              this.video_skill.colr = true;
+            else if(item == "capt")
+              this.video_skill.capt = true;
+            else if(item == "audi")
+              this.video_skill.audi = true;
+            else if(item == "moti")
+              this.video_skill.moti = true;
+            else if(item == "outr")
+              this.video_skill.outr = true;
+            else if(item == "intr")
+              this.video_skill.intr = true;
+          })
+        }
+        let originLength = this.$store.getters['stepper/getOriginLength'];
+        this.request_info.video_origin_length = originLength.name;
+        
+        let finalLength = this.$store.getters['stepper/getFinalLength'];
+        this.request_info.video_result_length = finalLength.name;
+        this.dates.range = this.$store.getters['stepper/checkDeadline'];
+        console.log(this.dates.range);
       },
       onOpenItem() {
         // Item opened

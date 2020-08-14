@@ -210,7 +210,7 @@ export const stepper = {
     getOriginLength(state) {
       for (const item of state.originLength) {
         if (item.status == true) {
-          return item.value
+          return item
         }
       }
       return;
@@ -218,7 +218,7 @@ export const stepper = {
     getFinalLength(state) {
       for (const item of state.finalLength) {
         if (item.status == true) {
-          return item.value
+          return item
         }
       }
       return;
