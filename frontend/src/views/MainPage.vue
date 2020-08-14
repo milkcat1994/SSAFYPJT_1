@@ -1,24 +1,35 @@
 <template>
   <div>
-    <base-header type="gradient-success" class="pt-5 pt-md-8 px-lg-5 mb-6">
+    <base-header type="gradient-success" class="pt-5 pt-md-8 px-lg-5 mb-4">
       <!-- 검색 -->
-      <div class="row align-items-center mx-lg-n5">
-        <div class="col-12 py-5 px-lg-5">
-          <div
-            class="d-flex flex-column justify-content-center col-lg-12 col-12 mb-6"
-          >
-            <!-- <h1 class="display-2 text-white">어떤 편집자를 찾으시나요?</h1> -->
+      <div class="row mt-7">
+        <div class="col-5 ml-5">
+          <!-- <h1 class="display-2 text-white">어떤 편집자를 찾으시나요?</h1> -->
 
-            <!-- 검색 input -->
+          <!-- 검색 input -->
 
-            <h1 class="display-3 mb-3">어떤 편집자를 찾으시나요?</h1>
-            <base-input
-              placeholder="편집할 영상의 스타일을 입력해보세요!"
-              addon-left-icon="fas fa-search"
-              v-model="keyword"
-              @keyup.enter="createRequest"
-            ></base-input>
+          <h1 class="display-3 mb-3">어떤 편집자를 찾으시나요?</h1>
+          <div class="mx-3 mb-3">
+            <h3 class="text-secondary mb-1">
+              자신의 이름으로 승부하는
+              <span class="text-primary">'진짜 편집자'</span>와 일해보세요.
+            </h3>
+            <h3 class="text-secondary mb-1">
+              <span class="text-primary">편집</span>의 비즈니스모델은
+              <span class="text-primary">'당신의 성공'</span>이기에.
+            </h3>
+            <h3 class="text-secondary mb-1">
+              당연하게도 매칭수수료
+              <span class="text-primary">'0%'</span>
+            </h3>
           </div>
+          <div class="d-flex mx-3">
+            <b-button variant="primary" class="mr-4">편집자 찾아보기</b-button>
+            <b-button variant="secondary">편집자 구경하기</b-button>
+          </div>
+        </div>
+        <div class="col-6 ml-4">
+          <img src="img/theme/friends.png" alt="png from pngtree.com" style="width:90%" />
         </div>
       </div>
     </base-header>
@@ -55,16 +66,12 @@
               ></b-carousel-slide>
 
               <!-- Slides with custom text -->
-              <b-carousel-slide
-                img-src="https://picsum.photos/1024/480/?image=54"
-              >
+              <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
                 <h1>Hello world!</h1>
               </b-carousel-slide>
 
               <!-- Slides with image only -->
-              <b-carousel-slide
-                img-src="https://picsum.photos/1024/480/?image=58"
-              ></b-carousel-slide>
+              <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
 
               <!-- Slides with img slot -->
               <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
@@ -81,11 +88,7 @@
               </b-carousel-slide>
 
               <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-              <b-carousel-slide
-                caption="Blank Image"
-                img-blank
-                img-alt="Blank image"
-              >
+              <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Suspendisse eros felis, tincidunt a tincidunt eget, convallis
@@ -111,14 +114,10 @@
                 <b-row>
                   <b-col cols="12">
                     <carousel :perPage="3">
-                      <slide
-                        class="p-2"
-                        v-for="editor in currentEditors"
-                        :key="editor.uid"
-                      >
+                      <slide class="p-2" v-for="editor in currentEditors" :key="editor.uid">
                         <b-card id="maincard">
                           <router-link :to="`/portfolio?no=${editor.uid}`">
-                            <img src="" alt="" />
+                            <img src alt />
                             <LazyYoutubeVideo
                               :src="editor.urls[0]"
                               style="width: 100%;"
@@ -129,9 +128,7 @@
                           <b-card-text>
                             <router-link :to="`/portfolio?no=${editor.uid}`">
                               <div class="d-inline-flex">
-                                <h3 class="mt-0 mb-1">
-                                  {{ editor.nickname }}
-                                </h3>
+                                <h3 class="mt-0 mb-1">{{ editor.nickname }}</h3>
                               </div>
                             </router-link>
 
