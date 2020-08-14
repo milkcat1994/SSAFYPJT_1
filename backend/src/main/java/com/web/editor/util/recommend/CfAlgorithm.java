@@ -15,14 +15,17 @@ public class CfAlgorithm {
     BookmarkService bookmarkService;
 
     final int MaxScore = 1;
-    
+    double weightTag = 0;
 
     // 유저의 북마크와 전체 유저의 리스트들, 유클리디안 거리
     public List<EditorDto> recommendByBookmark(EditorDto bookmarks, List<EditorDto> editors) {
 
         String[] bookmarkUid = bookmarks.getUid().split(",");
-
+    
         int cnt = bookmarkUid.length;
+        // 북마크 하나당 평균 태그개수마다 가중치 0.05씩 증가
+        weightTag = (double)(bookmarks.getTag().split(",").length/cnt) * 0.05;
+        System.out.println(weightTag);
 
         List<EditorDto> recommendList = new ArrayList<>();
         // for 에디터마다 유클리디안 거리 구하기 (태그, 비디오 기술)
@@ -88,11 +91,13 @@ public class CfAlgorithm {
             // 태그를 포함하면
             if (book.contains(ediTag.trim()))  eq+=1; 
         }
-        System.out.println("tag eq / tags: " + eq + "/" + bookTags.length);
-        System.out.println("tag score: " + eq/(double)bookTags.length * 1);
+        double tagScore = eq/(double)bookTags.length * MaxScore * (1 + weightTag);
 
-        if (eq/(double)bookTags.length * MaxScore * 1.5 > 1) return 1;
-        return eq/(double)bookTags.length * MaxScore * 1.5;
+        System.out.println("tag eq / tags: " + eq + "/" + bookTags.length);
+        System.out.println("tag score: " + tagScore);
+
+        if (tagScore > 1) return 1;
+        return tagScore;
     }
 
     // 스킬 점수화
@@ -104,10 +109,11 @@ public class CfAlgorithm {
         for (String ediSkill: ediSkills) {
             if (book.contains(ediSkill.trim()))  eq+=1; 
         }
+        double skillScore = eq/(double)bookSkills.length * MaxScore * (1 - weightTag);
         System.out.println("skill eq / skills: " + eq + "/" + bookSkills.length);
-        System.out.println("skill score: " + eq/(double)bookSkills.length * MaxScore);
+        System.out.println("skill score: " + skillScore);
 
-        return eq/(double)bookSkills.length * MaxScore * 0.5;
+        return skillScore;
     }
 
 }
