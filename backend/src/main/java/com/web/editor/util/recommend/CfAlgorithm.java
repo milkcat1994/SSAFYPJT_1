@@ -17,7 +17,6 @@ public class CfAlgorithm {
     final int MaxScore = 1;
     double weightTag = 0;
     int tagPerBookmark;
-    int skillPerBookmark;
 
     // 유저의 북마크와 전체 유저의 리스트들, 유클리디안 거리
     public List<EditorDto> recommendByBookmark(EditorDto bookmarks, List<EditorDto> editors) {
@@ -25,9 +24,9 @@ public class CfAlgorithm {
         String[] bookmarkUid = bookmarks.getUid().split(",");
         int cnt = bookmarkUid.length;
         tagPerBookmark = bookmarks.getTag().split(",").length / cnt;
-        skillPerBookmark = bookmarks.getSkill().split(",").length / cnt;
         // 북마크 하나당 평균 태그개수마다 가중치
-        weightTag = (double)(bookmarks.getTag().split(",").length/cnt);
+        weightTag = (double)tagPerBookmark * 0.1;
+        System.out.println(weightTag);
         if (weightTag > 1) weightTag = 0.5;
 
         List<EditorDto> recommendList = new ArrayList<>();
@@ -60,6 +59,7 @@ public class CfAlgorithm {
             if (ediTag == 0 && ediSkill == 0) {
                 continue L;
             }
+
             double sim = 1 / (1 + Math.sqrt(sum));
             // double sim = sum;
 
@@ -110,7 +110,7 @@ public class CfAlgorithm {
         for (String bookSkill: bookSkills) {
             if (edi.trim().contains(bookSkill.trim()))  eq+=1; 
         }
-        double skillScore = eq/(double)bookSkills.length * MaxScore * (1);
+        double skillScore = eq/(double)bookSkills.length * MaxScore * 1;
         // System.out.println("skill eq / skills: " + eq + "/" + bookSkills.length);
         // System.out.println("skill score: " + skillScore);
 
