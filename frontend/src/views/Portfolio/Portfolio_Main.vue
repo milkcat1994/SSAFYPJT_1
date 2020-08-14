@@ -725,24 +725,25 @@ moment.locale('ko');
         this.request_info.video_skill += ",outr";
       }
       // console.log(dates);
-      // http
-      //   .post("/request", this.request_info)
-      //   .then(({ data }) => {
-      //     if (data == "success") {
-      //       // console.log("요청사항 완료")
-      //       this.initModalRequest();
-      //       alertify.notify("작업 요청 완료", "success", 3);
-      //       return;
-      //     } else {
-      //       // console.log("요청사항 실패")
-      //       // fail
-      //       return;
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     return;
-      //   });
+      http
+        .post("/request", this.request_info)
+        .then(({ data }) => {
+          if (data == "success") {
+            // console.log("요청사항 완료")
+            this.initModalRequest();
+            this.$store.commit('stepper/clearFilterFinderStatus');
+            alertify.notify("작업 요청 완료", "success", 3);
+            return;
+          } else {
+            // console.log("요청사항 실패")
+            // fail
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
     },
     initModalRequest() {
       this.request_info = {

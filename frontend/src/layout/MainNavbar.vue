@@ -276,6 +276,7 @@ export default {
 
     logout() {
       this.$session.destroy();
+      this.$store.commit('stepper/clearFilterFinderStatus');
       store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});

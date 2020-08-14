@@ -129,6 +129,7 @@ public class PortfolioController {
         //     skills = skills.substring(1,len);
         //     portfolioInfo.setSkill(skills);
         // }
+        
         int res = portfolioService.portfolioUpdate(portfolioInfo);
         if(res != -1){
             result.status = true;
