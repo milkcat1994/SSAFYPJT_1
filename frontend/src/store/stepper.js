@@ -247,14 +247,6 @@ export const stepper = {
       })
       state.deadline = [];
     },
-    // 이거는 안 되나?
-    // clearStepper(state) {
-    //   for (const category of Object.values(state)) {
-    //     category.forEach(e => {
-    //       e.status = false
-    //     })
-    //   }
-    // },
     // 항목별 초기화(검색 filter-finder에서 쓸 용도)
     clearFilterFinderStatus(state) {
       state.videoType.forEach(e => {
