@@ -706,6 +706,7 @@ moment.locale('ko');
         this.request_info.video_style = "spor";
       }
 
+
       if (this.video_skill.colr) {
         this.request_info.video_skill += ",colr";
       }
@@ -1015,14 +1016,14 @@ moment.locale('ko');
       },
       openRequestForm(){
         this.modal.show=true;
-        let selectedType = this.$store.getters['stepper/getSelectedVideoType'];
+        let selectedType = this.$store.getters['stepper/getSelectedVideoType'].value;
         if(selectedType){
           if(selectedType == "pers")
             this.video_type.pers = true;
           else if(selectedType == "comm")
             this.video_type.comm = true;
         }
-        let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle'];
+        let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle'].value;
         if(selectedStyle){
           if(selectedStyle == "kids")
             this.video_style.kids = true;
@@ -1042,7 +1043,7 @@ moment.locale('ko');
             this.video_style.beau = true;
           else if(selectedStyle == "spor")
             this.video_style.spor = true;
-          else
+          else if(selectedStyle == "etc")
             this.video_style.etcs = true;
         }
         let selectedSkills = this.$store.getters['stepper/getSelectedVideoSkills'];
