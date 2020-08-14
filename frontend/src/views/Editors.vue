@@ -243,7 +243,7 @@ export default {
       (this.selectedFilters.length = 0);
     },
     fetchFilter() {
-      let selectedType = this.$store.getters['stepper/getSelectedVideoType']
+      let selectedType = this.$store.getters['stepper/getSelectedVideoType'].value
       if (selectedType) {
         this.videoType.forEach(item => {
           if (item.value == selectedType) {
@@ -252,10 +252,10 @@ export default {
           }
         })
       }
-      let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle']
+      let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle'].value
       if (selectedStyle) {
         this.videoStyle.forEach(item => {
-          if (item.value == selectedStyle) {
+          if (item.value == selectedStyle.value) {
             item.status = true
             this.selectedFilters.push(item.value)
           }

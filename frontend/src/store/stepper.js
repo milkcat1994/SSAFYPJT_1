@@ -185,7 +185,7 @@ export const stepper = {
     getSelectedVideoType(state) {
       for (const item of state.videoType) {
         if (item.status == true) {
-          return item.value
+          return item
         }
       }
       return;
@@ -193,7 +193,7 @@ export const stepper = {
     getSelectedVideoStyle(state) {
       for (const item of state.videoStyle) {
         if (item.status == true) {
-          return item.value
+          return item
         }
       }
       return;
