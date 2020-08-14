@@ -24,43 +24,51 @@
 
     <div class="container-fluid mt--7">
       <div class="row">
-        <div class="col-xl-7 order-xl-2 mb-5 mb-xl-0">
+        <div class="col-xl-5 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 303px;">
+            <div class="card-body pt-0 pt-md-4" style="height: 390px;">
               <div class="row">
                 <div class="col">
                   <div class="text">
                     <h1>
                       {{portfolio.nickname}}
-                      <base-button
-                        v-if="uid != $session.get('uid')"
-                        outline
-                        type="danger"
-                        icon="ni ni-favourite-28"
-                        @click="addBookmark()"
-                      >{{portfolio.markCnt}}</base-button>
-                      <base-button
-                        v-if="!isLogin"
-                        size="sm"
-                        type="default float-right"
-                        @click="alertModal.show=true"
-                      >작업 요청하기</base-button>
-                      <base-button
-                        v-if="$session.get('auth') == 'noneditor'"
-                        size="sm"
-                        type="default float-right"
-                        @click="modal.show=true"
-                      >작업 요청하기</base-button>
+                      <base-button v-if="uid != $session.get('uid') && !togleBookmark" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                      {{portfolio.markCnt}}
+                      </base-button>
+                      <base-button v-if="uid != $session.get('uid') && togleBookmark" type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                      {{portfolio.markCnt}}
+                      </base-button>
+                      <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
+                      <base-button v-if="$session.get('auth') == 'noneditor'" size="sm" type="default float-right" @click="openRequestForm()"> 작업 요청하기 </base-button>
                     </h1>
-                    <h3>Skills: {{portfolio.skill}}</h3>
-                    <h3>Pay/Wages: {{portfolio.payMin}}</h3>
-                    <h3>{{portfolio.description}}</h3>
-
-                    <div class="col-xl-5 order-xl-1">
-                      <!-- <div class="row"> -->
-                      <i class="ni ni-tag"></i>
-                      <input-tag v-model="tags" :read-only="true" style="width:500px;"></input-tag>
+                    <h2> 편집 기술 </h2>
+                    <div class="col" v-for="(skill, index) in portfolio.skills" :key="index">
+                      <div class="row">
+                        <i class="ni ni-check-bold"></i>
+                        <h3> {{skill}} </h3>
+                      </div>
                     </div>
+                    <div class="col">
+                      <div class="row">
+                        <i class="ni ni-check-bold"></i>
+                        <h3>
+                          분당 {{portfolio.payMin}}원
+                        </h3>
+                      </div>
+                    </div>
+                    <h3>
+                      {{portfolio.description}}
+                    </h3>
+                    
+                    <!-- <div class="col-xl-5 order-xl-1"> -->
+                      <!-- <div class="row"> -->
+                      <!-- <i class="ni ni-tag"></i> -->
+                      <!-- <input-tag v-model="tags" :read-only="true" style="width:500px;"></input-tag> -->
+                      <div class="col" v-for="(tagName, index) in tags" :key="index">
+                        <!-- <div class="col"> -->
+                          #{{tagName}}
+                        <!-- </div> -->
+                      </div>
                     <!-- </div> -->
                   </div>
                 </div>
@@ -69,12 +77,12 @@
           </div>
         </div>
 
-        <div class="col-xl-5 order-xl-1">
+        <div class="col-xl-7 order-xl-1">
           <card shadow type="secondary">
             <div class="HeadVideo">
               <LazyYoutubeVideo :src="mainVideo" style="width: 100%" />
             </div>
-            <h3 class="mb-0" style="text-align:center">대표영상</h3>
+            <!-- <h2 class="mb-0" style="text-align:center">대표영상</h2> -->
           </card>
         </div>
       </div>
@@ -85,12 +93,12 @@
         <div class="col">
           <div class="card shadow">
             <div class="card-header bg-transparent">
-              <h3 class="mb-0">그 외 영상들</h3>
+              <h2 class="mb-0">그 외 영상들</h2>
             </div>
 
             <div class="card-body">
               <div class="row">
-                <div class="col-xl-4 col-lg-6 mb-30" v-for="(video, index) in videos" :key="index">
+                <div class="col-xl-4 col-lg-6 mb-30" style="margin-bottom:30px;" v-for="(video, index) in videos" :key="index">
                   <LazyYoutubeVideo
                     :src="video.url"
                     :preview-image-size="video.previewImageSize"
@@ -100,7 +108,6 @@
               </div>
               <hr />
               <div class="row" style="margin-top: 30px">
-                <!-- <div class="col"> -->
                 <calendar
                   :eventCategories="eventCategories"
                   :events="events"
@@ -108,49 +115,82 @@
                   ref="calendar"
                   style="width: 100%; height: 100%"
                 />
-                <!-- {{events}} -->
-                <!-- </div> -->
-              </div>
-              <hr />
-              <div class="row" style="margin-top: 30px">
-                <div class="col-xl-4 col-lg-6">
-                  <h3>
-                    영상만족도
-                    <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
-                  </h3>
-                  <h3>
-                    친절도
-                    <rate :length="5" :value="kindnessAvg" :disabled="true" />
-                  </h3>
-                  <h3>
-                    마감 속도
-                    <rate :length="5" :value="finishAvg" :disabled="true" />
-                  </h3>
+                <div class="row" style="margin-left: 380px;">
+                <i class="fas fa-circle" style="color: #6699ff; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;">진행중 작업</i>
+                <i class="fas fa-circle"
+                  style="color: #ff0066; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
+                  >개인 일정</i>
+                <i class="fas fa-circle" style="color: #c9c9c9; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;">휴일</i>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" style="margin-top: 20px; margin-bottom: 50px;">
+      <div class="row">
+        <div class="col">
+          <div class="card shadow">
+            <div class="card-header bg-transparent">
+              <h1 class="mb-0">서비스 평가</h1>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+              <!-- <div class="row">
+                <div class="col" style="text-align:center;">
+                <h3> 총 {{reviews.length}}개의 후기가 존재합니다.</h3>
+                </div>
+              </div> -->
+                <div class="row" style="margin-bottom: 30px; text-align:center;">
+                <div class="col-xl-4 col-lg-6 mb-30">
+                  <div class="row">
+                    <h3 style="margin-top:10px; margin-left:40px;"> 영상만족도 </h3>
+                    <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
+                    <p style="margin-left:50px;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 mb-30">
+                  <div class="row">
+                    <h3 style="margin-top:10px; margin-left:40px;">친절도 </h3>
+                    <rate :length="5" :value="kindnessAvg" :disabled="true" />
+                    <p>편집자가 얼마나 친절히 응대하고 소통하였는지에 대해
+                      <br>{{reviews.length}}분이 평가한 결과입니다.</p>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 mb-30">
+                  <div class="row">
+                    <h3 style="margin-top:10px; margin-left:40px;">마감 속도 </h3>
+                    <rate :length="5" :value="finishAvg" :disabled="true" />
+                    <p style="margin-left:50px;">마감 기한을 잘 맞춰주었는지에 대해
+                      <br>{{reviews.length}}분이 평가한 결과입니다.</p>
+                  </div>
+                </div>
+                </div>
+              <!-- </div> -->
+              <div class="row">
                 <div class="col">
-                  <h3>
-                    한줄평
-                    <base-button size="sm" type="float-right">후기 더보기</base-button>
-                  </h3>
-                  <badger-accordion>
-                    <badger-accordion-item v-for="(review, index) in reviews" :key="index">
-                      <template slot="header">{{review.comment}}</template>
-                      <template slot="content">
-                        <h3>
-                          영상만족도
-                          <rate :length="5" :value="review.videoScore" :disabled="true" />
-                        </h3>
-                        <h3>
-                          친절도
-                          <rate :length="5" :value="review.kindnessScore" :disabled="true" />
-                        </h3>
-                        <h3>
-                          마감 속도
-                          <rate :length="5" :value="review.finishScore" :disabled="true" />
-                        </h3>
-                      </template>
-                    </badger-accordion-item>
-                  </badger-accordion>
+                  <h2 style="margin-bottom:20px;">한줄평({{reviews.length}})</h2>
+                  <div class="col" v-for="(review,index) in reviewsMain" :key="index">
+                    <div class="row">
+                      <img class="profile" src="img/theme/user-logos.png" width="45" height="30" style="margin-top:5px; margin-left:20px;"/>
+                      <h4 style="margin-top:11px; margin-right:10px; margin-left:7px;">{{review.nickname.slice(0,1)}}***</h4>
+                      <h5 style="margin-top:11px; margin-right:10px;">{{getFormatDate(review.createdDate)}}</h5>
+                      <rate
+                        :length="5"
+                        :value="review.scoreAvg"
+                        :disabled="true"
+                      />
+                    </div>
+                    <div class="col" style="margin-top:10px; margin-left:20px;">
+                      <h4>{{review.comment}}</h4>
+                    </div>
+                    <hr>
+                  </div>
+                  <div>
+                  {{this.reviewMessage}}
+                  <base-button v-if="this.reviewLoad" size="sm" type="float-right" icon="ni ni-fat-add" @click="loadMoreReviews()">더보기</base-button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -191,14 +231,14 @@
           <base-checkbox
             class="mb-3"
             name="video_type"
-            value="personal"
-            v-model="video_type.personal"
+            value="pers"
+            v-model="video_type.pers"
           >개인용</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_type"
-            value="commercial"
-            v-model="video_type.commercial"
+            value="comm"
+            v-model="video_type.comm"
           >상업용</base-checkbox>
         </div>
         <div class="row">
@@ -215,8 +255,8 @@
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="music"
-            v-model="video_style.music"
+            value="musi"
+            v-model="video_style.musi"
           >음악/댄스</base-checkbox>
           <base-checkbox
             class="mb-3"
@@ -233,28 +273,28 @@
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="movie"
-            v-model="video_style.movie"
+            value="movi"
+            v-model="video_style.movi"
           >영화/애니메이션</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="animal"
-            v-model="video_style.animal"
+            value="anim"
+            v-model="video_style.anim"
           >동물</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="beauty"
-            v-model="video_style.beauty"
+            value="beau"
+            v-model="video_style.beau"
           >뷰티/패션</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_style"
-            value="sports"
-            v-model="video_style.sports"
+            value="spor"
+            v-model="video_style.spor"
           >스포츠</base-checkbox>
-          <base-checkbox class="mb-3" name="video_style" value="etc" v-model="video_style.etc">기타</base-checkbox>
+          <base-checkbox class="mb-3" name="video_style" value="etcs" v-model="video_style.etcs">기타</base-checkbox>
           <base-input
             alternative
             placeholder="기타 선택 시 영상 종류를 입력해주세요"
@@ -300,48 +340,42 @@
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="color"
-            v-model="video_skill.color"
+            value="colr"
+            v-model="video_skill.colr"
           >색, 밝기 조정</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="audio"
-            v-model="video_skill.audio"
+            value="audi"
+            v-model="video_skill.audi"
           >음향(오디오, 음악)</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="motion"
-            v-model="video_skill.motion"
+            value="moti"
+            v-model="video_skill.moti"
           >모션그래픽</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="caption"
-            v-model="video_skill.caption"
+            value="capt"
+            v-model="video_skill.capt"
           >자막</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="intro"
-            v-model="video_skill.intro"
+            value="intr"
+            v-model="video_skill.intr"
           >인트로</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
-            value="outro"
-            v-model="video_skill.outro"
+            value="outr"
+            v-model="video_skill.outr"
           >아웃트로</base-checkbox>
         </div>
-        <h3>기타 요구사항</h3>
-        <textarea
-          class="form-control form-control-alternative"
-          id="description"
-          v-model="request_info.request_description"
-          rows="3"
-          placeholder="기타 요구사항을 작성해주세요."
-        ></textarea>
+          <h3>기타 요구사항</h3>
+          <textarea class="form-control form-control-alternative" id="description" v-model="request_info.request_description" rows="3" placeholder="기타 요구사항을 작성해주세요."></textarea>
       </div>
       <template slot="footer">
         <base-button type="secondary" @click="modal.show = false">Close</base-button>
@@ -377,11 +411,12 @@
     </modal>
   </div>
 </template>
+
 <script>
-import InputTag from "vue-input-tag";
+// import InputTag from 'vue-input-tag';
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 import { Rate } from "vue-rate";
-import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
+// import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
 import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
@@ -394,97 +429,107 @@ import alertify from "alertifyjs";
 // axios 초기 설정파일
 import http from "@/util/http-common";
 
+import moment from "moment";
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+moment.locale('ko');
+
 // import { mapGetters } from "vuex";
 // import store from "@/store/store.js";
 // 날짜 계산 파일
 // import { getFormatDate } from "@/util/day-common";
 // import { getEndDate, getFormatDate } from "@/util/day-common";
 
-export default {
-  name: "user-portfolio",
-  components: {
-    LazyYoutubeVideo,
-    Rate,
-    BadgerAccordion,
-    BadgerAccordionItem,
-    flatPicker,
-    InputTag,
-    Calendar,
-  },
-  data() {
-    return {
-      uid: "",
-      isLogin: false,
-      userType: "",
-      haveVideo: true,
-      haveTags: true,
+  export default {
+    name: 'user-portfolio',
+    components: {
+      LazyYoutubeVideo,
+      Rate,
+      // BadgerAccordion,
+      // BadgerAccordionItem,
+      flatPicker,
+      // InputTag,
+      Calendar
+    },
+    data() {
+      return {
+        uid:'',
+        isLogin: false,
+        userType: '',
+        haveVideo: true,
+        haveTags: true,
 
-      //닉네임, 소개
-      portfolio: {
-        nickname: "",
-        description: "",
-        payMin: "",
-        skill: "",
-        markCnt: 0,
-      },
-      // 각 평점
-      videoAvg: 0,
-      kindnessAvg: 0,
-      finishAvg: 0,
-
-      //리뷰들
-      reviews: [],
-
-      //태그들
-      tags: [],
-      tag: "",
-
-      // 북마크 토글
-      togleBookmark: false,
-
-      // 스케줄
-      eventCategories: [
-        {
-          id: 1,
-          title: "holiday",
-          textColor: "white",
-          backgroundColor: "#ff0066",
+        //닉네임, 소개
+        portfolio: {
+          nickname:'',
+          description:'',
+          payMin: '',
+          skills: [],
+          markCnt: 0,
         },
-        {
-          id: 2,
-          title: "selected",
-          textColor: "white",
-          backgroundColor: "#f29661",
-        },
-        {
-          id: 3,
-          title: "In Progress",
-          textColor: "white",
-          backgroundColor: "#6699ff",
-        },
-        {
-          id: 4,
-          title: "DisabledDates",
-          textColor: "black",
-          backgroundColor: "#c9c9c9",
-        },
-      ],
-      events: [],
-      offdays: [],
+        // 각 평점
+        videoAvg: 0,
+        kindnessAvg: 0,
+        finishAvg: 0,
 
-      mainVideo: "https://www.youtube.com/embed/",
-      videos: [],
+        //리뷰들
+        reviews: [],
+        reviewsMain: [],
+        cnt: 1,
+        reviewMessage: "",
+        reviewLoad: false,
 
-      modal: {
-        show: false,
-      },
-      alertModal: {
-        show: false,
-      },
+        //태그들
+        tags:[],
+        tag: '',
 
-      dates: {
-        range: "",
-      },
+        // 북마크 토글
+        togleBookmark: false,
+
+        // 스케줄
+        eventCategories: [
+          {
+            id: 1,
+            title: "holiday",
+            textColor: "white",
+            backgroundColor: "#ff0066",
+          },
+          {
+            id: 2,
+            title: "selected",
+            textColor: "white",
+            backgroundColor: "#f29661",
+          },
+          {
+            id: 3,
+            title: "In Progress",
+            textColor: "white",
+            backgroundColor: "#6699ff",
+          },
+          {
+            id: 4,
+            title: "DisabledDates",
+            textColor: "black",
+            backgroundColor: "#c9c9c9",
+          }
+        ],
+        events: [],
+        offdays: [],
+        
+        mainVideo: 'https://www.youtube.com/embed/',
+        videos: [],
+
+        modal: {
+          show: false
+        },
+        alertModal: {
+          show: false
+        },
+
+        dates: {
+          range: ""
+        },
+
       request_info: {
         request_nickname: "",
         response_nickname: "",
@@ -501,28 +546,28 @@ export default {
         done_flag: 0,
       },
       video_skill: {
-        color: false,
-        audio: false,
-        motion: false,
-        caption: false,
-        intro: false,
-        outro: false,
+        colr: false,
+        audi: false,
+        moti: false,
+        capt: false,
+        intr: false,
+        outr: false,
       },
       video_type: {
-        personal: false,
-        commercial: false,
+        pers: false,
+        comm: false,
       },
       video_style: {
         kids: false,
         game: false,
-        music: false,
+        musi: false,
         food: false,
         vlog: false,
-        movie: false,
-        animal: false,
-        beauty: false,
-        sports: false,
-        etc: false,
+        movi: false,
+        anim: false,
+        beau: false,
+        spor: false,
+        etcs: false,
       },
     };
   },
@@ -626,78 +671,78 @@ export default {
         this.request_info.end_date = dates[1];
       }
 
-      if (this.video_type.personal) {
-        this.request_info.video_type = "개인용";
+      if (this.video_type.pers) {
+        this.request_info.video_type = "pers";
       }
-      if (this.video_type.commercial) {
-        this.request_info.video_type = "상업용";
+      if (this.video_type.comm) {
+        this.request_info.video_type = "comm";
       }
 
       if (this.video_style.kids) {
-        this.request_info.video_style = "키즈";
+        this.request_info.video_style = "kids";
       }
       if (this.video_style.game) {
-        this.request_info.video_style = "게임";
+        this.request_info.video_style = "game";
       }
-      if (this.video_style.music) {
-        this.request_info.video_style = "음악/댄스";
+      if (this.video_style.musi) {
+        this.request_info.video_style = "musi";
       }
       if (this.video_style.food) {
-        this.request_info.video_style = "푸드/쿠킹";
+        this.request_info.video_style = "food";
       }
       if (this.video_style.vlog) {
-        this.request_info.video_style = "V-log";
+        this.request_info.video_style = "vlog";
       }
-      if (this.video_style.movie) {
-        this.request_info.video_style = "영화/애니메이션";
+      if (this.video_style.movi) {
+        this.request_info.video_style = "movi";
       }
-      if (this.video_style.animal) {
-        this.request_info.video_style = "동물";
+      if (this.video_style.anim) {
+        this.request_info.video_style = "anim";
       }
-      if (this.video_style.beauty) {
-        this.request_info.video_style = "뷰티/패션";
+      if (this.video_style.beau) {
+        this.request_info.video_style = "beau";
       }
-      if (this.video_style.sports) {
-        this.request_info.video_style = "스포츠";
-      }
-
-      if (this.video_skill.color) {
-        this.request_info.video_skill += ",색 보정";
-      }
-      if (this.video_skill.audio) {
-        this.request_info.video_skill += ",음향";
-      }
-      if (this.video_skill.motion) {
-        this.request_info.video_skill += ",모션그래픽";
-      }
-      if (this.video_skill.caption) {
-        this.request_info.video_skill += ",자막";
-      }
-      if (this.video_skill.intro) {
-        this.request_info.video_skill += ",인트로";
-      }
-      if (this.video_skill.outro) {
-        this.request_info.video_skill += ",아웃트로";
+      if (this.video_style.spor) {
+        this.request_info.video_style = "spor";
       }
 
-      http
-        .post("/request", this.request_info)
-        .then(({ data }) => {
-          if (data == "success") {
-            // console.log("요청사항 완료")
-            this.initModalRequest();
-            alertify.notify("작업 요청 완료", "success", 3);
-            return;
-          } else {
-            // console.log("요청사항 실패")
-            // fail
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return;
-        });
+      if (this.video_skill.colr) {
+        this.request_info.video_skill += ",colr";
+      }
+      if (this.video_skill.audi) {
+        this.request_info.video_skill += ",audi";
+      }
+      if (this.video_skill.moti) {
+        this.request_info.video_skill += ",moti";
+      }
+      if (this.video_skill.capt) {
+        this.request_info.video_skill += ",capt";
+      }
+      if (this.video_skill.intr) {
+        this.request_info.video_skill += ",intr";
+      }
+      if (this.video_skill.outr) {
+        this.request_info.video_skill += ",outr";
+      }
+      // console.log(dates);
+      // http
+      //   .post("/request", this.request_info)
+      //   .then(({ data }) => {
+      //     if (data == "success") {
+      //       // console.log("요청사항 완료")
+      //       this.initModalRequest();
+      //       alertify.notify("작업 요청 완료", "success", 3);
+      //       return;
+      //     } else {
+      //       // console.log("요청사항 실패")
+      //       // fail
+      //       return;
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     return;
+      //   });
     },
     initModalRequest() {
       this.request_info = {
@@ -764,34 +809,39 @@ export default {
             return;
           }
         })
-        .catch((error) => {
-          console.log(error);
-          return;
-        });
-    },
-    getReviewInfo(URL) {
-      http
-        .get(URL + "/review/" + this.uid)
-        .then(({ data }) => {
+      },
+      getReviewInfo(URL){
+        http
+        .get(URL+'/review/'+this.uid)
+        .then(({data}) => {
           //성공시 평균 계산 필요 추출 필요
-          if (data.data == "success") {
+          if (data.data == 'success') {
             this.reviews = data.object;
-            let videoAvg = 0,
-              kindnessAvg = 0,
-              finishAvg = 0;
-            data.object.forEach((obj) => {
+            let videoAvg=0, kindnessAvg=0, finishAvg=0;
+            data.object.forEach(obj => {
               videoAvg += obj.videoScore;
               kindnessAvg += obj.kindnessScore;
               finishAvg += obj.finishScore;
             });
             let length = data.object.length;
-            this.videoAvg = videoAvg / length;
-            this.kindnessAvg = kindnessAvg / length;
-            this.finishAvg = finishAvg / length;
-
+            this.videoAvg = videoAvg/length;
+            this.kindnessAvg = kindnessAvg/length;
+            this.finishAvg = finishAvg/length;
+            
+            if(this.reviews.length == 0){
+              this.reviewLoad = false;
+              this.reviewMessage = "아직 리뷰가 존재하지 않습니다.";
+            } else {
+              this.reviewsMain = this.reviews.reverse();
+              if(this.reviews.length > 5){
+                this.reviewLoad = true;
+                this.reviewsMain = this.reviewsMain.slice(0,5);
+              } else {
+                this.reviewLoad = false;
+              }
+            }
             return;
           } else {
-            // fail
             return;
           }
         })
@@ -827,33 +877,35 @@ export default {
     },
     getPortfolio(URL) {
       //1은 session uid
-      http
-        .get(URL + "/portfolio/" + this.uid)
-        .then(({ data }) => {
-          //성공시 video 추출 필요
-          if (data.data == "success") {
-            this.portfolio.nickname = data.object.nickname;
-            // console.log(data.object);
-            this.request_info.response_nickname = data.object.nickname;
-            this.portfolio.description = data.object.description;
-            this.portfolio.payMin = data.object.payMin;
-            this.portfolio.skill = data.object.skill;
-            this.getInprogressDate();
-            return;
-          } else {
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return;
-        });
-    },
-    getBookmarkCount() {
-      http
-        .get("/bookmark/cnt/" + this.uid)
-        .then(({ data }) => {
-          if (data.data == "success") {
+        http
+            .get(URL+'/portfolio/'+this.uid)
+            .then(({data}) => {
+                //성공시 video 추출 필요
+                if (data.data == 'success') {
+                  this.portfolio.nickname = data.object.nickname;
+                  // console.log(data.object);
+                  this.request_info.response_nickname = data.object.nickname;
+                  this.portfolio.description = data.object.description;
+                  this.portfolio.payMin = data.object.payMin;
+                  // this.portfolio.skill = data.object.skill;
+                  this.portfolio.skills = data.object.skill.split(",");
+                  // console.log(this.portfolio.skills);
+                  this.getInprogressDate();
+                  return;
+                } else {
+                  return;
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                return;
+            })
+      },
+      getBookmarkCount(){
+        http
+        .get('/bookmark/cnt/'+this.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
             this.portfolio.markCnt = data.object.length;
             data.object.forEach((obj) => {
               if (obj.userInfoUid == this.$session.get("uid")) {
@@ -903,54 +955,134 @@ export default {
             } else {
               return;
             }
-          });
+          })
+        }
+      },
+      //성공했을 경우 각 객체 돌면서 비디오 추출 필요
+      makeVideosArray(result){
+        let obj;
+        let res = [];
+        result.forEach(element => {
+          obj = new Object();
+          obj.url = element.url;
+          obj.previewImageSize = 'maxresdefault';
+          res.push(obj);
+        });
+        return res;
+      },
+      makeScheduleArray(result){
+        let date;
+        result.forEach(element => {
+          date = new Object();
+          date.start = new Date(element.startDate);
+          date.end = new Date(element.endDate);
+          date.categoryId = element.scheduleType;
+          date.repeat = "never";
+          this.events.push(date);
+        })
+      },
+      makeInprogressDateArray(result){
+        let obj;
+        result.forEach(element => {
+          obj = new Object();
+          obj.start = new Date(element.start_date);
+          obj.end = new Date(element.end_date);
+          obj.categoryId = 3;
+          obj.repeat = "never";
+          this.events.push(obj);
+        })
+      },
+      goToday() {
+        this.$refs.calendar.goToday();
+      },
+      loadMoreReviews(){
+        this.cnt++;
+        // console.log(this.cnt);
+        if(this.reviewsMain.length < this.reviews.length){
+          let sub = this.reviews.length - this.reviewsMain.length;
+          if(sub < 5){
+            this.reviewLoad = false;
+            this.reviewsMain = this.reviews.slice(0,this.reviews.length);
+          } else {
+            this.reviewLoad = true;
+            this.reviewsMain = this.reviews.slice(0, 5*this.cnt);
+          }
+        } else {
+          this.reviewLoad = false;
+          this.reviewMessage = "더 이상 후기가 존재하지 않습니다";
+        }
+      },
+      openRequestForm(){
+        this.modal.show=true;
+        let selectedType = this.$store.getters['stepper/getSelectedVideoType'];
+        if(selectedType){
+          if(selectedType == "pers")
+            this.video_type.pers = true;
+          else if(selectedType == "comm")
+            this.video_type.comm = true;
+        }
+        let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle'];
+        if(selectedStyle){
+          if(selectedStyle == "kids")
+            this.video_style.kids = true;
+          else if(selectedStyle == "game")
+            this.video_style.game = true;
+          else if(selectedStyle == "musi")
+            this.video_style.musi = true;
+          else if(selectedStyle == "food")
+            this.video_style.food = true;
+          else if(selectedStyle == "vlog")
+            this.video_style.vlog = true;
+          else if(selectedStyle == "movi")
+            this.video_style.movi = true;
+          else if(selectedStyle == "anim")
+            this.video_style.anim = true;
+          else if(selectedStyle == "beau")
+            this.video_style.beau = true;
+          else if(selectedStyle == "spor")
+            this.video_style.spor = true;
+          else
+            this.video_style.etcs = true;
+        }
+        let selectedSkills = this.$store.getters['stepper/getSelectedVideoSkills'];
+        if(selectedSkills){
+          selectedSkills.forEach(item => {
+            if(item == "colr")
+              this.video_skill.colr = true;
+            else if(item == "capt")
+              this.video_skill.capt = true;
+            else if(item == "audi")
+              this.video_skill.audi = true;
+            else if(item == "moti")
+              this.video_skill.moti = true;
+            else if(item == "outr")
+              this.video_skill.outr = true;
+            else if(item == "intr")
+              this.video_skill.intr = true;
+          })
+        }
+        let originLength = this.$store.getters['stepper/getOriginLength'];
+        this.request_info.video_origin_length = originLength.name;
+        
+        let finalLength = this.$store.getters['stepper/getFinalLength'];
+        this.request_info.video_result_length = finalLength.name;
+        this.dates.range = this.$store.getters['stepper/checkDeadline'];
+        console.log(this.dates.range);
+      },
+      onOpenItem() {
+        // Item opened
+      },
+      onCloseItem() {
+        // Item closed
+      },
+      getFormatDate(regtime) {
+        return moment(new Date(regtime)).format("YY.MM.DD hh:mm");
       }
-    },
-    //성공했을 경우 각 객체 돌면서 비디오 추출 필요
-    makeVideosArray(result) {
-      let obj;
-      let res = [];
-      result.forEach((element) => {
-        obj = new Object();
-        obj.url = element.url;
-        obj.previewImageSize = "maxresdefault";
-        res.push(obj);
-      });
-      return res;
-    },
-    makeScheduleArray(result) {
-      let date;
-      result.forEach((element) => {
-        date = new Object();
-        date.start = new Date(element.startDate);
-        date.end = new Date(element.endDate);
-        date.categoryId = element.scheduleType;
-        date.repeat = "never";
-        this.events.push(date);
-      });
-    },
-    makeInprogressDateArray(result) {
-      let obj;
-      result.forEach((element) => {
-        obj = new Object();
-        obj.start = new Date(element.start_date);
-        obj.end = new Date(element.end_date);
-        obj.categoryId = 3;
-        obj.repeat = "never";
-        this.events.push(obj);
-      });
-    },
-    goToday() {
-      this.$refs.calendar.goToday();
-    },
-    onOpenItem() {
-      // Item opened
-    },
-    onCloseItem() {
-      // Item closed
-    },
   },
 };
 </script>
 <style lang="scss">
+#reviewDate {
+  text-align: right;
+}
 </style>
