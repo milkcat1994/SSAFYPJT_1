@@ -15,7 +15,72 @@
         ></base-input>
       </div>
     </form>-->
+    <template>
+      <div>
+        <i v-b-toggle.sidebar-1 class="fas fa-bars"></i>
+        <b-sidebar id="sidebar-1" class="sidebar-1" bg-variant="white">
+          <div class="px-3 py-2 d-flex justify-content-center">
+            <router-link class="navbar-brand" to="/">
+              <img
+                src="/img/brand/green.png"
+                class="navbar-brand-img mb-5 "
+                alt="편집"
+                style="width:90px; height:50px; border:none;"
+              />
+            </router-link>
+          </div>
 
+          <div class="ml-4 mb-2">
+            <router-link to="/mainpage">
+              <i class="ni ni-tv-2 text-primary mx-2">
+                <span class="mx-2">메인페이지 </span>
+              </i>
+            </router-link>
+          </div>
+          <div class="ml-4 mb-2">
+            <router-link to="/editors">
+              <i class="ni ni-zoom-split-in text-primary ml-2">
+                <span class="mx-2"> 편집자 찾기 </span>
+              </i>
+            </router-link>
+          </div>
+          <div class="ml-4 mb-2">
+            <router-link
+              v-if="isEditor && isLogin"
+              :to="{
+                path: '/portfolio?no=' + this.$session.get('uid'),
+              }"
+            >
+              <i class="ni ni-collection text-primary mx-2">
+                <span class="mx-2"> 내 포트폴리오 </span>
+              </i>
+            </router-link>
+          </div>
+          <div class="ml-4 mb-2">
+            <router-link v-if="isLogin" to="/marklist">
+              <i class="ni ni-favourite-28 text-red mx-2">
+                <span class="mx-2"> 찜 </span>
+              </i>
+            </router-link>
+          </div>
+          <div class="ml-4 mb-2">
+            <router-link v-if="isLogin" to="/alarm">
+              <i class="ni ni-bell-55 text-primar mx-2">
+                <span class="mx-2">알람</span>
+              </i>
+            </router-link>
+          </div>
+        </b-sidebar>
+      </div>
+    </template>
+    <router-link class="navbar-brand" to="/">
+      <img
+        src="/img/brand/green.png"
+        class="navbar-brand-img my-atuo ml-3 "
+        alt="편집"
+        style="width:90px; height:50px; border:none;"
+      />
+    </router-link>
     <!-- 최근 메시지 보여주기 -->
     <ul class="navbar-nav align-items-center mr-4 d-none d-md-flex ml-lg-auto">
       <li class="nav-item dropdown" v-if="isLogin">
@@ -28,9 +93,13 @@
           <!-- 레이아웃 width가 md 이하일때는 @/components/Sidebar.vue 수정해야함 -->
           <template>
             <div class="dropdown-header noti-title">
-              <h6 class="text-overflow m-0">최근 매칭 내역</h6>
+              <h6 class="text-overflow m-0">최근 알림 내역</h6>
             </div>
-            <div  v-for="(notifyitem, index) in notifyitems.object" :key="index + '_notifyitems'"  @click="readNotify()">
+            <div
+              v-for="(notifyitem, index) in notifyitems.object"
+              :key="index + '_notifyitems'"
+              @click="readNotify()"
+            >
               <router-link to="/alarm" class="dropdown-item">
                 <i class="ni ni-bulb-61 text-yellow"></i>
                 <span v-if="notifyitem.notify_type == 'request'"
@@ -40,6 +109,10 @@
                 <span v-if="notifyitem.notify_type == 'accepted'"
                   >{{ notifyitem.request_nickname }}님께서 요청을
                   수락하셨습니다</span
+                >
+                <span v-if="notifyitem.notify_type == 'review'"
+                  >{{ notifyitem.request_nickname }}님께 후기를 남길 수
+                  있습니다</span
                 >
               </router-link>
             </div>
@@ -80,13 +153,11 @@
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
-            <span class="avatar avatar-sm rounded-circle">
-              <img alt="Image placeholder" src="img/theme/avatar.svg" />
-            </span>
+            <i class="fas fa-user" style="color: #172b4d !important;"></i>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold text-default">
-                {{nickname}}
-              </span>
+              <span class="mb-0 text-sm font-weight-bold text-default">{{
+                nickname
+              }}</span>
             </div>
           </div>
 
@@ -98,14 +169,6 @@
               <i class="ni ni-single-02"></i>
               <span>내 정보</span>
             </router-link>
-            <!-- <router-link to="/404" class="dropdown-item">
-              <i class="ni ni-settings-gear-65"></i>
-              <span>계정 설정</span>
-            </router-link>
-            <router-link to="/404" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>작업 일정</span>
-            </router-link> -->
             <router-link to="/404" class="dropdown-item">
               <i class="ni ni-support-16"></i>
               <span>도움말</span>
@@ -139,6 +202,7 @@ export default {
       searchQuery: "",
       notifyNum: "",
 
+      isEditor: "editor",
       isLogin: false,
       // nickname: "",
     };
@@ -147,7 +211,7 @@ export default {
     //생성 시 로그인 상태 확인
     if (this.$session.exists()) {
       this.isLogin = true;
-      // this.nickname = this.$session.get("nickname");
+      this.isEditor = this.$session.get("auth") == "editor";
       // 로그인이 되어있으면 알림 가져옴
       store.dispatch(
         "getNotifyitems",
@@ -162,8 +226,8 @@ export default {
     ...mapGetters(["notifyitems"]),
     ...mapGetters(["notifyitem"]),
     nickname() {
-      return this.$session.get("nickname")
-    }
+      return this.$session.get("nickname");
+    },
   },
   watch: {
     // route 경로가 바뀔때마다 로그인 상태인지 확인
@@ -185,7 +249,7 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
-    getNotifyNum(){
+    getNotifyNum() {
       this.notifyNum = this.notifyitems.data;
       return this.notifyNum;
     },
@@ -212,6 +276,7 @@ export default {
 
     logout() {
       this.$session.destroy();
+      this.$store.commit('stepper/clearFilterFinderStatus');
       store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
@@ -219,3 +284,18 @@ export default {
   },
 };
 </script>
+<style>
+.nav-item:hover {
+  cursor: pointer;
+}
+
+#sidebar-1 {
+  width: 200px;
+  background-color: white important;
+  z-index: 999;
+}
+
+router-link:hover {
+  opacity: 1;
+}
+</style>

@@ -36,4 +36,6 @@ public class RequestReviewSaveRequest {
     @ApiModelProperty(required = true)
     @NotNull
     private String comment;
+
+    private float scoreAvg;
 }

@@ -173,7 +173,7 @@
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <router-link to="/dashboard" class="text-light">
+          <router-link to="/mainpage" class="text-light">
             <small>메인화면</small>
           </router-link>
         </div>
@@ -204,6 +204,7 @@ export default {
       },
       emailcode: "",
       isCheck: false,
+      nickCheck: false,
 
       modal: {
         show: false,
@@ -268,7 +269,8 @@ export default {
         })
         .then(({ data }) => {
           if (data.data != "nickname") {
-            alertify.notify("닉네임 사용이 가능합니다!!!!!", "nickname", 3);
+            this.nickCheck = true;
+            alertify.notify("닉네임 사용이 가능합니다.", "nickname", 3);
           } else {
             alertify.error("이미 사용 중인 닉네임입니다.", 3);
           }
@@ -284,6 +286,7 @@ export default {
       this.model.password = "";
       this.model.passwordconf = "";
       this.isCheck = false;
+      this.nickCheck = false;
     },
     emailCheck(email) {
       let exptext = /^[\w]+@[\w]+\.+[\w]+/;
@@ -325,6 +328,9 @@ export default {
       valid &&
         !this.isCheck &&
         ((valid = false), (message = "이메일 인증을 해주세요."));
+      valid &&
+        !this.nickCheck &&
+        ((valid = false), (message = "닉네임 중복체크를 해주세요."));
       valid &&
         !this.pwdCheck(this.model.password) &&
         ((valid = false),

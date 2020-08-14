@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.web.editor</groupId>
 	<artifactId>backend</artifactId>
-	<version>1.2.1</version>
+	<version>1.3.0</version>
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -79,6 +79,12 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Redis CacheServer 설정 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 
 		<!--Multipart File Up&Download -->

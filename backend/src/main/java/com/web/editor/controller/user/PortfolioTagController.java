@@ -39,7 +39,7 @@ public class PortfolioTagController {
         List<PortfolioTag> portfolioTag = portfolioService.findTagByUid(uid);
 
         //포트폴리오의 태그가 있을 경우
-        if(portfolioTag != null){
+        if(!portfolioTag.isEmpty()){
                 result.status = true;
                 result.data = "success";
                 result.object = portfolioTag;
