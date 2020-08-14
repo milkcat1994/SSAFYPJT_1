@@ -7,9 +7,8 @@ import lombok.Setter;
 @Setter
 public class EditorDto {
     private String uid;
-    private String tags;
+    private String tag;
     private String skill;
-    private String pay;
     private double similarity;
 
 }

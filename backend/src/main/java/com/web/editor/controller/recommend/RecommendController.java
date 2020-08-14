@@ -2,6 +2,7 @@ package com.web.editor.controller.recommend;
 
 import java.util.List;
 
+import com.web.editor.model.dto.user.bookmark.Bookmark;
 import com.web.editor.model.dto.user.recommend.EditorDto;
 import com.web.editor.model.service.user.recommend.RecommendService;
 import com.web.editor.util.recommend.CfAlgorithm;
@@ -39,8 +40,22 @@ public class RecommendController {
         if (bookmarks == null) return new ResponseEntity<>("bookmark is empty", HttpStatus.OK);
         if (bookmarks.size() <= 0) return new ResponseEntity<>("bookmark is empty", HttpStatus.OK);
 
+        // 전체 북마크의 태그들
+        EditorDto bookmark = new EditorDto();
+        bookmark.setTag("");
+        bookmark.setSkill("");
+        bookmark.setUid("");
+        for (EditorDto editor: bookmarks){
+            bookmark.setUid(bookmark.getUid().concat("," + editor.getUid()));
+            bookmark.setTag(bookmark.getTag().concat("," + editor.getTag()));
+            bookmark.setSkill(bookmark.getSkill().concat("," + editor.getSkill()));
+        }
+        bookmark.setUid(bookmark.getUid().substring(1));
+        bookmark.setTag(bookmark.getTag().substring(1));
+        bookmark.setSkill(bookmark.getSkill().substring(1));
+
         // 추천 편집자 받아옴
-        List<EditorDto> recommendList = cfAlgorithm.recommendByBookmark(bookmarks, editors);
+        List<EditorDto> recommendList = cfAlgorithm.recommendByBookmark(bookmark, editors);
         
         return new ResponseEntity<>(recommendList, HttpStatus.OK);
     }

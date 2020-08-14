@@ -14,50 +14,53 @@ public class CfAlgorithm {
     @Autowired
     BookmarkService bookmarkService;
 
+    final int MaxScore = 1;
+    
 
     // 유저의 북마크와 전체 유저의 리스트들, 유클리디안 거리
-    public List<EditorDto> recommendByBookmark(List<EditorDto> bookmarks, List<EditorDto> editors) {
-        
+    public List<EditorDto> recommendByBookmark(EditorDto bookmarks, List<EditorDto> editors) {
+
+        String[] bookmarkUid = bookmarks.getUid().split(",");
+
+        int cnt = bookmarkUid.length;
+
         List<EditorDto> recommendList = new ArrayList<>();
         // for 에디터마다 유클리디안 거리 구하기 (태그, 비디오 기술)
         L: for(EditorDto editor : editors) {
-            for (EditorDto bookmark : bookmarks){
-                if (bookmark.getUid().equals(editor.getUid()))  continue L;
-            }
-            double sim_before = 0;
-            for (EditorDto bookmark : bookmarks) {
-                // double sim = ( sumXY- ((sumX*sumY)/N) )/ Math.sqrt( (sumPowX - ((sumX * sumX) / N)) * (sumPowY - ((sumY * sumY)/N)));
-                // 유클리디안 거리
-                double sum = 0;
-                
-                System.out.println("\nuid: " + editor.getUid());
 
-                // pay
-                // double bookPay = 1;
-                // double ediPay = editorPay(Double.parseDouble(bookmark.getPay()), Double.parseDouble(editor.getPay()));
-                // sum +=(bookPay - ediPay) * (bookPay - ediPay);
-                // tag
-                double bookTag = 1;
-                double ediTag =  editorTag(bookmark.getTags(), editor.getTags());
-                sum += (double)(bookTag - ediTag) * (bookTag - ediTag);
-                // skill
-                double bookSkill = 1;
-                double ediSkill =  editorSkill(bookmark.getSkill(), editor.getSkill());
-                sum += (double)(bookSkill - ediSkill) * (bookSkill - ediSkill);
-
-                double sim = 1 / (1 + Math.sqrt(sum));
-                // double sim = sum;
-
-                System.out.println("sim: " + sim);
-
-                if (sim_before < sim) {
-                    editor.setSimilarity(sim);
-                    if (sim_before != 0)    recommendList.remove(recommendList.size()-1);
-                    recommendList.add(editor);
-                    
-                    sim_before = sim;
+            // 북마크와 일치하는 에디터 제외
+            if (cnt > 0) {
+                for (String uid : bookmarkUid){
+                    if (uid.equals(editor.getUid()))  {
+                        cnt--;
+                        continue L;
+                    }
                 }
-            }   
+            }
+            // 유클리디안 거리
+            double sum = 0;
+            
+            System.out.println("\nuid: " + editor.getUid());
+
+            double bookTag = MaxScore;
+            double ediTag =  editorTag(bookmarks.getTag(), editor.getTag());
+            sum += (double)(bookTag - ediTag) * (bookTag - ediTag);
+            // skill
+            double bookSkill = MaxScore;
+            double ediSkill =  editorSkill(bookmarks.getSkill(), editor.getSkill());
+            sum += (double)(bookSkill - ediSkill) * (bookSkill - ediSkill);
+
+            if (ediTag == 0 && ediSkill == 0) {
+                continue L;
+            }
+            double sim = 1 / (1 + Math.sqrt(sum));
+            // double sim = sum;
+
+            System.out.println("sim: " + sim);
+
+            editor.setSimilarity(sim);
+            recommendList.add(editor);
+                
         }
         
         recommendList.sort(new Comparator<EditorDto>(){
@@ -77,40 +80,34 @@ public class CfAlgorithm {
     // 태그 점수화
     private double editorTag(String book, String edi) {
         // 태그를 문자열 배열로
-        String[] tags = book.split(",");
+        String[] ediTags = edi.split(",");
+        String[] bookTags = book.split(",");
         int eq = 0;
 
-        for (String tag: tags) {
+        for (String ediTag: ediTags) {
             // 태그를 포함하면
-            if (edi.contains(tag.trim()))  eq+=1; 
+            if (book.contains(ediTag.trim()))  eq+=1; 
         }
-        System.out.println("tag eq / tags: " + eq + "/" + tags.length);
-        System.out.println("tag score: " + eq/(double)tags.length * 1);
+        System.out.println("tag eq / tags: " + eq + "/" + bookTags.length);
+        System.out.println("tag score: " + eq/(double)bookTags.length * 1);
 
-        if (eq/(double)tags.length * 1 * 1.3 > 1) return 1;
-        return eq/(double)tags.length * 1 * 1.3;
+        if (eq/(double)bookTags.length * MaxScore * 1.5 > 1) return 1;
+        return eq/(double)bookTags.length * MaxScore * 1.5;
     }
 
     // 스킬 점수화
     private double editorSkill(String book, String edi) {
-        String[] skills = book.split(",");
+        String[] ediSkills = edi.split(",");
+        String[] bookSkills = book.split(",");
         int eq = 0;
 
-        for (String skill: skills) {
-            // 태그를 포함하지 않으면
-            if (!edi.contains(skill))  eq+=1; 
+        for (String ediSkill: ediSkills) {
+            if (book.contains(ediSkill.trim()))  eq+=1; 
         }
-        System.out.println("skill eq / skills: " + eq + "/" + skills.length);
-        System.out.println("skill score: " + eq/(double)skills.length * 1);
+        System.out.println("skill eq / skills: " + eq + "/" + bookSkills.length);
+        System.out.println("skill score: " + eq/(double)bookSkills.length * MaxScore);
 
-        return eq/(double)skills.length * 1;
+        return eq/(double)bookSkills.length * MaxScore * 0.5;
     }
-
-    // 금액 점수화
-    // private double editorPay(double book, double edi){
-    //     if (book > edi) return 1;
-    //     return (book - Math.abs(book-edi)) / book * 1;
-    // }
-
 
 }
