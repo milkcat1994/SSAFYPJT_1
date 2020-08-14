@@ -8,6 +8,18 @@ import VCalendar from "v-calendar";
 import store from "@/store/store.js";
 import VueSession from "vue-session";
 import VueCookies from "vue-cookies";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+
+import VueCarousel from "vue-carousel";
+
+Vue.use(VueCarousel);
+
+// Install BootstrapVue
+Vue.use(BootstrapVue);
+
+// Install BootstrapVue icon
+Vue.use(IconsPlugin);
 
 // for google Login
 import GAuth from "vue-google-oauth2";

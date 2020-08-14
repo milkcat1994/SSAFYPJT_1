@@ -18,7 +18,8 @@
     <div class="container-fluid mt--7 mb-4">
       <div class="card shadow border-0">
         <div class="card-header">
-          <h3 class="text-center mt-2">헤더(progress bar) 들어갈 자리</h3>
+          <!-- <h3 class="text-center mt-2">헤더(progress bar) 들어갈 자리</h3> -->
+          <progress-bar :currentStep="currentStep"></progress-bar>
         </div>
         <div class="card-body border-0">
           <video-type v-if="currentStep === 0"></video-type>
@@ -44,6 +45,7 @@
 // import http from "@/util/http-common";
 // import { mapGetters } from 'vuex';
 
+import ProgressBar from './ProgressBar.vue';
 import VideoType from './VideoType.vue';
 import VideoStyle from './VideoStyle.vue';
 import VideoSkills from './VideoSkills.vue';
@@ -54,7 +56,7 @@ import VideoDeadline from './VideoDeadline.vue';
 export default {
   name: "stepper",
   components: {
-    // HorizontalStepper,
+    ProgressBar,
     VideoType,
     VideoStyle,
     VideoSkills,
@@ -65,56 +67,6 @@ export default {
   data() {
     return {
       currentStep: 0,
-      searchSteps: [
-        {
-          icon: "help",
-          name: "first",
-          title: "영상 종류",
-          subtitle: "",
-          component: VideoType,
-          completed: false,
-        },
-        {
-          icon: "help",
-          name: "second",
-          title: "영상 특징",
-          subtitle: "",
-          component: VideoStyle,
-          completed: false,
-        },
-        {
-          icon: "help",
-          name: "fifth",
-          title: "편집 기술",
-          subtitle: "",
-          component: VideoSkills,
-          completed: false,
-        },
-        {
-          icon: "help",
-          name: "third",
-          title: "원본 길이",
-          subtitle: "",
-          component: VideoOriginLength,
-          completed: false,
-        },
-        {
-          icon: "help",
-          name: "fourth",
-          title: "영상 길이",
-          subtitle: "",
-          component: VideoFinalLength,
-          completed: false,
-        },
-        {
-          icon: "help",
-          name: "sixth",
-          title: "희망 기한",
-          subtitle: "",
-          component: VideoDeadline,
-          completed: false,
-        },
-      ],
     };
   },
   methods: {
@@ -126,19 +78,65 @@ export default {
         this.$router.push({name: 'mainpage'})
       }
     },
+    // 각 단계 verification 필요 ==> 다음 버튼 활성화
     nextStep() {
+      console.log(this.currentStep)
       if (this.currentStep < 5) {
-        this.currentStep++;
+        switch (this.currentStep) {
+          case 0:
+            if (!this.$store.getters['stepper/getSelectedVideoType']) {
+              alert('선택해라')
+            } else {
+              this.currentStep++;
+            }
+            break;
+          case 1:
+            if (!this.$store.getters['stepper/getSelectedVideoStyle']) {
+              alert('선택해라')
+            } else {
+              this.currentStep++;
+            }
+            break;
+          case 2:
+            if (this.$store.getters['stepper/getSelectedVideoSkills'].length === 0) {
+              // console.log(this.$store.getters['stepper/getSelectedVideoSkills'])
+              alert('선택해라')
+            } else {
+              this.currentStep++;
+            }
+            break;
+          case 3:
+            if (!this.$store.getters['stepper/getOriginLength']) {
+              // console.log(this.$store.getters['stepper/getOriginLength'])
+              alert('선택해라')
+            } else {
+              this.currentStep++;
+            }
+            break;
+          case 4:
+            if (!this.$store.getters['stepper/getFinalLength']) {
+              // console.log(this.$store.getters['stepper/getFinalLength'])
+              alert('선택해라')
+            } else {
+              this.currentStep++;
+            }
+            break;
+        }
       } else {
         // after final step
-        this.$router.push("/editors");
+        console.log(this.$store.getters['stepper/checkDeadline'])
+        if (this.$store.getters['stepper/checkDeadline'].length < 2) {
+          alert('선택해라')
+        } else {
+          // this.currentStep++;
+          this.$router.push("/editors");
+        }
       }
     },
     // Vuex stepper 초기화
     clearSteps() {
       this.$store.commit('stepper/clearStepperStatus')
     }
-    // 각 단계 verification 필요 ==> 다음 버튼 활성화
 
   },
   created() {

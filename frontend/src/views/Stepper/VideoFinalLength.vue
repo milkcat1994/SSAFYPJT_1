@@ -10,8 +10,8 @@
         <div class="card text-center col-sm-2 m-2" 
             v-for="item of finalLength"
             :class="{selected: !!item.status}"
-            :key="item.name"
-            @click="setFinalLength(item.name)">
+            :key="item.value"
+            @click="setFinalLength(item.value)">
           <div class="card-body px-0 pt-4">
             <h2 class="card-title">{{item.name}}</h2>
           </div>
@@ -32,8 +32,8 @@ export default {
     }),
   },
   methods: {
-    setFinalLength(name) {
-      this.$store.commit('stepper/setFinalLength', name)
+    setFinalLength(value) {
+      this.$store.commit('stepper/setFinalLength', value)
     }
   }
 };

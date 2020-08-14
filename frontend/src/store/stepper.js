@@ -128,44 +128,54 @@ export const stepper = {
       {
         name: '5분 이내',
         status: false,
+        value: '5min'
       },
       {
         name: '15분 이내',
         status: false,
+        value: '15min'
       },
       {
         name: '30분 이내',
         status: false,
+        value: '30min'
       },
       {
         name: '1시간 이내',
         status: false,
+        value: '1hr'
       },
       {
         name: '1시간 이상',
         status: false,
+        value: 'over1hr'
       },
     ],
     finalLength: [
       {
         name: '1분 이내',
         status: false,
+        value: '1min'
       },
       {
         name: '5분 이내',
         status: false,
+        value: '5min'
       },
       {
         name: '10분 이내',
         status: false,
+        value: '10min'
       },
       {
         name: '30분 이내',
         status: false,
+        value: '30min'
       },
       {
         name: '30분 이상',
         status: false,
+        value: 'over30min'
       },
     ],
     deadline: [],
@@ -190,11 +200,6 @@ export const stepper = {
     },
     getSelectedVideoSkills(state) {
       let res = new Array();
-      // state.videoSkills.forEach(e => {
-      //   if (e.status) {
-      //     res.push(e.value)
-      //   }
-      // })
       for (const item of state.videoSkills) {
         if (item.status == true) {
           res.push(item.value)
@@ -202,17 +207,25 @@ export const stepper = {
       }
       return res;
     },
-    // state값 조정해서 쓰지 않는다면 getters 쓸 이유가 없다!
-    // BE에 보내주는 형태에 맞게 가공하는 용도로 쓰자!(수정 전)
-    // getOriginLength(state) {
-    //   return state.originLength
-    // },
-    // getFinalLength(state) {
-    //   return state.finalLength
-    // },
-    // getDeadline(state) {
-    //   return state.deadline
-    // }
+    getOriginLength(state) {
+      for (const item of state.originLength) {
+        if (item.status == true) {
+          return item
+        }
+      }
+      return;
+    },
+    getFinalLength(state) {
+      for (const item of state.finalLength) {
+        if (item.status == true) {
+          return item
+        }
+      }
+      return;
+    },
+    checkDeadline(state) {
+      return state.deadline
+    }
   },
   mutations: {
     // 초기화
@@ -282,7 +295,7 @@ export const stepper = {
     },
     setOriginLength(state, payload) {
       state.originLength.forEach(e => {
-        if (e.name == payload) {
+        if (e.value == payload) {
           e.status = true
         } else {
           e.status = false
@@ -291,7 +304,7 @@ export const stepper = {
     },
     setFinalLength(state, payload) {
       state.finalLength.forEach(e => {
-        if (e.name == payload) {
+        if (e.value == payload) {
           e.status = true
         } else {
           e.status = false
