@@ -99,7 +99,7 @@
               </div>
               <div class="row" v-for="(video, index) in portfolio.URLs" :key="index">
                 <div class="col-md-11">
-                  {{index}}
+                  <!-- {{index}} -->
                   <base-input
                   alternative
                   label="영상 URL"
@@ -108,9 +108,9 @@
                   v-model="video.url"
                   />
                 </div>
-                <div class="col-md-1">
+                <!-- <div class="col-md-1">
                   <base-button style="margin-top:32px;" type="float-center" icon="fa fa-minus-circle" @click="deleteURL(index)"></base-button>
-                </div>
+                </div> -->
               </div>
               <div class="addButton">
                 <base-button type="float-center" icon="fa fa-plus-circle" @click="addURL()"></base-button>
@@ -154,7 +154,7 @@
 import InputTag from 'vue-input-tag';
 //axios 초기 설정파일
 import http from "@/util/http-common";
-// import alertify from "alertifyjs";
+import alertify from "alertifyjs";
 import { getFormatDate } from "@/util/day-common";
 
   export default {
@@ -347,10 +347,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -363,10 +364,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -387,10 +389,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -403,10 +406,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -426,10 +430,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -443,10 +448,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -486,10 +492,11 @@ import { getFormatDate } from "@/util/day-common";
         })
         .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
         })
@@ -502,10 +509,11 @@ import { getFormatDate } from "@/util/day-common";
         })
         .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
         })
