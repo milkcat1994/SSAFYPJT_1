@@ -25,7 +25,7 @@ public class AsyncTaskService {
      */
 	// 초 * 1000
 	// 1시간마다 갱신으로 설정
-	@Scheduled(fixedDelay = 360000)
+	@Scheduled(fixedDelay = 86400000)
 	public void SaveDatatoRedis() {
         System.out.println("Thread Start");
         
