@@ -12,12 +12,12 @@
             @click="selectVideoSkills(item.value)">
           <div class="card-body">
             <img class="icon" :src="item.img" :alt="item.name">
-            <h2 class="card-title mt-2" :id="'tootlip-target-'+item.value">{{item.name}}
-              <!-- <i :id="'tootlip-target-'+item.value" class="far fa-question-circle fa-md"></i> -->
-              <!-- <b-icon :id="'tootlip-target-'+item.value" icon="exclamation-circle-fill" variant="primary"></b-icon> -->
+            <h2 class="card-title mt-2">{{item.name}}
+              <!-- <b-icon :id="'tooltip-target-'+item.value" icon="exclamation-circle-fill" variant="primary"></b-icon> -->
+              <!-- <i class="far fa-question-circle fa-md"></i> -->
             </h2>
             <p class="card-text">{{item.description}}</p>
-            <!-- <b-tooltip :target="'tootlip-target-'+item.value" triggers="hover">{{item.description}}</b-tooltip> -->
+            <!-- <b-tooltip :target="'tooltip-target-'+item.value" triggers="hover">{{item.description}}</b-tooltip> -->
           </div>
           <!-- <i v-if="!!skill.status" class="fas fa-check-circle fa-sm"></i> -->
         </div>

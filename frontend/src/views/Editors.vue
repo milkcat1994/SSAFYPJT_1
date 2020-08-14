@@ -158,35 +158,7 @@ export default {
     };
   },
   created() {
-    let selectedType = this.$store.getters['stepper/getSelectedVideoType']
-    if (selectedType) {
-      this.videoType.forEach(item => {
-        if (item.value == selectedType) {
-          item.status = true
-          this.selectedFilters.push(item.value)
-        }
-      })
-    }
-    let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle']
-    if (selectedStyle) {
-      this.videoStyle.forEach(item => {
-        if (item.value == selectedStyle) {
-          item.status = true
-          this.selectedFilters.push(item.value)
-        }
-      })
-    }
-    let selectedSkills = this.$store.getters['stepper/getSelectedVideoSkills']
-    console.log(selectedSkills)
-    if (selectedSkills) {
-      this.videoSkills.forEach(item => {
-        console.log(item)
-        if (selectedSkills.includes(item.value)) {
-          item.status = true
-          this.selectedFilters.push(item.value)
-        }
-      })
-    }
+    
   },
   methods: {
     // 이름 또는 단어 검색
@@ -242,7 +214,7 @@ export default {
     },
     clearFilterAll() {
       // 필터된 카테고리들 토글(활성화 <-> 비활성화)
-      // Vuex와 동기화하지 않음
+      // 작업요청서 필터(Vuex)와 동기화하지 않고 지역 변수 사용
       (this.videoType = [
         {name: '개인', value: 'pers', status: false},
         {name: '상업', value: 'comm', status: false},
@@ -270,6 +242,35 @@ export default {
       // selectedFilters 배열 clear
       (this.selectedFilters.length = 0);
     },
+    fetchFilter() {
+      let selectedType = this.$store.getters['stepper/getSelectedVideoType']
+      if (selectedType) {
+        this.videoType.forEach(item => {
+          if (item.value == selectedType) {
+            item.status = true
+            this.selectedFilters.push(item.value)
+          }
+        })
+      }
+      let selectedStyle = this.$store.getters['stepper/getSelectedVideoStyle']
+      if (selectedStyle) {
+        this.videoStyle.forEach(item => {
+          if (item.value == selectedStyle) {
+            item.status = true
+            this.selectedFilters.push(item.value)
+          }
+        })
+      }
+      let selectedSkills = this.$store.getters['stepper/getSelectedVideoSkills']
+      if (selectedSkills) {
+        this.videoSkills.forEach(item => {
+          if (selectedSkills.includes(item.value)) {
+            item.status = true
+            this.selectedFilters.push(item.value)
+          }
+        })
+      }
+    }
   },
 };
 </script>
