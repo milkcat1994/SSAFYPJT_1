@@ -48,24 +48,24 @@ export default new Router({
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/MainPage.vue"),
         },
-        {
-          path: "/icons",
-          name: "icons",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Icons.vue"),
-        },
-        {
-          path: "/maps",
-          name: "maps",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Maps.vue"),
-        },
-        {
-          path: "/tables",
-          name: "tables",
-          component: () =>
-            import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
-        },
+        // {
+        //   path: "/icons",
+        //   name: "icons",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Icons.vue"),
+        // },
+        // {
+        //   path: "/maps",
+        //   name: "maps",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Maps.vue"),
+        // },
+        // {
+        //   path: "/tables",
+        //   name: "tables",
+        //   component: () =>
+        //     import(/* webpackChunkName: "demo" */ "./views/Tables.vue"),
+        // },
         // {
         //   path: "/search",
         //   name: "search",
@@ -73,8 +73,8 @@ export default new Router({
         //     import(/* webpackChunkName: "demo" */ "./views/Search.vue"),
         // },
         {
-          path: "/stepper",
-          name: "stepper",
+          path: "/search",
+          name: "search",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Stepper/Stepper.vue"),
         },

@@ -35,37 +35,7 @@
                       input-classes="form-control-alternative"
                       v-model="portfolio.description"
                     />
-                    <label>편집할 수 있는 기술을 선택해주세요</label>
-                    <!-- <br>
-                    <input type="checkbox" name="video_skill" id="video_skill" value="color">
-                    <label for="color">
-                      색, 밝기 조정
-                    </label>
-                    <br>
-                    <input type="checkbox" name="video_skill" id="video_skill" value="audio">
-                    <label for="audio">
-                      음향(오디오, 음악)
-                    </label>
-                    <br>
-                    <input type="checkbox" name="video_skill" id="video_skill" value="motion">
-                    <label for="motion">
-                      모션그래픽
-                    </label>
-                    <br>
-                    <input type="checkbox" name="video_skill" id="video_skill" value="caption">
-                    <label for="caption">
-                      자막
-                    </label>
-                    <br>
-                    <input type="checkbox" name="video_skill" id="video_skill" value="intro">
-                    <label for="intro">
-                      인트로
-                    </label>
-                    <br>
-                    <input type="checkbox" name="video_skill" id="video_skill" value="outro">
-                    <label for="outro">
-                      아웃트로
-                    </label> -->
+                    <h4>편집할 수 있는 기술을 선택해주세요</h4>
                     <base-checkbox class="mb-3" name="video_skill" value="color" v-model="checkboxes.color">
                       색, 밝기 조정
                     </base-checkbox>
@@ -84,7 +54,6 @@
                     <base-checkbox class="mb-3" name="video_skill" value="outro" v-model="checkboxes.outro">
                       아웃트로
                     </base-checkbox>
-                    <!-- {{checkboxes}} -->
                     <base-input
                       alternative
                       label="분당 페이가격을 적어주세요."
@@ -110,7 +79,7 @@
               label="대표영상 URL"
               placeholder="https://"
               input-classes="form-control-alternative"
-              v-model="portfolio.HeadURL[0]"
+              v-model="portfolio.HeadURL[0].url"
             />
             <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="uploadHeadVideo()"> 수정하기 </base-button>
           </card>
@@ -118,42 +87,39 @@
       </div>
     </div>
 
-    <div class="container-fluid" style="margin-top: 20px">
+    <div class="container-fluid" style="margin-top: 20px;  margin-bottom: 50px;">
       <div class="row">
         <div class="col">
           <div class="card shadow">
             <div class="card-body">
-              <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="uploadVideos()"> 수정하기 </base-button>
-              <div class="row">
-                <div class="col">
-                <base-input
+              <div class="col" style="margin-bottom:30px;">
+              <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="uploadVideos()"> 
+                수정하기
+              </base-button>
+              </div>
+              <div class="row" v-for="(video, index) in portfolio.URLs" :key="index">
+                <div class="col-md-11">
+                  <!-- {{index}} -->
+                  <base-input
                   alternative
-                  label="영상1 URL"
+                  label="영상 URL"
                   placeholder="https://"
                   input-classes="form-control-alternative"
-                  v-model="portfolio.URLs[0]"
-                />
-                <base-input
-                  alternative
-                  label="영상2 URL"
-                  placeholder="https://"
-                  input-classes="form-control-alternative"
-                  v-model="portfolio.URLs[1]"
-                />
-                <base-input
-                  alternative
-                  label="영상3 URL"
-                  placeholder="https://"
-                  input-classes="form-control-alternative"
-                  v-model="portfolio.URLs[2]"
-                />
+                  v-model="video.url"
+                  />
                 </div>
+                <!-- <div class="col-md-1">
+                  <base-button style="margin-top:32px;" type="float-center" icon="fa fa-minus-circle" @click="deleteURL(index)"></base-button>
+                </div> -->
+              </div>
+              <div class="addButton">
+                <base-button type="float-center" icon="fa fa-plus-circle" @click="addURL()"></base-button>
               </div>
 
-              <div class="row" style="margin-top: 30px">
+              <!-- <div class="row" style="margin-top: 30px;"> -->
                 <div class="col">
                   <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
-                  <label for="schedule"> 근무가 불가능한 날짜를 골라주세요. </label>
+                  <h4> 근무가 불가능한 날짜를 골라주세요. </h4>
                   <!-- <div class="row"> -->
                     <!-- <base-checkbox class="mb-3" v-model="offDays.weekday">평일</base-checkbox>
                     <base-checkbox class="mb-3" v-model="offDays.weekend">주말</base-checkbox>
@@ -176,7 +142,7 @@
                   />
                   {{disableDates}} -->
                 </div>
-              </div>
+              <!-- </div> -->
             </div>
           </div>
         </div>
@@ -188,7 +154,7 @@
 import InputTag from 'vue-input-tag';
 //axios 초기 설정파일
 import http from "@/util/http-common";
-// import alertify from "alertifyjs";
+import alertify from "alertifyjs";
 import { getFormatDate } from "@/util/day-common";
 
   export default {
@@ -381,10 +347,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -397,30 +364,36 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
         }
       },
       uploadVideos(){
+        let urlList = [];
+        this.portfolio.URLs.forEach(element => {
+          urlList.push(element.url);
+        })
         // 그외영상_최초등록일 경우
         if(this.isFirstVideos){
           http
           .post('/portfolio/video/'+this.uid, {
             portfolioUid: this.uid,
-            url: this.portfolio.URLs,
+            url: urlList,
             mainFlag: 0
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -428,15 +401,16 @@ import { getFormatDate } from "@/util/day-common";
           http
           .put('/portfolio/video/'+this.uid, {
             portfolioUid: this.uid,
-            url: this.portfolio.URLs,
+            url: urlList,
             mainFlag: 0
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -456,10 +430,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -473,10 +448,11 @@ import { getFormatDate } from "@/util/day-common";
           })
           .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
           })
@@ -516,10 +492,11 @@ import { getFormatDate } from "@/util/day-common";
         })
         .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
         })
@@ -532,10 +509,11 @@ import { getFormatDate } from "@/util/day-common";
         })
         .then(({ data }) => {
             if(data.data == "success"){
+              this.$router.push("/portfolio?no="+this.uid);
               // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
-              // alertify.error("오류가 발생하였습니다.",3);
+              alertify.error("오류가 발생하였습니다.",3);
               return;
             }
         })
@@ -550,8 +528,12 @@ import { getFormatDate } from "@/util/day-common";
       },
       makeVideosArray(result){
         let res = [];
+        let obj;
         result.forEach(element => {
-          res.push(element.url);
+          obj = new Object;
+          obj.url = element.url;
+          obj.mainFlag = element.mainFlag;
+          res.push(obj);
         });
         return res;
       },
@@ -563,8 +545,21 @@ import { getFormatDate } from "@/util/day-common";
         })
         return res;
       },
+      addURL(){
+        this.portfolio.URLs.push({
+          url: '',
+          mainFlag: 0
+        })
+      },
+      deleteURL(index){
+        console.log(index);
+        delete this.portfolio.URLs[index];
+      }
     },
   };
 </script>
 <style lang="scss">
+.addButton {
+  text-align: center;
+}
 </style>

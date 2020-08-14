@@ -106,29 +106,29 @@ public class PortfolioController {
     public Object updatePortfolio(@PathVariable String uid, @RequestBody PortfolioInfo portfolioInfo){
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
-        if(portfolioInfo.getSkill().length() > 0){
-            StringTokenizer st = new StringTokenizer(portfolioInfo.getSkill(), ",");
-            String skills = "";
-            while(st.hasMoreTokens()){
-                String skill = st.nextToken();
-                if(skill.equals("color")){
-                    skills += ",색/밝기 조정";
-                } else if(skill.equals("audio")){
-                    skills += ",음향";
-                } else if(skill.equals("motion")){
-                    skills += ",모션그래픽";
-                } else if(skill.equals("caption")){
-                    skills += ",자막";
-                } else if(skill.equals("intro")){
-                    skills += ",인트로";
-                } else if(skill.equals("outro")){
-                    skills += ",아웃트로";
-                }
-            }
-            int len = skills.length();
-            skills = skills.substring(1,len);
-            portfolioInfo.setSkill(skills);
-        }
+        // if(portfolioInfo.getSkill().length() > 0){
+        //     StringTokenizer st = new StringTokenizer(portfolioInfo.getSkill(), ",");
+        //     String skills = "";
+        //     while(st.hasMoreTokens()){
+        //         String skill = st.nextToken();
+        //         if(skill.equals("color")){
+        //             skills += ",색/밝기 조정";
+        //         } else if(skill.equals("audio")){
+        //             skills += ",음향";
+        //         } else if(skill.equals("motion")){
+        //             skills += ",모션그래픽";
+        //         } else if(skill.equals("caption")){
+        //             skills += ",자막";
+        //         } else if(skill.equals("intro")){
+        //             skills += ",인트로";
+        //         } else if(skill.equals("outro")){
+        //             skills += ",아웃트로";
+        //         }
+        //     }
+        //     int len = skills.length();
+        //     skills = skills.substring(1,len);
+        //     portfolioInfo.setSkill(skills);
+        // }
         int res = portfolioService.portfolioUpdate(portfolioInfo);
         if(res != -1){
             result.status = true;

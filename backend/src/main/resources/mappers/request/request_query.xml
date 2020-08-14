@@ -185,16 +185,18 @@
 		`video_score` as `videoScore`,
 		`kindness_score` as `kindnessScore`,
 		`finish_score` as `finishScore`,
-		`comment`
+		`comment`,
+		`score_avg` as `scoreAvg`
         FROM review
-        WHERE `request_form_rid` in (SELECT `rid` FROM request_form WHERE response_nickname = #{responseNickname})
+		WHERE `request_form_rid` in (SELECT `rid` FROM request_form WHERE response_nickname = #{responseNickname})
+		ORDER BY `score_avg`
     </select>
 
 	<!-- 요청서에 리뷰 등록 -->
 	<insert id="insertReview">
-        INSERT INTO review (`request_form_rid`, `nickname`, `video_score`, `kindness_score`, `finish_score`, `comment`)
+        INSERT INTO review (`request_form_rid`, `nickname`, `video_score`, `kindness_score`, `finish_score`, `comment`, `score_avg`)
                         VALUES 
-                        (#{requestFormRid}, #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment})
+                        (#{requestFormRid}, #{nickname}, #{videoScore}, #{kindnessScore}, #{finishScore}, #{comment}, #{scoreAvg})
     </insert>
 
 	<!-- 요청서에 리뷰 삭제 -->
@@ -244,6 +246,17 @@
 		where nickname = #{orgNickname}
 	</update>
 
+	<!-- 평점 평균 평균Column에서 바로 가져오기-->
+	<select id="joinScores" resultType="SearchAverageScore">
+		SELECT RF.response_nickname as nickname, AVG(score_avg) as avgScore
+		FROM `request_form` RF
+		LEFT JOIN review R ON RF.rid = R.request_form_rid
+		where done_flag = 3
+		GROUP BY RF.response_nickname
+	</select>
 
-
+	<select id="searchRequestVideoInfo" resultType="SearchRequestVideoInfo">
+		SELECT response_nickname as nickname, video_type as videoType, video_style as videoStyle, video_skill as videoSkill
+		FROM `request_form`
+	</select>
 </mapper>

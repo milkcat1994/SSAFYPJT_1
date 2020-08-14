@@ -383,7 +383,6 @@
                           <b-button
                             @click="
                               writeReview(
-                                requestitem2.response_nickname,
                                 requestitem2.rid
                               )
                             "
@@ -726,6 +725,7 @@ export default {
         .put("/request/done/" + rid)
         .then(({ data }) => {
           if (data == "success") {
+            this.$bvModal.hide("donereview");
             alertify.notify("요청이 완료되었습니다.", "success", 3);
           }
         })
@@ -802,13 +802,13 @@ export default {
           console.log(err);
         });
     },
-    writeReview(editor_nickname, rid) {
+    writeReview(rid) {
       let msg = "리뷰 작성에 실패하였습니다.";
       // console.log(editor_nickname, rid);
       http
         .post("/request/review", {
           requestFormRid: rid,
-          nickname: editor_nickname,
+          nickname: this.nickname,
           videoScore: this.videoScore,
           kindnessScore: this.kindnessScore,
           finishScore: this.finishScore,
@@ -852,7 +852,6 @@ export default {
                 alertify.error(msg, 3);
                 return;
               }
-
             })
             .catch(() => {
               msg = "서버 통신 실패";
@@ -866,7 +865,8 @@ export default {
       );
     },
     setRequestDate(start, end, rid) {
-      if (this.ridDetail == rid || this.ridDetail == -1) {  // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
+      if (this.ridDetail == rid || this.ridDetail == -1) {
+        // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
         this.setDateClean();
         this.ridDetail = "";
         return;
@@ -927,4 +927,8 @@ export default {
   margin: 10px;
   float: right;
 }
+.alarm {
+  min-height: 70vh;
+}
+
 </style>

@@ -2,11 +2,7 @@ package com.web.editor.model.dto.user.search;
 
 import java.util.List;
 
-// import com.web.editor.util.constants.SearchType;
-
 import io.swagger.annotations.ApiModelProperty;
-
-// import com.web.editor.util.constants.SearchSortType;
 
 import lombok.Getter;
 import lombok.Setter;
