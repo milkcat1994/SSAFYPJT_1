@@ -213,7 +213,8 @@ export default {
     },
     findSuper() {
       // 슈퍼편집자 조건으로 검색 조건 + router로 push
-      this.$router.push({ name: "search" });
+      // this.$router.push({name: 'search'})
+      this.$router.push({name: 'stepper'})
     },
     getSuggestion() {
       // 현재 로그인한 사용자의 태그나 이용정보 바탕으로 검색 조건 + router로 push
