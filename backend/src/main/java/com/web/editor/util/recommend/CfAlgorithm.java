@@ -16,17 +16,19 @@ public class CfAlgorithm {
 
     final int MaxScore = 1;
     double weightTag = 0;
+    int tagPerBookmark;
+    int skillPerBookmark;
 
     // 유저의 북마크와 전체 유저의 리스트들, 유클리디안 거리
     public List<EditorDto> recommendByBookmark(EditorDto bookmarks, List<EditorDto> editors) {
 
         String[] bookmarkUid = bookmarks.getUid().split(",");
-    
         int cnt = bookmarkUid.length;
-        // 북마크 하나당 평균 태그개수마다 가중치 0.1씩 증가
-        weightTag = (double)(bookmarks.getTag().split(",").length/cnt) * 0.1;
+        tagPerBookmark = bookmarks.getTag().split(",").length / cnt;
+        skillPerBookmark = bookmarks.getSkill().split(",").length / cnt;
+        // 북마크 하나당 평균 태그개수마다 가중치
+        weightTag = (double)(bookmarks.getTag().split(",").length/cnt);
         if (weightTag > 1) weightTag = 0.5;
-        System.out.println(weightTag);
 
         List<EditorDto> recommendList = new ArrayList<>();
         // for 에디터마다 유클리디안 거리 구하기 (태그, 비디오 기술)
@@ -44,7 +46,7 @@ public class CfAlgorithm {
             // 유클리디안 거리
             double sum = 0;
             
-            System.out.println("\nuid: " + editor.getUid());
+            // System.out.println("\nuid: " + editor.getUid());
 
             double bookTag = MaxScore;
             double ediTag =  editorTag(bookmarks.getTag(), editor.getTag());
@@ -54,17 +56,17 @@ public class CfAlgorithm {
             double ediSkill =  editorSkill(bookmarks.getSkill(), editor.getSkill());
             sum += (double)(bookSkill - ediSkill) * (bookSkill - ediSkill);
 
+            // 연관성이 없을때
             if (ediTag == 0 && ediSkill == 0) {
                 continue L;
             }
             double sim = 1 / (1 + Math.sqrt(sum));
             // double sim = sum;
 
-            System.out.println("sim: " + sim);
+            // System.out.println("sim: " + sim);
 
             editor.setSimilarity(sim);
             recommendList.add(editor);
-                
         }
         
         recommendList.sort(new Comparator<EditorDto>(){
@@ -84,18 +86,17 @@ public class CfAlgorithm {
     // 태그 점수화
     private double editorTag(String book, String edi) {
         // 태그를 문자열 배열로
-        String[] ediTags = edi.split(",");
         String[] bookTags = book.split(",");
         int eq = 0;
 
-        for (String ediTag: ediTags) {
+        for (String bookTag: bookTags) {
             // 태그를 포함하면
-            if (book.contains(ediTag.trim()))  eq+=1; 
+            if (edi.trim().contains(bookTag.trim()))  eq+=1; 
         }
-        double tagScore = eq/(double)bookTags.length * MaxScore * (1 + weightTag);
+        double tagScore = eq/(double)tagPerBookmark * MaxScore * (1 + weightTag);
 
-        System.out.println("tag eq / tags: " + eq + "/" + bookTags.length);
-        System.out.println("tag score: " + tagScore);
+        // System.out.println("tag eq / tags: " + eq + "/" + bookTags.length);
+        // System.out.println("tag score: " + tagScore);
 
         if (tagScore > 1) return 1;
         return tagScore;
@@ -103,16 +104,15 @@ public class CfAlgorithm {
 
     // 스킬 점수화
     private double editorSkill(String book, String edi) {
-        String[] ediSkills = edi.split(",");
         String[] bookSkills = book.split(",");
         int eq = 0;
 
-        for (String ediSkill: ediSkills) {
-            if (book.contains(ediSkill.trim()))  eq+=1; 
+        for (String bookSkill: bookSkills) {
+            if (edi.trim().contains(bookSkill.trim()))  eq+=1; 
         }
-        double skillScore = eq/(double)bookSkills.length * MaxScore * (1 - weightTag);
-        System.out.println("skill eq / skills: " + eq + "/" + bookSkills.length);
-        System.out.println("skill score: " + skillScore);
+        double skillScore = eq/(double)bookSkills.length * MaxScore * (1);
+        // System.out.println("skill eq / skills: " + eq + "/" + bookSkills.length);
+        // System.out.println("skill score: " + skillScore);
 
         return skillScore;
     }
