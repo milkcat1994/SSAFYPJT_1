@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import com.web.editor.model.dto.request.NicknameUpdateDto;
 import com.web.editor.model.dto.user.NormalLoginRequest;
 import com.web.editor.model.dto.user.NormalRegisterRequest;
-import com.web.editor.model.dto.user.Portfolio;
 import com.web.editor.model.dto.user.PortfolioNicknameUpdateRequest;
 import com.web.editor.model.dto.user.User;
 import com.web.editor.model.dto.user.UserConfirm;
