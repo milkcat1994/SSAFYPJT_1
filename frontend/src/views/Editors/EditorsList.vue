@@ -54,8 +54,14 @@
                     </base-button>
                   </div>
                 </div>
-                <div>
-                  <span><i class="fas fa-star"></i> {{editor.avgScore}}점</span>
+                <div class="d-flex">
+                  <!-- 평점 -->
+                  <!-- <span><i class="fas fa-star"></i> {{Number((editor.avgScore).toFixed(1))}}점</span> -->
+                  <span><i class="fas fa-star"></i> {{ round(editor.avgScore) }}점</span>
+                  <!-- 예상 견적 -->
+                  <div class="col-4 text-danger">
+                    예상 견적: 분당 {{ numberWithCommas(editor.payMin) }}원
+                  </div>
                 </div>
                 <div class="row">
                   <!-- 태그 -->
@@ -68,10 +74,7 @@
                       {{ tag }}
                     </button>
                   </div>
-                  <!-- 예상 견적 -->
-                  <div class="col-4 text-danger">
-                    예상 견적: 분당 {{ editor.payMin }}원
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -91,7 +94,7 @@
   </div>
 </template>
 <script>
-import http from "@/util/http-common";
+// import http from "@/util/http-common";
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 export default {
@@ -137,6 +140,12 @@ export default {
   created() {
   },
   methods: {
+    round(score) {
+      return Number(score.toFixed(1));
+    },
+    numberWithCommas(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     fetchPage(val) {
       this.currentPage = val;
     },
@@ -152,41 +161,41 @@ export default {
       this.$emit('sort-by', val)
     },
 
-    // 북마크 로직(미완성)
-    isBookmarked(portfolioUID) {
-      // login 되어있는 사용자만?
-      http
-        .get("/bookmark/cnt/" + portfolioUID)
-        .then((res) => {
-          if (res.data == "success") {
-            let isBooked = false;
-            res.object.forEach((obj) => {
-              if (obj.userInfoUid == this.$session.get("uid")) {
-                isBooked = true;
-              }
-            });
-            return isBooked;
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    },
-    addBookmark(portfolioUID) {
-      if (!this.isBookmarked(portfolioUID)) {
-        http
-          .post("/bookmark", {
-            uid: this.$session.get("uid"),
-            muid: portfolioUID,
-          })
-          .then((res) => {
-            // 리스트 전체 돌면서
-            // 리스트에 있는 개별 포트폴리오 UID == 북마크한 포트폴리오 UID
-            // 일 경우 북마크 개수 업데이트? (아니면 Vue.js가 자동으로 업데이트해주는지?)
-            console.log(res);
-          });
-      }
-    },
+    // // 북마크 로직(미완성)
+    // isBookmarked(portfolioUID) {
+    //   // login 되어있는 사용자만?
+    //   http
+    //     .get("/bookmark/cnt/" + portfolioUID)
+    //     .then((res) => {
+    //       if (res.data == "success") {
+    //         let isBooked = false;
+    //         res.object.forEach((obj) => {
+    //           if (obj.userInfoUid == this.$session.get("uid")) {
+    //             isBooked = true;
+    //           }
+    //         });
+    //         return isBooked;
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //     });
+    // },
+    // addBookmark(portfolioUID) {
+    //   if (!this.isBookmarked(portfolioUID)) {
+    //     http
+    //       .post("/bookmark", {
+    //         uid: this.$session.get("uid"),
+    //         muid: portfolioUID,
+    //       })
+    //       .then((res) => {
+    //         // 리스트 전체 돌면서
+    //         // 리스트에 있는 개별 포트폴리오 UID == 북마크한 포트폴리오 UID
+    //         // 일 경우 북마크 개수 업데이트? (아니면 Vue.js가 자동으로 업데이트해주는지?)
+    //         console.log(res);
+    //       });
+    //   }
+    // },
   },
 };
 </script>
