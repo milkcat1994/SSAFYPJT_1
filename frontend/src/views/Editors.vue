@@ -1,133 +1,150 @@
 <template>
   <div>
-    <base-header type="gradient-success" class="pb-6 pb-8 pt-5 pt-md-8">
-      <!-- 카테고리 필터 -->
-      <div class="filter-finder d-flex flex-column mx-4 mb-4" style>
+    <div class="bg-gradient-success pb-8 pt-8">
+      <div class="container">
 
-        <!-- 영상 종류 -->
-        <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
-          <div
-            class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
+        <!-- <div class="col-md-12 col-lg-6">
+          <search-card
+            title="카테고리를 선택해 원하는 편집자를 찾아보세요"
+            type="gradient-info"
+            sub-title="편집자 상세 검색"
+            icon="fas fa-search"
+            class="mb-0 mb-xl-0"
           >
-            <span class="text-eunjung font-weight-bold">영상 목적</span>
-          </div>
-          <div class="d-inline-flex m-2 p-2">
-            <button
-              class="btn btn-sm"
-              :class="{
-                'btn-success': !!item.status,
-                'btn-outline-eunjung': !item.status,
-              }"
-              v-for="item in videoType"
-              :key="item.name"
-              @click="toggleFilter(item)"
+          </search-card>
+        </div> -->
+
+        <div class="filter-finder d-flex flex-column mt-4" style>
+
+          <!-- 영상 종류 -->
+          <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
+            <div
+              class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
             >
-              <span class="mx-2">{{ item.name }}</span>
-            </button>
+              <span class="text-primary font-weight-bold">영상 목적</span>
+            </div>
+            <div class="d-inline-flex m-2 p-2">
+              <button
+                class="btn btn-sm"
+                :class="{
+                  'btn-success': !!item.status,
+                  'btn-outline-primary': !item.status,
+                }"
+                v-for="item in videoType"
+                :key="item.name"
+                @click="toggleFilter(item)"
+              >
+                <span class="mx-2">{{ item.name }}</span>
+              </button>
+            </div>
           </div>
-        </div>
-        <!-- 영상 특징 -->
-        <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
-          <div
-            class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
-          >
-            <span class="text-eunjung font-weight-bold">영상 종류</span>
-          </div>
-          <div class="d-inline-flex m-2 p-2">
-            <button
-              class="btn btn-sm"
-              :class="{
-                'btn-success': !!item.status,
-                'btn-outline-eunjung': !item.status,
-              }"
-              v-for="item in videoStyle"
-              :key="item.name"
-              @click="toggleFilter(item)"
+          <!-- 영상 특징 -->
+          <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
+            <div
+              class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
             >
-              <span class="mx-2">{{ item.name }}</span>
-            </button>
+              <span class="text-primary font-weight-bold">영상 종류</span>
+            </div>
+            <div class="d-inline-flex m-2 p-2">
+              <button
+                class="btn btn-sm"
+                :class="{
+                  'btn-success': !!item.status,
+                  'btn-outline-primary': !item.status,
+                }"
+                v-for="item in videoStyle"
+                :key="item.name"
+                @click="toggleFilter(item)"
+              >
+                <span class="mx-2">{{ item.name }}</span>
+              </button>
+            </div>
           </div>
-        </div>
-        <!-- 편집 기술 -->
-        <div class="edit-skill px-4 mb-2 bg-white rounded-pill shadow-sm">
-          <div
-            class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
-          >
-            <span class="text-eunjung font-weight-bold">편집 기술</span>
-          </div>
-          <div class="d-inline-flex m-2 p-2">
-            <button
-              class="btn btn-sm"
-              :class="{
-                'btn-success': !!skill.status,
-                'btn-outline-eunjung': !skill.status,
-              }"
-              v-for="skill in videoSkills"
-              :key="skill.name"
-              @click="toggleFilter(skill)"
+          <!-- 편집 기술 -->
+          <div class="edit-skill px-4 mb-2 bg-white rounded-pill shadow-sm">
+            <div
+              class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
             >
-              <span class="mx-2">{{ skill.name }}</span>
-            </button>
+              <span class="text-primary font-weight-bold">편집 기술</span>
+            </div>
+            <div class="d-inline-flex m-2 p-2">
+              <button
+                class="btn btn-sm"
+                :class="{
+                  'btn-success': !!skill.status,
+                  'btn-outline-primary': !skill.status,
+                }"
+                v-for="skill in videoSkills"
+                :key="skill.name"
+                @click="toggleFilter(skill)"
+              >
+                <span class="mx-2">{{ skill.name }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 선택된 필터 표시 바 -->
+          <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
+          <!-- 전체 해제 -->
+            <!-- <div class="m-2 p-2">
+              <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
+            </div> -->
+          <!-- 필터들 -->
+            <!-- <div class="m-2 p-2">
+              <button class="btn btn-success btn-sm" v-for="category in selectedFilters" :key="category" @click="clearFilter(category)">{{category}}</button>
+            </div> -->
+          <!-- 적용 버튼 -->
+            <!-- <div class="m-2 p-2">
+              <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;" @click="fetchEditors">적용</button>
+            </div> -->
+          <!-- </div> -->
+
+          <!-- 필터 적용 및 초기화 -->
+          <div class="d-flex justify-content-end">
+            <div class="m-2">
+              <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
+            </div>
+            <div class="m-2">
+              <button class="btn btn-primary btn-sm" @click="fetchEditors">적용</button>
+            </div>
           </div>
         </div>
 
-        <!-- 선택된 필터 표시 바 -->
-        <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
-        <!-- 전체 해제 -->
-          <!-- <div class="m-2 p-2">
-            <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
-          </div> -->
-        <!-- 필터들 -->
-          <!-- <div class="m-2 p-2">
-            <button class="btn btn-success btn-sm" v-for="category in selectedFilters" :key="category" @click="clearFilter(category)">{{category}}</button>
-          </div> -->
-        <!-- 적용 버튼 -->
-          <!-- <div class="m-2 p-2">
-            <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;" @click="fetchEditors">적용</button>
-          </div> -->
-        <!-- </div> -->
-
-        <!-- 필터 적용 및 초기화 -->
-        <div class="d-flex justify-content-end">
-          <div class="m-2">
-            <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
+        <!-- 검색 바 -->
+        <div class="d-flex justify-content-center mx-4 px-2">
+          <div class="d-inline-flex">
+            <base-dropdown>
+              <base-button slot="title" type="secondary" class="dropdown-toggle">{{
+                searchKey
+              }}</base-button>
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
+                >전체</a
+              >
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
+                >이름</a
+              >
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'"
+                >태그</a
+              >
+            </base-dropdown>
           </div>
-          <div class="m-2">
-            <button class="btn btn-primary btn-sm" @click="fetchEditors">적용</button>
+          <div class="d-inline-flex">
+            <base-input
+              placeholder="검색어를 입력해보세요"
+              v-model="keyword"
+              @keyup.enter="fetchEditors"
+              style="width:500px;"
+            ></base-input>
+          </div>
+          <div class="d-inline-flex">
+            <button class="btn btn-primary ml-1" style="max-height: 43px;" @click="fetchEditors">검색</button>
           </div>
         </div>
+        
       </div>
+    </div>
 
-      <!-- 검색 바 -->
-      <div class="d-flex justify-content-center mx-4 px-2">
-        <div class="d-inline-flex">
-          <base-dropdown>
-            <base-button slot="title" type="secondary" class="dropdown-toggle">{{
-              searchKey
-            }}</base-button>
-            <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
-              >이름</a
-            >
-            <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'"
-              >태그</a
-            >
-          </base-dropdown>
-        </div>
-        <div class="d-inline-flex">
-          <base-input
-            placeholder="검색어를 입력해보세요"
-            v-model="keyword"
-            @keyup.enter="fetchEditors"
-            style="width:500px;"
-          ></base-input>
-        </div>
-        <div class="d-inline-flex">
-          <button class="btn btn-primary ml-1" style="max-height: 43px;" @click="fetchEditors">검색</button>
-        </div>
-      </div>
-    </base-header>
-
-    <div class="container-fluid mt--7 mb-5">
+    <div class="container mt--7 mb-5">
       <!-- 편집자 목록 -->
       <editors-list
         title="편집자"
@@ -177,7 +194,6 @@ export default {
       ],
       // 검색 기준
       searchKey: "기준",
-      // searchBy: "이름",
       // 검색 단어
       keyword: "",
       // 정렬 기준
@@ -233,6 +249,7 @@ export default {
   methods: {
     setSortKey(key) {
       this.sortBy = key
+      this.fetchEditors()
     },
     fetchEditors() {
       http
@@ -384,7 +401,10 @@ export default {
     },
     resetAll() {
       this.clearFilterAll();
+      this.keyword = ""
       this.sortBy = "NICKNAME_ASC"
+      this.searchKey = "전체"
+      this.fetchEditors()
     }
   },
 };
