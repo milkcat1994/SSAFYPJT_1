@@ -1,10 +1,5 @@
 <template>
-  <base-nav
-    class="navbar-top navbar-dark"
-    id="navbar-main"
-    :show-toggle-button="false"
-    expand
-  >
+  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
     <!-- <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
       <div class="form-group mb-0">
         <base-input
@@ -31,20 +26,14 @@
               class="d-flex bg-dark text-light align-items-center px-3 py-2"
               style="display:none"
             >
-              <b-button
-                id="closebtn"
-                size="sm"
-                style="display:none;"
-                @click="hide"
-                >Close</b-button
-              >
+              <b-button id="closebtn" size="sm" style="display:none;" @click="hide">Close</b-button>
             </div>
           </template>
           <div class="px-3 py-2 d-flex justify-content-center">
             <router-link class="navbar-brand" to="/">
               <img
                 src="/img/brand/green.png"
-                class="navbar-brand-img my-5 "
+                class="navbar-brand-img my-5"
                 alt="편집"
                 style="width:90px; height:50px; border:none;"
               />
@@ -54,14 +43,14 @@
           <div class="ml-4 mb-2">
             <router-link to="/mainpage">
               <i class="ni ni-tv-2 text-primary mx-2">
-                <span class="mx-2">메인페이지 </span>
+                <span class="mx-2">메인페이지</span>
               </i>
             </router-link>
           </div>
           <div class="ml-4 mb-2">
             <router-link to="/editors">
               <i class="ni ni-zoom-split-in text-primary ml-2">
-                <span class="mx-2"> 편집자 찾기 </span>
+                <span class="mx-2">편집자 찾기</span>
               </i>
             </router-link>
           </div>
@@ -73,14 +62,14 @@
               }"
             >
               <i class="ni ni-collection text-primary mx-2">
-                <span class="mx-2"> 내 포트폴리오 </span>
+                <span class="mx-2">내 포트폴리오</span>
               </i>
             </router-link>
           </div>
           <div class="ml-4 mb-2">
             <router-link v-if="isLogin" to="/marklist">
               <i class="ni ni-favourite-28 text-red mx-2">
-                <span class="mx-2"> 찜 </span>
+                <span class="mx-2">찜</span>
               </i>
             </router-link>
           </div>
@@ -103,7 +92,7 @@
     <router-link class="navbar-brand" to="/">
       <img
         src="/img/brand/green.png"
-        class="navbar-brand-img my-atuo ml-3 "
+        class="navbar-brand-img my-atuo ml-3"
         alt="편집"
         style="width:90px; height:50px; border:none;"
       />
@@ -129,18 +118,18 @@
             >
               <router-link to="/alarm" class="dropdown-item">
                 <i class="ni ni-bulb-61 text-yellow"></i>
-                <span v-if="notifyitem.notify_type == 'request'"
-                  >{{ notifyitem.request_nickname }}님께서 영상편집을
-                  요청하셨습니다</span
-                >
-                <span v-if="notifyitem.notify_type == 'accepted'"
-                  >{{ notifyitem.request_nickname }}님께서 요청을
-                  수락하셨습니다</span
-                >
-                <span v-if="notifyitem.notify_type == 'review'"
-                  >{{ notifyitem.request_nickname }}님께 후기를 남길 수
-                  있습니다</span
-                >
+                <span v-if="notifyitem.notify_type == 'request'">
+                  {{ notifyitem.request_nickname }}님께서 영상편집을
+                  요청하셨습니다
+                </span>
+                <span v-if="notifyitem.notify_type == 'accepted'">
+                  {{ notifyitem.request_nickname }}님께서 요청을
+                  수락하셨습니다
+                </span>
+                <span v-if="notifyitem.notify_type == 'review'">
+                  {{ notifyitem.request_nickname }}님께 후기를 남길 수
+                  있습니다
+                </span>
               </router-link>
             </div>
             <div class="dropdown-divider"></div>
@@ -173,18 +162,17 @@
     </ul>
 
     <!-- 마이페이지 -->
-    <ul
-      v-if="isLogin"
-      class="navbar-nav align-items-center ml-2 d-none d-md-flex"
-    >
+    <ul v-if="isLogin" class="navbar-nav align-items-center ml-2 d-none d-md-flex">
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
             <i class="fas fa-user" style="color: #172b4d !important;"></i>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold text-default">{{
+              <span class="mb-0 text-sm font-weight-bold text-default">
+                {{
                 nickname
-              }}</span>
+                }}
+              </span>
             </div>
           </div>
 
@@ -201,11 +189,7 @@
               <span>도움말</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <span
-              style="cursor:pointer;"
-              class="dropdown-item"
-              @click="logout()"
-            >
+            <span style="cursor:pointer;" class="dropdown-item" @click="logout()">
               <i class="ni ni-lock-circle-open"></i>
               <span>로그아웃</span>
             </span>
@@ -315,7 +299,7 @@ export default {
 
     logout() {
       this.$session.destroy();
-      this.$store.commit('stepper/clearFilterFinderStatus');
+      this.$store.commit("stepper/clearFilterFinderStatus");
       store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
