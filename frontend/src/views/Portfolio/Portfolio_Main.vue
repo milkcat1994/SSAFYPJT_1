@@ -1068,7 +1068,7 @@ moment.locale('ko');
         
         let finalLength = this.$store.getters['stepper/getFinalLength'];
         this.request_info.video_result_length = finalLength.name;
-        this.dates.range = this.$store.getters['stepper/checkDeadline'];
+        this.dates.range = this.$store.getters['stepper/getDeadline'];
         console.log(this.dates.range);
       },
       onOpenItem() {

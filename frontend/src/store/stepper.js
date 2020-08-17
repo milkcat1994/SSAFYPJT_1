@@ -223,8 +223,51 @@ export const stepper = {
       }
       return;
     },
-    checkDeadline(state) {
+    getDeadline(state) {
       return state.deadline
+    },
+    // 해당 Step에 값이 있는지 검증
+    isChecked(state, getters) {
+      return step => {
+        switch (step) {
+          case 0:
+            if (!getters.getSelectedVideoType) {
+              return false
+            } else {
+              return true
+            }
+          case 1:
+            if (!getters.getSelectedVideoStyle) {
+              return false
+            } else {
+              return true
+            }
+          case 2:
+            if (getters.getSelectedVideoSkills.length === 0) {
+              return false
+            } else {
+              return true
+            }
+          case 3:
+            if (!getters.getOriginLength) {
+              return false
+            } else {
+              return true
+            }
+          case 4:
+            if (!getters.getFinalLength) {
+              return false
+            } else {
+              return true
+            }
+          case 5:
+            if (getters.getDeadline.length < 2) {
+              return false
+            } else {
+              return true
+            }
+        }
+      }
     }
   },
   mutations: {
@@ -303,6 +346,7 @@ export const stepper = {
         }
       })
     },
+    
     setDeadline(state, payload) {
       // payload => "2020-08-01 to 2020-08-21"
       state.deadline = payload.split(" to ");

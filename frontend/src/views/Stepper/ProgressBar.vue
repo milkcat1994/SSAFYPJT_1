@@ -1,9 +1,10 @@
 <template>
   <div class="d-flex justify-content-center">
-    <div class="border-top-0 text-center mx-4"
+    <div class="border-top-0 text-center mx-4 py-1"
       v-for="stage of stages"
       :key="stage.name"
-      :class="{completed: !!stage.status, ready: !stage.status}">
+      :class="{done: !!stage.status, notyet: !stage.status}"
+      @click="changeStep(stage.num)">
       <span class="stage-name">{{stage.name}}</span>
     </div>
   </div>
@@ -12,11 +13,6 @@
 <script>
 export default {
   name: 'progress-bar',
-  props: {
-    currentStep: {
-      type: Number
-    }
-  },
   data() {
     return {
       initStages: [
@@ -32,7 +28,7 @@ export default {
   computed: {
     stages() {
       this.initStages.forEach(stage => {
-        if (stage.num <= this.currentStep) {
+        if (this.$store.getters['stepper/isChecked'](stage.num)) {
           stage.status = true
         } else {
           stage.status = false
@@ -41,17 +37,21 @@ export default {
       return this.initStages
     }
   },
+  methods: {
+    changeStep(stageNum) {
+      this.$emit('change-step', stageNum)
+    },
+  },
 }
 </script>
 
 <style scoped>
-.card {
-  min-width: 100px;
-}
-.completed {
+.done {
+  cursor: pointer;
   border-bottom: 8px solid darkblue;
 }
-.ready {
+.notyet {
+  cursor: default;
   border-bottom: 8px solid lightgray;
 }
 .stage-name {
