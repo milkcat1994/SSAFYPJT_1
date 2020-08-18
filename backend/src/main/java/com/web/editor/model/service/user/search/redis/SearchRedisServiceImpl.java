@@ -2,38 +2,29 @@ package com.web.editor.model.service.user.search.redis;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.editor.model.dto.request.SearchAverageScore;
 import com.web.editor.model.dto.request.SearchRequestVideoInfo;
-import com.web.editor.model.dto.user.PortfolioTag;
 import com.web.editor.model.dto.user.search.SearchPortfolio;
 import com.web.editor.model.dto.user.search.SearchPortfolioJoinBookmark;
 import com.web.editor.model.dto.user.search.SearchPortfolioJoinVideo;
 import com.web.editor.model.dto.user.search.SearchRequest;
 import com.web.editor.model.dto.user.search.SearchTag;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.query.SortQuery;
-import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Repository;
-
-import io.netty.util.internal.PriorityQueue;
-import reactor.core.Fuseable.SynchronousSubscription;
 
 @Repository
 public class SearchRedisServiceImpl implements SearchRedisService {
@@ -57,26 +48,31 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         RedisTemplate<String, Object> redisTemplateHash,
             RedisTemplate<String, String> redisTemplateSet,
             RedisTemplate<String, Integer> redisTemplateHashUid) {
-                objectMapper = new ObjectMapper();
-        this.redisTemplateHash = redisTemplateHash;
-        this.redisTemplateSet = redisTemplateSet;
-        hashOperations = redisTemplateHash.opsForHash();
-
-        // searchPortfolio 클래스 받기위한 operation
-        this.redisTemplateHash.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchPortfolio.class));
-        setResultOperations = redisTemplateHash.opsForSet();
-
-
-
-        setOperations = redisTemplateSet.opsForSet();
-        this.redisTemplateHashUid = redisTemplateHashUid;
-        hashUidOperations = redisTemplateHashUid.opsForHash();
-
-        redisOperations = redisTemplateHash.opsForValue().getOperations();
+                try {
+                    objectMapper = new ObjectMapper();
+                    this.redisTemplateHash = redisTemplateHash;
+                    this.redisTemplateSet = redisTemplateSet;
+                    hashOperations = redisTemplateHash.opsForHash();
+            
+                    // searchPortfolio 클래스 받기위한 operation
+                    this.redisTemplateHash.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchPortfolio.class));
+                    setResultOperations = redisTemplateHash.opsForSet();
+            
+            
+            
+                    setOperations = redisTemplateSet.opsForSet();
+                    this.redisTemplateHashUid = redisTemplateHashUid;
+                    hashUidOperations = redisTemplateHashUid.opsForHash();
+            
+                    redisOperations = redisTemplateHash.opsForValue().getOperations();
+                } catch (RedisConnectionFailureException e) {
+                    System.out.println("Redis와 연결이 끊어져 Redis 객체 생성 불가");
+                }
     }
 
     @Override
-    public void portfolioAndBookmarkSave(List<SearchPortfolioJoinBookmark> searchPortfolioJoinBookmarks) {
+    public void portfolioAndBookmarkSave(List<SearchPortfolioJoinBookmark> searchPortfolioJoinBookmarks) 
+    throws RedisConnectionFailureException{
         // 북마크 수, 포트폴리오 테이블 Join 결과값 "uid:{uid} 를 key로 임시 데이터 저장"
         // 닉네임 -> uid
         // 평점의 경우 0으로 자동 초기화 된다.
@@ -97,7 +93,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 
     // mainUrl 해당 포트폴리오에 저장
     @Override
-    public void portfolioAndVideoSave(List<SearchPortfolioJoinVideo> searchPortfolioJoinVideos) {
+    public void portfolioAndVideoSave(List<SearchPortfolioJoinVideo> searchPortfolioJoinVideos)
+    throws RedisConnectionFailureException{
         for (SearchPortfolioJoinVideo searchPortfolioJoinVideo : searchPortfolioJoinVideos) {
             hashOperations.put("uid:" + searchPortfolioJoinVideo.getUid(), "url",
                     searchPortfolioJoinVideo.getMainUrl());
@@ -107,7 +104,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 
     // 닉네임에 따른 리뷰 점수 등록
     @Override
-    public void requestAndReviewSave(List<SearchAverageScore> searchAverageScores) {
+    public void requestAndReviewSave(List<SearchAverageScore> searchAverageScores)
+    throws RedisConnectionFailureException{
         for (SearchAverageScore searchAverageScore : searchAverageScores) {
             hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "nickname", searchAverageScore.getNickname());
             hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "avgScore", searchAverageScore.getAvgScore());
@@ -118,7 +116,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     // Join된 테이블 정보를 이용하여 사용가능한 새로운 정보를 만들어낸다.
     // 리뷰와 포폴 합치는 작업 필요
     @Override
-    public void makeUserInfo() {
+    public void makeUserInfo()
+    throws RedisConnectionFailureException{
         // 모든 리뷰작성된 키를 가져온다.
         // nickname으로 이루어져있음.
         Set<String> reviewKeys = this.hashKeys("nickname:review:*");
@@ -132,7 +131,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             // 해당 nickname키들을 이용해 uid를 가져오고 해당 uid에 해당하는 Hash에 score점수를 넣는다.
             hashOperations.put("uid:"+hashUidOperations.get("nickname:uid:"+hashOperations.get(key, "nickname"), "uid"), "avgScore", hashOperations.get(key, "avgScore"));
 
-            System.out.println("key>"+key+ " avgScore>"+hashOperations.get(key, "avgScore"));
             // hashOperations.put(key, "score", hashOperations.get("nickname:" + hashOperations.get(key, "nickname"), "score"));
         }
         System.out.println("makeUserInfo 완료");
@@ -143,7 +141,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     // filter 입력 -> request_form의 video_type, video_style, video_skill
     // video_type, video_style, video_skill - nickname으로 잘라서 저장하기
     @Override
-    public void searchRequestVideoInfoSave(List<SearchRequestVideoInfo> searchRequestVideoInfos) {
+    public void searchRequestVideoInfoSave(List<SearchRequestVideoInfo> searchRequestVideoInfos)
+    throws RedisConnectionFailureException{
         Integer uid;
         StringTokenizer st;
         // nickname:uid:{nickname} 이용하여 nickname를 통해 uid를 알아내자
@@ -164,7 +163,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     // tag-uid 저장
     // SearchPortfolioJoinBookmark Object에 uid의 태그 Set의 Key를 기억
     @Override
-    public void portfolioTagSave(List<SearchTag> searchTags){
+    public void portfolioTagSave(List<SearchTag> searchTags)
+    throws RedisConnectionFailureException{
         for (SearchTag searchTag : searchTags) {
             if(searchTag == null) continue;
             // 태그별 uid Set 생성
@@ -244,7 +244,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     // filter -> video_type, video_style, video_skill
     // 검색어 -> tag, nickname
     // 정렬 -> 가격 낮은, 가격 높은, 이름순, 평점순
-    public List<SearchPortfolio> getListByFilter(SearchRequest searchRequest){
+    public List<SearchPortfolio> getListByFilter(SearchRequest searchRequest)
+    throws RedisConnectionFailureException{
         List<SearchPortfolio> resultList = new ArrayList<>();
         String searchKey = makeKey(searchRequest);
         SearchPortfolioJoinBookmark tempResult;
@@ -259,14 +260,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             // setResultOperations.members(searchKey) 해당 식은 uid를 가져오는 것이다.
             // tag만 검색 했을 때 다른 searchKey를 뱉어야 한다.
 
-
-
-
-            // Set<String> uidSet = setResultOperations.members(searchKey);
-            // for (String uid : uidSet) {
-            //     tempResult = objectMapper.convertValue(hashOperations.entries("uid:"+uid));
-            //     setResultOperations.add(filterString+":"+searchString, new SearchPortfolio(tempResult, Collections.emptySet()));
-            // }
             resultList.addAll(setResultOperations.members(searchKey));
             return resultList;
         }
@@ -332,7 +325,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // nickname은 포함하는 방식으로 *{nickname}* 로 pattern 주면 가능
         keySet = new LinkedHashSet<>();
 
-        // System.out.println("검색이 무엇>"+searchRequest.getSearchType());
         switch (searchRequest.getSearchType()) {
             case "TAG":
                 // 태그 검색이지만 태그 검색어가 없을경우 모두 검색 해야함
@@ -360,7 +352,10 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                     sb.append("nickname:").append(searchRequest.getSearchText());
                     //해당 글자 포함하는 닉네임 가지는 Key 모두 저장
                     keySet.addAll(hashKeys("nickname:uids:*"+searchRequest.getSearchText()+"*"));
-                    setOperations.unionAndStore(keySet, "nickname:uids:search:"+searchRequest.getSearchText());
+                    // 검색어가 없을 경우 합치지 않는다.
+                    if(!keySet.isEmpty()){
+                        setOperations.unionAndStore(keySet, "nickname:uids:search:"+searchRequest.getSearchText());
+                    }
                     keySet = new LinkedHashSet<>();
                     keySet.add("nickname:uids:search:"+searchRequest.getSearchText());
                 }
@@ -378,23 +373,16 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         keySet.add(filterString);
         String searchString = sb.toString();
         sb.setLength(0);
-        // for (String string : keySet) {
-        //     System.out.println("key>>>"+string);
-        // }
         // 검색 결과 uid를 담는 Set이다. -> 교집합 통해 uid집합 만들기
         // nickname:uid:{nickname} 가 Hash이므로 intersect연산이 되지 않는다.
         Set<String> resultSet = setOperations.intersect(keySet);
 
-        // for(String uid : resultSet){
-        //     System.out.println(uid);
-        // }
         // 모든 검색 UID를 돌면서 리스트를 띄우기 위한 양식으로 만든다.
         for (String uid : resultSet) {
             tempResult = objectMapper.convertValue(hashOperations.entries("uid:"+uid), SearchPortfolioJoinBookmark.class);
-            // resultList.add(new SearchPortfolio(tempResult, setOperations.members(tempResult.getTagKey())));
+            
             
             // tagKey를 이용하여 tagList를 구해야 한다.
-            // System.out.println(tempResult);
             if(tempResult.getTagKey() == null){
                 setResultOperations.add("search:"+filterString+":"+searchString, new SearchPortfolio(tempResult, Collections.emptySet()));
             }
@@ -410,14 +398,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 
         System.out.println("5차 완료");
 
-        // setOperations
-        // Stream으로 진행
-        // resultList = resultList.stream()
-        //     .sorted((a, b) -> a.getPayMin() - b.getPayMin())
-        //     .collect(Collectors.toList());
-
         // 정렬 -> 가격 낮은, 가격 높은, 이름순, 평점순
-        // SortQuery<String> sortQuery = SortQueryBuilder.sort("key").by("hash*->nickname").build();
         // 기본 정렬 평점순
         // 정렬
         switch (searchRequest.getSortType()) {
@@ -436,29 +417,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                 break;
         }
 
-        // 검색될 uid 집합
-        // for (String uid : videoUidSet) {
-            
-        // }
         System.out.println("디비 캐시로 저장한 뒤 가져옴");
         return resultList;
-    }
-
-    // @Override
-    // public Set<SearchPortfolio> getListIfExists(String searchKey) {
-
-    // }
-
-    @Override
-    public Map<Integer, SearchPortfolio> findAllUsers() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Set<Integer> findUidByTag(List<String> tags) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     // keys의 패턴을 통해 모든 key를 모두 불러오자.
@@ -468,13 +428,15 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     }
 
     @Override
-    public long deleteAll(){
+    public long deleteAll()
+    throws RedisConnectionFailureException{
         Set<String> allKeys = this.hashKeys("*");
         return redisOperations.delete(allKeys);
     }
 
     @Override
-    public long deleteKeys(String pattern){
+    public long deleteKeys(String pattern)
+    throws RedisConnectionFailureException{
         Set<String> searchKeys = this.hashKeys(pattern+"*");
         return redisOperations.delete(searchKeys);
     }

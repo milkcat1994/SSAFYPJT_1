@@ -10,10 +10,18 @@ const requireLogin = (to, from, next) => {
   if (Vue.prototype.$session.exists()) return next();
   next({
     // 아래 창에서 로그인 모달을 띄워줄순 없을지
-    path: "/user/login",
+    name: "login",
     // 요청한 페이지로 이동 하기 위한 방식
     // query: {redirect: to.fullPath}
   });
+};
+
+//로그인이 되어 있다면 접근 할 수 없다.
+const requireUnLogin = (to, from, next) => {
+  if (!Vue.prototype.$session.exists()) return next();
+  next({
+    name: "mainpage"
+  })
 };
 
 //editor가 아니라면 접근 할 수 없다.
@@ -148,18 +156,21 @@ export default new Router({
           name: "login",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Login.vue"),
+            beforeEnter: requireUnLogin,
         },
         {
-          path: "/",
+          path: "/register",
           name: "register",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Register.vue"),
+            beforeEnter: requireUnLogin,
         },
         {
           path: "/profile",
           name: "profile",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/UserProfile.vue"),
+            beforeEnter: requireLogin,
         },
       ],
     },

@@ -140,14 +140,16 @@ export default {
       this.currentPage = val;
     },
     fetchSortKey(val) {
-      if (val == "NICKNAME_ASC") {
-        this.sortKey = "이름순";
-      } else if (val == "SCORE_DESC") {
-        this.sortKey = "평점순";
-      } else if (val == "PRICE_ASC") {
-        this.sortKey = "낮은 가격순";
-      } else if (val == "PRICE_DESC") this.sortKey = "높은 가격순";
-      this.$emit("sort-by", val);
+      if (val == 'NICKNAME_ASC') {
+        this.sortKey = '이름순'
+      } else if (val == 'SCORE_DESC') {
+        this.sortKey = '평점순'
+      } else if (val == 'PRICE_ASC') {
+        this.sortKey = '낮은 가격순'
+      } else if (val == 'PRICE_DESC'){
+        this.sortKey = '높은 가격순'
+      }
+      this.$emit('sort-by', val)
     },
 
     // // 북마크 로직(미완성)
