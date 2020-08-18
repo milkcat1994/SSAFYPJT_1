@@ -156,8 +156,9 @@ export default {
         this.sortKey = '평점순'
       } else if (val == 'PRICE_ASC') {
         this.sortKey = '낮은 가격순'
-      } else if (val == 'PRICE_DESC')
+      } else if (val == 'PRICE_DESC'){
         this.sortKey = '높은 가격순'
+      }
       this.$emit('sort-by', val)
     },
 
