@@ -37,19 +37,19 @@
           <li class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/">
               <i class="ni ni-planet"></i>
-              <span class="nav-link-inner--text">Dashboard</span>
+              <span class="nav-link-inner--text">메인</span>
             </router-link>
           </li>
           <li v-if="!isLogin" class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/user">
-              <i class="ni ni-circle-08"></i>
-              <span class="nav-link-inner--text">Register</span>
+              <i class="fas fa-user-plus"></i>
+              <span class="nav-link-inner--text">회원가입</span>
             </router-link>
           </li>
           <li v-if="!isLogin" class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/login">
-              <i class="ni ni-key-25"></i>
-              <span class="nav-link-inner--text">Login</span>
+              <i class="fas fa-user-check"></i>
+              <span class="nav-link-inner--text">로그인</span>
             </router-link>
           </li>
           <li v-if="isLogin" class="nav-item">
@@ -57,6 +57,12 @@
               <i class="ni ni-single-02"></i>
               <span class="nav-link-inner--text">Profile</span>
             </router-link>
+          </li>
+          <li v-if="isLogin" class="nav-item">
+            <span class="nav-link nav-link-icon" @click="logout()">
+              <i class="ni ni-single-02"></i>
+              <span>로그아웃</span>
+            </span>
           </li>
         </ul>
       </template>
@@ -115,17 +121,17 @@
               </li>
               <li class="nav-item">
                 <a
-                  href="https://www.creative-tim.com/presentation"
+                  href="#"
                   class="nav-link"
                   target="_blank"
                 >About Us</a>
               </li>
               <li class="nav-item">
-                <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+                <a href="#" class="nav-link" target="_blank">Blog</a>
               </li>
               <li class="nav-item">
                 <a
-                  href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md"
+                  href="#"
                   class="nav-link"
                   target="_blank"
                 >MIT License</a>

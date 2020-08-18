@@ -1,28 +1,28 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
-    <side-bar
+    <!-- <side-bar
       :background-color="sidebarBackground"
-      short-title="Argon"
-      title="Argon"
+      short-title="편집"
+      title="편집"
     >
       <template slot="links">
         <sidebar-item
           :link="{
             name: '메인',
             icon: 'ni ni-tv-2 text-primary',
-            path: '/dashboard',
+            path: '/mainpage',
           }"
         />
 
         <sidebar-item
           :link="{
-            name: '검색',
+            name: '편집자 찾기',
             icon: 'ni ni-zoom-split-in text-primary',
             path: '/editors',
           }"
         />
         <sidebar-item
-          v-if="isEditor"
+          v-if="isEditor && isLogin"
           :link="{
             name: '포트폴리오',
             icon: 'ni ni-collection text-primary',
@@ -46,9 +46,10 @@
           }"
         />
       </template>
-    </side-bar>
+    </side-bar>-->
+    <!-- <div class="main-content" :data="sidebarBackground" @mousedown="hide(sidebar)"> -->
     <div class="main-content" :data="sidebarBackground">
-      <main-navbar></main-navbar>
+      <main-navbar @mousedown.stop></main-navbar>
 
       <div>
         <fade-transition :duration="200" origin="center top" mode="out-in">
@@ -61,14 +62,12 @@
   </div>
 </template>
 <script>
-// import DashboardNavbar from './DashboardNavbar.vue';
 import MainNavbar from "./MainNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import { FadeTransition } from "vue2-transitions";
 
 export default {
   components: {
-    // DashboardNavbar,
     MainNavbar,
     ContentFooter,
     FadeTransition,
@@ -92,6 +91,8 @@ export default {
       sidebarBackground: "vue", //vue|blue|orange|green|red|primary
       isLogin: false,
       isEditor: false,
+
+      collapsed: false,
     };
   },
   created() {

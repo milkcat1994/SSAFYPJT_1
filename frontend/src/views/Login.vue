@@ -7,15 +7,8 @@
             <small>소셜 로그인</small>
           </div>
           <div class="btn-wrapper text-center">
-            <a href="#" class="btn btn-neutral btn-icon">
-              <span class="btn-inner--icon">
-                <img src="img/icons/common/kakao.svg" />
-              </span>
-              <span class="btn-inner--text">Kakao</span>
-            </a>
-
             <!-- for google login -->
-            <a @click="googleLogin" class="btn btn-neutral btn-icon">
+            <a @click="googleLogin" class="btn btn-neutral btn-icon" style="width:350px">
               <span class="btn-inner--icon">
                 <img src="img/icons/common/google.svg" />
               </span>
@@ -39,9 +32,7 @@
             <div
               v-if="!this.$v.model.email.email"
               class="text-left ml-3 mb-3 small"
-            >
-              이메일 형식이 올바르지 않습니다.
-            </div>
+            >이메일 형식이 올바르지 않습니다.</div>
 
             <base-input
               class="input-group-alternative"
@@ -57,16 +48,14 @@
               <span class="text-muted">이 사이트 기억하기</span>
             </base-checkbox>-->
             <div class="text-center">
-              <base-button type="primary" class="my-4" @click="login()"
-                >로그인</base-button
-              >
+              <base-button type="primary" class="my-4" @click="login()">로그인</base-button>
             </div>
           </form>
         </div>
       </div>
       <div class="row mt-3">
         <div class="col-6">
-          <router-link to="/dashboard" class="text-light">
+          <router-link to="/mainpage" class="text-light">
             <small>메인화면</small>
           </router-link>
         </div>
@@ -83,13 +72,9 @@
       <template slot="header">
         <h5 class="modal-title" id="requestForm">Google 계정 연동 동의</h5>
       </template>
-      <div>
-        구글 계정 연동에 동의하시겠습니까?
-      </div>
+      <div>구글 계정 연동에 동의하시겠습니까?</div>
       <template slot="footer">
-        <base-button type="secondary" @click="modal.show = false"
-          >Close</base-button
-        >
+        <base-button type="secondary" @click="modal.show = false">Close</base-button>
         <base-button type="primary" @click="connectGoogle">동의</base-button>
       </template>
     </modal>
@@ -175,24 +160,13 @@ export default {
                 alertify.error(
                   "회원 정보가 없습니다. 먼저 회원가입을 진행해 주세요"
                 );
+                this.$router.push({ name: "register" });
               }
             })
             .catch(() => {
               alert("로그인 시 에러가 발생했습니다.");
             });
 
-          // 토큰생성
-          // this.$gAuth.getAuthCode()
-          //   .then(authCode => {
-          //     //on success
-          //     return this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
-          //   })
-          //   .then(response => {
-          //     //and then
-          //   })
-          //   .catch(error => {
-          //     //on fail do something
-          // })
         })
         .catch((error) => {
           console.log(error);

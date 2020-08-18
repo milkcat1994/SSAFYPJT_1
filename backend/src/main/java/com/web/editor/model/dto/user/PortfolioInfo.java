@@ -26,7 +26,7 @@ public class PortfolioInfo {
 
     @ApiModelProperty(required = true)
     @NotNull
-    private String payMin;
+    private int payMin;
 
     @ApiModelProperty(required = true)
     @NotNull

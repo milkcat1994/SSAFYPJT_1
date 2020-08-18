@@ -17,7 +17,7 @@ public class ScheduleMapper {
     @Autowired
     SqlSession sqlSession;
     
-    // 편집자 회원의 개인일정 조회
+    // 편집자 회원의 휴일 일정 조회
 	public List<HolidayDate> holidayDates(int uid) throws SQLException{
 		return sqlSession.selectList("holidayDates", uid);
 	};

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.editor.model.mapper.user.RecommendMapper">
+
+
+	<!-- 전체 에디터 검색 -->
+	<select id="searchAllEditor" resultType="EditorDto">
+		select portfolio.uid as uid, portfolio.nickname as nickname, portfolio.pay as pay, skill, GROUP_CONCAT(tag_name SEPARATOR ', ') AS tag, portfolio.description, portfolio.url as url
+        from (select portfolio.uid as uid,nickname, pay_min as pay, skill, description, url from portfolio
+            left outer join (select * from video_info where main_flag = 1) as video_info
+            on portfolio.uid = video_info.portfolio_uid) as portfolio
+        join portfolio_tag
+        on portfolio.uid = portfolio_tag.portfolio_uid
+        GROUP BY portfolio_uid
+	</select>
+
+	<!-- 북마크의 태그, 스킬 -->
+	<select id="searchBookEditorByUid" resultType="EditorDto" parameterType="String">
+		select portfolio.uid as uid, skill, GROUP_CONCAT(tag_name SEPARATOR ', ') AS tag
+        from (
+            select portfolio.uid, skill
+            from bookmark 
+            join portfolio 
+            on bookmark.mark_uid = portfolio.uid 
+            where user_info_uid = #{uid}) as portfolio
+        join portfolio_tag
+        on portfolio.uid = portfolio_tag.portfolio_uid
+        GROUP BY portfolio_uid;
+	</select>
+
+</mapper>
