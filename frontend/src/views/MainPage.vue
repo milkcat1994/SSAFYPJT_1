@@ -81,10 +81,13 @@
                     <h4>
                       <i class="fas fa-heart mr-2" style="color:red"></i>
                       <span class="mr-3">{{ editor.bookmarkNumber }}</span>
+<<<<<<< HEAD
                     </h4>
                     <h4>
                       <i class="fas fa-star mr-2" style="color:yellow"></i>
                       <span class="mr-3">{{ editor.avgScore }}</span>
+=======
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
                     </h4>
                   </div>
                 </template>
@@ -111,15 +114,22 @@
                         :key="recEditor.uid"
                       >
                         <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
+<<<<<<< HEAD
                           <img src alt />
                           <LazyYoutubeVideo :src="recEditor.url" style="width: 100%;" class="mb-2" />
+=======
+                            <img src alt />
+                            <LazyYoutubeVideo
+                              :src="recEditor.url"
+                              style="width: 100%;"
+                              class="mb-2"
+                            />
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
                           <hr />
                           <b-card-text>
-                            <router-link :to="`/portfolio?no=${recEditor.uid}`">
                               <div class="d-inline-flex">
                                 <h3 class="mt-0 mb-1">{{ recEditor.nickname }}</h3>
                               </div>
-                            </router-link>
 
                             <div
                               v-for="(t, index) in recEditor.tag.split(', ').slice(0, 3)"
@@ -214,11 +224,14 @@ export default {
           sortType: "SCORE_DESC",
           videoSkills: [],
           videoStyles: [],
+<<<<<<< HEAD
           videoTypes: [],
+=======
+          videoTypes: []
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
         })
         .then((res) => {
           if (res.data.status) {
-            // console.log(res.data.object);
             this.editorsData = res.data.object;
           } else {
             console.log(res.data.status);
@@ -256,7 +269,10 @@ export default {
     movePortfolio(uid) {
       this.$router.push("/portfolio?no=" + uid);
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
     // getReviewInfo(uid) {
     //   http
     //     .get("/portfolio/review/" + uid)

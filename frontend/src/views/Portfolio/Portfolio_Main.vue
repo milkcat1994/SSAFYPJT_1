@@ -650,7 +650,6 @@ export default {
       this.$router.push("/");
       return;
     }
-
     if (this.$session.exists()) {
       this.isLogin = true;
     }
