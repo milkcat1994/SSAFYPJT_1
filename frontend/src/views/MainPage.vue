@@ -58,7 +58,7 @@
             >
               <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
                 <template v-slot:img>
-                  <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%;" class="mb-2" />
+                  <LazyYoutubeVideo :src="editor.url" style="width: 100%;" class="mb-2" />
                   <router-link :to="`/portfolio?no=${editor.uid}`">
                     <div class="d-flex justify-content-end mt-3 mx-3">
                       <h2
@@ -80,7 +80,14 @@
                   <div class="d-flex justify-content-end mb-5 mx-3">
                     <h4>
                       <i class="fas fa-heart mr-2" style="color:red"></i>
-                      <span class="mr-3">{{ editor.bookmarkCount }}</span>
+                      <span class="mr-3">{{ editor.bookmarkNumber }}</span>
+<<<<<<< HEAD
+                    </h4>
+                    <h4>
+                      <i class="fas fa-star mr-2" style="color:yellow"></i>
+                      <span class="mr-3">{{ editor.avgScore }}</span>
+=======
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
                     </h4>
                   </div>
                 </template>
@@ -106,22 +113,23 @@
                         v-for="recEditor in recommendData.slice(0, 10)"
                         :key="recEditor.uid"
                       >
-                        <b-card id="maincard">
-                          <router-link :to="`/portfolio?no=${recEditor.uid}`">
+                        <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
+<<<<<<< HEAD
+                          <img src alt />
+                          <LazyYoutubeVideo :src="recEditor.url" style="width: 100%;" class="mb-2" />
+=======
                             <img src alt />
                             <LazyYoutubeVideo
                               :src="recEditor.url"
                               style="width: 100%;"
                               class="mb-2"
                             />
-                          </router-link>
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
                           <hr />
                           <b-card-text>
-                            <router-link :to="`/portfolio?no=${recEditor.uid}`">
                               <div class="d-inline-flex">
                                 <h3 class="mt-0 mb-1">{{ recEditor.nickname }}</h3>
                               </div>
-                            </router-link>
 
                             <div
                               v-for="(t, index) in recEditor.tag.split(', ').slice(0, 3)"
@@ -209,10 +217,21 @@ export default {
     },
     fetchEditors() {
       http
-        .get("/search/listAll")
+        .post("/search", {
+          searchTags: [],
+          searchText: "",
+          searchType: "ALL",
+          sortType: "SCORE_DESC",
+          videoSkills: [],
+          videoStyles: [],
+<<<<<<< HEAD
+          videoTypes: [],
+=======
+          videoTypes: []
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
+        })
         .then((res) => {
           if (res.data.status) {
-            // console.log(res.data.object);
             this.editorsData = res.data.object;
           } else {
             console.log(res.data.status);
@@ -247,6 +266,13 @@ export default {
     fetchPage(val) {
       this.currentPage = val;
     },
+    movePortfolio(uid) {
+      this.$router.push("/portfolio?no=" + uid);
+    },
+<<<<<<< HEAD
+
+=======
+>>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
     // getReviewInfo(uid) {
     //   http
     //     .get("/portfolio/review/" + uid)
