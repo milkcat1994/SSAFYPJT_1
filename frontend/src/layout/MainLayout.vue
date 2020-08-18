@@ -46,21 +46,12 @@
           }"
         />
       </template>
-    </side-bar> -->
-    <div
-      class="main-content"
-      :data="sidebarBackground"
-      @mousedown="hide(sidebar)"
-    >
+    </side-bar>-->
+    <div class="main-content" :data="sidebarBackground" @mousedown="hide(sidebar)">
       <main-navbar @mousedown.stop></main-navbar>
 
       <div>
-        <fade-transition
-          @click="test()"
-          :duration="200"
-          origin="center top"
-          mode="out-in"
-        >
+        <fade-transition @click="test()" :duration="200" origin="center top" mode="out-in">
           <!-- your content here -->
           <router-view></router-view>
         </fade-transition>
