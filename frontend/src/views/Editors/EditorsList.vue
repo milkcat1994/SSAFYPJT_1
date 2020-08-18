@@ -8,9 +8,7 @@
             <button class="btn btn-danger" @click="$emit('clear-sort')">초기화</button>
           </div>
           <base-dropdown>
-            <base-button slot="title" type="primary" class="dropdown-toggle"
-              >{{sortKey}}</base-button
-            >
+            <base-button slot="title" type="primary" class="dropdown-toggle">{{sortKey}}</base-button>
             <a class="dropdown-item" @click="fetchSortKey('NICKNAME_ASC')">이름순</a>
             <a class="dropdown-item" @click="fetchSortKey('SCORE_DESC')">평점순</a>
             <a class="dropdown-item" @click="fetchSortKey('PRICE_ASC')">낮은 가격순</a>
@@ -25,11 +23,8 @@
               <div class="col-3">
                 <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
-                  <img src="" alt="" />
-                  <LazyYoutubeVideo
-                    :src="editor.url"
-                    style="width: 100%;"
-                  />
+                  <img src alt />
+                  <LazyYoutubeVideo :src="editor.url" style="width: 100%;" />
                 </router-link>
               </div>
               <div class="col-9 pt-2 d-flex flex-column justify-content-around">
@@ -49,13 +44,18 @@
                       type="danger"
                       size="sm"
                       icon="ni ni-favourite-28"
-                    >
-                      {{ editor.bookmarkNumber }}
-                    </base-button>
+                    >{{ editor.bookmarkNumber }}</base-button>
                   </div>
                 </div>
-                <div>
-                  <span><i class="fas fa-star"></i> {{editor.avgScore}}점</span>
+                <div class="d-flex">
+                  <!-- 평점 -->
+                  <!-- <span><i class="fas fa-star"></i> {{Number((editor.avgScore).toFixed(1))}}점</span> -->
+                  <span>
+                    <i class="fas fa-star"></i>
+                    {{ round(editor.avgScore) }}점
+                  </span>
+                  <!-- 예상 견적 -->
+                  <div class="col-4 text-danger">예상 견적: 분당 {{ numberWithCommas(editor.payMin) }}원</div>
                 </div>
                 <div class="row">
                   <!-- 태그 -->
@@ -64,13 +64,7 @@
                       class="btn btn-info btn-sm mb-1"
                       :key="index"
                       v-for="(tag, index) in editor.tags"
-                    >
-                      {{ tag }}
-                    </button>
-                  </div>
-                  <!-- 예상 견적 -->
-                  <div class="col-4 text-danger">
-                    예상 견적: 분당 {{ editor.payMin }}원
+                    >{{ tag }}</button>
                   </div>
                 </div>
               </div>
@@ -91,15 +85,15 @@
   </div>
 </template>
 <script>
-import http from "@/util/http-common";
+// import http from "@/util/http-common";
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 export default {
   name: "editors-list",
   props: {
     editorsData: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   components: {
     LazyYoutubeVideo,
@@ -111,8 +105,8 @@ export default {
       return this.editorsData.slice(start, end);
     },
     totalPage() {
-      return Math.ceil(this.editorsData.length / this.editorsPerPage)
-    }
+      return Math.ceil(this.editorsData.length / this.editorsPerPage);
+    },
   },
   data() {
     return {
@@ -134,59 +128,63 @@ export default {
       //   url: ["편집자 대표 URL", "기타 URL1", ...]
     };
   },
-  created() {
-  },
+  created() {},
   methods: {
+    round(score) {
+      return Number(score.toFixed(1));
+    },
+    numberWithCommas(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     fetchPage(val) {
       this.currentPage = val;
     },
     fetchSortKey(val) {
-      if (val == 'NICKNAME_ASC') {
-        this.sortKey = '이름순'
-      } else if (val == 'SCORE_DESC') {
-        this.sortKey = '평점순'
-      } else if (val == 'PRICE_ASC') {
-        this.sortKey = '낮은 가격순'
-      } else if (val == 'PRICE_DESC')
-        this.sortKey = '높은 가격순'
-      this.$emit('sort-by', val)
+      if (val == "NICKNAME_ASC") {
+        this.sortKey = "이름순";
+      } else if (val == "SCORE_DESC") {
+        this.sortKey = "평점순";
+      } else if (val == "PRICE_ASC") {
+        this.sortKey = "낮은 가격순";
+      } else if (val == "PRICE_DESC") this.sortKey = "높은 가격순";
+      this.$emit("sort-by", val);
     },
 
-    // 북마크 로직(미완성)
-    isBookmarked(portfolioUID) {
-      // login 되어있는 사용자만?
-      http
-        .get("/bookmark/cnt/" + portfolioUID)
-        .then((res) => {
-          if (res.data == "success") {
-            let isBooked = false;
-            res.object.forEach((obj) => {
-              if (obj.userInfoUid == this.$session.get("uid")) {
-                isBooked = true;
-              }
-            });
-            return isBooked;
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    },
-    addBookmark(portfolioUID) {
-      if (!this.isBookmarked(portfolioUID)) {
-        http
-          .post("/bookmark", {
-            uid: this.$session.get("uid"),
-            muid: portfolioUID,
-          })
-          .then((res) => {
-            // 리스트 전체 돌면서
-            // 리스트에 있는 개별 포트폴리오 UID == 북마크한 포트폴리오 UID
-            // 일 경우 북마크 개수 업데이트? (아니면 Vue.js가 자동으로 업데이트해주는지?)
-            console.log(res);
-          });
-      }
-    },
+    // // 북마크 로직(미완성)
+    // isBookmarked(portfolioUID) {
+    //   // login 되어있는 사용자만?
+    //   http
+    //     .get("/bookmark/cnt/" + portfolioUID)
+    //     .then((res) => {
+    //       if (res.data == "success") {
+    //         let isBooked = false;
+    //         res.object.forEach((obj) => {
+    //           if (obj.userInfoUid == this.$session.get("uid")) {
+    //             isBooked = true;
+    //           }
+    //         });
+    //         return isBooked;
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //     });
+    // },
+    // addBookmark(portfolioUID) {
+    //   if (!this.isBookmarked(portfolioUID)) {
+    //     http
+    //       .post("/bookmark", {
+    //         uid: this.$session.get("uid"),
+    //         muid: portfolioUID,
+    //       })
+    //       .then((res) => {
+    //         // 리스트 전체 돌면서
+    //         // 리스트에 있는 개별 포트폴리오 UID == 북마크한 포트폴리오 UID
+    //         // 일 경우 북마크 개수 업데이트? (아니면 Vue.js가 자동으로 업데이트해주는지?)
+    //         console.log(res);
+    //       });
+    //   }
+    // },
   },
 };
 </script>

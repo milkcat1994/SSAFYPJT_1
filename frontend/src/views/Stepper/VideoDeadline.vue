@@ -10,7 +10,7 @@
           slot-scope="{focus, blur}"
           @on-open="focus"
           @on-close="blur"
-          @on-change="doSomethingOnChange"
+          @on-change="changeDates"
           :config="config"
           class="form-control datepicker"
           placeholder="시작날짜 - 마감날짜"
@@ -27,13 +27,9 @@ export default {
   name: "video-deadline",
   components: { flatPicker },
   methods: {
-    setDeadline(date) {
-      this.$store.commit('stepper/setDeadline', date)
-    },
-    doSomethingOnChange(selectedDates, dateStr){
-      console.log(selectedDates)
-      // dateStr: Y-m-d
-      console.log(dateStr)
+    changeDates(selectedDates, dateStr){
+      // console.log(selectedDates)
+      // console.log(dateStr)
       this.$store.commit('stepper/setDeadline', dateStr)
     }
   },

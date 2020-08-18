@@ -180,7 +180,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     
 	private String makeKey(SearchRequest searchRequest){
         StringBuilder sb = new StringBuilder();
-        sb.append("search:");
 
         if(!searchRequest.getVideoTypes().isEmpty()){
             sb.append("videoType:");
@@ -205,13 +204,32 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             sb.append(string+":");
         }
 
+        // 없다면 모든 uid가 필요하다.
+        if(sb.length()==0) {
+            sb.append("uids:all:");
+        }
 
 		switch (searchRequest.getSearchType()) {
-			case "TAG":
-				sb.append("tag:").append(searchRequest.getSearchTags().get(0));
+            case "TAG":
+                // 태그 검색이지만 태그 검색어가 없을경우 모두 검색 해야함
+                if(searchRequest.getSearchTags().isEmpty()) {
+                    sb.append("all");
+                }
+                else{
+                    sb.append("tag:");
+                    for(String tag : searchRequest.getSearchTags()){
+                        sb.append(tag).append(':');
+                    }
+                }
 				break;
-			case "NICKNAME":
-				sb.append("nickname:").append(searchRequest.getSearchText());
+                // 닉네임 검색이지만 닉네임 검색어가 없을경우 모두 검색 해야함
+            case "NICKNAME":
+                if(searchRequest.getSearchText().trim().equals("")) {
+                    sb.append("all");
+                }
+                else{
+                    sb.append("nickname:").append(searchRequest.getSearchText());
+                }
 			break;
             case "ALL":
                 sb.append("all");
@@ -219,7 +237,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 			default:
 				return "";
         }
-		return sb.toString();
+		return "search:"+sb.toString();
     }
     
     // 검색결과 도출
@@ -231,6 +249,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         String searchKey = makeKey(searchRequest);
         SearchPortfolioJoinBookmark tempResult;
         // Redis에 해당 검색 key값이 있는지 확인
+        System.out.println("검색키>>"+searchKey);
         if(hashKeys(searchKey).isEmpty()){
             System.out.println("key가 없음");
         }
@@ -316,23 +335,35 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // System.out.println("검색이 무엇>"+searchRequest.getSearchType());
         switch (searchRequest.getSearchType()) {
             case "TAG":
-                // 해당 tag를 가지는 모든 uid 더하기
-                sb.append("tag:");
-                for (String tag : searchRequest.getSearchTags()) {
-                    keySet.add("tag:"+tag);
-                    sb.append(tag).append(':');
-                    System.out.println("tag>"+tag);
+                // 태그 검색이지만 태그 검색어가 없을경우 모두 검색 해야함
+                if(searchRequest.getSearchTags().isEmpty()) {
+                    sb.append("all");
                 }
-                sb.setLength(sb.length());
-                System.out.println("태그검색");
+                else{
+                    // 해당 tag를 가지는 모든 uid 더하기
+                    sb.append("tag:");
+                    for (String tag : searchRequest.getSearchTags()) {
+                        keySet.add("tag:"+tag);
+                        sb.append(tag).append(':');
+                        System.out.println("tag>"+tag);
+                    }
+                    sb.setLength(sb.length());
+                    System.out.println("태그검색");
+                }
                 break;
             case "NICKNAME":
-                sb.append("nickname:").append(searchRequest.getSearchText());
-                //해당 글자 포함하는 닉네임 가지는 Key 모두 저장
-                keySet.addAll(hashKeys("nickname:uids:*"+searchRequest.getSearchText()+"*"));
-                setOperations.unionAndStore(keySet, "nickname:uids:search:"+searchRequest.getSearchText());
-                keySet = new LinkedHashSet<>();
-                keySet.add("nickname:uids:search:"+searchRequest.getSearchText());
+                // 닉네임 검색이지만 닉네임 검색어가 없을경우 모두 검색 해야함
+                if(searchRequest.getSearchText().trim().equals("")) {
+                    sb.append("all");
+                }
+                else{
+                    sb.append("nickname:").append(searchRequest.getSearchText());
+                    //해당 글자 포함하는 닉네임 가지는 Key 모두 저장
+                    keySet.addAll(hashKeys("nickname:uids:*"+searchRequest.getSearchText()+"*"));
+                    setOperations.unionAndStore(keySet, "nickname:uids:search:"+searchRequest.getSearchText());
+                    keySet = new LinkedHashSet<>();
+                    keySet.add("nickname:uids:search:"+searchRequest.getSearchText());
+                }
             break;
             case "ALL":
                 sb.append("all");
@@ -374,6 +405,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         System.out.println("4차 완료");
         
         // 검색어시 key로 추가해 넣어야한다.
+        System.out.println("검색키>>"+"search:"+filterString+":"+searchString);
         resultList.addAll(setResultOperations.members("search:"+filterString+":"+searchString));
 
         System.out.println("5차 완료");
