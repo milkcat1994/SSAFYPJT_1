@@ -94,7 +94,7 @@
                 <b-row>
                   <b-col cols="12">
                     <carousel :perPage="3">
-                      <slide class="p-2" v-for="editor in currentEditors" :key="editor.uid">
+                      <slide class="p-2" v-for="editor in recommendData" :key="editor.uid">
                         <b-card id="maincard">
                           <router-link :to="`/portfolio?no=${editor.uid}`">
                             <img src alt />
@@ -143,22 +143,35 @@ export default {
       slide: 0,
       sliding: null,
       keyword: null,
-      editorsPerPage: 5,
+      editorsPerPage: 6,
       currentPage: 1,
       editorsData: [],
+      recommendData: [],
     };
   },
   created() {
     this.fetchEditors();
   },
   methods: {
+    recommendEditors() {
+      http
+        .post("/recommend/" + this.$session.get("uid"))
+        .then((res) => {
+          // console.log(res);
+          if (res.data) {
+            console.log(res.data);
+            this.recommendData = res.data.object;
+          }
+        })
+        .catch((err) => console.log(err));
+    },
     fetchEditors() {
       http
         .get("/search/listAll")
         .then((res) => {
           // console.log(res)
           if (res.data.status) {
-            // console.log(res.data.object)
+            // console.log(res.data.object);
             this.editorsData = res.data.object;
           } else {
             console.log(res.data.status);
@@ -220,7 +233,10 @@ export default {
       return this.editorsData.slice(start, end);
     },
   },
-  mounted() {},
+  mounted() {
+    this.fetchEditors();
+    this.recommendEditors();
+  },
 };
 </script>
 <style scoped>
