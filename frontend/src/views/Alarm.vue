@@ -13,9 +13,9 @@
     </base-header>
 
     <br />
-    <hr />
     <!-- <h2 class="text-center">알림창</h2> -->
     <br />
+    <br>
 
     <div class="container-fluid mt--7 mb-5">
       <!-- for calendar -->
