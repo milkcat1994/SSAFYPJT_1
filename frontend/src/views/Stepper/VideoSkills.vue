@@ -1,30 +1,26 @@
 <template>
-  <div class="container mx-auto my-4 py-4" style="width: 80%">
+  <div class="container mx-auto my-4 py-4">
     
-    <h1 class="display-3 mb-4 text-center">추가하실 편집 기술이 있으신가요?</h1>
+    <h1 class="display-3 text-center">추가하실 편집 기술이 있으신가요?</h1>
+    <div class="text-center mb-4">
+      <small>(제목에 마우스를 올리면 설명을 볼 수 있습니다)</small>
+    </div>
     <div class="container">
       <div class="row d-flex justify-content-center">
-        <div class="card col-4 col-md-3 m-2 text-center"
-            style="min-width: 275px;"
-            v-for="item of videoSkills"
-            :key="item.value"
-            :class="{selected: !!item.status}"
-            @click="selectVideoSkills(item.value)">
+        <div class="card p-0 col-md-6 col-lg-3 text-center"
+          style="margin: 0.5rem 1rem;"
+          v-for="item of videoSkills"
+          :key="item.value"
+          :class="{selected: !!item.status}"
+          @click="selectVideoSkills(item.value)">
           <div class="card-body">
-            <img class="icon" :src="item.img" :alt="item.name">
-            <h2 class="card-title mt-2">{{item.name}}
-              <!-- <b-icon :id="'tooltip-target-'+item.value" icon="exclamation-circle-fill" variant="primary"></b-icon> -->
-              <!-- <i class="far fa-question-circle fa-md"></i> -->
-            </h2>
-            <p class="card-text">{{item.description}}</p>
-            <!-- <b-tooltip :target="'tooltip-target-'+item.value" triggers="hover">{{item.description}}</b-tooltip> -->
-          </div>
-          <!-- <i v-if="!!skill.status" class="fas fa-check-circle fa-sm"></i> -->
-          <div :class="'tootlip-'+item.value">
-            <i :id="'tootlip-target-'+item.value" class="far fa-question-circle fa-md"></i>
-            <div :class="'tootlip-target-'+item.value">
-              <p>{{item.description}}</p>
+            <img class="icon mb-2" :src="item.img" :alt="item.name">
+            <div class="card-title mt-2 mb-0"><b>{{item.name}}</b>
+              <div class="tooltip-text">{{
+                  item.description
+                }}</div>
             </div>
+            <!-- <p class="card-text">{{item.description}}</p> -->
           </div>
         </div>
       </div>
@@ -34,13 +30,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-// import Vue from "vue";
-// import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-
-// // Install BootstrapVue
-// Vue.use(BootstrapVue);
-// // Optionally install the BootstrapVue icon components plugin
-// Vue.use(IconsPlugin);
 
 export default {
   name: "video-skills",
@@ -75,20 +64,28 @@ export default {
   border: 1px solid darkblue;
 }
 
-.tooltip-moti {
-  position: relative;
-  display: inline-block;
+.card-title {
+  /* position: relative; */
+  /* display: inline-block; */
+  /* border-bottom: 1px dotted black; */
 }
-.tooltip-moti .tooltip-target-moti {
+
+.card-title .tooltip-text {
   visibility: hidden;
-  width: 300px;
-  background-color: orange;
-  padding: 0;
-  margin-top: 10px;
-  color: white;
+  width: 220px;
+  background-color: black;
+  color: #fff;
   text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
   position: absolute;
+  /* left: 0; */
   z-index: 1;
 }
-/* .tooltip:hover .tooltip-content { visibility: visible; } */
+
+.card-title:hover .tooltip-text {
+  visibility: visible;
+}
 </style>
