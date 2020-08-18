@@ -7,15 +7,8 @@
             <small>소셜 로그인</small>
           </div>
           <div class="btn-wrapper text-center">
-            <a href="#" class="btn btn-neutral btn-icon">
-              <span class="btn-inner--icon">
-                <img src="img/icons/common/kakao.svg" />
-              </span>
-              <span class="btn-inner--text">Kakao</span>
-            </a>
-
             <!-- for google login -->
-            <a @click="googleLogin" class="btn btn-neutral btn-icon">
+            <a @click="googleLogin" class="btn btn-neutral btn-icon" style="width:350px">
               <span class="btn-inner--icon">
                 <img src="img/icons/common/google.svg" />
               </span>
@@ -167,6 +160,7 @@ export default {
                 alertify.error(
                   "회원 정보가 없습니다. 먼저 회원가입을 진행해 주세요"
                 );
+                this.$router.push({ name: "register" });
               }
             })
             .catch(() => {

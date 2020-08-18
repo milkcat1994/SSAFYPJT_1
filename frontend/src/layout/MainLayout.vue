@@ -47,11 +47,12 @@
         />
       </template>
     </side-bar>-->
-    <div class="main-content" :data="sidebarBackground" @mousedown="hide(sidebar)">
+    <!-- <div class="main-content" :data="sidebarBackground" @mousedown="hide(sidebar)"> -->
+    <div class="main-content" :data="sidebarBackground">
       <main-navbar @mousedown.stop></main-navbar>
 
       <div>
-        <fade-transition @click="test()" :duration="200" origin="center top" mode="out-in">
+        <fade-transition :duration="200" origin="center top" mode="out-in">
           <!-- your content here -->
           <router-view></router-view>
         </fade-transition>
@@ -105,9 +106,6 @@ export default {
     }
   },
   methods: {
-    test() {
-      this.localShow = false;
-    },
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);

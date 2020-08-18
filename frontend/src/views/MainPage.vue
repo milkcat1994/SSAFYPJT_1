@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:100%">
     <base-header type="gradient-success" class="pt-5 pt-md-8 px-lg-5 mb-4">
       <!-- 검색 -->
       <div class="row mt-7">
@@ -24,11 +24,11 @@
             </h3>
           </div>
           <div class="d-flex mx-3">
-            <b-button variant="primary" class="mr-4" @click="moveStepper()">편집자 찾아보기</b-button>
-            <b-button variant="secondary" @click="moveList()">편집자 구경하기</b-button>
+            <b-button variant="primary" class="mr-4" @click="moveStepper()">맞춤 편집자 찾기</b-button>
+            <b-button variant="secondary" @click="moveList()">전체 편집자 보기</b-button>
           </div>
         </div>
-        <div class="col-6 ml-4">
+        <div class="col-6 ml-4 mr-0 pr-0">
           <img src="img/theme/friends.png" alt="png from pngtree.com" style="width:90%" />
         </div>
       </div>
@@ -66,12 +66,13 @@
                   <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%;" class="mb-2" />
                   <router-link :to="`/portfolio?no=${editor.uid}`">
                     <div class="d-flex justify-content-end mt-3 mx-3">
-                      <h3 class="mt-0 mb-1">{{ editor.nickname }}</h3>
+                      <h3 class="mt-0 mb-1" style="color:white">{{ editor.nickname }}</h3>
                     </div>
                   </router-link>
                   <div class="d-flex justify-content-end mb-5 mx-3">
                     <h4>
-                      <i class="fas fa-star"></i>
+                      <i class="fas fa-heart mr-3" style="color:red"></i>
+                      <i class="fas fa-star" style="color:yellow"></i>
                     </h4>
                   </div>
                 </template>
@@ -197,6 +198,18 @@ export default {
     moveStepper() {
       // 현재 로그인한 사용자의 태그나 이용정보 바탕으로 검색 조건 + router로 push
       this.$router.push({ name: "search" });
+    },
+    fetchPage(val) {
+      this.currentPage = val;
+    },
+    round(score) {
+      return Number(score.toFixed(1));
+    },
+    fetchSortKey(val) {
+      if (val == "SCORE_DESC") {
+        this.sortKey = "평점순";
+      }
+      this.$emit("sort-by", val);
     },
   },
   computed: {
