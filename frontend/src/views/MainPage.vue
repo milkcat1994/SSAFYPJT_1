@@ -58,22 +58,29 @@
             >
               <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
                 <template v-slot:img>
-                  <!-- <img
-                    class="d-block img-fluid w-100"
-                    src="https://picsum.photos/1024/480/?image=55"
-                    alt="image slot"
-                  />-->
                   <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%;" class="mb-2" />
                   <router-link :to="`/portfolio?no=${editor.uid}`">
                     <div class="d-flex justify-content-end mt-3 mx-3">
-                      <h3 class="mt-0 mb-1" style="color:white">{{ editor.nickname }}</h3>
+                      <h2
+                        class="mt-0 mb-1 mr-2"
+                        style="color:white decoration:none"
+                      >{{ editor.nickname }}</h2>
+                    </div>
+                    <div class="d-flex justify-content-end mr-3 mb-2">
+                      <div
+                        v-for="t in editor.tags.slice(0, 5)"
+                        :key="t"
+                        class="text-right mt-3"
+                        style="display:inline-block"
+                      >
+                        <span class="mr-2"># {{ t }}</span>
+                      </div>
                     </div>
                   </router-link>
                   <div class="d-flex justify-content-end mb-5 mx-3">
                     <h4>
                       <i class="fas fa-heart mr-2" style="color:red"></i>
                       <span class="mr-3">{{ editor.bookmarkCount }}</span>
-                      <i class="fas fa-star" style="color:yellow"></i>
                     </h4>
                   </div>
                 </template>
@@ -88,13 +95,17 @@
             <h1 class="hr-sect">맞춤 편집자를 만나보세요.</h1>
           </div>
 
-          <div class="px-4">
+          <div class="px-4" v-if="isLogin">
             <div id="app">
               <b-container>
                 <b-row>
                   <b-col cols="12">
-                    <carousel :perPage="3">
-                      <slide class="p-2" v-for="recEditor in recommendData" :key="recEditor.uid">
+                    <carousel :perPage="4">
+                      <slide
+                        class="p-2"
+                        v-for="recEditor in recommendData.slice(0, 10)"
+                        :key="recEditor.uid"
+                      >
                         <b-card id="maincard">
                           <router-link :to="`/portfolio?no=${recEditor.uid}`">
                             <img src alt />
@@ -112,6 +123,13 @@
                               </div>
                             </router-link>
 
+                            <div
+                              v-for="(t, index) in recEditor.tag.split(', ').slice(0, 3)"
+                              :key="index"
+                              class="d-flex"
+                            >
+                              <span class="d-flex"># {{ t }}</span>
+                            </div>
                             <p class="text-right">₩ {{ recEditor.pay }}</p>
                           </b-card-text>
                         </b-card>
@@ -121,6 +139,22 @@
                 </b-row>
               </b-container>
             </div>
+          </div>
+
+          <div class="px-4" v-if="!isLogin">
+            <b-container>
+              <b-row>
+                <b-col cols="12" class="d-flex justify-content-center">
+                  <img src="img/theme/dogcat1.png" alt="강아지고양이" style="width:50%" class="my-0" />
+                </b-col>
+                <b-col cols="12" class="d-flex justify-content-center mb-2">
+                  <span style="color:#b9cced">Designed by PngTree</span>
+                </b-col>
+                <b-col cols="12" class="d-flex justify-content-center">
+                  <h1 style>로그인이 필요해요!</h1>
+                </b-col>
+              </b-row>
+            </b-container>
           </div>
         </div>
       </div>
@@ -147,10 +181,18 @@ export default {
       currentPage: 1,
       editorsData: [],
       recommendData: [],
+      avgScore: 0,
+
+      isLogin: false,
     };
   },
   created() {
     this.fetchEditors();
+    if (this.$session.exists()) {
+      this.isLogin = true;
+    } else {
+      this.isLogin = false;
+    }
   },
   methods: {
     recommendEditors() {
@@ -160,7 +202,7 @@ export default {
           // console.log(res);
           if (res.data) {
             console.log(res.data);
-            this.recommendData = res.data.object;
+            this.recommendData = res.data;
           }
         })
         .catch((err) => console.log(err));
@@ -169,7 +211,6 @@ export default {
       http
         .get("/search/listAll")
         .then((res) => {
-          // console.log(res)
           if (res.data.status) {
             // console.log(res.data.object);
             this.editorsData = res.data.object;
@@ -195,36 +236,44 @@ export default {
     },
     createRequest(event) {
       console.log(event.target.value);
-      this.$router.push(
-        { name: "search" }
-        // {params: {
-        // 둘 중 하나 사용
-        //    keyword: this.keyword
-        //    keyword: event.target.value
-        // }}
-      );
+      this.$router.push({ name: "search" });
     },
     moveList() {
-      // 슈퍼편집자 조건으로 검색 조건 + router로 push
-      // this.$router.push({name: 'search'})
       this.$router.push({ name: "editors" });
     },
     moveStepper() {
-      // 현재 로그인한 사용자의 태그나 이용정보 바탕으로 검색 조건 + router로 push
       this.$router.push({ name: "search" });
     },
     fetchPage(val) {
       this.currentPage = val;
     },
-    round(score) {
-      return Number(score.toFixed(1));
-    },
-    fetchSortKey(val) {
-      if (val == "SCORE_DESC") {
-        this.sortKey = "평점순";
-      }
-      this.$emit("sort-by", val);
-    },
+    // getReviewInfo(uid) {
+    //   http
+    //     .get("/portfolio/review/" + uid)
+    //     .then(({ data }) => {
+    //       //성공시 평균 계산 필요 추출 필요
+    //       if (data.data == "success") {
+    //         this.reviews = data.object;
+    //         let videoAvg = 0,
+    //           kindnessAvg = 0,
+    //           finishAvg = 0;
+    //         data.object.forEach((obj) => {
+    //           videoAvg += obj.videoScore;
+    //           kindnessAvg += obj.kindnessScore;
+    //           finishAvg += obj.finishScore;
+    //         });
+    //         let length = data.object.length;
+    //         this.avgScore = (videoAvg + kindnessAvg + finishAvg) / length;
+    //         return;
+    //       } else {
+    //         return;
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       return;
+    //     });
+    // },
   },
   computed: {
     currentEditors() {
