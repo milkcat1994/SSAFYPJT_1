@@ -12,7 +12,12 @@
     </form>-->
     <template>
       <div>
-        <i v-b-toggle.sidebar-footer class="fas fa-bars" @mouseup="maskon"></i>
+        <i
+          v-b-toggle.sidebar-footer
+          class="hamburger fas fa-bars mr-2 p-3"
+          @mouseup="maskon"
+          style="border:none outline:0 width:100px"
+        ></i>
         <b-sidebar
           id="sidebar-footer"
           aria-label="Sidebar with custom footer"
@@ -20,11 +25,12 @@
           shadow
           class="sidebar-1"
           bg-variant="white"
+          style="width:100px"
         >
-          <template v-slot:footer="{ hide }" style="display:none">
+          <template v-slot:footer="{ hide }" style="display:none width:100px">
             <div
               class="d-flex bg-dark text-light align-items-center px-3 py-2"
-              style="display:none"
+              style="display:none width:100px"
             >
               <b-button id="closebtn" size="sm" style="display:none;" @click="hide">Close</b-button>
             </div>
@@ -40,21 +46,21 @@
             </router-link>
           </div>
 
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link to="/mainpage">
               <i class="ni ni-tv-2 text-primary mx-2">
                 <span class="mx-2">메인페이지</span>
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link to="/editors">
               <i class="ni ni-zoom-split-in text-primary ml-2">
                 <span class="mx-2">편집자 찾기</span>
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link
               v-if="isEditor && isLogin"
               :to="{
@@ -66,14 +72,14 @@
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link v-if="isLogin" to="/marklist">
               <i class="ni ni-favourite-28 text-red mx-2">
                 <span class="mx-2">찜</span>
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link v-if="isLogin" to="/alarm">
               <i class="ni ni-bell-55 text-primar mx-2">
                 <span class="mx-2">알람</span>
@@ -102,8 +108,30 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <i class="ni ni-bell-55"></i>
-            <badge type="text-light">{{ getNotifyNum() }}</badge>
+            <main rel="main">
+              <div class="notification">
+                <svg viewBox="-10 0 35 35">
+                  <path
+                    class="notification--bell"
+                    d="M14 12v1H0v-1l0.73-0.58c0.77-0.77 0.81-3.55 1.19-4.42 0.77-3.77 4.08-5 4.08-5 0-0.55 0.45-1 1-1s1 0.45 1 1c0 0 3.39 1.23 4.16 5 0.38 1.88 0.42 3.66 1.19 4.42l0.66 0.58z"
+                  />
+                  <path
+                    class="notification--bellClapper"
+                    d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"
+                  />
+                </svg>
+                <span class="notification--num">{{ getNotifyNum() }}</span>
+              </div>
+            </main>
+            <!-- <i class="ni ni-bell-55" v-if="this.notifyNum == 0"></i>
+            <badge type="text-light" v-if="this.notifyNum == 0">{{ getNotifyNum() }}</badge>
+
+            <i class="ni ni-bell-55" style="color:red" v-if="this.notifyNum"></i>
+            <badge
+              type="text-light"
+              v-if="!this.notifyNum == 0"
+              style="color:red"
+            >{{ getNotifyNum() }}</badge>-->
           </div>
 
           <!-- 레이아웃 width가 md 이하일때는 @/components/Sidebar.vue 수정해야함 -->
@@ -149,14 +177,14 @@
     <ul class="navbar-nav">
       <li v-if="!isLogin" class="nav-item mr-3">
         <router-link :to="{ name: 'register' }" class="nav-link">
-          <i class="fas fa-user-plus"></i>
-          <span class="nav-link-inner--text">회원가입</span>
+          <i class="fas fa-user-plus mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">회원가입</span>
         </router-link>
       </li>
       <li v-if="!isLogin" class="nav-item">
         <router-link :to="{ name: 'login' }" class="nav-link">
-          <i class="fas fa-user-check"></i>
-          <span class="nav-link-inner--text">로그인</span>
+          <i class="fas fa-user-check mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">로그인</span>
         </router-link>
       </li>
     </ul>
@@ -258,7 +286,7 @@ export default {
     maskoff() {
       this.mask = false;
       document.getElementById("closebtn").click();
-      console.log("클릭함");
+      // console.log("클릭함");
     },
     // toggleSidebar() {
     //   console.log("toggleOn");
@@ -313,12 +341,124 @@ export default {
 }
 
 #sidebar-1 {
-  width: 200px;
-  background-color: white important;
+  width: 100px;
+  background-color: #fbf4f9 important;
   z-index: 999;
 }
 
 router-link:hover {
   opacity: 1;
+}
+
+.hamburger:focus {
+  border: none;
+  outline: none;
+}
+
+.navbar-brand-img:focus {
+  border: none;
+  outline: none;
+}
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+/* .notification {
+  position: relative;
+  width: 14px;
+  height: 16.8px;
+} */
+.notification {
+  display: flex;
+  align-items: center;
+  margin-top: 35%;
+}
+svg {
+  display: flex;
+  align-items: center;
+  width: 40px;
+}
+svg > path {
+  fill: #172b4d;
+}
+
+.notification--bell {
+  animation: bell 2.2s linear infinite;
+  transform-origin: 50% 0%;
+  color: red;
+}
+
+.notification--bellClapper {
+  animation: bellClapper 2.2s 0.1s linear infinite;
+}
+
+.notification--num {
+  position: absolute;
+  top: 10%;
+  left: 60%;
+  font-size: 15px;
+  border-radius: 90%;
+  /* border: 1px; */
+  color: #ffffff;
+  background-color: #ff4c13;
+  text-align: center;
+  animation: notification 2.2s linear;
+}
+
+@keyframes bell {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  45% {
+    transform: rotate(-10deg);
+  }
+  55% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes bellClapper {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(-0.15em);
+  }
+  45% {
+    transform: translateX(0.15em);
+  }
+  55% {
+    transform: translateX(-0.1em);
+  }
+  60% {
+    transform: translateX(0.1em);
+  }
+}
+
+@keyframes notification {
+  0%,
+  25%,
+  75%,
+  100% {
+    opacity: 1;
+  }
+  30%,
+  70% {
+    opacity: 0;
+  }
 }
 </style>

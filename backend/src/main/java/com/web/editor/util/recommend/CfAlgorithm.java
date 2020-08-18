@@ -26,7 +26,6 @@ public class CfAlgorithm {
         tagPerBookmark = bookmarks.getTag().split(",").length / cnt;
         // 북마크 하나당 평균 태그개수마다 가중치
         weightTag = (double)tagPerBookmark * 0.1;
-        System.out.println(weightTag);
         if (weightTag > 1) weightTag = 0.5;
 
         List<EditorDto> recommendList = new ArrayList<>();
@@ -80,10 +79,11 @@ public class CfAlgorithm {
 
     // 태그 점수화
     private double editorTag(String book, String edi) {
+        if (book == null || edi == null) return 0;
         // 태그를 문자열 배열로
         String[] bookTags = book.split(",");
         int eq = 0;
-
+    
         for (String bookTag: bookTags) {
             // 태그를 포함하면
             if (edi.trim().contains(bookTag.trim()))  eq+=1; 
@@ -96,6 +96,7 @@ public class CfAlgorithm {
 
     // 스킬 점수화
     private double editorSkill(String book, String edi) {
+        if (book == null || edi == null) return 0;
         String[] bookSkills = book.split(",");
         int eq = 0;
 
