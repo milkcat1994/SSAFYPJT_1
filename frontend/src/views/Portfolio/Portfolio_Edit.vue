@@ -9,8 +9,8 @@
         등록하기
       </base-button>
 
-      <router-link :to="'/portfolio?no='+this.uid">
-        <base-button size="sm" type="info" class="btn btn-info float-right">
+      <router-link :to="'/portfolio?no='+this.uid" style="margin-right: 1%;">
+        <base-button type="info" class="btn btn-info float-right" style="margin-right: 1%;">
           취소하기
         </base-button>
       </router-link>
@@ -174,8 +174,10 @@ import { getFormatDate } from "@/util/day-common";
           nickname: '',
           skills: "",
           payMin: "",
-          HeadURL: [],
-          URLs: [],
+          HeadURL: [{url: "", mainFlag: 1}],
+          URLs: [{url: "", mainFlag: 0},
+                  {url: "", mainFlag: 0},
+                  {url: "", mainFlag: 0}],
           schedule: "",
           description: ""
         },
@@ -337,12 +339,16 @@ import { getFormatDate } from "@/util/day-common";
             })
       },
       uploadHeadVideo(){
+        let urlList = [];
+        this.portfolio.HeadURL.forEach(element => {
+          urlList.push(element.url);
+        })
         // 대표영상_최초등록일 경우
         if(this.isFirstHeadVideo){
           http
           .post('/portfolio/video/'+this.uid, {
             portfolioUid: this.uid,
-            url: this.portfolio.HeadURL,
+            url: urlList,
             mainFlag: 1
           })
           .then(({ data }) => {
@@ -359,7 +365,7 @@ import { getFormatDate } from "@/util/day-common";
           http
           .put('/portfolio/video/'+this.uid, {
             portfolioUid: this.uid,
-            url: this.portfolio.HeadURL,
+            url: urlList,
             mainFlag: 1
           })
           .then(({ data }) => {
