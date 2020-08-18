@@ -26,6 +26,7 @@
           <calendar
             :eventCategories="eventCategories"
             :events="(events = scheduledate)"
+            :offDays="offdays"
             ref="calendar"
           />
           <i class="fas fa-circle" style="color: #f29661; margin: 15px;"
@@ -40,7 +41,7 @@
             v-if="$session.get('auth') == 'editor'"
             >개인 일정</i
           >
-          <i class="fas fa-circle" style="color: #c9c9c9; margin: 15px">휴일</i>
+          <i v-if="$session.get('auth') == 'editor'" class="fas fa-circle" style="color: #c9c9c9; margin: 15px">휴일</i>
         </div>
       </div>
 
@@ -620,7 +621,7 @@ export default {
           id: 2,
           title: "selected",
           textColor: "white",
-          backgroundColor: "#f29661",
+          backgroundColor: "#e9967a",
         },
         {
           id: 3,
@@ -638,6 +639,7 @@ export default {
 
       ridDetail: "",
 
+      offdays: [],
       events: [],
       videoScore: 0,
       kindnessScore: 0,
@@ -666,13 +668,14 @@ export default {
           this.$router.push("/");
         });
       if (this.$session.get("auth") == "editor") {
-        store.dispatch(
-          "getProgressdate",
-          "/request/date/res/" + this.$session.get("nickname")
-        );
+        console.log(this.$session.get("uid"));
         store.dispatch(
           "getHolidaydate",
           "/schedule/holiday/" + this.$session.get("uid")
+        );
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/res/" + this.$session.get("nickname")
         );
         store.dispatch(
           "getRequestitems0",
@@ -694,10 +697,6 @@ export default {
         store.dispatch(
           "getProgressdate",
           "/request/date/req/" + this.$session.get("nickname")
-        );
-        store.dispatch(
-          "getHolidaydate",
-          "/schedule/holiday/" + this.$session.get("uid")
         );
         store.dispatch(
           "getRequestitems0",
@@ -731,6 +730,7 @@ export default {
   },
   methods: {
     getDetail(rid) {
+      console.log(this.events);
       store.dispatch("getRequestitem", "/request/" + rid);
     },
     // 요청 수락
