@@ -46,6 +46,7 @@
                     <button
                       class="btn btn-info btn-sm mb-1"
                       :key="index"
+                      @click="searchTag(tag)"
                       v-for="(tag, index) in tags"
                     >#{{ tag }}</button>
                     </div>
@@ -593,6 +594,38 @@ moment.locale('ko');
       },
     };
   },
+  computed:{
+    queryNo(){
+      return this.$route.query.no;
+    }
+  },
+  watch:{
+    // 같은 화면에서 다른 query값을 이용하기 위한 watch
+    queryNo(){
+      this.uid = this.$route.query.no;
+
+      let URL = "/portfolio";
+      //포트폴리오 정보, 영상, 리뷰, 스케쥴, 태그 가져오기
+      //포트폴리오 정보
+      this.getPortfolio(URL);
+
+      //포트폴리오 리뷰
+      this.getReviewInfo(URL);
+
+      // 포트폴리오 영상
+      this.getVideoInfo(URL);
+
+      // 포트폴리오 스케쥴
+      this.getScheduleInfo(URL);
+
+      // 포트폴리오 태그
+      this.getTagInfo(URL);
+
+      // 북마크 정보 가져와서 북마크 한 인원수 보여주기
+      this.getBookmarkCount();
+
+    }
+  },
   created() {
     // 잘못된 url 접근시 이동
     if (
@@ -1139,6 +1172,11 @@ moment.locale('ko');
           this.portfolio.responseTime = "1시간 이내";
         }
         // console.log(totalTime);
+      },
+      searchTag(tag){
+        // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.    
+        console.log(tag)
+        this.$router.push({name: "editors", params:{clickSearchTag: tag}});
       }
   },
 };
