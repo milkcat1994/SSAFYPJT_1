@@ -599,6 +599,10 @@ moment.locale('ko');
       return this.$route.query.no;
     }
   },
+  mounted(){
+    //스크롤 맨 위로 올리기
+    window.scrollTo(0,0);
+  },
   watch:{
     // 같은 화면에서 다른 query값을 이용하기 위한 watch
     queryNo(){
@@ -636,7 +640,6 @@ moment.locale('ko');
       this.$router.push("/");
       return;
     }
-
     if (this.$session.exists()) {
       this.isLogin = true;
     }
