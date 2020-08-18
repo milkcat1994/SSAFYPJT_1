@@ -94,25 +94,25 @@
                 <b-row>
                   <b-col cols="12">
                     <carousel :perPage="3">
-                      <slide class="p-2" v-for="editor in recommendData" :key="editor.uid">
+                      <slide class="p-2" v-for="recEditor in recommendData" :key="recEditor.uid">
                         <b-card id="maincard">
-                          <router-link :to="`/portfolio?no=${editor.uid}`">
+                          <router-link :to="`/portfolio?no=${recEditor.uid}`">
                             <img src alt />
                             <LazyYoutubeVideo
-                              :src="editor.urls[0]"
+                              :src="recEditor.url"
                               style="width: 100%;"
                               class="mb-2"
                             />
                           </router-link>
                           <hr />
                           <b-card-text>
-                            <router-link :to="`/portfolio?no=${editor.uid}`">
+                            <router-link :to="`/portfolio?no=${recEditor.uid}`">
                               <div class="d-inline-flex">
-                                <h3 class="mt-0 mb-1">{{ editor.nickname }}</h3>
+                                <h3 class="mt-0 mb-1">{{ recEditor.nickname }}</h3>
                               </div>
                             </router-link>
 
-                            <p class="text-right">₩ {{ editor.payMin }}</p>
+                            <p class="text-right">₩ {{ recEditor.pay }}</p>
                           </b-card-text>
                         </b-card>
                       </slide>
