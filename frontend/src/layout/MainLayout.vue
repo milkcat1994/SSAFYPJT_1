@@ -56,6 +56,10 @@
           <!-- your content here -->
           <router-view></router-view>
         </fade-transition>
+        <div>
+          <!-- <i class="arrow ni ni-bold-up" @click="scrollToTop"></i> -->
+          <div class="arrow" @click="scrollToTop"></div>
+        </div>
         <content-footer v-if="!$route.meta.hideFooter"></content-footer>
       </div>
     </div>
@@ -111,7 +115,61 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     },
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
   },
 };
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+html {
+  scroll-behavior: smooth;
+}
+
+div.arrow {
+  width: 6vmin;
+  height: 6vmin;
+  position: fixed;
+  right: 55px;
+  bottom: 80px;
+  transition: all 0.5s ease-in-out;
+  opacity: 0.6;
+  transform: rotate(-45deg);
+
+  &::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-width: 0.8vmin 0.8vmin 0 0;
+    border-style: solid;
+    border-color: #172b4d;
+    transition: 0.2s ease;
+    display: block;
+    transform-origin: 100% 0;
+  }
+
+  &:after {
+    content: "";
+    float: left;
+    position: relative;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    border-width: 0 0.8vmin 0 0;
+    border-style: solid;
+    border-color: #172b4d;
+    transform-origin: 100% 0;
+    transition: 0.2s ease;
+  }
+
+  &:hover::after {
+    transform: rotate(45deg);
+    border-color: orange;
+    height: 140%;
+  }
+  &:hover::before {
+    border-color: orange;
+    transform: scale(0.8);
+  }
+}
+</style>
