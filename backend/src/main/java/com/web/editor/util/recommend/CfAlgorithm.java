@@ -79,6 +79,7 @@ public class CfAlgorithm {
 
     // 태그 점수화
     private double editorTag(String book, String edi) {
+        if (book == null || edi == null) return 0;
         // 태그를 문자열 배열로
         String[] bookTags = book.split(",");
         int eq = 0;
@@ -95,6 +96,7 @@ public class CfAlgorithm {
 
     // 스킬 점수화
     private double editorSkill(String book, String edi) {
+        if (book == null || edi == null) return 0;
         String[] bookSkills = book.split(",");
         int eq = 0;
 
