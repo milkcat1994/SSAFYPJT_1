@@ -94,7 +94,11 @@
                 <b-row>
                   <b-col cols="12">
                     <carousel :perPage="3">
-                      <slide class="p-2" v-for="recEditor in recommendData" :key="recEditor.uid">
+                      <slide
+                        class="p-2"
+                        v-for="recEditor in recommendData.slice(0, 10)"
+                        :key="recEditor.uid"
+                      >
                         <b-card id="maincard">
                           <router-link :to="`/portfolio?no=${recEditor.uid}`">
                             <img src alt />
@@ -112,6 +116,13 @@
                               </div>
                             </router-link>
 
+                            <div
+                              v-for="(t, index) in recEditor.tag.split(', ').slice(0, 3)"
+                              :key="index"
+                              class="d-flex"
+                            >
+                              <span class="d-flex"># {{ t }}</span>
+                            </div>
                             <p class="text-right">₩ {{ recEditor.pay }}</p>
                           </b-card-text>
                         </b-card>
@@ -160,7 +171,7 @@ export default {
           // console.log(res);
           if (res.data) {
             console.log(res.data);
-            this.recommendData = res.data.object;
+            this.recommendData = res.data;
           }
         })
         .catch((err) => console.log(err));
