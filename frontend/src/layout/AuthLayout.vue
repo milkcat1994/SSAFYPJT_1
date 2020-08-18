@@ -36,32 +36,32 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/">
-              <i class="ni ni-planet"></i>
-              <span class="nav-link-inner--text">메인</span>
+              <i class="ni ni-planet" style="color: #172b4d !important;"></i>
+              <span class="nav-link-inner--text" style="color: #172b4d !important;">메인</span>
             </router-link>
           </li>
           <li v-if="!isLogin" class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/user">
-              <i class="fas fa-user-plus"></i>
-              <span class="nav-link-inner--text">회원가입</span>
+              <i class="fas fa-user-plus" style="color: #172b4d !important;"></i>
+              <span class="nav-link-inner--text" style="color: #172b4d !important;">회원가입</span>
             </router-link>
           </li>
           <li v-if="!isLogin" class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/login">
-              <i class="fas fa-user-check"></i>
-              <span class="nav-link-inner--text">로그인</span>
+              <i class="fas fa-user-check" style="color: #172b4d !important;"></i>
+              <span class="nav-link-inner--text" style="color: #172b4d !important;">로그인</span>
             </router-link>
           </li>
           <li v-if="isLogin" class="nav-item">
             <router-link class="nav-link nav-link-icon" to="/profile">
-              <i class="ni ni-single-02"></i>
-              <span class="nav-link-inner--text">Profile</span>
+              <i class="ni ni-single-02" style="color: #172b4d !important;"></i>
+              <span class="nav-link-inner--text" style="color: #172b4d !important;">Profile</span>
             </router-link>
           </li>
           <li v-if="isLogin" class="nav-item">
             <span class="nav-link nav-link-icon" @click="logout()">
-              <i class="ni ni-single-02"></i>
-              <span>로그아웃</span>
+              <i class="ni ni-single-02" style="color: #172b4d !important;"></i>
+              <span style="color: #172b4d !important;">로그아웃</span>
             </span>
           </li>
         </ul>
@@ -116,21 +116,13 @@
                 <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
               </li>
               <li class="nav-item">
-                <a
-                  href="#"
-                  class="nav-link"
-                  target="_blank"
-                >About Us</a>
+                <a href="#" class="nav-link" target="_blank">About Us</a>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link" target="_blank">Blog</a>
               </li>
               <li class="nav-item">
-                <a
-                  href="#"
-                  class="nav-link"
-                  target="_blank"
-                >MIT License</a>
+                <a href="#" class="nav-link" target="_blank">MIT License</a>
               </li>
             </ul>
           </div>

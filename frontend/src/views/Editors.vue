@@ -152,6 +152,7 @@
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
+        @clickSearchTag="reSearchTag"
         ></editors-list>
     </div>
   </div>
@@ -164,6 +165,12 @@ export default {
   name: "editors",
   components: {
     EditorsList,
+  },
+  props:{
+    clickSearchTag: {
+      type: String,
+      default : ''
+    }
   },
   data() {
     return {
@@ -244,12 +251,23 @@ export default {
     },
   },
   created() {
+    // 태그 클릭으로 들어왔을경우
+    if(this.clickSearchTag != ''){
+      this.searchKey = '태그';
+      this.keyword = this.clickSearchTag;
+    }
+
     this.fetchFilter();
   },
   mounted() {
     this.fetchEditors();
   },
   methods: {
+    reSearchTag(keyword){
+      this.searchKey = '태그';
+      this.keyword = keyword;
+      this.fetchEditors();
+    },
     setSortKey(key) {
       this.sortBy = key
       this.fetchEditors()
