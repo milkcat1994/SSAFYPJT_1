@@ -207,8 +207,8 @@ export default new Vuex.Store({
       });
     },
     initDataOnAlarm(context) {
-      context.commit('mutateSetProgressdate', []);
       context.commit('mutateSetHolidaydate', []);
+      context.commit('mutateSetProgressdate', []);
       context.commit('mutateSetRequestitems0123', []);
     },
 
