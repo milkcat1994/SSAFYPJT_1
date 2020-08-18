@@ -56,7 +56,7 @@
           <div class="ml-4 mb-3">
             <router-link to="/editors">
               <i class="ni ni-zoom-split-in text-primary ml-2">
-                <span class="mx-2">편집자 찾기</span>
+                <span class="mx-2">전체 편집자 보기</span>
               </i>
             </router-link>
           </div>

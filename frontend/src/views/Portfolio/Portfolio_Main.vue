@@ -38,9 +38,6 @@
                 <base-button v-if="uid == $session.get('uid')" disabled type="danger" icon="ni ni-favourite-28">
                 {{portfolio.markCnt}}
                 </base-button>
-                <base-button v-if="uid == $session.get('uid')" disabled type="danger" icon="ni ni-favourite-28">
-                {{portfolio.markCnt}}
-                </base-button>
                 <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
                 <base-button v-if="uid != $session.get('uid') && isLogin" size="sm" type="default float-right" @click="openRequestForm()"> 작업 요청하기 </base-button>
               </h1>
