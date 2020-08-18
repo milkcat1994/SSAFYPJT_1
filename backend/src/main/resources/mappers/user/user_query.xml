@@ -41,8 +41,8 @@
     </select>
 
     <!-- 회원 조회 - 닉네임으로 조회 -->
-    <select id="userfindByNickname" resultType="User">
-        SELECT `email`, `nickname`, `auth`
+    <select id="userfindByNickname" resultType="String">
+        SELECT `email`
         FROM user_info
         WHERE `nickname` = #{nickname}
     </select>

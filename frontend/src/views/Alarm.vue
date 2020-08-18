@@ -29,7 +29,7 @@
             :offDays="offdays"
             ref="calendar"
           />
-          <i class="fas fa-circle" style="color: #f29661; margin: 15px;"
+          <i class="fas fa-circle" style="color: #ffe200; margin: 15px;"
             >선택된 작업</i
           >
           <i class="fas fa-circle" style="color: #6699ff; margin: 15px"
@@ -281,11 +281,26 @@
                           </tbody>
                         </table>
                       </b-card-text>
+
                       <b-button
                         class="statusBtn"
                         style="background-color: #0099ff"
                         @click="doneRequest(requestitem1.rid)"
                         >요청 완료</b-button
+                      >
+                      <b-button
+                        v-if="$session.get('auth') == 'editor'"
+                        class="statusBtn"
+                        style="background-color: #aaaaff"
+                        @click="getUserInfo(requestitem1.request_nickname)"
+                        >이메일 보기</b-button
+                      >
+                      <b-button
+                        v-if="$session.get('auth') == 'noneditor'"
+                        class="statusBtn"
+                        style="background-color: #aaaaff"
+                        @click="getUserInfo(requestitem1.response_nickname)"
+                        >이메일 보기</b-button
                       >
                     </b-card-body>
                   </b-collapse>
@@ -621,7 +636,7 @@ export default {
           id: 2,
           title: "selected",
           textColor: "white",
-          backgroundColor: "#e9967a",
+          backgroundColor: "#ffe200",
         },
         {
           id: 3,
@@ -636,6 +651,8 @@ export default {
           backgroundColor: "#c9c9c9",
         },
       ],
+
+      
 
       ridDetail: "",
 
@@ -668,7 +685,6 @@ export default {
           this.$router.push("/");
         });
       if (this.$session.get("auth") == "editor") {
-        console.log(this.$session.get("uid"));
         store.dispatch(
           "getHolidaydate",
           "/schedule/holiday/" + this.$session.get("uid")
@@ -730,7 +746,6 @@ export default {
   },
   methods: {
     getDetail(rid) {
-      console.log(this.events);
       store.dispatch("getRequestitem", "/request/" + rid);
     },
     // 요청 수락
@@ -992,6 +1007,27 @@ export default {
           );
         });
     },
+
+    showEmail(){
+      
+    },
+    getUserInfo(nickname) {
+      //1은 session uid
+        http
+            .post('/user/userfind/'+ nickname)
+            .then(({data}) => {
+                if (data != 'not exist') {
+                  console.log(data);
+                  return;
+                } else {
+                  return;
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                return;
+            })
+      },
   },
 };
 </script>

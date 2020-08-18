@@ -150,10 +150,10 @@ public class UserController {
     @ApiOperation(value = "user정보 반환-nickname으로 검색")
     public Object userfindByNickname(@PathVariable String nickname) {
 
-        User user = userService.userfindByNickname(nickname);
+        String email = userService.userfindByNickname(nickname);
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        if (email != null) {
+            return new ResponseEntity<>(email, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("not exist", HttpStatus.OK);
         }
