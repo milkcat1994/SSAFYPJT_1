@@ -108,8 +108,30 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <i class="ni ni-bell-55"></i>
-            <badge type="text-light">{{ getNotifyNum() }}</badge>
+            <main rel="main">
+              <div class="notification">
+                <svg viewBox="-10 0 35 35">
+                  <path
+                    class="notification--bell"
+                    d="M14 12v1H0v-1l0.73-0.58c0.77-0.77 0.81-3.55 1.19-4.42 0.77-3.77 4.08-5 4.08-5 0-0.55 0.45-1 1-1s1 0.45 1 1c0 0 3.39 1.23 4.16 5 0.38 1.88 0.42 3.66 1.19 4.42l0.66 0.58z"
+                  />
+                  <path
+                    class="notification--bellClapper"
+                    d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"
+                  />
+                </svg>
+                <span class="notification--num">{{ getNotifyNum() }}</span>
+              </div>
+            </main>
+            <!-- <i class="ni ni-bell-55" v-if="this.notifyNum == 0"></i>
+            <badge type="text-light" v-if="this.notifyNum == 0">{{ getNotifyNum() }}</badge>
+
+            <i class="ni ni-bell-55" style="color:red" v-if="this.notifyNum"></i>
+            <badge
+              type="text-light"
+              v-if="!this.notifyNum == 0"
+              style="color:red"
+            >{{ getNotifyNum() }}</badge>-->
           </div>
 
           <!-- 레이아웃 width가 md 이하일때는 @/components/Sidebar.vue 수정해야함 -->
@@ -336,5 +358,107 @@ router-link:hover {
 .navbar-brand-img:focus {
   border: none;
   outline: none;
+}
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+/* .notification {
+  position: relative;
+  width: 14px;
+  height: 16.8px;
+} */
+.notification {
+  display: flex;
+  align-items: center;
+  margin-top: 35%;
+}
+svg {
+  display: flex;
+  align-items: center;
+  width: 40px;
+}
+svg > path {
+  fill: #172b4d;
+}
+
+.notification--bell {
+  animation: bell 2.2s linear infinite;
+  transform-origin: 50% 0%;
+  color: red;
+}
+
+.notification--bellClapper {
+  animation: bellClapper 2.2s 0.1s linear infinite;
+}
+
+.notification--num {
+  position: absolute;
+  top: 10%;
+  left: 60%;
+  font-size: 15px;
+  border-radius: 90%;
+  /* border: 1px; */
+  color: #ffffff;
+  background-color: #ff4c13;
+  text-align: center;
+  animation: notification 2.2s linear;
+}
+
+@keyframes bell {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  45% {
+    transform: rotate(-10deg);
+  }
+  55% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes bellClapper {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(-0.15em);
+  }
+  45% {
+    transform: translateX(0.15em);
+  }
+  55% {
+    transform: translateX(-0.1em);
+  }
+  60% {
+    transform: translateX(0.1em);
+  }
+}
+
+@keyframes notification {
+  0%,
+  25%,
+  75%,
+  100% {
+    opacity: 1;
+  }
+  30%,
+  70% {
+    opacity: 0;
+  }
 }
 </style>
