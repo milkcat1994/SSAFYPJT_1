@@ -2,34 +2,9 @@
   <div class="row justify-content-center">
     <div class="col-lg-5 col-md-7">
       <div class="card bg-secondary shadow border-0">
-        <div class="card-header bg-transparent pb-5">
-          <div class="text-center mt-2 mb-3">
-            <small>소셜 회원가입</small>
-          </div>
-          <div class="btn-wrapper text-center">
-            <router-link :to="{ name: 'Kakao' }" class="btn btn-neutral btn-icon">
-              <span class="btn-inner--icon">
-                <img src="img/icons/common/kakao.svg" />
-              </span>
-              <span class="btn-inner--text">Kakao</span>
-            </router-link>
-            <!-- <a href="#" class="btn btn-neutral btn-icon">
-              <span class="btn-inner--icon">
-                <img src="img/icons/common/kakao.svg" />
-              </span>
-              <span class="btn-inner--text">Kakao</span>
-            </a>-->
-            <a href="#" class="btn btn-neutral btn-icon">
-              <span class="btn-inner--icon">
-                <img src="img/icons/common/google.svg" />
-              </span>
-              <span class="btn-inner--text">Google</span>
-            </a>
-          </div>
-        </div>
         <div class="card-body px-lg-5 py-lg-5">
           <div class="text-center mb-4">
-            <small>또는 사이트 회원가입</small>
+            <small>회원가입</small>
           </div>
           <form role="form">
             <div class="d-flex justify-content-center">
