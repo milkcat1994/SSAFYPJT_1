@@ -82,7 +82,7 @@ public class CfAlgorithm {
         // 태그를 문자열 배열로
         String[] bookTags = book.split(",");
         int eq = 0;
-
+    
         for (String bookTag: bookTags) {
             // 태그를 포함하면
             if (edi.trim().contains(bookTag.trim()))  eq+=1; 

@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.validation.Valid;
 
@@ -81,6 +82,57 @@ public class RequestController {
 
 		List<RequestDto> requestList = requestService.searchListFlagRequest(statusDto);
 
+		for (RequestDto requestDto : requestList) {
+			if(requestDto.getVideo_type().equals("pers"))
+			requestDto.setVideo_type("개인용");
+			else if(requestDto.getVideo_type().equals("comm"))
+				requestDto.setVideo_type("상업용");
+
+			if(requestDto.getVideo_style().equals("kids"))
+				requestDto.setVideo_style("키즈");
+			else if(requestDto.getVideo_style().equals("game"))
+				requestDto.setVideo_style("게임");
+			else if(requestDto.getVideo_style().equals("musi"))
+				requestDto.setVideo_style("음악/댄스");
+			else if(requestDto.getVideo_style().equals("food"))
+				requestDto.setVideo_style("푸드/쿠킹");
+			else if(requestDto.getVideo_style().equals("vlog"))
+				requestDto.setVideo_style("V-log");
+			else if(requestDto.getVideo_style().equals("movi"))
+				requestDto.setVideo_style("영화/애니메이션");
+			else if(requestDto.getVideo_style().equals("anim"))
+				requestDto.setVideo_style("동물");
+			else if(requestDto.getVideo_style().equals("beau"))
+				requestDto.setVideo_style("뷰티/패션");
+			else if(requestDto.getVideo_style().equals("spor"))
+				requestDto.setVideo_style("스포츠");
+			
+			if(requestDto.getVideo_skill().length() > 0){
+				StringTokenizer st = new StringTokenizer(requestDto.getVideo_skill(), ",");
+				String skills = "";
+				while(st.hasMoreTokens()){
+					String skill = st.nextToken();
+					if(skill.equals("colr")){
+						skills += ", 색/밝기 조정";
+					} else if(skill.equals("audi")){
+						skills += ", 음향";
+					} else if(skill.equals("moti")){
+						skills += ", 모션그래픽";
+					} else if(skill.equals("capt")){
+						skills += ", 자막";
+					} else if(skill.equals("intr")){
+						skills += ", 인트로";
+					} else if(skill.equals("outr")){
+						skills += ", 아웃트로";
+					}
+				}
+				int len = skills.length();
+				skills = skills.substring(2,len);
+				requestDto.setVideo_skill(skills);;
+			}
+
+		}
+
 		if (!requestList.isEmpty()) {
 			return new ResponseEntity<>(requestList, HttpStatus.OK);
 		} else {
@@ -113,6 +165,57 @@ public class RequestController {
 
 		List<RequestDto> responseList = requestService.searchListFlagResponse(statusDto);
 
+		for (RequestDto requestDto : responseList) {
+			if(requestDto.getVideo_type().equals("pers"))
+			requestDto.setVideo_type("개인용");
+			else if(requestDto.getVideo_type().equals("comm"))
+				requestDto.setVideo_type("상업용");
+
+			if(requestDto.getVideo_style().equals("kids"))
+				requestDto.setVideo_style("키즈");
+			else if(requestDto.getVideo_style().equals("game"))
+				requestDto.setVideo_style("게임");
+			else if(requestDto.getVideo_style().equals("musi"))
+				requestDto.setVideo_style("음악/댄스");
+			else if(requestDto.getVideo_style().equals("food"))
+				requestDto.setVideo_style("푸드/쿠킹");
+			else if(requestDto.getVideo_style().equals("vlog"))
+				requestDto.setVideo_style("V-log");
+			else if(requestDto.getVideo_style().equals("movi"))
+				requestDto.setVideo_style("영화/애니메이션");
+			else if(requestDto.getVideo_style().equals("anim"))
+				requestDto.setVideo_style("동물");
+			else if(requestDto.getVideo_style().equals("beau"))
+				requestDto.setVideo_style("뷰티/패션");
+			else if(requestDto.getVideo_style().equals("spor"))
+				requestDto.setVideo_style("스포츠");
+			
+			if(requestDto.getVideo_skill().length() > 0){
+				StringTokenizer st = new StringTokenizer(requestDto.getVideo_skill(), ",");
+				String skills = "";
+				while(st.hasMoreTokens()){
+					String skill = st.nextToken();
+					if(skill.equals("colr")){
+						skills += ", 색/밝기 조정";
+					} else if(skill.equals("audi")){
+						skills += ", 음향";
+					} else if(skill.equals("moti")){
+						skills += ", 모션그래픽";
+					} else if(skill.equals("capt")){
+						skills += ", 자막";
+					} else if(skill.equals("intr")){
+						skills += ", 인트로";
+					} else if(skill.equals("outr")){
+						skills += ", 아웃트로";
+					}
+				}
+				int len = skills.length();
+				skills = skills.substring(2,len);
+				requestDto.setVideo_skill(skills);;
+			}
+
+		}
+		
 		if (!responseList.isEmpty()) {
 			return new ResponseEntity<>(responseList, HttpStatus.OK);
 		} else {
@@ -126,7 +229,6 @@ public class RequestController {
 	public ResponseEntity<String> insertRequest(@Valid @RequestBody RequestDto requestDto) {
 		// 등록시 기본값 0
 		requestDto.setDone_flag(0);
-		
 		requestDto.setVideo_skill(requestDto.getVideo_skill().substring(1));
 
 		int result = requestService.insertRequest(requestDto);
@@ -349,8 +451,10 @@ public class RequestController {
 	@ApiOperation(value = "요청서의 리뷰 등록")
 	@PostMapping("/review")
 	public Object insertReview(@RequestBody RequestReviewSaveRequest requestReviewSaveRequest) {
+		float avg = requestReviewSaveRequest.getFinishScore() + requestReviewSaveRequest.getKindnessScore() + requestReviewSaveRequest.getVideoScore();
+		requestReviewSaveRequest.setScoreAvg(avg/3);
 		int result = requestService.insertReview(requestReviewSaveRequest);
-
+		
 		if (result > 0) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -372,7 +476,5 @@ public class RequestController {
 			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
 		}
 	}
-
-
 	
 }

@@ -1,91 +1,48 @@
 <template>
-  <div class="container mx-auto my-4 py-4" style="width: 80%">
-
-    <h1 class="display-3 mb-0">편집된 영상의 길이는 얼마나 되어야 할까요?</h1>
+  <div class="container mx-auto my-4 py-4" style="width: 90%">
     
+    <h1 class="display-3 mb-0 text-center">편집된 영상의 길이를 선택해주세요</h1>
+
     <div class="container py-4">
-      
-      <base-radio class="custom-control-alternative" name="one-min" v-model="final">
-        <span class="display-4">1분 이내</span>
-      </base-radio>
-      
-      <base-radio class="custom-control-alternative" name="five-min" v-model="final">
-        <span class="display-4">5분 이내</span>
-      </base-radio>
-      
-      <base-radio class="custom-control-alternative" name="ten-min" v-model="final">
-        <span class="display-4">10분 이내</span>
-      </base-radio>
-      
-      <base-radio class="custom-control-alternative" name="thirty-min" v-model="final">
-        <span class="display-4">30분 이내</span>
-      </base-radio>
-      
-      <base-radio class="custom-control-alternative" name="over-thirty" v-model="final">
-        <span class="display-4">30분 이상</span>
-      </base-radio>
-          
+
+      <div class="row d-flex justify-content-center">
+
+        <div class="card text-center col-sm-2 m-2" 
+            v-for="item of finalLength"
+            :class="{selected: !!item.status}"
+            :key="item.value"
+            @click="setFinalLength(item.value)">
+          <div class="card-body px-0 pt-4">
+            <h2 class="card-title">{{item.name}}</h2>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
 </template>
 <script>
-import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { mapState } from "vuex";
 
 export default {
   name: "video-final-length",
-  props: {
-    type: {
-      type: String,
-    },
-    title: String,
-    clickedNext: {
-      type: Boolean,
-    },
-    currentStep: {
-      type: Object,
-    },
+  computed: {
+    ...mapState({
+      finalLength: state => state.stepper.finalLength
+    }),
   },
-  mixins: [validationMixin],
-  data() {
-    return {
-      final: null,
-    };
-  },
-  validations: {
-    final: {
-      required,
-    },
-  },
-  watch: {
-    $v: {
-      handler: function (val) {
-        if (!val.$invalid) {
-          this.$emit("can-continue", { value: true });
-        } else {
-          this.$emit("can-continue", { value: false });
-        }
-      },
-      deep: true,
-    },
-    clickedNext(val) {
-      if (val === true) {
-        this.$v.final.$touch();
-        this.setFinalLength()
-      }
-    },
-    final(val) {
-      this.$store.commit('setFinalLength', {value: val})
+  methods: {
+    setFinalLength(value) {
+      this.$store.commit('stepper/setFinalLength', value)
     }
-  },
-  mounted() {
-    if (!this.$v.$invalid) {
-      this.$emit("can-continue", { value: true });
-    } else {
-      this.$emit("can-continue", { value: false });
-    }
-  },
+  }
 };
 </script>
-<style>
+<style scoped>
+.card {
+  cursor: pointer;
+}
+.selected {
+  border: solid 1px darkblue;
+}
 </style>
