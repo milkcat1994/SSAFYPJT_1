@@ -360,7 +360,10 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                     sb.append("nickname:").append(searchRequest.getSearchText());
                     //해당 글자 포함하는 닉네임 가지는 Key 모두 저장
                     keySet.addAll(hashKeys("nickname:uids:*"+searchRequest.getSearchText()+"*"));
-                    setOperations.unionAndStore(keySet, "nickname:uids:search:"+searchRequest.getSearchText());
+                    // 검색어가 없을 경우 합치지 않는다.
+                    if(!keySet.isEmpty()){
+                        setOperations.unionAndStore(keySet, "nickname:uids:search:"+searchRequest.getSearchText());
+                    }
                     keySet = new LinkedHashSet<>();
                     keySet.add("nickname:uids:search:"+searchRequest.getSearchText());
                 }
