@@ -292,16 +292,33 @@
                         v-if="$session.get('auth') == 'editor'"
                         class="statusBtn"
                         style="background-color: #aaaaff"
-                        @click="getUserInfo(requestitem1.request_nickname)"
+                        @click="getEmail(requestitem1.request_nickname)"
                         >이메일 보기</b-button
                       >
                       <b-button
                         v-if="$session.get('auth') == 'noneditor'"
                         class="statusBtn"
                         style="background-color: #aaaaff"
-                        @click="getUserInfo(requestitem1.response_nickname)"
+                        @click="getEmail(requestitem1.response_nickname)"
                         >이메일 보기</b-button
                       >
+                      <b-modal id="emailModal" hide-footer>
+                        <template v-slot:modal-title>{{ requestitem1.response_nickname }}님의 이메일</template>
+                        <div class="d-block text-center">
+                          <div id="emailtarget" class="d-flex justify-content-center">
+                            {{ email }}
+                          </div>
+                          <br>
+                          <b-button
+                            class="justify-content-center"
+                            style="background-color: #aaaaff"
+                            copytarget="emailtarget"
+                            ><i class="fas fa-copy" style="color: #000000">복사하기</i></b-button
+                          >
+                          <br>
+                        </div>
+                      </b-modal>
+                      
                     </b-card-body>
                   </b-collapse>
                 </b-card>
@@ -652,7 +669,7 @@ export default {
         },
       ],
 
-      
+      email: "",
 
       ridDetail: "",
 
@@ -1008,26 +1025,25 @@ export default {
         });
     },
 
-    showEmail(){
-      
-    },
-    getUserInfo(nickname) {
+    getEmail(nickname) {
       //1은 session uid
         http
-            .post('/user/userfind/'+ nickname)
-            .then(({data}) => {
-                if (data != 'not exist') {
-                  console.log(data);
-                  return;
-                } else {
-                  return;
-                }
-            })
-            .catch(error => {
-                console.log(error);
+          .post('/user/userfind/'+ nickname)
+          .then(({data}) => {
+              if (data != 'not exist') {
+                this.email = data;
+                this.$bvModal.show("emailModal");
                 return;
-            })
-      },
+              } else {
+                return;
+              }
+          })
+          .catch(error => {
+              console.log(error);
+              return;
+          })
+    },
+   
   },
 };
 </script>
