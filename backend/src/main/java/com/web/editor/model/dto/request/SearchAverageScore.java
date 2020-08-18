@@ -17,4 +17,9 @@ import lombok.ToString;
 public class SearchAverageScore {
     String nickname;
     float avgScore;
+
+    public SearchAverageScore(SearchAverageScore searchAverageScore){
+        this.nickname = searchAverageScore.getNickname();
+        this.avgScore = searchAverageScore.getAvgScore();
+    }
 }

@@ -17,4 +17,9 @@ import lombok.Setter;
 public class SearchPortfolioJoinVideo {
     private int uid;
     private String mainUrl;
+
+    public SearchPortfolioJoinVideo(SearchPortfolioJoinVideo searchPortfolioJoinVideo){
+        this.uid = searchPortfolioJoinVideo.getUid();
+        this.mainUrl = searchPortfolioJoinVideo.getMainUrl();
+    }
 }
