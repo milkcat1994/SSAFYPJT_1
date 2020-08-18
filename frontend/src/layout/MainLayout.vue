@@ -46,12 +46,9 @@
           }"
         />
       </template>
-    </side-bar> -->
-    <div
-      class="main-content"
-      :data="sidebarBackground"
-      @mousedown="hide(sidebar)"
-    >
+    </side-bar>-->
+    <!-- <div class="main-content" :data="sidebarBackground" @mousedown="hide(sidebar)"> -->
+    <div class="main-content" :data="sidebarBackground">
       <main-navbar @mousedown.stop></main-navbar>
 
       <div>
