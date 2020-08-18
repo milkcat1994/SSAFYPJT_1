@@ -81,13 +81,10 @@
                     <h4>
                       <i class="fas fa-heart mr-2" style="color:red"></i>
                       <span class="mr-3">{{ editor.bookmarkNumber }}</span>
-<<<<<<< HEAD
                     </h4>
                     <h4>
                       <i class="fas fa-star mr-2" style="color:yellow"></i>
                       <span class="mr-3">{{ editor.avgScore }}</span>
-=======
->>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
                     </h4>
                   </div>
                 </template>
@@ -114,17 +111,8 @@
                         :key="recEditor.uid"
                       >
                         <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
-<<<<<<< HEAD
                           <img src alt />
                           <LazyYoutubeVideo :src="recEditor.url" style="width: 100%;" class="mb-2" />
-=======
-                            <img src alt />
-                            <LazyYoutubeVideo
-                              :src="recEditor.url"
-                              style="width: 100%;"
-                              class="mb-2"
-                            />
->>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
                           <hr />
                           <b-card-text>
                               <div class="d-inline-flex">
@@ -224,11 +212,7 @@ export default {
           sortType: "SCORE_DESC",
           videoSkills: [],
           videoStyles: [],
-<<<<<<< HEAD
           videoTypes: [],
-=======
-          videoTypes: []
->>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
         })
         .then((res) => {
           if (res.data.status) {
@@ -269,37 +253,33 @@ export default {
     movePortfolio(uid) {
       this.$router.push("/portfolio?no=" + uid);
     },
-<<<<<<< HEAD
-
-=======
->>>>>>> 44dca8335e4e8ef66ead92c0d7fe1bc255f764a8
-    // getReviewInfo(uid) {
-    //   http
-    //     .get("/portfolio/review/" + uid)
-    //     .then(({ data }) => {
-    //       //성공시 평균 계산 필요 추출 필요
-    //       if (data.data == "success") {
-    //         this.reviews = data.object;
-    //         let videoAvg = 0,
-    //           kindnessAvg = 0,
-    //           finishAvg = 0;
-    //         data.object.forEach((obj) => {
-    //           videoAvg += obj.videoScore;
-    //           kindnessAvg += obj.kindnessScore;
-    //           finishAvg += obj.finishScore;
-    //         });
-    //         let length = data.object.length;
-    //         this.avgScore = (videoAvg + kindnessAvg + finishAvg) / length;
-    //         return;
-    //       } else {
-    //         return;
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       return;
-    //     });
-    // },
+    getReviewInfo(uid) {
+      http
+        .get("/portfolio/review/" + uid)
+        .then(({ data }) => {
+          //성공시 평균 계산 필요 추출 필요
+          if (data.data == "success") {
+            this.reviews = data.object;
+            let videoAvg = 0,
+              kindnessAvg = 0,
+              finishAvg = 0;
+            data.object.forEach((obj) => {
+              videoAvg += obj.videoScore;
+              kindnessAvg += obj.kindnessScore;
+              finishAvg += obj.finishScore;
+            });
+            let length = data.object.length;
+            this.avgScore = (videoAvg + kindnessAvg + finishAvg) / length;
+            return;
+          } else {
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
   },
   computed: {
     currentEditors() {
