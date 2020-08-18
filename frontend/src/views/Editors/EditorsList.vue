@@ -5,7 +5,7 @@
         <span>전체 {{totalPage}}페이지 중 {{currentPage}}페이지</span>
         <div>
           <div class="mr-2 d-inline-flex">
-            <button class="btn btn-danger" @click="$emit('clear-sort')">초기화</button>
+            <button class="btn btn-danger" @click="$emit('clear-sort')">전체 편집자 보기</button>
           </div>
           <base-dropdown>
             <base-button slot="title" type="primary" class="dropdown-toggle">{{sortKey}}</base-button>
@@ -39,12 +39,28 @@
                   <div class="d-inline-flex flex-column ml-3">
                     <!-- <base-button :outline="!isBookmarked(editor.uid)" type="danger" size="sm" icon="ni ni-favourite-28" @click="addBookmark()"> -->
                     <base-button
+                      v-if="!editor.togleBookmark"
                       outline
+                      type="danger"
+                      size="sm"
+                      icon="ni ni-favourite-28"
+                      @click="addBookmark(editor.uid, editor.togleBookmark)"
+                    >{{editor.bookmarkNumber}}</base-button>
+                    <base-button
+                      v-else
+                      type="danger"
+                      size="sm"
+                      icon="ni ni-favourite-28"
+                      @click="addBookmark(editor.uid, editor.togleBookmark)"
+                    >{{editor.bookmarkNumber}}</base-button>
+
+                    <!-- <base-button
+                      v-if="togleBookmark"
                       disabled
                       type="danger"
                       size="sm"
                       icon="ni ni-favourite-28"
-                    >{{ editor.bookmarkNumber }}</base-button>
+                    >{{ getBookmarkCount(editor.uid) }}</base-button> -->
                   </div>
                 </div>
                 <div class="d-flex">
@@ -85,7 +101,7 @@
   </div>
 </template>
 <script>
-// import http from "@/util/http-common";
+import http from "@/util/http-common";
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 export default {
@@ -102,6 +118,8 @@ export default {
     currentEditors() {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;
+      this.getBookmarkCount(this.editorsData);
+      // console.log(this.editorsData.uid);
       return this.editorsData.slice(start, end);
     },
     totalPage() {
@@ -116,19 +134,11 @@ export default {
       editorsPerPage: 5,
       currentPage: 1,
       sortKey: "정렬",
-      // editorsData: [],
-      // 백엔드 API 호출 시 반환 자료형
-      // {
-      //   uid: "포트폴리오 UID",
-      //   nickname: "포트폴리오 닉네임",
-      //   payMin: "분당 가격",
-      //   bookmarkNumber: "북마크 개수",
-      //   avgScore: "평점",
-      //   tags: ["편집자 관련 태그", ...],
-      //   url: ["편집자 대표 URL", "기타 URL1", ...]
     };
   },
-  created() {},
+  created() {
+
+  },
   methods: {
     round(score) {
       return Number(score.toFixed(1));
@@ -149,42 +159,69 @@ export default {
       } else if (val == "PRICE_DESC") this.sortKey = "높은 가격순";
       this.$emit("sort-by", val);
     },
-
-    // // 북마크 로직(미완성)
-    // isBookmarked(portfolioUID) {
-    //   // login 되어있는 사용자만?
-    //   http
-    //     .get("/bookmark/cnt/" + portfolioUID)
-    //     .then((res) => {
-    //       if (res.data == "success") {
-    //         let isBooked = false;
-    //         res.object.forEach((obj) => {
-    //           if (obj.userInfoUid == this.$session.get("uid")) {
-    //             isBooked = true;
-    //           }
-    //         });
-    //         return isBooked;
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //     });
-    // },
-    // addBookmark(portfolioUID) {
-    //   if (!this.isBookmarked(portfolioUID)) {
-    //     http
-    //       .post("/bookmark", {
-    //         uid: this.$session.get("uid"),
-    //         muid: portfolioUID,
-    //       })
-    //       .then((res) => {
-    //         // 리스트 전체 돌면서
-    //         // 리스트에 있는 개별 포트폴리오 UID == 북마크한 포트폴리오 UID
-    //         // 일 경우 북마크 개수 업데이트? (아니면 Vue.js가 자동으로 업데이트해주는지?)
-    //         console.log(res);
-    //       });
-    //   }
-    // },
+    getBookmarkCount(editorsList){
+      editorsList.forEach(editor => {
+        http
+        .get('/bookmark/cnt/'+editor.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
+            data.object.forEach((obj) => {
+              if (obj.userInfoUid == this.$session.get("uid")) {
+                editor.togleBookmark = true;
+              }
+            });
+            return;
+          } else {
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+      })
+    },
+    addBookmark(uid, togleBookmark) {
+      if (!togleBookmark) {
+        http
+          .post("/bookmark", {
+            uid: this.$session.get("uid"),
+            muid: uid,
+          })
+          .then(({ data }) => {
+            if (data.data == "success") {
+              this.editorsData.forEach(editor => {
+                if(editor.uid == uid){
+                  editor.bookmarkNumber += 1;
+                  editor.togleBookmark = true;
+                }
+              });
+              return;
+            } else {
+              return;
+            }
+          });
+      } else {
+        http
+          .post("/bookmark/delete", {
+            uid: this.$session.get("uid"),
+            muid: uid,
+          })
+          .then(({ data }) => {
+            if (data.data == "success") {
+              this.editorsData.forEach(editor => {
+                if(editor.uid == uid){
+                  editor.bookmarkNumber -= 1;
+                  editor.togleBookmark = false;
+                }
+              });
+              return;
+            } else {
+              return;
+            }
+          })
+        }
+      },
   },
 };
 </script>
