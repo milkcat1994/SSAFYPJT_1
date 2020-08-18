@@ -17,9 +17,9 @@
       </div>
     </div>
 
-    <div class="container mt--7 mb-4">
+    <div class="container mt--7 mb-8">
       <div class="card shadow border-0">
-        <div class="card-header">
+        <div class="card-header pb-0">
           <!-- <h3 class="text-center mt-2">헤더(progress bar) 들어갈 자리</h3> -->
           <progress-bar
             @change-step="changeStep"

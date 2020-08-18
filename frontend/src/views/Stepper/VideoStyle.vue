@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto my-4 py-4" style="width: 80%;">
+  <div class="container mx-auto py-4" style="width: 80%;">
     
     <h1 class="display-3 mb-4 text-center">어떤 종류의 영상인가요?</h1>
 

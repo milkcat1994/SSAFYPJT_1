@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto my-4 py-4" style="width: 90%">
+  <div class="container mx-auto py-4" style="width: 90%">
     
     <h1 class="display-3 mb-0 text-center">편집된 영상의 길이를 선택해주세요</h1>
 
