@@ -58,11 +58,6 @@
             >
               <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
                 <template v-slot:img>
-                  <!-- <img
-                    class="d-block img-fluid w-100"
-                    src="https://picsum.photos/1024/480/?image=55"
-                    alt="image slot"
-                  />-->
                   <LazyYoutubeVideo :src="editor.urls[0]" style="width: 100%;" class="mb-2" />
                   <router-link :to="`/portfolio?no=${editor.uid}`">
                     <div class="d-flex justify-content-end mt-3 mx-3">

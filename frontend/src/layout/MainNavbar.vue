@@ -155,14 +155,14 @@
     <ul class="navbar-nav">
       <li v-if="!isLogin" class="nav-item mr-3">
         <router-link :to="{ name: 'register' }" class="nav-link">
-          <i class="fas fa-user-plus"></i>
-          <span class="nav-link-inner--text">회원가입</span>
+          <i class="fas fa-user-plus mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">회원가입</span>
         </router-link>
       </li>
       <li v-if="!isLogin" class="nav-item">
         <router-link :to="{ name: 'login' }" class="nav-link">
-          <i class="fas fa-user-check"></i>
-          <span class="nav-link-inner--text">로그인</span>
+          <i class="fas fa-user-check mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">로그인</span>
         </router-link>
       </li>
     </ul>
