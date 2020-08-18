@@ -18,6 +18,7 @@
       </div>
       <div v-if="message" class="emptyResult">
         <h1>{{message}}</h1>
+        <br>
         <li>단어의 철자가 정확한지 확인해 보세요.</li>
         <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
         <li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
@@ -157,6 +158,7 @@ export default {
         this.sortKey = "낮은 가격순";
       } else if (val == "PRICE_DESC") this.sortKey = "높은 가격순";
       this.$emit("sort-by", val);
+      this.message = "";
     },
     getBookmarkCount(editorsList){
       editorsList.forEach(editor => {

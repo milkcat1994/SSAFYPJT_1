@@ -271,9 +271,7 @@ export default {
             this.editors = res.data.object;
             if(this.editors.length == 0){
               this.message = "검색 결과가 없습니다.";
-              console.log("검색 결과 없음");
             }
-            // console.log(this.editors);
           } else {
             console.log(res.data.status);
           }
@@ -287,7 +285,6 @@ export default {
         this.videoType.forEach(item => {
           if (item.value == initType) {
             item.status = true
-            // this.selectedType.push(item.value)
             this.selectedFilters.push(item.value)
           }
         })
@@ -297,7 +294,6 @@ export default {
         this.videoStyle.forEach(item => {
           if (item.value == initStyle) {
             item.status = true
-            // this.selectedStyle.push(item.value)
             this.selectedFilters.push(item.value)
           }
         })
@@ -322,42 +318,6 @@ export default {
         val.status = true;
       }
     },
-    // toggleTypeFilter(val) {
-    //   if (val.status) {
-    //     let index = this.selectedType.indexOf(val.value);
-    //     if (index > -1) {
-    //       this.selectedType.splice(index, 1);
-    //     }
-    //     val.status = false;
-    //   } else {
-    //     this.selectedType.push(val.value);
-    //     val.status = true;
-    //   }
-    // },
-    // toggleStyleFilter(val) {
-    //   if (val.status) {
-    //     let index = this.selectedStyle.indexOf(val.value);
-    //     if (index > -1) {
-    //       this.selectedStyle.splice(index, 1);
-    //     }
-    //     val.status = false;
-    //   } else {
-    //     this.selectedStyle.push(val.value);
-    //     val.status = true;
-    //   }
-    // },
-    // toggleSkillFilter(val) {
-    //   if (val.status) {
-    //     let index = this.selectedSkills.indexOf(val.value);
-    //     if (index > -1) {
-    //       this.selectedSkills.splice(index, 1);
-    //     }
-    //     val.status = false;
-    //   } else {
-    //     this.selectedSkills.push(val.value);
-    //     val.status = true;
-    //   }
-    // },
     clearFilter(value) {
       let index = this.selectedFilters.indexOf(value);
       if (index > -1) {
