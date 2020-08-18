@@ -26,9 +26,10 @@
           <calendar
             :eventCategories="eventCategories"
             :events="(events = scheduledate)"
+            :offDays="offdays"
             ref="calendar"
           />
-          <i class="fas fa-circle" style="color: #f29661; margin: 15px;"
+          <i class="fas fa-circle" style="color: #ffe200; margin: 15px;"
             >선택된 작업</i
           >
           <i class="fas fa-circle" style="color: #6699ff; margin: 15px"
@@ -40,7 +41,7 @@
             v-if="$session.get('auth') == 'editor'"
             >개인 일정</i
           >
-          <i class="fas fa-circle" style="color: #c9c9c9; margin: 15px">휴일</i>
+          <i v-if="$session.get('auth') == 'editor'" class="fas fa-circle" style="color: #c9c9c9; margin: 15px">휴일</i>
         </div>
       </div>
 
@@ -280,12 +281,44 @@
                           </tbody>
                         </table>
                       </b-card-text>
+
                       <b-button
                         class="statusBtn"
                         style="background-color: #0099ff"
                         @click="doneRequest(requestitem1.rid)"
                         >요청 완료</b-button
                       >
+                      <b-button
+                        v-if="$session.get('auth') == 'editor'"
+                        class="statusBtn"
+                        style="background-color: #aaaaff"
+                        @click="getEmail(requestitem1.request_nickname)"
+                        >이메일 보기</b-button
+                      >
+                      <b-button
+                        v-if="$session.get('auth') == 'noneditor'"
+                        class="statusBtn"
+                        style="background-color: #aaaaff"
+                        @click="getEmail(requestitem1.response_nickname)"
+                        >이메일 보기</b-button
+                      >
+                      <b-modal id="emailModal" hide-footer>
+                        <template v-slot:modal-title>{{ requestitem1.response_nickname }}님의 이메일</template>
+                        <div class="d-block text-center">
+                          <div id="emailtarget" class="d-flex justify-content-center">
+                            {{ email }}
+                          </div>
+                          <br>
+                          <b-button
+                            class="justify-content-center"
+                            style="background-color: #aaaaff"
+                            copytarget="emailtarget"
+                            ><i class="fas fa-copy" style="color: #000000">복사하기</i></b-button
+                          >
+                          <br>
+                        </div>
+                      </b-modal>
+                      
                     </b-card-body>
                   </b-collapse>
                 </b-card>
@@ -620,7 +653,7 @@ export default {
           id: 2,
           title: "selected",
           textColor: "white",
-          backgroundColor: "#f29661",
+          backgroundColor: "#ffe200",
         },
         {
           id: 3,
@@ -636,8 +669,11 @@ export default {
         },
       ],
 
+      email: "",
+
       ridDetail: "",
 
+      offdays: [],
       events: [],
       videoScore: 0,
       kindnessScore: 0,
@@ -667,12 +703,12 @@ export default {
         });
       if (this.$session.get("auth") == "editor") {
         store.dispatch(
-          "getProgressdate",
-          "/request/date/res/" + this.$session.get("nickname")
-        );
-        store.dispatch(
           "getHolidaydate",
           "/schedule/holiday/" + this.$session.get("uid")
+        );
+        store.dispatch(
+          "getProgressdate",
+          "/request/date/res/" + this.$session.get("nickname")
         );
         store.dispatch(
           "getRequestitems0",
@@ -694,10 +730,6 @@ export default {
         store.dispatch(
           "getProgressdate",
           "/request/date/req/" + this.$session.get("nickname")
-        );
-        store.dispatch(
-          "getHolidaydate",
-          "/schedule/holiday/" + this.$session.get("uid")
         );
         store.dispatch(
           "getRequestitems0",
@@ -992,6 +1024,26 @@ export default {
           );
         });
     },
+
+    getEmail(nickname) {
+      //1은 session uid
+        http
+          .post('/user/userfind/'+ nickname)
+          .then(({data}) => {
+              if (data != 'not exist') {
+                this.email = data;
+                this.$bvModal.show("emailModal");
+                return;
+              } else {
+                return;
+              }
+          })
+          .catch(error => {
+              console.log(error);
+              return;
+          })
+    },
+   
   },
 };
 </script>

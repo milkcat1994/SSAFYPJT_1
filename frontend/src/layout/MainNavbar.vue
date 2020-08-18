@@ -108,30 +108,9 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <main rel="main">
-              <div class="notification">
-                <svg viewBox="-10 0 35 35">
-                  <path
-                    class="notification--bell"
-                    d="M14 12v1H0v-1l0.73-0.58c0.77-0.77 0.81-3.55 1.19-4.42 0.77-3.77 4.08-5 4.08-5 0-0.55 0.45-1 1-1s1 0.45 1 1c0 0 3.39 1.23 4.16 5 0.38 1.88 0.42 3.66 1.19 4.42l0.66 0.58z"
-                  />
-                  <path
-                    class="notification--bellClapper"
-                    d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"
-                  />
-                </svg>
-                <span class="notification--num">{{ getNotifyNum() }}</span>
-              </div>
-            </main>
-            <!-- <i class="ni ni-bell-55" v-if="this.notifyNum == 0"></i>
-            <badge type="text-light" v-if="this.notifyNum == 0">{{ getNotifyNum() }}</badge>
-
-            <i class="ni ni-bell-55" style="color:red" v-if="this.notifyNum"></i>
-            <badge
-              type="text-light"
-              v-if="!this.notifyNum == 0"
-              style="color:red"
-            >{{ getNotifyNum() }}</badge>-->
+            <i v-if="getNotifyNum() > 0" class="ni ni-bell-55" style="color:#ff0066"></i>
+            <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
+            <badge type="text-light">{{ getNotifyNum() }}</badge>
           </div>
 
           <!-- 레이아웃 width가 md 이하일때는 @/components/Sidebar.vue 수정해야함 -->
