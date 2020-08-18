@@ -43,8 +43,8 @@ public class UserMapper {
     }
 
     // 회원 조회 닉네임으로
-    public String findByNickname(@Param("nickname") String nickname) throws SQLException{
-        return sqlSession.selectOne("findByNickname", nickname);
+    public String userfindByNickname(@Param("nickname") String nickname) throws SQLException{
+        return sqlSession.selectOne("userfindByNickname", nickname);
     }
 
     // 회원 정보 수정
@@ -64,7 +64,7 @@ public class UserMapper {
     }
 
     // nickname 중복 확인
-    public String userfindByNickname(@Param("nickname") String nickname) throws SQLException{
-        return sqlSession.selectOne("userfindByNickname", nickname);
+    public User findByNickname(@Param("nickname") String nickname) throws SQLException{
+        return sqlSession.selectOne("findByNickname", nickname);
     }
 }
