@@ -54,7 +54,7 @@ public class RecommendController {
         bookmark.setTag(bookmark.getTag().substring(1));
         bookmark.setSkill(bookmark.getSkill().substring(1));
 
-        // 추천 편집자 받아옴
+        // 추천 편집자 리스트
         List<EditorDto> recommendList = cfAlgorithm.recommendByBookmark(bookmark, editors);
         
         return new ResponseEntity<>(recommendList, HttpStatus.OK);

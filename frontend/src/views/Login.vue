@@ -167,18 +167,6 @@ export default {
               alert("로그인 시 에러가 발생했습니다.");
             });
 
-          // 토큰생성
-          // this.$gAuth.getAuthCode()
-          //   .then(authCode => {
-          //     //on success
-          //     return this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
-          //   })
-          //   .then(response => {
-          //     //and then
-          //   })
-          //   .catch(error => {
-          //     //on fail do something
-          // })
         })
         .catch((error) => {
           console.log(error);
