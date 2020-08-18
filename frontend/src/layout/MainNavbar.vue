@@ -65,7 +65,9 @@
               v-if="isEditor && isLogin"
               :to="{
                 path: '/portfolio?no=' + this.$session.get('uid'),
+                params:{uid : this.$session.get('uid')}
               }"
+              :key="$route.fullPath"
             >
               <i class="ni ni-collection text-primary mx-2">
                 <span class="mx-2">내 포트폴리오</span>
