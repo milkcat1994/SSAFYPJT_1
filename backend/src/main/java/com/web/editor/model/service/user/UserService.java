@@ -15,6 +15,9 @@ public interface UserService {
     // 회원 조회
     public User findByUid(String uid);
 
+    // 닉네임으로 회원 조회
+    public User userfindByNickname(String nickname);
+
     // 회원 정보 수정
     public int updateUser(User user);
 

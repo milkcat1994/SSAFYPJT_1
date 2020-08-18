@@ -108,7 +108,8 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <i class="ni ni-bell-55"></i>
+            <i v-if="getNotifyNum() > 0" class="ni ni-bell-55" style="color:#ff0066"></i>
+            <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
             <badge type="text-light">{{ getNotifyNum() }}</badge>
           </div>
 
