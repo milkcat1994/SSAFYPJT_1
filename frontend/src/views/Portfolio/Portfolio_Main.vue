@@ -26,7 +26,7 @@
       <div class="row">
         <div class="col-xl-5 order-xl-2 mb-5 mb-xl-0">
           <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 390px;">
+            <div class="card-body pt-0 pt-md-4" style="min-height: 486px;">
               <div class="row">
                 <div class="col">
                   <div class="text">

@@ -12,7 +12,12 @@
     </form>-->
     <template>
       <div>
-        <i v-b-toggle.sidebar-footer class="fas fa-bars" @mouseup="maskon"></i>
+        <i
+          v-b-toggle.sidebar-footer
+          class="hamburger fas fa-bars mr-2 p-3"
+          @mouseup="maskon"
+          style="border:none outline:0 width:100px"
+        ></i>
         <b-sidebar
           id="sidebar-footer"
           aria-label="Sidebar with custom footer"
@@ -20,11 +25,12 @@
           shadow
           class="sidebar-1"
           bg-variant="white"
+          style="width:100px"
         >
-          <template v-slot:footer="{ hide }" style="display:none">
+          <template v-slot:footer="{ hide }" style="display:none width:100px">
             <div
               class="d-flex bg-dark text-light align-items-center px-3 py-2"
-              style="display:none"
+              style="display:none width:100px"
             >
               <b-button id="closebtn" size="sm" style="display:none;" @click="hide">Close</b-button>
             </div>
@@ -40,21 +46,21 @@
             </router-link>
           </div>
 
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link to="/mainpage">
               <i class="ni ni-tv-2 text-primary mx-2">
                 <span class="mx-2">메인페이지</span>
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link to="/editors">
               <i class="ni ni-zoom-split-in text-primary ml-2">
                 <span class="mx-2">편집자 찾기</span>
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link
               v-if="isEditor && isLogin"
               :to="{
@@ -66,14 +72,14 @@
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link v-if="isLogin" to="/marklist">
               <i class="ni ni-favourite-28 text-red mx-2">
                 <span class="mx-2">찜</span>
               </i>
             </router-link>
           </div>
-          <div class="ml-4 mb-2">
+          <div class="ml-4 mb-3">
             <router-link v-if="isLogin" to="/alarm">
               <i class="ni ni-bell-55 text-primar mx-2">
                 <span class="mx-2">알람</span>
@@ -258,7 +264,7 @@ export default {
     maskoff() {
       this.mask = false;
       document.getElementById("closebtn").click();
-      console.log("클릭함");
+      // console.log("클릭함");
     },
     // toggleSidebar() {
     //   console.log("toggleOn");
@@ -313,12 +319,22 @@ export default {
 }
 
 #sidebar-1 {
-  width: 200px;
-  background-color: white important;
+  width: 100px;
+  background-color: #fbf4f9 important;
   z-index: 999;
 }
 
 router-link:hover {
   opacity: 1;
+}
+
+.hamburger:focus {
+  border: none;
+  outline: none;
+}
+
+.navbar-brand-img:focus {
+  border: none;
+  outline: none;
 }
 </style>
