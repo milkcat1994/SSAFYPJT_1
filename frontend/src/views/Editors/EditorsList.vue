@@ -16,6 +16,14 @@
           </base-dropdown>
         </div>
       </div>
+      <div v-if="message" class="emptyResult">
+        <h1>{{message}}</h1>
+        <li>단어의 철자가 정확한지 확인해 보세요.</li>
+        <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
+        <li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
+        <li>두 단어 이상의 검색어인 경우, 띄어쓰기를 확인해 보세요.</li>
+        <li>검색 옵션을 변경해서 다시 검색해 보세요.</li>
+      </div>
       <ul class="list-unstyled mt-4">
         <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
           <div class="container">
@@ -37,7 +45,6 @@
                   </router-link>
                   <!-- 북마크 -->
                   <div class="d-inline-flex flex-column ml-3">
-                    <!-- <base-button :outline="!isBookmarked(editor.uid)" type="danger" size="sm" icon="ni ni-favourite-28" @click="addBookmark()"> -->
                     <base-button
                       v-if="!editor.togleBookmark"
                       outline
@@ -53,14 +60,6 @@
                       icon="ni ni-favourite-28"
                       @click="addBookmark(editor.uid, editor.togleBookmark)"
                     >{{editor.bookmarkNumber}}</base-button>
-
-                    <!-- <base-button
-                      v-if="togleBookmark"
-                      disabled
-                      type="danger"
-                      size="sm"
-                      icon="ni ni-favourite-28"
-                    >{{ getBookmarkCount(editor.uid) }}</base-button> -->
                   </div>
                 </div>
                 <div class="d-flex">
@@ -110,6 +109,7 @@ export default {
     editorsData: {
       type: Array,
     },
+    message: String,
   },
   components: {
     LazyYoutubeVideo,
@@ -119,7 +119,6 @@ export default {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;
       this.getBookmarkCount(this.editorsData);
-      // console.log(this.editorsData.uid);
       return this.editorsData.slice(start, end);
     },
     totalPage() {
@@ -232,5 +231,9 @@ export default {
 
 .dropdown-item:hover {
   cursor: pointer;
+}
+
+.emptyResult {
+  text-align: center;
 }
 </style>

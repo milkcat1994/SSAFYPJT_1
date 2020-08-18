@@ -149,6 +149,7 @@
       <editors-list
         title="편집자"
         :editorsData="editors"
+        :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
         ></editors-list>
@@ -200,6 +201,8 @@ export default {
       sortBy: "NICKNAME_ASC",
       // 선택한 필터들
       selectedFilters: [],
+
+      message: "",
     };
   },
   computed: {
@@ -252,6 +255,7 @@ export default {
       this.fetchEditors()
     },
     fetchEditors() {
+      this.message = "";
       http
         .post("/search", {
           searchTags: this.keyword.split(" "),
@@ -265,6 +269,11 @@ export default {
         .then((res) => {
           if (res.data.status) {
             this.editors = res.data.object;
+            if(this.editors.length == 0){
+              this.message = "검색 결과가 없습니다.";
+              console.log("검색 결과 없음");
+            }
+            // console.log(this.editors);
           } else {
             console.log(res.data.status);
           }
@@ -272,6 +281,7 @@ export default {
         .catch((err) => console.error(err));
     },
     fetchFilter() {
+      this.message = "";
       let initType = this.$store.getters['stepper/getSelectedVideoType'].value
       if (initType) {
         this.videoType.forEach(item => {
@@ -368,6 +378,7 @@ export default {
           e.status = false;
         }
       });
+      this.message = "";
     },
     clearFilterAll() {
       // 필터된 카테고리들 토글(활성화 <-> 비활성화)
@@ -398,13 +409,15 @@ export default {
       ]),
       // selectedFilters 배열 clear
       (this.selectedFilters.length = 0);
+      this.message = "";
     },
     resetAll() {
       this.clearFilterAll();
-      this.keyword = ""
-      this.sortBy = "NICKNAME_ASC"
-      this.searchKey = "전체"
-      this.fetchEditors()
+      this.keyword = "";
+      this.sortBy = "NICKNAME_ASC";
+      this.searchKey = "전체";
+      this.fetchEditors();
+      this.message = "";
     }
   },
 };
