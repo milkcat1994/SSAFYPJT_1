@@ -6,6 +6,7 @@ import com.web.editor.model.dto.user.NormalLoginRequest;
 import com.web.editor.model.dto.user.User;
 import com.web.editor.model.dto.user.UserConfirm;
 import com.web.editor.model.mapper.user.UserMapper;
+import com.web.editor.util.security.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    SecurityUtil securityUtil;
+
     @Override
     public User normalLogin(NormalLoginRequest normalLoginRequest) {
         User user = null;
         try{
+            //sha-256 암호화하여 DB와 비교
+            normalLoginRequest.setPassword(securityUtil.encryptSHA256(normalLoginRequest.getPassword()));
             user = userMapper.normalLogin(normalLoginRequest);
             return user;
         } catch(SQLException e){
@@ -30,6 +36,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int normalRegister(User user) {
         try{
+            user.setPassword(securityUtil.encryptSHA256(user.getPassword()));
             int res = userMapper.normalRegister(user);
             return res;
         } catch(SQLException e){
