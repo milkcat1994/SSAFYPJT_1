@@ -11,65 +11,92 @@
           v-if="!haveTags && !haveVideo"
           type="info"
           class="btn btn-info float-right"
-        >포트폴리오 등록하기</base-button>
+        >등록하기</base-button>
         <base-button
           v-if="haveTags || haveVideo"
           size="sm"
           type="info"
           class="btn btn-info float-right"
           icon="ni ni-settings"
-        >Edit profile</base-button>
+        >수정하기</base-button>
       </router-link>
     </base-header>
 
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col-xl-5 order-xl-2 mb-5 mb-xl-0">
-          <div class="card card-profile shadow">
-            <div class="card-body pt-0 pt-md-4" style="height: 390px;">
+          <div class="card card-profile shadow" style="min-height: 486px;">
+            <div class="card-header">
+              <h1>
+                {{portfolio.nickname}}
+                <base-button v-if="uid != $session.get('uid') && !togleBookmark" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                {{portfolio.markCnt}}
+                </base-button>
+                <base-button v-if="uid != $session.get('uid') && togleBookmark" type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                {{portfolio.markCnt}}
+                </base-button>
+                <base-button v-if="uid == $session.get('uid')" type="danger" icon="ni ni-favourite-28">
+                {{portfolio.markCnt}}
+                </base-button>
+                <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
+                <base-button v-if="uid != $session.get('uid')" size="sm" type="default float-right" @click="openRequestForm()"> 작업 요청하기 </base-button>
+              </h1>
+              <h3> {{portfolio.description}} </h3>
+              <div class="col">
+                    <button
+                      class="btn btn-info btn-sm mb-1"
+                      :key="index"
+                      v-for="(tag, index) in tags"
+                    >#{{ tag }}</button>
+                    </div>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
               <div class="row">
                 <div class="col">
                   <div class="text">
-                    <h1>
-                      {{portfolio.nickname}}
-                      <base-button v-if="uid != $session.get('uid') && !togleBookmark" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
-                      {{portfolio.markCnt}}
-                      </base-button>
-                      <base-button v-if="uid != $session.get('uid') && togleBookmark" type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
-                      {{portfolio.markCnt}}
-                      </base-button>
-                      <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
-                      <base-button v-if="$session.get('auth') == 'noneditor'" size="sm" type="default float-right" @click="openRequestForm()"> 작업 요청하기 </base-button>
-                    </h1>
-                    <h2> 편집 기술 </h2>
-                    <div class="col" v-for="(skill, index) in portfolio.skills" :key="index">
-                      <div class="row">
-                        <i class="ni ni-check-bold"></i>
-                        <h3> {{skill}} </h3>
-                      </div>
-                    </div>
+                    <!-- <div id="editor_skill"> -->
+                    <h4 style="margin-bottom:3%;"> {{portfolio.nickname}}님은 아래와 같은 기술을 보유하고 있습니다. </h4>
                     <div class="col">
                       <div class="row">
-                        <i class="ni ni-check-bold"></i>
-                        <h3>
-                          분당 {{portfolio.payMin}}원
-                        </h3>
+                        <div class="col-6" v-for="(skill, index) in portfolio.skills" :key="index">
+                          <div class="row">
+                            <i class="ni ni-check-bold"></i>
+                            <h3> {{skill}} </h3>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <h3>
-                      {{portfolio.description}}
-                    </h3>
-                    
-                    <!-- <div class="col-xl-5 order-xl-1"> -->
-                      <!-- <div class="row"> -->
-                      <!-- <i class="ni ni-tag"></i> -->
-                      <!-- <input-tag v-model="tags" :read-only="true" style="width:500px;"></input-tag> -->
-                      <div class="col" v-for="(tagName, index) in tags" :key="index">
-                        <!-- <div class="col"> -->
-                          #{{tagName}}
-                        <!-- </div> -->
+                    <hr>
+                    <div class="row">
+                      <div class="col">
+                        <h3>
+                          {{portfolio.payMin}}원
+                        </h3>
+                        <h5>분당가격</h5>
                       </div>
-                    <!-- </div> -->
+
+                      <div class="col">
+                        <h3>
+                          {{portfolio.workCnt}}건
+                        </h3>
+                        <h5>총작업개수</h5>
+                      </div>
+
+                      <div class="col">
+                        <h3>
+                          {{portfolio.totalRate}}
+                        </h3>
+                        <h5>총만족도</h5>
+                      </div>
+
+                      <div class="col">
+                        <h3>
+                          {{portfolio.responseTime}}
+                        </h3>
+                        <h5>평균응답시간</h5>
+                      </div>
+
+                    </div>
                   </div>
                 </div>
               </div>
@@ -82,7 +109,6 @@
             <div class="HeadVideo">
               <LazyYoutubeVideo :src="mainVideo" style="width: 100%" />
             </div>
-            <!-- <h2 class="mb-0" style="text-align:center">대표영상</h2> -->
           </card>
         </div>
       </div>
@@ -101,7 +127,7 @@
                 <div class="col-xl-4 col-lg-6 mb-30" style="margin-bottom:30px;" v-for="(video, index) in videos" :key="index">
                   <LazyYoutubeVideo
                     :src="video.url"
-                    :preview-image-size="video.previewImageSize"
+                    
                     :aspect-ratio="video.aspectRatio"
                   />
                 </div>
@@ -115,7 +141,7 @@
                   ref="calendar"
                   style="width: 100%; height: 100%"
                 />
-                <div class="row" style="margin-left: 380px;">
+                <div class="row" style="margin-left: 33%;">
                 <i class="fas fa-circle" style="color: #6699ff; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;">진행중 작업</i>
                 <i class="fas fa-circle"
                   style="color: #ff0066; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
@@ -137,15 +163,10 @@
               <h1 class="mb-0">서비스 평가</h1>
             </div>
             <div class="card-body pt-0 pt-md-4">
-              <!-- <div class="row">
-                <div class="col" style="text-align:center;">
-                <h3> 총 {{reviews.length}}개의 후기가 존재합니다.</h3>
-                </div>
-              </div> -->
-                <div class="row" style="margin-bottom: 30px; text-align:center;">
+              <div class="row" style="margin-bottom: 30px; text-align:center;">
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:40px;"> 영상만족도 </h3>
+                    <h3 style="margin-top:10px; margin-left:10%;"> 영상만족도 </h3>
                     <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
                     <p style="margin-left:50px;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
                   </div>
@@ -173,7 +194,7 @@
                   <h2 style="margin-bottom:20px;">한줄평({{reviews.length}})</h2>
                   <div class="col" v-for="(review,index) in reviewsMain" :key="index">
                     <div class="row">
-                      <img class="profile" src="img/theme/user-logos.png" style="margin-top:5px; margin-left:20px; width: 45px; height:30px;"/>
+                      <img class="profile" src="img/theme/user-logos.png" style="margin-top:5px; margin-left:1.5%; width: 45px; height:30px;"/>
                       <h4 style="margin-top:11px; margin-right:10px; margin-left:7px;">{{review.nickname.slice(0,1)}}***</h4>
                       <h5 style="margin-top:11px; margin-right:10px;">{{getFormatDate(review.createdDate)}}</h5>
                       <rate
@@ -445,8 +466,6 @@ moment.locale('ko');
     components: {
       LazyYoutubeVideo,
       Rate,
-      // BadgerAccordion,
-      // BadgerAccordionItem,
       flatPicker,
       // InputTag,
       Calendar
@@ -466,6 +485,9 @@ moment.locale('ko');
           payMin: '',
           skills: [],
           markCnt: 0,
+          workCnt: 0,
+          totalRate: '',
+          responseTime: '',
         },
         // 각 평점
         videoAvg: 0,
@@ -611,37 +633,25 @@ moment.locale('ko');
 
     // console.log(this.events);
   },
-  // computed: {
-  //   ...mapGetters(["requests"])
-  // },
   methods: {
     checkRequestForm() {
       let valid = true;
       let message = "";
       // 필수 입력이 되었는지 확인
-      valid &&
-        !this.request_info.request_nickname &&
-        ((valid = false), (message = "의뢰인의 닉네임이 없습니다."));
-      valid &&
-        !this.request_info.response_nickname &&
-        ((valid = false), (message = "편집자의 닉네임이 없습니다."));
-      valid &&
-        !this.dates.range &&
-        ((valid = false), (message = "기간을 입력해주세요"));
-      valid &&
-        !this.request_info.video_origin_length &&
-        ((valid = false), (message = "원본 영상 길이를 입력해주세요"));
-      valid &&
-        !this.request_info.video_origin_length &&
-        ((valid = false), (message = "원본 영상 길이를 입력해주세요"));
+      valid && !this.request_info.request_nickname && ((valid = false), (message = '의뢰인의 닉네임이 없습니다.'))
+      valid && !this.request_info.response_nickname && ((valid = false), (message = '편집자의 닉네임이 없습니다.'))
+      valid && !this.dates.range && ((valid = false), (message = '기간을 입력해주세요'))
+      valid && !this.request_info.video_origin_length && ((valid = false), (message = '원본 영상 길이를 입력해주세요'))
+      valid && !this.request_info.video_result_length && ((valid = false), (message = '최종 영상 길이를 입력해주세요'))
+
 
       //숫자인지 체크
-      valid &&
-        !this.checkNumberFormat(this.request_info.video_origin_length) &&
-        ((valid = false), (message = "숫자만 입력해주세요"));
-      valid &&
-        !this.checkNumberFormat(this.request_info.video_result_length) &&
-        ((valid = false), (message = "숫자만 입력해주세요"));
+      // valid &&
+      //   !this.checkNumberFormat(this.request_info.video_origin_length) &&
+      //   ((valid = false), (message = "숫자만 입력해주세요"));
+      // valid &&
+      //   !this.checkNumberFormat(this.request_info.video_result_length) &&
+      //   ((valid = false), (message = "숫자만 입력해주세요"));
       // valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
 
       if (valid) this.requestForm();
@@ -763,11 +773,30 @@ moment.locale('ko');
       };
       this.modal.show = false;
     },
+    getWorkCount(){
+      http
+        .get("/request/res/" + this.portfolio.nickname + "/2")
+        .then(({ data }) => {
+          this.portfolio.workCnt = data.length;
+          if(data.length > 0)
+            this.getAvgResponseTime(data);
+          else {
+            this.portfolio.responseTime = "-";
+          }
+          return;
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
     getInprogressDate() {
       http
         .get("/request/res/" + this.portfolio.nickname + "/1")
         .then(({ data }) => {
-          if (data.length > 0) this.makeInprogressDateArray(data);
+          if (data.length > 0) {
+            this.makeInprogressDateArray(data);
+          }
           return;
         })
         .catch((error) => {
@@ -829,7 +858,13 @@ moment.locale('ko');
             this.videoAvg = videoAvg/length;
             this.kindnessAvg = kindnessAvg/length;
             this.finishAvg = finishAvg/length;
-            
+            this.portfolio.totalRate = ((this.videoAvg + this.kindnessAvg + this.finishAvg)/3)*20;
+            if(isNaN(this.portfolio.totalRate))
+              this.portfolio.totalRate = "-";
+            else
+              this.portfolio.totalRate = this.round(this.portfolio.totalRate);
+            // console.log(this.portfolio.totalRate);
+
             if(this.reviews.length == 0){
               this.reviewLoad = false;
               this.reviewMessage = "아직 리뷰가 존재하지 않습니다.";
@@ -893,6 +928,7 @@ moment.locale('ko');
                   this.portfolio.skills = data.object.skill.split(",");
                   // console.log(this.portfolio.skills);
                   this.getInprogressDate();
+                  this.getWorkCount();
                   return;
                 } else {
                   return;
@@ -967,7 +1003,7 @@ moment.locale('ko');
         result.forEach(element => {
           obj = new Object();
           obj.url = element.url;
-          obj.previewImageSize = 'maxresdefault';
+          // obj.previewImageSize = 'maxresdefault';
           res.push(obj);
         });
         return res;
@@ -1069,22 +1105,46 @@ moment.locale('ko');
         let finalLength = this.$store.getters['stepper/getFinalLength'];
         this.request_info.video_result_length = finalLength.name;
         this.dates.range = this.$store.getters['stepper/getDeadline'];
-        console.log(this.dates.range);
-      },
-      onOpenItem() {
-        // Item opened
-      },
-      onCloseItem() {
-        // Item closed
+        // console.log(this.dates.range);
       },
       getFormatDate(regtime) {
         return moment(new Date(regtime)).format("YY.MM.DD hh:mm");
+      },
+      round(score) {
+        var result = Number(score.toFixed(1));
+        return result+"%";
+      },
+      getAvgResponseTime(list) {
+        let time;
+        let totalTime = 0;
+        list.forEach(element => {
+          if(element.response_date!=null && element.request_date!= null) {
+            time = moment(element.response_date).diff(moment(element.request_date), "minutes");
+            totalTime += time;
+            // console.log(element.response_date + " " + element.request_date + " " + totalTime);
+          }
+        });
+        totalTime /= list.length;
+        if(totalTime >= 720){
+          this.portfolio.responseTime = "하루 이내";
+        } else if(360 < totalTime && totalTime < 720){
+          this.portfolio.responseTime = "12시간 이내";
+        } else if(180 < totalTime && totalTime <= 360){
+          this.portfolio.responseTime = "6시간 이내";
+        } else if(120 < totalTime && totalTime <= 180){
+          this.portfolio.responseTime = "3시간 이내";
+        } else if(60 < totalTime && totalTime <= 120){
+          this.portfolio.responseTime = "2시간 이내";
+        } else {
+          this.portfolio.responseTime = "1시간 이내";
+        }
+        // console.log(totalTime);
       }
   },
 };
 </script>
 <style lang="scss">
-#reviewDate {
-  text-align: right;
-}
+// #editor_skill{
+//   background-color: #d6d6d6;
+// }
 </style>
