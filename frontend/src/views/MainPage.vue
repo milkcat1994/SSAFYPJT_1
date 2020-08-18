@@ -71,7 +71,8 @@
                   </router-link>
                   <div class="d-flex justify-content-end mb-5 mx-3">
                     <h4>
-                      <i class="fas fa-heart mr-3" style="color:red"></i>
+                      <i class="fas fa-heart mr-2" style="color:red"></i>
+                      <span class="mr-3">{{ editor.bookmarkCount }}</span>
                       <i class="fas fa-star" style="color:yellow"></i>
                     </h4>
                   </div>
