@@ -40,6 +40,13 @@
         WHERE `uid` = #{uid}
     </select>
 
+    <!-- 회원 조회 - 닉네임으로 조회 -->
+    <select id="userfindByNickname" resultType="String">
+        SELECT `email`
+        FROM user_info
+        WHERE `nickname` = #{nickname}
+    </select>
+
     <!-- 회원 정보 수정 -->
     <update id="updateUser">
         UPDATE user_info

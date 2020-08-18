@@ -5,7 +5,7 @@
         <span>전체 {{totalPage}}페이지 중 {{currentPage}}페이지</span>
         <div>
           <div class="mr-2 d-inline-flex">
-            <button class="btn btn-danger" @click="$emit('clear-sort')">초기화</button>
+            <button class="btn btn-danger" @click="$emit('clear-sort')">전체 편집자 보기</button>
           </div>
           <base-dropdown>
             <base-button slot="title" type="primary" class="dropdown-toggle">{{sortKey}}</base-button>
@@ -15,6 +15,15 @@
             <a class="dropdown-item" @click="fetchSortKey('PRICE_DESC')">높은 가격순</a>
           </base-dropdown>
         </div>
+      </div>
+      <div v-if="message" class="emptyResult">
+        <h1>{{message}}</h1>
+        <br>
+        <li>단어의 철자가 정확한지 확인해 보세요.</li>
+        <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
+        <li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
+        <li>두 단어 이상의 검색어인 경우, 띄어쓰기를 확인해 보세요.</li>
+        <li>검색 옵션을 변경해서 다시 검색해 보세요.</li>
       </div>
       <ul class="list-unstyled mt-4">
         <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
@@ -37,14 +46,21 @@
                   </router-link>
                   <!-- 북마크 -->
                   <div class="d-inline-flex flex-column ml-3">
-                    <!-- <base-button :outline="!isBookmarked(editor.uid)" type="danger" size="sm" icon="ni ni-favourite-28" @click="addBookmark()"> -->
                     <base-button
+                      v-if="!editor.togleBookmark"
                       outline
-                      disabled
                       type="danger"
                       size="sm"
                       icon="ni ni-favourite-28"
-                    >{{ editor.bookmarkNumber }}</base-button>
+                      @click="addBookmark(editor.uid, editor.togleBookmark)"
+                    >{{editor.bookmarkNumber}}</base-button>
+                    <base-button
+                      v-else
+                      type="danger"
+                      size="sm"
+                      icon="ni ni-favourite-28"
+                      @click="addBookmark(editor.uid, editor.togleBookmark)"
+                    >{{editor.bookmarkNumber}}</base-button>
                   </div>
                 </div>
                 <div class="d-flex">
@@ -63,6 +79,7 @@
                     <button
                       class="btn btn-info btn-sm mb-1"
                       :key="index"
+                      @click="searchTag(tag)"
                       v-for="(tag, index) in editor.tags"
                     >{{ tag }}</button>
                   </div>
@@ -85,7 +102,7 @@
   </div>
 </template>
 <script>
-// import http from "@/util/http-common";
+import http from "@/util/http-common";
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 export default {
@@ -94,6 +111,7 @@ export default {
     editorsData: {
       type: Array,
     },
+    message: String,
   },
   components: {
     LazyYoutubeVideo,
@@ -102,6 +120,7 @@ export default {
     currentEditors() {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;
+      this.getBookmarkCount(this.editorsData);
       return this.editorsData.slice(start, end);
     },
     totalPage() {
@@ -116,19 +135,11 @@ export default {
       editorsPerPage: 5,
       currentPage: 1,
       sortKey: "정렬",
-      // editorsData: [],
-      // 백엔드 API 호출 시 반환 자료형
-      // {
-      //   uid: "포트폴리오 UID",
-      //   nickname: "포트폴리오 닉네임",
-      //   payMin: "분당 가격",
-      //   bookmarkNumber: "북마크 개수",
-      //   avgScore: "평점",
-      //   tags: ["편집자 관련 태그", ...],
-      //   url: ["편집자 대표 URL", "기타 URL1", ...]
     };
   },
-  created() {},
+  created() {
+
+  },
   methods: {
     round(score) {
       return Number(score.toFixed(1));
@@ -148,43 +159,76 @@ export default {
         this.sortKey = "낮은 가격순";
       } else if (val == "PRICE_DESC") this.sortKey = "높은 가격순";
       this.$emit("sort-by", val);
+      this.message = "";
     },
-
-    // // 북마크 로직(미완성)
-    // isBookmarked(portfolioUID) {
-    //   // login 되어있는 사용자만?
-    //   http
-    //     .get("/bookmark/cnt/" + portfolioUID)
-    //     .then((res) => {
-    //       if (res.data == "success") {
-    //         let isBooked = false;
-    //         res.object.forEach((obj) => {
-    //           if (obj.userInfoUid == this.$session.get("uid")) {
-    //             isBooked = true;
-    //           }
-    //         });
-    //         return isBooked;
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //     });
-    // },
-    // addBookmark(portfolioUID) {
-    //   if (!this.isBookmarked(portfolioUID)) {
-    //     http
-    //       .post("/bookmark", {
-    //         uid: this.$session.get("uid"),
-    //         muid: portfolioUID,
-    //       })
-    //       .then((res) => {
-    //         // 리스트 전체 돌면서
-    //         // 리스트에 있는 개별 포트폴리오 UID == 북마크한 포트폴리오 UID
-    //         // 일 경우 북마크 개수 업데이트? (아니면 Vue.js가 자동으로 업데이트해주는지?)
-    //         console.log(res);
-    //       });
-    //   }
-    // },
+    getBookmarkCount(editorsList){
+      editorsList.forEach(editor => {
+        http
+        .get('/bookmark/cnt/'+editor.uid)
+        .then(({data}) => {
+          if(data.data == 'success'){
+            data.object.forEach((obj) => {
+              if (obj.userInfoUid == this.$session.get("uid")) {
+                editor.togleBookmark = true;
+              }
+            });
+            return;
+          } else {
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+      })
+    },
+    addBookmark(uid, togleBookmark) {
+      if (!togleBookmark) {
+        http
+          .post("/bookmark", {
+            uid: this.$session.get("uid"),
+            muid: uid,
+          })
+          .then(({ data }) => {
+            if (data.data == "success") {
+              this.editorsData.forEach(editor => {
+                if(editor.uid == uid){
+                  editor.bookmarkNumber += 1;
+                  editor.togleBookmark = true;
+                }
+              });
+              return;
+            } else {
+              return;
+            }
+          });
+      } else {
+        http
+          .post("/bookmark/delete", {
+            uid: this.$session.get("uid"),
+            muid: uid,
+          })
+          .then(({ data }) => {
+            if (data.data == "success") {
+              this.editorsData.forEach(editor => {
+                if(editor.uid == uid){
+                  editor.bookmarkNumber -= 1;
+                  editor.togleBookmark = false;
+                }
+              });
+              return;
+            } else {
+              return;
+            }
+          })
+        }
+      },
+    searchTag(tag){
+      // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.    
+      console.log(tag)
+      this.$emit("clickSearchTag", tag);
+    }
   },
 };
 </script>
@@ -195,5 +239,9 @@ export default {
 
 .dropdown-item:hover {
   cursor: pointer;
+}
+
+.emptyResult {
+  text-align: center;
 }
 </style>

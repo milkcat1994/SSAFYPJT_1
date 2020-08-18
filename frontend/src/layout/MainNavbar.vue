@@ -56,7 +56,7 @@
           <div class="ml-4 mb-3">
             <router-link to="/editors">
               <i class="ni ni-zoom-split-in text-primary ml-2">
-                <span class="mx-2">편집자 찾기</span>
+                <span class="mx-2">전체 편집자 보기</span>
               </i>
             </router-link>
           </div>
@@ -65,7 +65,9 @@
               v-if="isEditor && isLogin"
               :to="{
                 path: '/portfolio?no=' + this.$session.get('uid'),
+                params:{uid : this.$session.get('uid')}
               }"
+              :key="$route.fullPath"
             >
               <i class="ni ni-collection text-primary mx-2">
                 <span class="mx-2">내 포트폴리오</span>
@@ -108,7 +110,8 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <i class="ni ni-bell-55"></i>
+            <i v-if="getNotifyNum() > 0" class="ni ni-bell-55" style="color:#ff0066"></i>
+            <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
             <badge type="text-light">{{ getNotifyNum() }}</badge>
           </div>
 
@@ -155,14 +158,14 @@
     <ul class="navbar-nav">
       <li v-if="!isLogin" class="nav-item mr-3">
         <router-link :to="{ name: 'register' }" class="nav-link">
-          <i class="fas fa-user-plus"></i>
-          <span class="nav-link-inner--text">회원가입</span>
+          <i class="fas fa-user-plus mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">회원가입</span>
         </router-link>
       </li>
       <li v-if="!isLogin" class="nav-item">
         <router-link :to="{ name: 'login' }" class="nav-link">
-          <i class="fas fa-user-check"></i>
-          <span class="nav-link-inner--text">로그인</span>
+          <i class="fas fa-user-check mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">로그인</span>
         </router-link>
       </li>
     </ul>
@@ -336,5 +339,107 @@ router-link:hover {
 .navbar-brand-img:focus {
   border: none;
   outline: none;
+}
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+/* .notification {
+  position: relative;
+  width: 14px;
+  height: 16.8px;
+} */
+.notification {
+  display: flex;
+  align-items: center;
+  margin-top: 35%;
+}
+svg {
+  display: flex;
+  align-items: center;
+  width: 40px;
+}
+svg > path {
+  fill: #172b4d;
+}
+
+.notification--bell {
+  animation: bell 2.2s linear infinite;
+  transform-origin: 50% 0%;
+  color: red;
+}
+
+.notification--bellClapper {
+  animation: bellClapper 2.2s 0.1s linear infinite;
+}
+
+.notification--num {
+  position: absolute;
+  top: 10%;
+  left: 60%;
+  font-size: 15px;
+  border-radius: 90%;
+  /* border: 1px; */
+  color: #ffffff;
+  background-color: #ff4c13;
+  text-align: center;
+  animation: notification 2.2s linear;
+}
+
+@keyframes bell {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  45% {
+    transform: rotate(-10deg);
+  }
+  55% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes bellClapper {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(-0.15em);
+  }
+  45% {
+    transform: translateX(0.15em);
+  }
+  55% {
+    transform: translateX(-0.1em);
+  }
+  60% {
+    transform: translateX(0.1em);
+  }
+}
+
+@keyframes notification {
+  0%,
+  25%,
+  75%,
+  100% {
+    opacity: 1;
+  }
+  30%,
+  70% {
+    opacity: 0;
+  }
 }
 </style>
