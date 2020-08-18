@@ -1,7 +1,7 @@
 <template>
   <footer class="footer px-4">
     <div class="row align-items-center justify-content-lg-between">
-      <div class="col-lg-6">
+      <div class="col-lg-3 ml-4">
         <div class="copyright text-center text-lg-left text-muted">
           © {{year}}
           <a
@@ -17,7 +17,7 @@
           <a href="#" class="font-weight-bold ml-1" target="_blank">1로와</a>
         </div>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-3 mr-4">
         <ul class="nav nav-footer justify-content-center justify-content-lg-end">
           <li class="nav-item">
             <router-link :to="'/about'" class="nav-link">About Us</router-link>
