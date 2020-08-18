@@ -289,7 +289,7 @@ import { getFormatDate } from "@/util/day-common";
             this.haveSchedule = true;
             let result = data.object.filter(schedule => schedule.scheduleType == 0);
             this.disableDates = this.makeScheduleArray(result);
-            console.log(this.disableDates);
+            // console.log(this.disableDates);
             return;
           } else {
             // console.log("스케줄 없음");
