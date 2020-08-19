@@ -18,13 +18,9 @@ public interface RequestService {
 	public RequestDto searchRequest(int rid);
 
 	// 요청자의 리스트
-	public List<RequestDto> searchListRequest(String request_nickname);
-
 	public List<RequestDto> searchListFlagRequest(RequestStatusDto statusDto);
 
 	// 요청 받는 사람의 리스트
-	public List<RequestDto> searchListResponse(String response_nickname);
-
 	public List<RequestDto> searchListFlagResponse(RequestStatusDto statusDto);
 
 	// 요청 등록
@@ -42,17 +38,11 @@ public interface RequestService {
 	// 후기 완료
 	public int doneReview(int rid);
 
-	// 요청 삭제
-	public int deleteRequest(int rid);
-
 	// 알림 조회
 	public List<NotifyDto> searchNotify(String response_nickname);
 
 	// 알림 등록
 	public int insertNotify(NotifyDto notifyDto);
-
-	// 알림 삭제
-	public int deleteNotify(int nid);
 
 	// 알림 수정(읽음)
 	public int updateNotify(int nid);

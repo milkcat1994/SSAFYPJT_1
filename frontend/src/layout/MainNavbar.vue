@@ -1,5 +1,10 @@
 <template>
-  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
+  <base-nav
+    class="navbar-top navbar-dark"
+    id="navbar-main"
+    :show-toggle-button="false"
+    expand
+  >
     <!-- <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
       <div class="form-group mb-0">
         <base-input
@@ -32,16 +37,22 @@
               class="d-flex bg-dark text-light align-items-center px-3 py-2"
               style="display:none width:100px"
             >
-              <b-button id="closebtn" size="sm" style="display:none;" @click="hide">Close</b-button>
+              <b-button
+                id="closebtn"
+                size="sm"
+                style="display:none;"
+                @click="hide"
+                >Close</b-button
+              >
             </div>
           </template>
-          <div class="px-3 py-2 d-flex justify-content-center">
-            <router-link class="navbar-brand" to="/">
+          <div class="pl-2 py-2 d-flex justify-content-center">
+            <router-link class="navbar-brand mb-3" to="/">
               <img
                 src="/img/brand/green.png"
-                class="navbar-brand-img my-5"
+                class="navbar-brand-img my-4"
                 alt="편집"
-                style="width:90px; height:50px; border:none;"
+                style="width:110px; border:none;"
               />
             </router-link>
           </div>
@@ -65,7 +76,7 @@
               v-if="isEditor && isLogin"
               :to="{
                 path: '/portfolio?no=' + this.$session.get('uid'),
-                params:{uid : this.$session.get('uid')}
+                params: { uid: this.$session.get('uid') },
               }"
               :key="$route.fullPath"
             >
@@ -100,9 +111,9 @@
     <router-link class="navbar-brand" to="/">
       <img
         src="/img/brand/green.png"
-        class="navbar-brand-img my-atuo ml-3"
+        class="navbar-brand-img my-atuo ml-1"
         alt="편집"
-        style="width:90px; height:50px; border:none;"
+        style="width:90px;border:none;"
       />
     </router-link>
     <!-- 최근 메시지 보여주기 -->
@@ -111,7 +122,9 @@
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
             <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
-            <badge v-if="getNotifyNum() == 0" type="text-light">{{ getNotifyNum() }}</badge>
+            <badge v-if="getNotifyNum() == 0" type="text-light">{{
+              getNotifyNum()
+            }}</badge>
             <main rel="main" v-if="getNotifyNum() > 0">
               <div class="notification">
                 <svg viewBox="-10 0 35 35">
@@ -124,7 +137,11 @@
                     d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"
                   />
                 </svg>
-                <span class="notification--num">{{ getNotifyNum() }}</span>
+                <span
+                  class="notification--num"
+                  style="font-style:inherit; font-weight: bold ;"
+                  >{{ getNotifyNum() }}</span
+                >
               </div>
             </main>
           </div>
@@ -146,12 +163,10 @@
                   요청하셨습니다
                 </span>
                 <span v-if="notifyitem.notify_type == 'accepted'">
-                  {{ notifyitem.request_nickname }}님께서 요청을
-                  수락하셨습니다
+                  {{ notifyitem.request_nickname }}님께서 요청을 수락하셨습니다
                 </span>
                 <span v-if="notifyitem.notify_type == 'review'">
-                  {{ notifyitem.request_nickname }}님께 후기를 남길 수
-                  있습니다
+                  {{ notifyitem.request_nickname }}님께 후기를 남길 수 있습니다
                 </span>
               </router-link>
             </div>
@@ -172,29 +187,40 @@
     <ul class="navbar-nav">
       <li v-if="!isLogin" class="nav-item mr-3">
         <router-link :to="{ name: 'register' }" class="nav-link">
-          <i class="fas fa-user-plus mr-1" style="color: #172b4d !important;"></i>
-          <span class="nav-link-inner--text" style="color: #172b4d !important;">회원가입</span>
+          <i
+            class="fas fa-user-plus mr-1"
+            style="color: #172b4d !important;"
+          ></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;"
+            >회원가입</span
+          >
         </router-link>
       </li>
       <li v-if="!isLogin" class="nav-item">
         <router-link :to="{ name: 'login' }" class="nav-link">
-          <i class="fas fa-user-check mr-1" style="color: #172b4d !important;"></i>
-          <span class="nav-link-inner--text" style="color: #172b4d !important;">로그인</span>
+          <i
+            class="fas fa-user-check mr-1"
+            style="color: #172b4d !important;"
+          ></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;"
+            >로그인</span
+          >
         </router-link>
       </li>
     </ul>
 
     <!-- 마이페이지 -->
-    <ul v-if="isLogin" class="navbar-nav align-items-center ml-2 d-none d-md-flex">
+    <ul
+      v-if="isLogin"
+      class="navbar-nav align-items-center ml-2 d-none d-md-flex"
+    >
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
             <i class="fas fa-user" style="color: #172b4d !important;"></i>
             <div class="media-body ml-2 d-none d-lg-block">
               <span class="mb-0 text-sm font-weight-bold text-default">
-                {{
-                nickname
-                }}
+                {{ nickname }}
               </span>
             </div>
           </div>
@@ -212,7 +238,11 @@
               <span>도움말</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <span style="cursor:pointer;" class="dropdown-item" @click="logout()">
+            <span
+              style="cursor:pointer;"
+              class="dropdown-item"
+              @click="logout()"
+            >
               <i class="ni ni-lock-circle-open"></i>
               <span>로그아웃</span>
             </span>
@@ -326,6 +356,7 @@ export default {
       store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
+      // this.$forceUpdate();
     },
   },
 };
@@ -390,9 +421,9 @@ svg > path {
 
 .notification--num {
   position: absolute;
-  top: 20%;
+  top: 22%;
   left: 75%;
-  font-size: 16px;
+  font-size: 14px;
   /* border-radius: 90%; */
   /* border: 1px; */
   color: #172b4d;
