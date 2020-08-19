@@ -134,15 +134,11 @@
                   ref="calendar"
                   style="width: 100%; height: 100%"
                 />
-                <div class="row" style="margin-left: 33%;">
+                <div class="row" style="margin-left: 40%;">
                   <i
                     class="fas fa-circle"
                     style="color: #6699ff; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
                   >진행중 작업</i>
-                  <i
-                    class="fas fa-circle"
-                    style="color: #ff0066; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
-                  >개인 일정</i>
                   <i
                     class="fas fa-circle"
                     style="color: #c9c9c9; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
