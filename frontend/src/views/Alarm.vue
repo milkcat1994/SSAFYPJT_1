@@ -30,6 +30,7 @@
         color="#82C7EB"
         :sync="true"
         :labels="{checked: '편집자', unchecked: '일반'}"
+        style="width: 200px !important;"
         />
 
       <div style="display: table; width:100%">
@@ -1085,6 +1086,11 @@ export default {
 }
 .alarm {
   min-height: 70vh;
+}
+
+.v-switch-label
+.v-switch-core  {
+  width: 100px !important;
 }
 
 
