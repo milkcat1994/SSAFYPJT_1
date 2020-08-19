@@ -1,8 +1,9 @@
 <template>
-  <div class="container mx-auto my-4 py-4">
+  <div class="container mx-auto py-4">
+    
     <h1 class="display-3 text-center">추가하실 편집 기술이 있으신가요?</h1>
     <div class="text-center mb-4">
-      <small>(제목에 마우스를 올리면 설명을 볼 수 있습니다)</small>
+      <small>(제목에 마우스를 올리면 설명을 볼 수 있습니다 / 중복선택 가능)</small>
     </div>
     <div class="container">
       <div class="row d-flex justify-content-center">

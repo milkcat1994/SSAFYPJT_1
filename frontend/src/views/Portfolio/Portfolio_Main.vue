@@ -1314,8 +1314,13 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-// #editor_skill{
+<style scoped>
+/* // #editor_skill{
 //   background-color: #d6d6d6;
-// }
+// } */
+.custom-control{
+  margin-right:40px;
+
+}
+
 </style>

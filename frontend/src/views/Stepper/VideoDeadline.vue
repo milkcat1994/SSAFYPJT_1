@@ -1,5 +1,6 @@
 <template>
-  <div class="container mx-auto my-4 py-4" style="width: 80%">
+  <div class="container mx-auto py-4" style="width: 80%">
+    
     <h1 class="display-3 mb-0">희망 완료일을 알려주세요!</h1>
 
     <div class="container my-4 py-4">
