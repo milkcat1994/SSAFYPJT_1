@@ -24,6 +24,7 @@ public class SearchPortfolio{
     private String url;
     private int payMin;
     private int bookmarkNumber;
+    private boolean togleBookmark = false;
     private float avgScore;
     private List<String> tags;
 

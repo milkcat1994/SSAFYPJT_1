@@ -2,7 +2,6 @@ package com.web.editor.controller.recommend;
 
 import java.util.List;
 
-import com.web.editor.model.dto.user.bookmark.Bookmark;
 import com.web.editor.model.dto.user.recommend.EditorDto;
 import com.web.editor.model.service.user.recommend.RecommendService;
 import com.web.editor.util.recommend.CfAlgorithm;

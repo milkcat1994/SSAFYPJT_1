@@ -91,6 +91,7 @@ export default new Router({
           name: "editors",
           component: () =>
             import(/* webpackChunkName: "demo" */ "./views/Editors.vue"),
+            props: true,
         },
         {
           path: "/marklist",
