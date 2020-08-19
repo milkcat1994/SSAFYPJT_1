@@ -31,20 +31,12 @@ public class RequestMapper {
 	}
 
 	// 요청자의 리스트
-	public List<RequestDto> searchListRequest(String request_nickname) throws SQLException {
-		return sqlSession.selectList("searchListRequest", request_nickname);
-	}
-
 	// nickname, done_flag
 	public List<RequestDto> searchListFlagRequest(RequestStatusDto statusDto) throws SQLException {
 		return sqlSession.selectList("searchListFlagRequest", statusDto);
 	}
 
 	// 요청 받는 사람의 리스트
-	public List<RequestDto> searchListResponse(String response_nickname) throws SQLException {
-		return sqlSession.selectList("searchListResponse", response_nickname);
-	}
-
 	public List<RequestDto> searchListFlagResponse(RequestStatusDto statusDto) throws SQLException {
 		return sqlSession.selectList("searchListFlagResponse", statusDto);
 	}
@@ -74,11 +66,6 @@ public class RequestMapper {
 		return sqlSession.update("denyRequest", rid);
 	}
 
-	// 요청 삭제
-	public int deleteRequest(int rid) throws SQLException {
-		return sqlSession.delete("deleteRequest", rid);
-	}
-
 	// 알림 조회
 	public List<NotifyDto> searchNotify(String response_nickname) throws SQLException {
 		return sqlSession.selectList("searchNotify", response_nickname);
@@ -87,11 +74,6 @@ public class RequestMapper {
 	// 알람 등록
 	public int insertNotify(NotifyDto notifyDto) throws SQLException {
 		return sqlSession.insert("insertNotify", notifyDto);
-	}
-
-	// 알림 삭제
-	public int deleteNotify(int nid) throws SQLException {
-		return sqlSession.delete("deleteNotify", nid);
 	}
 
 	// 알림 수정 (읽음)
