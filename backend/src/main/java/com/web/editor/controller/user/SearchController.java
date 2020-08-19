@@ -137,12 +137,10 @@ public class SearchController {
 					}
 				}
 
-				// System.out.println("searchRequestVideoInfo>>>>"+searchRequestVideoInfo);
 				st = new StringTokenizer(searchRequestVideoInfo.getVideoSkill(), ",");
 				while(st.hasMoreTokens()){
 					vidoeSkill = st.nextToken().trim();
 					if(videoFilterSet.contains(vidoeSkill)) {
-						// System.out.println("스킬>>"+vidoeSkill);
 						if(videoFilterMap.containsKey(vidoeSkill)){
 							videoFilterMap.get(vidoeSkill).add(uidMap.get(nickname));
 						}
@@ -189,7 +187,6 @@ public class SearchController {
 			// 필터에 대한 uid
 			Set<Integer> filterResulltSet = new HashSet<>();
 			// 필터에 대한 합집합
-			// System.out.println(videoFilterMap);
 			for (String videoFilter : videoFilterSet) {
 				filterResulltSet.addAll(videoFilterMap.get(videoFilter));
 			}

@@ -19,7 +19,7 @@ public class CfAlgorithm {
     int tagPerBookmark;
 
     // 유저의 북마크와 전체 유저의 리스트들, 유클리디안 거리
-    public List<EditorDto> recommendByBookmark(EditorDto bookmarks, List<EditorDto> editors) {
+    public List<EditorDto> recommendByBookmark(EditorDto bookmarks, List<EditorDto> editors, String myUid) {
 
         String[] bookmarkUid = bookmarks.getUid().split(",");
         int cnt = bookmarkUid.length;
@@ -32,6 +32,9 @@ public class CfAlgorithm {
         // for 에디터마다 유클리디안 거리 구하기 (태그, 비디오 기술)
         L: for(EditorDto editor : editors) {
             if (editor.getTag() == null && editor.getSkill() == null) continue;
+            
+            // 본인 제외
+            if (editor.getUid().equals(myUid)) continue;
 
             // 북마크와 일치하는 에디터 제외
             if (cnt > 0) {
