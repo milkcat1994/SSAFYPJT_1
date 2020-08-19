@@ -558,7 +558,7 @@ import { getFormatDate } from "@/util/day-common";
         })
       },
       deleteURL(index){
-        console.log(index);
+        // console.log(index);
         delete this.portfolio.URLs[index];
       }
     },

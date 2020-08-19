@@ -1164,7 +1164,7 @@ export default {
     },
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
-      console.log(tag);
+      // console.log(tag);
       this.$router.push({ name: "editors", params: { clickSearchTag: tag } });
     },
   },

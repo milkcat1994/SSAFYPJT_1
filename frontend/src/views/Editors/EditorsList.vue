@@ -170,6 +170,7 @@ export default {
             data.object.forEach((obj) => {
               if (obj.userInfoUid == this.$session.get("uid")) {
                 editor.togleBookmark = true;
+                editor.bookmarkNumber = data.object.length;
               }
             });
             return;
@@ -226,7 +227,7 @@ export default {
       },
     searchTag(tag){
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.    
-      console.log(tag)
+      // console.log(tag)
       this.$emit("clickSearchTag", tag);
     }
   },
@@ -241,7 +242,11 @@ export default {
   cursor: pointer;
 }
 
-.emptyResult {
+.emptyResult li {
+  margin-left: 30%;
+}
+
+.emptyResult > h1 {
   text-align: center;
 }
 </style>
