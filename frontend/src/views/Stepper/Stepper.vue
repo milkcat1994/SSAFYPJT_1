@@ -10,8 +10,7 @@
               sub-title="작업 요청서 작성하기"
               icon="ni ni-scissors"
               class="mb-0 mb-xl-0"
-            >
-            </search-card>
+            ></search-card>
           </div>
         </div>
       </div>
@@ -21,9 +20,7 @@
       <div class="card shadow border-0">
         <div class="card-header">
           <!-- <h3 class="text-center mt-2">헤더(progress bar) 들어갈 자리</h3> -->
-          <progress-bar
-            @change-step="changeStep"
-          ></progress-bar>
+          <progress-bar @change-step="changeStep"></progress-bar>
         </div>
         <div class="card-body border-0">
           <video-type v-if="currentStep === 0"></video-type>
@@ -37,12 +34,11 @@
           <div class="px-2">
             <a href="#" @click.prevent="backStep">이전</a>
             <button class="btn btn-primary ml-4" @click.prevent="nextStep">다음</button>
-            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -50,13 +46,13 @@
 // import { mapGetters } from 'vuex';
 import alertify from "alertifyjs";
 
-import ProgressBar from './ProgressBar.vue';
-import VideoType from './VideoType.vue';
-import VideoStyle from './VideoStyle.vue';
-import VideoSkills from './VideoSkills.vue';
-import VideoOriginLength from './VideoOriginLength.vue';
-import VideoFinalLength from './VideoFinalLength.vue';
-import VideoDeadline from './VideoDeadline.vue';
+import ProgressBar from "./ProgressBar.vue";
+import VideoType from "./VideoType.vue";
+import VideoStyle from "./VideoStyle.vue";
+import VideoSkills from "./VideoSkills.vue";
+import VideoOriginLength from "./VideoOriginLength.vue";
+import VideoFinalLength from "./VideoFinalLength.vue";
+import VideoDeadline from "./VideoDeadline.vue";
 
 export default {
   name: "stepper",
@@ -80,13 +76,13 @@ export default {
         this.currentStep--;
       } else {
         // this.currentStep = 0
-        this.$router.push({name: 'mainpage'})
+        this.$router.push({ name: "mainpage" });
       }
     },
     changeStep(stepNum) {
-      if (this.$store.getters['stepper/isChecked'](stepNum)) {
+      if (this.$store.getters["stepper/isChecked"](stepNum)) {
         // console.log(stepNum)
-        this.currentStep = stepNum
+        this.currentStep = stepNum;
       }
     },
     // 각 단계 verification 필요 ==> 다음 버튼 활성화
@@ -95,21 +91,23 @@ export default {
       if (this.currentStep < 5) {
         switch (this.currentStep) {
           case 0:
-            if (!this.$store.getters['stepper/getSelectedVideoType']) {
+            if (!this.$store.getters["stepper/getSelectedVideoType"]) {
               alertify.notify("편집 목적을 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
             break;
           case 1:
-            if (!this.$store.getters['stepper/getSelectedVideoStyle']) {
+            if (!this.$store.getters["stepper/getSelectedVideoStyle"]) {
               alertify.notify("영상 종류를 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
             break;
           case 2:
-            if (this.$store.getters['stepper/getSelectedVideoSkills'].length === 0) {
+            if (
+              this.$store.getters["stepper/getSelectedVideoSkills"].length === 0
+            ) {
               // console.log(this.$store.getters['stepper/getSelectedVideoSkills'])
               alertify.notify("편집 스킬을 선택해주세요", "warning", 3);
             } else {
@@ -117,7 +115,7 @@ export default {
             }
             break;
           case 3:
-            if (!this.$store.getters['stepper/getOriginLength']) {
+            if (!this.$store.getters["stepper/getOriginLength"]) {
               // console.log(this.$store.getters['stepper/getOriginLength'])
               alertify.notify("원본 길이를 선택해주세요", "warning", 3);
             } else {
@@ -125,7 +123,7 @@ export default {
             }
             break;
           case 4:
-            if (!this.$store.getters['stepper/getFinalLength']) {
+            if (!this.$store.getters["stepper/getFinalLength"]) {
               // console.log(this.$store.getters['stepper/getFinalLength'])
               alertify.notify("완성 길이를 선택해주세요", "warning", 3);
             } else {
@@ -143,7 +141,7 @@ export default {
       } else {
         // after final step
         // console.log(this.$store.getters['stepper/getDeadline'])
-        if (this.$store.getters['stepper/getDeadline'].length < 2) {
+        if (this.$store.getters["stepper/getDeadline"].length < 2) {
           alertify.notify("마감 기한을 선택해주세요", "warning", 3);
         } else {
           // this.currentStep++;
@@ -153,15 +151,17 @@ export default {
     },
     // Vuex stepper 초기화
     clearSteps() {
-      this.$store.commit('stepper/clearStepperStatus')
-    }
-
+      this.$store.commit("stepper/clearStepperStatus");
+    },
   },
   created() {
-    this.clearSteps()
-  }
+    this.clearSteps();
+  },
 };
 </script>
 
 <style>
+#maincard {
+  box-shadow: 3px 3px 3px gray;
+}
 </style>
