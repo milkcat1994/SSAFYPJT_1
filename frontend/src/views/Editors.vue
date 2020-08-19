@@ -117,9 +117,9 @@
               <base-button slot="title" type="secondary" class="dropdown-toggle">{{
                 searchKey
               }}</base-button>
-              <!-- <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
                 >전체</a
-              > -->
+              >
               <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
                 >이름</a
               >
@@ -201,7 +201,7 @@ export default {
         {name: '모션그래픽', value: 'moti', status: false}, 
       ],
       // 검색 기준
-      searchKey: "이름",
+      searchKey: "기준",
       // 검색 단어
       keyword: "",
       // 정렬 기준
@@ -393,7 +393,7 @@ export default {
       this.clearFilterAll();
       this.keyword = "";
       this.sortBy = "NICKNAME_ASC";
-      this.searchKey = "이름";
+      this.searchKey = "전체";
       this.fetchEditors();
       this.message = "";
     }
