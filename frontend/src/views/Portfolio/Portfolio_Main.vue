@@ -162,27 +162,27 @@
               <div class="row" style="margin-bottom: 30px; text-align:center;">
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:10%;">영상만족도</h3>
+                    <h3 style="margin-top:10px; margin-left:22%;">영상만족도</h3>
                     <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
-                    <p style="margin-left:50px;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
+                    <p style="margin-left:20%;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:40px;">친절도</h3>
+                    <h3 style="margin-top:10px; margin-left:20%;">친절도</h3>
                     <rate :length="5" :value="kindnessAvg" :disabled="true" />
-                    <p>
-                      편집자가 얼마나 친절히 응대하고 소통하였는지에 대해
+                    <p style="margin-left:10%;">
+                      편집자가 얼마나 친절히 응대하고
                       <br />
-                      {{reviews.length}}분이 평가한 결과입니다.
+                      소통하였는지에 대해 {{reviews.length}}분이 평가한 결과입니다.
                     </p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:40px;">마감 속도</h3>
+                    <h3 style="margin-top:10px; margin-left:20%;">마감 속도</h3>
                     <rate :length="5" :value="finishAvg" :disabled="true" />
-                    <p style="margin-left:50px;">
+                    <p style="margin-left:20%;">
                       마감 기한을 잘 맞춰주었는지에 대해
                       <br />
                       {{reviews.length}}분이 평가한 결과입니다.
