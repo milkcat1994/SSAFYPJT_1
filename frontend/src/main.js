@@ -42,7 +42,6 @@ var sessionOptions = {
 };
 Vue.use(VueSession, sessionOptions);
 
-Vue.use(VueCookies);
 Vue.config.productionTip = false;
 
 Vue.component("star-rating", StarRating);

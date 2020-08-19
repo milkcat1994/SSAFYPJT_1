@@ -57,20 +57,6 @@ public class RequestController {
 		}
 	}
 
-	// 요청 리스트
-	// 요청자(일반회원)의 리스트
-	@ApiOperation(value = "요청자(일반회원)의 리스트")
-	@GetMapping("/req/{request_nickname}")
-	public Object searchListRequest(@PathVariable String request_nickname) throws UnsupportedEncodingException {
-		List<RequestDto> requestList = requestService.searchListRequest(decodeURL(request_nickname));
-
-		if (!requestList.isEmpty()) {
-			return new ResponseEntity<>(requestList, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
-		}
-	}
-
 	// done_flag 0~2, nickname
 	@ApiOperation(value = "일반회원의 요청 리스트 done_flag(0: 요청, 1: 진행, 2: 완료))")
 	@GetMapping("/req/{nickname}/{done_flag}")
@@ -141,18 +127,6 @@ public class RequestController {
 	}
 
 	// 요청받는사람(편집자)의 리스트
-	@ApiOperation(value = "요청받는사람(편집자)의 리스트")
-	@GetMapping("/res/{response_nickname}")
-	public Object searchListResponse(@PathVariable String response_nickname) throws UnsupportedEncodingException {
-
-		List<RequestDto> responseList = requestService.searchListResponse(decodeURL(response_nickname));
-
-		if (!responseList.isEmpty()) {
-			return new ResponseEntity<>(responseList, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("fail", HttpStatus.NO_CONTENT);
-		}
-	}
 
 	@ApiOperation(value = "편집자의 요청 리스트 done_flag(0: 요청, 1: 진행, 2: 완료))")
 	@GetMapping("/res/{nickname}/{done_flag}")
@@ -314,21 +288,6 @@ public class RequestController {
 		}
 	}
 
-	// 요청 삭제
-	@ApiOperation(value = "rid에 해당하는 요청 삭제, \"success\" 또는 \"fail\"반환")
-	@DeleteMapping("{rid}")
-	public ResponseEntity<String> deleteRequest(@PathVariable int rid) {
-		// 해당 요청서의 태그들 삭제
-		requestService.deleteReqTag(rid);
-		int result = requestService.deleteRequest(rid);
-
-		if (result > 0) {
-			return new ResponseEntity<String>("success", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-		}
-	}
-
 	// 알림 조회
 	@ApiOperation(value = "회원의 알림 리스트(limit 5)")
 	@GetMapping("/notify/{response_nickname}") // 일반회원 (요청자)
@@ -347,31 +306,6 @@ public class RequestController {
 		}
 	}
 
-	// 알림 삭제
-	@ApiOperation(value = "nid에 해당하는 요청알림 삭제, \"success\" 또는 \"fail\"반환")
-	@DeleteMapping("/notify/{nid}")
-	public ResponseEntity<String> deleteNotify(@PathVariable int nid) {
-		int result = requestService.deleteNotify(nid);
-
-		if (result > 0) {
-			return new ResponseEntity<String>("success", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-		}
-	}
-
-	// 알림 수정(읽음)
-	@ApiOperation(value = "nid에 해당하는 요청알림을 읽음,  \"success\" 또는 \"fail\"반환")
-	@PutMapping("/notify/{nid}")
-	public ResponseEntity<String> updateNotify(@PathVariable int nid) {
-		int result = requestService.updateNotify(nid);
-
-		if (result > 0) {
-			return new ResponseEntity<String>("success", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<String>("fail", HttpStatus.NOT_FOUND);
-		}
-	}
 
 	// 알림 수정2(회원이 알림을 전부 읽음)
 	@ApiOperation(value = "회원이 요청알림을 전부 읽음,  \"success\" 또는 \"fail\"반환")

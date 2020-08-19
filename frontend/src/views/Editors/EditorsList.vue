@@ -1,5 +1,5 @@
 <template>
-  <div style="max-height: 1200px;">
+  <div id="lst" style="max-height: 1200px;">
     <div class="card p-4">
       <div class="d-flex justify-content-between align-item-center">
         <span>전체 {{totalPage}}페이지 중 {{currentPage}}페이지</span>
@@ -18,7 +18,7 @@
       </div>
       <div v-if="message" class="emptyResult">
         <h1>{{message}}</h1>
-        <br>
+        <br />
         <li>단어의 철자가 정확한지 확인해 보세요.</li>
         <li>한글을 영어로 혹은 영어를 한글로 입력했는지 확인해 보세요.</li>
         <li>검색어의 단어 수를 줄이거나, 보다 일반적인 검색어로 다시 검색해 보세요.</li>
@@ -91,6 +91,7 @@
       </ul>
       <div class="card-footer d-flex justify-content-center">
         <base-pagination
+          id="pagination"
           :total="editorsData.length"
           :perPage="editorsPerPage"
           :value="currentPage"
@@ -137,9 +138,7 @@ export default {
       sortKey: "정렬",
     };
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     round(score) {
       return Number(score.toFixed(1));
@@ -161,27 +160,28 @@ export default {
       this.$emit("sort-by", val);
       this.message = "";
     },
-    getBookmarkCount(editorsList){
-      editorsList.forEach(editor => {
+    getBookmarkCount(editorsList) {
+      editorsList.forEach((editor) => {
         http
-        .get('/bookmark/cnt/'+editor.uid)
-        .then(({data}) => {
-          if(data.data == 'success'){
-            data.object.forEach((obj) => {
-              if (obj.userInfoUid == this.$session.get("uid")) {
-                editor.togleBookmark = true;
-              }
-            });
+          .get("/bookmark/cnt/" + editor.uid)
+          .then(({ data }) => {
+            if (data.data == "success") {
+              data.object.forEach((obj) => {
+                if (obj.userInfoUid == this.$session.get("uid")) {
+                  editor.togleBookmark = true;
+                  editor.bookmarkNumber = data.object.length;
+                }
+              });
+              return;
+            } else {
+              return;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
             return;
-          } else {
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return;
-        });
-      })
+          });
+      });
     },
     addBookmark(uid, togleBookmark) {
       if (!togleBookmark) {
@@ -192,8 +192,8 @@ export default {
           })
           .then(({ data }) => {
             if (data.data == "success") {
-              this.editorsData.forEach(editor => {
-                if(editor.uid == uid){
+              this.editorsData.forEach((editor) => {
+                if (editor.uid == uid) {
                   editor.bookmarkNumber += 1;
                   editor.togleBookmark = true;
                 }
@@ -211,8 +211,8 @@ export default {
           })
           .then(({ data }) => {
             if (data.data == "success") {
-              this.editorsData.forEach(editor => {
-                if(editor.uid == uid){
+              this.editorsData.forEach((editor) => {
+                if (editor.uid == uid) {
                   editor.bookmarkNumber -= 1;
                   editor.togleBookmark = false;
                 }
@@ -221,14 +221,14 @@ export default {
             } else {
               return;
             }
-          })
-        }
-      },
-    searchTag(tag){
-      // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.    
-      console.log(tag)
+          });
+      }
+    },
+    searchTag(tag) {
+      // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
+      // console.log(tag)
       this.$emit("clickSearchTag", tag);
-    }
+    },
   },
 };
 </script>
@@ -241,7 +241,15 @@ export default {
   cursor: pointer;
 }
 
-.emptyResult {
+.emptyResult li {
+  margin-left: 30%;
+}
+
+.emptyResult > h1 {
   text-align: center;
+}
+
+#pagination {
+  cursor: pointer;
 }
 </style>

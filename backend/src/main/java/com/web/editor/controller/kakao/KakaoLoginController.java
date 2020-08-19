@@ -10,22 +10,16 @@ import org.springframework.http.ResponseEntity;
 import com.web.editor.model.service.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
-import com.web.editor.model.dto.user.NormalLoginRequest;
 import com.web.editor.model.dto.user.NormalRegisterRequest;
-import com.web.editor.model.dto.user.UserUpdateRequest;
 import io.swagger.annotations.ApiOperation;
 import com.web.editor.model.service.kakao.KakaoAPI;
  
@@ -47,16 +41,6 @@ public class KakaoLoginController {
    
     @PostMapping(value="/login")
     public Object login(@RequestParam("code") String code, HttpSession session,@Valid @RequestBody NormalRegisterRequest request) {
-        // String access_Token = kakao.getAccessToken(code);
-        // HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
-        // System.out.println("login Controller : " + userInfo);
-        
-        // //    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
-        // if (userInfo.get("email") != null) {
-        //     session.setAttribute("userId", userInfo.get("email"));
-        //     session.setAttribute("access_Token", access_Token);
-        // }
-        // return "index";
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
 
@@ -93,7 +77,6 @@ public class KakaoLoginController {
         kakao.kakaoLogout((String)session.getAttribute("access_Token"));
         session.removeAttribute("access_Token");
         session.removeAttribute("userId");
-        System.out.println("로그아웃 완료!!!");
         response = new ResponseEntity<>(result, HttpStatus.OK);
         
         return response;

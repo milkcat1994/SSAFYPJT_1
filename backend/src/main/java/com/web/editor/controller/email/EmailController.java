@@ -112,7 +112,6 @@ public class EmailController {
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
         
-        System.out.println("1번");
         try {
             emailConfirm = emailMapper.findEmailConfirmByEmailAndEmailKey(request);
         } catch (SQLException se) {
@@ -122,8 +121,6 @@ public class EmailController {
             response = new ResponseEntity<>(result, HttpStatus.OK);
             return response;
         }
-        System.out.println(request.getEmail());
-        System.out.println(request.getEmailKey());
         // 이메일 인증 코드 일치
         if (emailConfirm != null) {
             result.status = true;
@@ -131,12 +128,10 @@ public class EmailController {
             // 기존 존재하는 토큰 삭제
             try {
                 emailMapper.deleteEmailConfirmByEmail(request.getEmail());
-                System.out.println("2번");
             } catch (SQLException se) {
                 se.printStackTrace();
                 result.status = false;
                 result.data = "sql_error";
-                System.out.println("3번");
                 response = new ResponseEntity<>(result, HttpStatus.OK);
                 return response;
             }
@@ -144,7 +139,6 @@ public class EmailController {
         } else {
             result.status = false;
             result.data = "fail";
-            System.out.println("4번");
             response = new ResponseEntity<>(result, HttpStatus.OK);
         }
 
