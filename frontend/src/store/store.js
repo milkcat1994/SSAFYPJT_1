@@ -18,7 +18,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   modules: {
     auth,
-    stepper
+    stepper,
   },
 
   state: {
@@ -36,7 +36,6 @@ export default new Vuex.Store({
     progressdate: [],
     holidaydate: [],
     scheduledate: [],
-    
   },
   getters: {
     // notify
@@ -64,26 +63,58 @@ export default new Vuex.Store({
       return state.requestitem;
     },
     progressdate(state) {
-        return state.progressdate;
+      return state.progressdate;
     },
     holidaydate(state) {
-        return state.holidaydate;
+      return state.holidaydate;
     },
     scheduledate(state) {
-      if (state.holidaydate.length > 0 && state.progressdate.length > 0) 
-        return state.holidaydate.concat(state.progressdate).concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
-      if (state.holidaydate.length > 0 && state.progressdate.length <= 0) 
-        return state.holidaydate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
-      if (state.progressdate.length > 0 && state.holidaydate.length <= 0) 
-        return state.progressdate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
-      return state.scheduledate.concat([{start:"", end:"", categoryId: 2, repeat: "montly", title:"selected"}]);
+      if (state.holidaydate.length > 0 && state.progressdate.length > 0)
+        return state.holidaydate
+          .concat(state.progressdate)
+          .concat([
+            {
+              start: "",
+              end: "",
+              categoryId: 2,
+              repeat: "montly",
+              title: "selected",
+            },
+          ]);
+      if (state.holidaydate.length > 0 && state.progressdate.length <= 0)
+        return state.holidaydate.concat([
+          {
+            start: "",
+            end: "",
+            categoryId: 2,
+            repeat: "montly",
+            title: "selected",
+          },
+        ]);
+      if (state.progressdate.length > 0 && state.holidaydate.length <= 0)
+        return state.progressdate.concat([
+          {
+            start: "",
+            end: "",
+            categoryId: 2,
+            repeat: "montly",
+            title: "selected",
+          },
+        ]);
+      return state.scheduledate.concat([
+        {
+          start: "",
+          end: "",
+          categoryId: 2,
+          repeat: "montly",
+          title: "selected",
+        },
+      ]);
     },
-
 
     tagitem(state) {
       return state.tagitem;
     },
-
   },
   mutations: {
     // notify
@@ -140,29 +171,28 @@ export default new Vuex.Store({
       state.requestitems3 = obj;
     },
     mutateSetRequestitems0123(state, requestitems) {
-      state.requestitems0 = requestitems
-      state.requestitems1 = requestitems
-      state.requestitems2 = requestitems
-      state.requestitems3 = requestitems
+      state.requestitems0 = requestitems;
+      state.requestitems1 = requestitems;
+      state.requestitems2 = requestitems;
+      state.requestitems3 = requestitems;
     },
     mutateSetRequestitem(state, requestitem) {
       state.requestitem = requestitem;
     },
     mutateSetProgressdate(state, progressdate) {
-        state.progressdate = progressdate
+      state.progressdate = progressdate;
     },
     mutateSetHolidaydate(state, holidaydate) {
-        state.holidaydate = holidaydate
+      state.holidaydate = holidaydate;
     },
 
     mutateSetScheduledate(state, data) {
-        state.holidaydate = data
+      state.holidaydate = data;
     },
 
     mutateSetTagitem(state, tagitem) {
       state.tagitem = tagitem;
     },
-    
   },
   actions: {
     // notify
@@ -230,18 +260,18 @@ export default new Vuex.Store({
     },
     getProgressdate(context, payload) {
       http.get(payload).then(({ data }) => {
-        context.commit('mutateSetProgressdate', data);
+        context.commit("mutateSetProgressdate", data);
       });
     },
     getHolidaydate(context, payload) {
       http.get(payload).then(({ data }) => {
-        context.commit('mutateSetHolidaydate', data);
+        context.commit("mutateSetHolidaydate", data);
       });
     },
     initDataOnAlarm(context) {
-      context.commit('mutateSetHolidaydate', []);
-      context.commit('mutateSetProgressdate', []);
-      context.commit('mutateSetRequestitems0123', []);
+      context.commit("mutateSetHolidaydate", []);
+      context.commit("mutateSetProgressdate", []);
+      context.commit("mutateSetRequestitems0123", []);
     },
 
     getTagitem(context, payload) {
@@ -253,6 +283,6 @@ export default new Vuex.Store({
   plugins: [
     createPersistedState({
       paths: ["auth"],
-    })
+    }),
   ],
 });

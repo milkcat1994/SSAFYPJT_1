@@ -90,7 +90,7 @@
                         <div
                           v-for="t in editor.tags.slice(0, 5)"
                           :key="t"
-                          class="text-right mt-3"
+                          class="text-right mt-2"
                           style="display:inline-block"
                         >
                           <span class="mr-2"># {{ t }}</span>
@@ -122,8 +122,8 @@
             <div class="px-4" v-if="isLogin">
               <div id="app">
                 <b-container>
-                  <b-row class="caro1">
-                    <b-col cols="12" class="caro">
+                  <b-row>
+                    <b-col cols="12">
                       <carousel :perPage="4">
                         <slide
                           class="p-2"
@@ -198,6 +198,7 @@
 import http from "@/util/http-common.js";
 import { Carousel, Slide } from "vue-carousel";
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -294,6 +295,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["isLoggedIn"]),
     currentEditors() {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;

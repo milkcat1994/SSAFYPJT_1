@@ -164,12 +164,12 @@ div.arrow {
 
   &:hover::after {
     transform: rotate(45deg);
-    border-color: #eddab9;
+    border-color: white;
     height: 140%;
     cursor: pointer;
   }
   &:hover::before {
-    border-color: #eddab9;
+    border-color: white;
     transform: scale(0.8);
     cursor: pointer;
   }

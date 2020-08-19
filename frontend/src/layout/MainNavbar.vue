@@ -46,13 +46,13 @@
               >
             </div>
           </template>
-          <div class="px-3 py-2 d-flex justify-content-center">
-            <router-link class="navbar-brand" to="/">
+          <div class="pl-2 py-2 d-flex justify-content-center">
+            <router-link class="navbar-brand mb-3" to="/">
               <img
                 src="/img/brand/green.png"
-                class="navbar-brand-img my-5"
+                class="navbar-brand-img my-4"
                 alt="편집"
-                style="width:90px; height:50px; border:none;"
+                style="width:110px; border:none;"
               />
             </router-link>
           </div>
@@ -111,9 +111,9 @@
     <router-link class="navbar-brand" to="/">
       <img
         src="/img/brand/green.png"
-        class="navbar-brand-img my-atuo ml-3"
+        class="navbar-brand-img my-atuo ml-1"
         alt="편집"
-        style="width:90px; height:50px; border:none;"
+        style="width:90px;border:none;"
       />
     </router-link>
     <!-- 최근 메시지 보여주기 -->
@@ -137,7 +137,11 @@
                     d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"
                   />
                 </svg>
-                <span class="notification--num">{{ getNotifyNum() }}</span>
+                <span
+                  class="notification--num"
+                  style="font-style:inherit; font-weight: bold ;"
+                  >{{ getNotifyNum() }}</span
+                >
               </div>
             </main>
           </div>
@@ -351,8 +355,8 @@ export default {
       this.$store.commit("stepper/clearFilterFinderStatus");
       store.dispatch("initDataOnAlarm");
       this.isLogin = false;
-      this.$router.push({ name: "mainpage" }).catch(() => {});
-      this.$forceUpdate();
+      this.$router.push("/").catch(() => {});
+      // this.$forceUpdate();
     },
   },
 };
@@ -417,9 +421,9 @@ svg > path {
 
 .notification--num {
   position: absolute;
-  top: 20%;
+  top: 22%;
   left: 75%;
-  font-size: 16px;
+  font-size: 14px;
   /* border-radius: 90%; */
   /* border: 1px; */
   color: #172b4d;
