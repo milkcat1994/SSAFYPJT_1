@@ -110,9 +110,23 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <i v-if="getNotifyNum() > 0" class="ni ni-bell-55" style="color:#ff0066"></i>
             <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
-            <badge type="text-light">{{ getNotifyNum() }}</badge>
+            <badge v-if="getNotifyNum() == 0" type="text-light">{{ getNotifyNum() }}</badge>
+            <main rel="main" v-if="getNotifyNum() > 0">
+              <div class="notification">
+                <svg viewBox="-10 0 35 35">
+                  <path
+                    class="notification--bell"
+                    d="M14 12v1H0v-1l0.73-0.58c0.77-0.77 0.81-3.55 1.19-4.42 0.77-3.77 4.08-5 4.08-5 0-0.55 0.45-1 1-1s1 0.45 1 1c0 0 3.39 1.23 4.16 5 0.38 1.88 0.42 3.66 1.19 4.42l0.66 0.58z"
+                  />
+                  <path
+                    class="notification--bellClapper"
+                    d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"
+                  />
+                </svg>
+                <span class="notification--num">{{ getNotifyNum() }}</span>
+              </div>
+            </main>
           </div>
 
           <!-- 레이아웃 width가 md 이하일때는 @/components/Sidebar.vue 수정해야함 -->
@@ -362,13 +376,12 @@ svg {
   width: 40px;
 }
 svg > path {
-  fill: #172b4d;
+  fill: #dc143c;
 }
 
 .notification--bell {
   animation: bell 2.2s linear infinite;
   transform-origin: 50% 0%;
-  color: red;
 }
 
 .notification--bellClapper {
@@ -377,13 +390,13 @@ svg > path {
 
 .notification--num {
   position: absolute;
-  top: 10%;
-  left: 60%;
-  font-size: 15px;
-  border-radius: 90%;
+  top: 20%;
+  left: 75%;
+  font-size: 16px;
+  /* border-radius: 90%; */
   /* border: 1px; */
-  color: #ffffff;
-  background-color: #ff4c13;
+  color: #172b4d;
+  /* background-color: #ff4c13; */
   text-align: center;
   animation: notification 2.2s linear;
 }

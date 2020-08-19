@@ -28,8 +28,11 @@
             <b-button variant="secondary" @click="moveList()">전체 편집자 보기</b-button>
           </div>
         </div>
-        <div class="col-6 ml-4 mr-0 pr-0">
-          <img src="img/theme/friends.png" alt="png from pngtree.com" style="width:90%" />
+        <div class="col-6 ml-4 mr-0 pr-0 mb-3">
+          <img src="img/theme/friends2.png" alt="png from pngtree.com" style="width:90%" />
+        </div>
+        <div class="col-12 ml-7 pl-9 mb-4" style="left:52%">
+          <span class="text-end" style="color:#fbf4f9">PngTree.com</span>
         </div>
       </div>
     </base-header>
@@ -84,7 +87,7 @@
                     </h4>
                     <h4>
                       <i class="fas fa-star mr-2" style="color:yellow"></i>
-                      <span class="mr-3">{{ editor.avgScore }}</span>
+                      <span class="mr-3">{{ round(editor.avgScore) }}</span>
                     </h4>
                   </div>
                 </template>
@@ -115,9 +118,9 @@
                           <LazyYoutubeVideo :src="recEditor.url" style="width: 100%;" class="mb-2" />
                           <hr />
                           <b-card-text>
-                              <div class="d-inline-flex">
-                                <h3 class="mt-0 mb-1">{{ recEditor.nickname }}</h3>
-                              </div>
+                            <div class="d-inline-flex">
+                              <h3 class="mt-0 mb-1">{{ recEditor.nickname }}</h3>
+                            </div>
 
                             <div
                               v-for="(t, index) in recEditor.tag.split(', ').slice(0, 3)"
@@ -253,33 +256,37 @@ export default {
     movePortfolio(uid) {
       this.$router.push("/portfolio?no=" + uid);
     },
-    getReviewInfo(uid) {
-      http
-        .get("/portfolio/review/" + uid)
-        .then(({ data }) => {
-          //성공시 평균 계산 필요 추출 필요
-          if (data.data == "success") {
-            this.reviews = data.object;
-            let videoAvg = 0,
-              kindnessAvg = 0,
-              finishAvg = 0;
-            data.object.forEach((obj) => {
-              videoAvg += obj.videoScore;
-              kindnessAvg += obj.kindnessScore;
-              finishAvg += obj.finishScore;
-            });
-            let length = data.object.length;
-            this.avgScore = (videoAvg + kindnessAvg + finishAvg) / length;
-            return;
-          } else {
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          return;
-        });
+
+    round(score) {
+      return Number(score.toFixed(1));
     },
+    // getReviewInfo(uid) {
+    //   http
+    //     .get("/portfolio/review/" + uid)
+    //     .then(({ data }) => {
+    //       //성공시 평균 계산 필요 추출 필요
+    //       if (data.data == "success") {
+    //         this.reviews = data.object;
+    //         let videoAvg = 0,
+    //           kindnessAvg = 0,
+    //           finishAvg = 0;
+    //         data.object.forEach((obj) => {
+    //           videoAvg += obj.videoScore;
+    //           kindnessAvg += obj.kindnessScore;
+    //           finishAvg += obj.finishScore;
+    //         });
+    //         let length = data.object.length;
+    //         this.avgScore = (videoAvg + kindnessAvg + finishAvg) / length;
+    //         return;
+    //       } else {
+    //         return;
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       return;
+    //     });
+    // },
   },
   computed: {
     currentEditors() {
