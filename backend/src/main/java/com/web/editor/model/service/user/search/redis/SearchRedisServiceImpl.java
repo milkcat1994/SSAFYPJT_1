@@ -250,24 +250,38 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         String searchKey = makeKey(searchRequest);
         SearchPortfolioJoinBookmark tempResult;
         // Redis에 해당 검색 key값이 있는지 확인
-        System.out.println("검색키>>"+searchKey);
-        if(hashKeys(searchKey).isEmpty()){
-            System.out.println("key가 없음");
-        }
-        else{
+        if(!hashKeys(searchKey).isEmpty()){
             // key가 있다면 해당 key로 값을 가져오기
-            System.out.println("캐시에서 가져옴>> "+searchKey);
             // setResultOperations.members(searchKey) 해당 식은 uid를 가져오는 것이다.
             // tag만 검색 했을 때 다른 searchKey를 뱉어야 한다.
 
             resultList.addAll(setResultOperations.members(searchKey));
+
+            // 정렬 -> 가격 낮은, 가격 높은, 이름순, 평점순
+            // 기본 정렬 평점순
+            // 정렬
+            switch (searchRequest.getSortType()) {
+                case "PRICE_ASC":
+                    Collections.sort(resultList, (a, b) -> a.getPayMin() - b.getPayMin());
+                    break;
+                case "PRICE_DESC":
+                    Collections.sort(resultList, (a, b) -> b.getPayMin() - a.getPayMin());
+                    break;
+                case "NICKNAME_ASC":
+                    Collections.sort(resultList, (a, b) -> a.getNickname().compareTo(b.getNickname()));
+                    break;
+                case "SCORE_DESC":
+                default:
+                    Collections.sort(resultList, (a, b) -> Float.compare(b.getAvgScore(), a.getAvgScore()));
+                    break;
+            }
+
             return resultList;
         }
 
         // videoType, videoStyle -> 1개
         Set<String> keySet = new LinkedHashSet<>();
         keySet = new LinkedHashSet<>();
-        System.out.println("1차 완료");
 
         // 자료 부르기 위한 Key값 만드는 StringBuilder
         StringBuilder sb = new StringBuilder();
@@ -318,7 +332,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // (videoSkill, videoType, videoStyle)의 합집합 구하기
         if(!keySet.isEmpty())
             setOperations.unionAndStore(keySet, filterString);
-        System.out.println("2차 완료"+filterString);
 
         // SearchType에 따라 tag, nickname, all 이 갈린다.
         // tag는 정확한 검색 결과 여야 하며
@@ -337,10 +350,8 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                     for (String tag : searchRequest.getSearchTags()) {
                         keySet.add("tag:"+tag);
                         sb.append(tag).append(':');
-                        System.out.println("tag>"+tag);
                     }
                     sb.setLength(sb.length());
-                    System.out.println("태그검색");
                 }
                 break;
             case "NICKNAME":
@@ -368,7 +379,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             default:
                 return null;
         }
-        System.out.println("3차 완료");
         // video filter와 검색 결과를 담은 key Set이다.
         keySet.add(filterString);
         String searchString = sb.toString();
@@ -381,7 +391,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         for (String uid : resultSet) {
             tempResult = objectMapper.convertValue(hashOperations.entries("uid:"+uid), SearchPortfolioJoinBookmark.class);
             
-            
             // tagKey를 이용하여 tagList를 구해야 한다.
             if(tempResult.getTagKey() == null){
                 setResultOperations.add("search:"+filterString+":"+searchString, new SearchPortfolio(tempResult, Collections.emptySet()));
@@ -390,13 +399,9 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                 setResultOperations.add("search:"+filterString+":"+searchString, new SearchPortfolio(tempResult, setOperations.members(tempResult.getTagKey())));
             }
         }
-        System.out.println("4차 완료");
         
-        // 검색어시 key로 추가해 넣어야한다.
-        System.out.println("검색키>>"+"search:"+filterString+":"+searchString);
+        // 검색어시 key로 추가해 넣어야한다.+searchString);
         resultList.addAll(setResultOperations.members("search:"+filterString+":"+searchString));
-
-        System.out.println("5차 완료");
 
         // 정렬 -> 가격 낮은, 가격 높은, 이름순, 평점순
         // 기본 정렬 평점순
@@ -409,15 +414,14 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                 Collections.sort(resultList, (a, b) -> b.getPayMin() - a.getPayMin());
                 break;
             case "NICKNAME_ASC":
-            Collections.sort(resultList, (a, b) -> a.getNickname().compareTo(b.getNickname()));
+                Collections.sort(resultList, (a, b) -> a.getNickname().compareTo(b.getNickname()));
                 break;
             case "SCORE_DESC":
             default:
-            Collections.sort(resultList, (a, b) -> Float.compare(b.getAvgScore(), a.getAvgScore()));
+                Collections.sort(resultList, (a, b) -> Float.compare(b.getAvgScore(), a.getAvgScore()));
                 break;
         }
 
-        System.out.println("디비 캐시로 저장한 뒤 가져옴");
         return resultList;
     }
 
