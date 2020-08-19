@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      dates: new Date(),
+      dates: '',
       config: {
         allowInput: true,
         mode: "range",

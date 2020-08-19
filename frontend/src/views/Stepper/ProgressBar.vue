@@ -1,17 +1,15 @@
 <template>
-  <!-- <div class="d-flex flex-column justify-content-center" style="min-height: 124px;"> -->
-  <div class="d-flex flex-column justify-content-center">
-      <!-- :class="{done: !!stage.status, notyet: !stage.status}" -->
-    <div class="d-flex justify-content-center">
-      <div class="text-center mx-2 py-1"
-        v-for="stage of stages"
-        :key="stage.name"
-        @click="changeStep(stage.num)"
-        style="width: 120px;">
-        <span class="stage-name">{{stage.name}}</span>
-        <div class="status" :class="{done: !!stage.status, notyet: !stage.status}" style="height: 6px;"></div>
-        <!-- <small>{{stage.value}}</small> -->
-      </div>
+  <div class="d-flex justify-content-center">
+    <div
+      class="border-top-0 text-center px-4 py-1"
+      v-for="stage of stages"
+      :key="stage.name"
+      :class="{ done: !!stage.status, notyet: !stage.status,current: currentStep == stage.num }"
+      @click="changeStep(stage.num)"
+    >
+      <span class="stage-name"
+      >{{ stage.name }}</span>
+      <!-- :class ="{current: currentStep == stage.num}" -->
     </div>
 
     <!-- <div class="d-flex justify-content-center mx-4 p-2 bg-white rounded">
@@ -25,6 +23,7 @@
 <script>
 export default {
   name: "progress-bar",
+  props: ['currentStep'],
   data() {
     return {
       initStages: [
@@ -78,6 +77,12 @@ export default {
       return arr
     }
   },
+  watch:{
+    currentStep(){
+      console.log(this.currentStep)
+    
+    }
+  },
   methods: {
     changeStep(stageNum) {
       this.$emit("change-step", stageNum);
@@ -95,8 +100,14 @@ export default {
   cursor: default;
   border-bottom: 10px solid lightgray;
 }
+
 .stage-name {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.current{
+  cursor: default;
+  border-bottom: 10px solid #bcb9ed ;
 }
 </style>
