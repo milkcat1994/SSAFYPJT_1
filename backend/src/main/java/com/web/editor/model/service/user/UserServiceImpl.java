@@ -58,6 +58,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String userfindByNickname(String nickname) {
+        try{
+            return userMapper.userfindByNickname(nickname);
+        } catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public int updateUser(User user) {
         try{
             int res = userMapper.updateUser(user);

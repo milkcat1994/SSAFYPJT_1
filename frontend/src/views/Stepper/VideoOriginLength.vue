@@ -4,21 +4,24 @@
     <h1 class="display-3 mb-0 text-center">원본 영상의 길이를 선택해주세요</h1>
 
     <div class="container py-4">
-
       <div class="row d-flex justify-content-center">
-
-        <div class="card text-center col-sm-2 m-2" 
-            v-for="item of originLength"
-            :class="{selected: !!item.status}"
-            :key="item.value"
-            @click.prevent="setOriginLength(item.value)">
-          <div class="card-body px-0 pt-4">
-            <h2 class="card-title">{{item.name}}</h2>
+        <button
+          v-for="item of originLength"
+          :key="item.value"
+          type="button"
+          class="btn my-2"
+          style="min-width: 150px; min-height: 60px; !important"
+          :class="{'btn-primary': !!item.status, 'btn-outline-primary': !item.status}"
+          @click="setOriginLength(item.value)"
+        >
+          <div>
+            <i :class="item.icon"></i>
+            <span>{{item.name}}</span>
+            <i v-if="!!item.status" class="fas fa-check fa-sm"></i>
           </div>
-        </div>
+        </button>
       </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -28,14 +31,14 @@ export default {
   name: "video-origin-length",
   computed: {
     ...mapState({
-      originLength: state => state.stepper.originLength
+      originLength: (state) => state.stepper.originLength,
     }),
   },
   methods: {
     setOriginLength(value) {
-      this.$store.commit('stepper/setOriginLength', value)
-    }
-  }
+      this.$store.commit("stepper/setOriginLength", value);
+    },
+  },
 };
 </script>
 <style scoped>

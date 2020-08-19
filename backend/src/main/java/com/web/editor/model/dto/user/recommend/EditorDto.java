@@ -11,4 +11,9 @@ public class EditorDto {
     private String skill;
     private double similarity;
 
+    private String url;
+    private String nickname;
+    private String pay;
+    private String description;
+
 }

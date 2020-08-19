@@ -7,7 +7,7 @@
       <base-input addon-left-icon="ni ni-calendar-grid-58">
         <flat-picker
           v-model="dates"
-          slot-scope="{focus, blur}"
+          slot-scope="{ focus, blur }"
           @on-open="focus"
           @on-close="blur"
           @on-change="changeDates"
@@ -27,23 +27,22 @@ export default {
   name: "video-deadline",
   components: { flatPicker },
   methods: {
-    changeDates(selectedDates, dateStr){
+    changeDates(selectedDates, dateStr) {
       // console.log(selectedDates)
       // console.log(dateStr)
-      this.$store.commit('stepper/setDeadline', dateStr)
-    }
+      this.$store.commit("stepper/setDeadline", dateStr);
+    },
   },
   data() {
     return {
       dates: new Date(),
       config: {
         allowInput: true,
-        mode: 'range',
-        minDate: "today",
-      }
+        mode: "range",
+        // minDate: "today",
+      },
     };
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

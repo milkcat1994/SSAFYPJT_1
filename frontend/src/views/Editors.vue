@@ -149,8 +149,10 @@
       <editors-list
         title="편집자"
         :editorsData="editors"
+        :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
+        @clickSearchTag="reSearchTag"
         ></editors-list>
     </div>
   </div>
@@ -163,6 +165,12 @@ export default {
   name: "editors",
   components: {
     EditorsList,
+  },
+  props:{
+    clickSearchTag: {
+      type: String,
+      default : ''
+    }
   },
   data() {
     return {
@@ -200,6 +208,8 @@ export default {
       sortBy: "NICKNAME_ASC",
       // 선택한 필터들
       selectedFilters: [],
+
+      message: "",
     };
   },
   computed: {
@@ -241,17 +251,29 @@ export default {
     },
   },
   created() {
+    // 태그 클릭으로 들어왔을경우
+    if(this.clickSearchTag != ''){
+      this.searchKey = '태그';
+      this.keyword = this.clickSearchTag;
+    }
+
     this.fetchFilter();
   },
   mounted() {
     this.fetchEditors();
   },
   methods: {
+    reSearchTag(keyword){
+      this.searchKey = '태그';
+      this.keyword = keyword;
+      this.fetchEditors();
+    },
     setSortKey(key) {
       this.sortBy = key
       this.fetchEditors()
     },
     fetchEditors() {
+      this.message = "";
       http
         .post("/search", {
           searchTags: this.keyword.split(" "),
@@ -265,6 +287,9 @@ export default {
         .then((res) => {
           if (res.data.status) {
             this.editors = res.data.object;
+            if(this.editors.length == 0){
+              this.message = "검색 결과가 없습니다.";
+            }
           } else {
             console.log(res.data.status);
           }
@@ -272,12 +297,12 @@ export default {
         .catch((err) => console.error(err));
     },
     fetchFilter() {
+      this.message = "";
       let initType = this.$store.getters['stepper/getSelectedVideoType'].value
       if (initType) {
         this.videoType.forEach(item => {
           if (item.value == initType) {
             item.status = true
-            // this.selectedType.push(item.value)
             this.selectedFilters.push(item.value)
           }
         })
@@ -287,7 +312,6 @@ export default {
         this.videoStyle.forEach(item => {
           if (item.value == initStyle) {
             item.status = true
-            // this.selectedStyle.push(item.value)
             this.selectedFilters.push(item.value)
           }
         })
@@ -312,42 +336,6 @@ export default {
         val.status = true;
       }
     },
-    // toggleTypeFilter(val) {
-    //   if (val.status) {
-    //     let index = this.selectedType.indexOf(val.value);
-    //     if (index > -1) {
-    //       this.selectedType.splice(index, 1);
-    //     }
-    //     val.status = false;
-    //   } else {
-    //     this.selectedType.push(val.value);
-    //     val.status = true;
-    //   }
-    // },
-    // toggleStyleFilter(val) {
-    //   if (val.status) {
-    //     let index = this.selectedStyle.indexOf(val.value);
-    //     if (index > -1) {
-    //       this.selectedStyle.splice(index, 1);
-    //     }
-    //     val.status = false;
-    //   } else {
-    //     this.selectedStyle.push(val.value);
-    //     val.status = true;
-    //   }
-    // },
-    // toggleSkillFilter(val) {
-    //   if (val.status) {
-    //     let index = this.selectedSkills.indexOf(val.value);
-    //     if (index > -1) {
-    //       this.selectedSkills.splice(index, 1);
-    //     }
-    //     val.status = false;
-    //   } else {
-    //     this.selectedSkills.push(val.value);
-    //     val.status = true;
-    //   }
-    // },
     clearFilter(value) {
       let index = this.selectedFilters.indexOf(value);
       if (index > -1) {
@@ -368,6 +356,7 @@ export default {
           e.status = false;
         }
       });
+      this.message = "";
     },
     clearFilterAll() {
       // 필터된 카테고리들 토글(활성화 <-> 비활성화)
@@ -398,13 +387,15 @@ export default {
       ]),
       // selectedFilters 배열 clear
       (this.selectedFilters.length = 0);
+      this.message = "";
     },
     resetAll() {
       this.clearFilterAll();
-      this.keyword = ""
-      this.sortBy = "NICKNAME_ASC"
-      this.searchKey = "전체"
-      this.fetchEditors()
+      this.keyword = "";
+      this.sortBy = "NICKNAME_ASC";
+      this.searchKey = "전체";
+      this.fetchEditors();
+      this.message = "";
     }
   },
 };

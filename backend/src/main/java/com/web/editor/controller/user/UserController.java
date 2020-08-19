@@ -146,6 +146,19 @@ public class UserController {
         return response;
     }
 
+    @PostMapping("/userfind/{nickname}")
+    @ApiOperation(value = "user정보 반환-nickname으로 검색")
+    public Object userfindByNickname(@PathVariable String nickname) {
+
+        String email = userService.userfindByNickname(nickname);
+
+        if (email != null) {
+            return new ResponseEntity<>(email, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("not exist", HttpStatus.OK);
+        }
+    }
+
     @PutMapping("/user/{uid}")
     @ApiOperation(value = "user정보 수정")
     public Object updateUser(@RequestBody UserUpdateRequest request, @PathVariable String uid) {

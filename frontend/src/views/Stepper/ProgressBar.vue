@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'progress-bar',
+  name: "progress-bar",
   data() {
     return {
       initStages: [
@@ -80,20 +80,20 @@ export default {
   },
   methods: {
     changeStep(stageNum) {
-      this.$emit('change-step', stageNum)
+      this.$emit("change-step", stageNum);
     },
   },
-}
+};
 </script>
 
 <style scoped>
 .done {
   cursor: pointer;
-  border-bottom: 8px solid darkblue;
+  border-bottom: 10px solid darkblue;
 }
 .notyet {
   cursor: default;
-  border-bottom: 8px solid lightgray;
+  border-bottom: 10px solid lightgray;
 }
 .stage-name {
   font-size: 1.5rem;

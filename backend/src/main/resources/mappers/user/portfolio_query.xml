@@ -47,7 +47,7 @@
                                 (SELECT `nickname`
                                     FROM user_info
                                     WHERE `uid` = #{uid}),
-                                '', '', '')
+                                '', 0, '')
     </insert>
     <!-- 
         user_info 테이블이 없어서 임시로 nickname 삽입

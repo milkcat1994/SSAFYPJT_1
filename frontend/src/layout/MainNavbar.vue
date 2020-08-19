@@ -1,5 +1,10 @@
 <template>
-  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
+  <base-nav
+    class="navbar-top navbar-dark"
+    id="navbar-main"
+    :show-toggle-button="false"
+    expand
+  >
     <!-- <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
       <div class="form-group mb-0">
         <base-input
@@ -32,7 +37,13 @@
               class="d-flex bg-dark text-light align-items-center px-3 py-2"
               style="display:none width:100px"
             >
-              <b-button id="closebtn" size="sm" style="display:none;" @click="hide">Close</b-button>
+              <b-button
+                id="closebtn"
+                size="sm"
+                style="display:none;"
+                @click="hide"
+                >Close</b-button
+              >
             </div>
           </template>
           <div class="px-3 py-2 d-flex justify-content-center">
@@ -56,7 +67,7 @@
           <div class="ml-4 mb-3">
             <router-link to="/editors">
               <i class="ni ni-zoom-split-in text-primary ml-2">
-                <span class="mx-2">편집자 찾기</span>
+                <span class="mx-2">전체 편집자 보기</span>
               </i>
             </router-link>
           </div>
@@ -65,7 +76,9 @@
               v-if="isEditor && isLogin"
               :to="{
                 path: '/portfolio?no=' + this.$session.get('uid'),
+                params: { uid: this.$session.get('uid') },
               }"
+              :key="$route.fullPath"
             >
               <i class="ni ni-collection text-primary mx-2">
                 <span class="mx-2">내 포트폴리오</span>
@@ -108,8 +121,25 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <i class="ni ni-bell-55"></i>
-            <badge type="text-light">{{ getNotifyNum() }}</badge>
+            <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
+            <badge v-if="getNotifyNum() == 0" type="text-light">{{
+              getNotifyNum()
+            }}</badge>
+            <main rel="main" v-if="getNotifyNum() > 0">
+              <div class="notification">
+                <svg viewBox="-10 0 35 35">
+                  <path
+                    class="notification--bell"
+                    d="M14 12v1H0v-1l0.73-0.58c0.77-0.77 0.81-3.55 1.19-4.42 0.77-3.77 4.08-5 4.08-5 0-0.55 0.45-1 1-1s1 0.45 1 1c0 0 3.39 1.23 4.16 5 0.38 1.88 0.42 3.66 1.19 4.42l0.66 0.58z"
+                  />
+                  <path
+                    class="notification--bellClapper"
+                    d="M7 15.7c1.11 0 2-0.89 2-2H5c0 1.11 0.89 2 2 2z"
+                  />
+                </svg>
+                <span class="notification--num">{{ getNotifyNum() }}</span>
+              </div>
+            </main>
           </div>
 
           <!-- 레이아웃 width가 md 이하일때는 @/components/Sidebar.vue 수정해야함 -->
@@ -129,12 +159,10 @@
                   요청하셨습니다
                 </span>
                 <span v-if="notifyitem.notify_type == 'accepted'">
-                  {{ notifyitem.request_nickname }}님께서 요청을
-                  수락하셨습니다
+                  {{ notifyitem.request_nickname }}님께서 요청을 수락하셨습니다
                 </span>
                 <span v-if="notifyitem.notify_type == 'review'">
-                  {{ notifyitem.request_nickname }}님께 후기를 남길 수
-                  있습니다
+                  {{ notifyitem.request_nickname }}님께 후기를 남길 수 있습니다
                 </span>
               </router-link>
             </div>
@@ -155,29 +183,40 @@
     <ul class="navbar-nav">
       <li v-if="!isLogin" class="nav-item mr-3">
         <router-link :to="{ name: 'register' }" class="nav-link">
-          <i class="fas fa-user-plus"></i>
-          <span class="nav-link-inner--text">회원가입</span>
+          <i
+            class="fas fa-user-plus mr-1"
+            style="color: #172b4d !important;"
+          ></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;"
+            >회원가입</span
+          >
         </router-link>
       </li>
       <li v-if="!isLogin" class="nav-item">
         <router-link :to="{ name: 'login' }" class="nav-link">
-          <i class="fas fa-user-check"></i>
-          <span class="nav-link-inner--text">로그인</span>
+          <i
+            class="fas fa-user-check mr-1"
+            style="color: #172b4d !important;"
+          ></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;"
+            >로그인</span
+          >
         </router-link>
       </li>
     </ul>
 
     <!-- 마이페이지 -->
-    <ul v-if="isLogin" class="navbar-nav align-items-center ml-2 d-none d-md-flex">
+    <ul
+      v-if="isLogin"
+      class="navbar-nav align-items-center ml-2 d-none d-md-flex"
+    >
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
             <i class="fas fa-user" style="color: #172b4d !important;"></i>
             <div class="media-body ml-2 d-none d-lg-block">
               <span class="mb-0 text-sm font-weight-bold text-default">
-                {{
-                nickname
-                }}
+                {{ nickname }}
               </span>
             </div>
           </div>
@@ -195,7 +234,11 @@
               <span>도움말</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <span style="cursor:pointer;" class="dropdown-item" @click="logout()">
+            <span
+              style="cursor:pointer;"
+              class="dropdown-item"
+              @click="logout()"
+            >
               <i class="ni ni-lock-circle-open"></i>
               <span>로그아웃</span>
             </span>
@@ -308,7 +351,8 @@ export default {
       this.$store.commit("stepper/clearFilterFinderStatus");
       store.dispatch("initDataOnAlarm");
       this.isLogin = false;
-      this.$router.push("/").catch(() => {});
+      this.$router.push({ name: "mainpage" }).catch(() => {});
+      this.$forceUpdate();
     },
   },
 };
@@ -336,5 +380,106 @@ router-link:hover {
 .navbar-brand-img:focus {
   border: none;
   outline: none;
+}
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+/* .notification {
+  position: relative;
+  width: 14px;
+  height: 16.8px;
+} */
+.notification {
+  display: flex;
+  align-items: center;
+  margin-top: 35%;
+}
+svg {
+  display: flex;
+  align-items: center;
+  width: 40px;
+}
+svg > path {
+  fill: #dc143c;
+}
+
+.notification--bell {
+  animation: bell 2.2s linear infinite;
+  transform-origin: 50% 0%;
+}
+
+.notification--bellClapper {
+  animation: bellClapper 2.2s 0.1s linear infinite;
+}
+
+.notification--num {
+  position: absolute;
+  top: 20%;
+  left: 75%;
+  font-size: 16px;
+  /* border-radius: 90%; */
+  /* border: 1px; */
+  color: #172b4d;
+  /* background-color: #ff4c13; */
+  text-align: center;
+  animation: notification 2.2s linear;
+}
+
+@keyframes bell {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(10deg);
+  }
+  45% {
+    transform: rotate(-10deg);
+  }
+  55% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+}
+
+@keyframes bellClapper {
+  0%,
+  25%,
+  75%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(-0.15em);
+  }
+  45% {
+    transform: translateX(0.15em);
+  }
+  55% {
+    transform: translateX(-0.1em);
+  }
+  60% {
+    transform: translateX(0.1em);
+  }
+}
+
+@keyframes notification {
+  0%,
+  25%,
+  75%,
+  100% {
+    opacity: 1;
+  }
+  30%,
+  70% {
+    opacity: 0;
+  }
 }
 </style>

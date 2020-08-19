@@ -9,8 +9,8 @@
         등록하기
       </base-button>
 
-      <router-link :to="'/portfolio?no='+this.uid">
-        <base-button size="sm" type="info" class="btn btn-info float-right">
+      <router-link :to="'/portfolio?no='+this.uid" style="margin-right: 1%;">
+        <base-button type="info" class="btn btn-info float-right" style="margin-right: 1%;">
           취소하기
         </base-button>
       </router-link>
@@ -108,18 +108,17 @@
                   v-model="video.url"
                   />
                 </div>
-                <!-- <div class="col-md-1">
+                <div class="col-md-1">
                   <base-button style="margin-top:32px;" type="float-center" icon="fa fa-minus-circle" @click="deleteURL(index)"></base-button>
-                </div> -->
+                </div>
               </div>
               <div class="addButton">
                 <base-button type="float-center" icon="fa fa-plus-circle" @click="addURL()"></base-button>
               </div>
 
-              <!-- <div class="row" style="margin-top: 30px;"> -->
-                <div class="col">
-                  <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
-                  <h4> 근무가 불가능한 날짜를 골라주세요. </h4>
+              <div class="col">
+                <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
+                <h4> 근무가 불가능한 날짜를 골라주세요. </h4>
                   <!-- <div class="row"> -->
                     <!-- <base-checkbox class="mb-3" v-model="offDays.weekday">평일</base-checkbox>
                     <base-checkbox class="mb-3" v-model="offDays.weekend">주말</base-checkbox>
@@ -131,18 +130,11 @@
                     <base-checkbox class="mb-3" v-model="offDays.sat">토</base-checkbox>
                     <base-checkbox class="mb-3" v-model="offDays.sun">일</base-checkbox> -->
                   <!-- </div> -->
-                  <vc-date-picker
-                    mode='multiple'
-                    v-model='disableDates'>
-                  </vc-date-picker>
-                  <!-- <vc-calendar
-                    title-position="left"
-                    v-model='disableDates'
-                    :disabled-dates='disableDates'
-                  />
-                  {{disableDates}} -->
-                </div>
-              <!-- </div> -->
+                <vc-date-picker
+                  mode='multiple'
+                  v-model='disableDates'>
+                </vc-date-picker>
+              </div>
             </div>
           </div>
         </div>
@@ -174,8 +166,10 @@ import { getFormatDate } from "@/util/day-common";
           nickname: '',
           skills: "",
           payMin: "",
-          HeadURL: [],
-          URLs: [],
+          HeadURL: [{url: "", mainFlag: 1}],
+          URLs: [{url: "", mainFlag: 0},
+                  {url: "", mainFlag: 0},
+                  {url: "", mainFlag: 0}],
           schedule: "",
           description: ""
         },
@@ -287,9 +281,8 @@ import { getFormatDate } from "@/util/day-common";
         .then(({data}) => {
           if(data.data == 'success'){
             this.haveSchedule = true;
-            let result = data.object.filter(schedule => schedule.scheduleType == 0);
+            let result = data.object.filter(schedule => schedule.scheduleType == 4);
             this.disableDates = this.makeScheduleArray(result);
-            console.log(this.disableDates);
             return;
           } else {
             // console.log("스케줄 없음");
@@ -337,12 +330,16 @@ import { getFormatDate } from "@/util/day-common";
             })
       },
       uploadHeadVideo(){
+        let urlList = [];
+        this.portfolio.HeadURL.forEach(element => {
+          urlList.push(element.url);
+        })
         // 대표영상_최초등록일 경우
         if(this.isFirstHeadVideo){
           http
           .post('/portfolio/video/'+this.uid, {
             portfolioUid: this.uid,
-            url: this.portfolio.HeadURL,
+            url: urlList,
             mainFlag: 1
           })
           .then(({ data }) => {
@@ -359,7 +356,7 @@ import { getFormatDate } from "@/util/day-common";
           http
           .put('/portfolio/video/'+this.uid, {
             portfolioUid: this.uid,
-            url: this.portfolio.HeadURL,
+            url: urlList,
             mainFlag: 1
           })
           .then(({ data }) => {
@@ -552,8 +549,10 @@ import { getFormatDate } from "@/util/day-common";
         })
       },
       deleteURL(index){
-        console.log(index);
-        delete this.portfolio.URLs[index];
+        // console.log(index);
+        // this.portfolio.URLs[index].url = "";
+        // delete this.portfolio.URLs[index];
+        this.portfolio.URLs.splice(index,1);
       }
     },
   };
