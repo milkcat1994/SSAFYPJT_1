@@ -170,6 +170,7 @@ export default {
             data.object.forEach((obj) => {
               if (obj.userInfoUid == this.$session.get("uid")) {
                 editor.togleBookmark = true;
+                editor.bookmarkNumber = data.object.length;
               }
             });
             return;
@@ -241,7 +242,11 @@ export default {
   cursor: pointer;
 }
 
-.emptyResult {
+.emptyResult li {
+  margin-left: 30%;
+}
+
+.emptyResult > h1 {
   text-align: center;
 }
 </style>
