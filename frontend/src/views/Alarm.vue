@@ -55,10 +55,8 @@
         <card shadow>
           <tab-pane>
             <span slot="title">
-              <div v-if="auth=='noneditor'">요청한 작업</div>
-              <div v-else>요청된 작업</div>
+              <div>요청 작업</div>
             </span>
-            
             <div role="tablist">
               <div v-for="(requestitem0, index) in requestitems0" :key="index + '_requestitems0'">
                 <b-card no-body class="m-1">
@@ -75,11 +73,11 @@
                           requestitem0.idx
                         );
                       ">
-                      <span v-if="auth == 'editor'">
-                        {{ requestitem0.request_nickname }}님이 작업이
+                      <span v-if="authmode == 'editor'">
+                        {{ requestitem0.request_nickname }}님이 작업이 
                         요청했습니다.
                       </span>
-                      <span v-if="auth == 'noneditor'">
+                      <span v-if="authmode == 'noneditor'">
                         {{ requestitem0.response_nickname }}님께 작업을
                         요청했습니다.
                       </span>
@@ -94,11 +92,11 @@
                       <b-card-text>
                         <table class="table table-hover">
                           <tbody>
-                            <tr v-if="auth == 'editor'">
+                            <tr v-if="authmode == 'editor'">
                               <th>요청자</th>
                               <td>{{ requestitem0.request_nickname }}</td>
                             </tr>
-                            <tr v-if="auth == 'noneditor'">
+                            <tr v-if="authmode == 'noneditor'">
                               <th>편집자</th>
                               <td>{{ requestitem0.response_nickname }}</td>
                             </tr>
@@ -141,7 +139,7 @@
                       </b-card-text>
                       <div
                         id="editorBtn"
-                        v-if="auth == 'editor'"
+                        v-if="authmode == 'editor'"
                       >
                         <b-button
                           class="statusBtn"
@@ -156,7 +154,7 @@
                       </div>
                       <div
                         id="noneditorBtn"
-                        v-if="auth == 'noneditor'"
+                        v-if="authmode == 'noneditor'"
                       >
                         <b-button
                           class="statusBtn"
@@ -173,7 +171,7 @@
 
           <tab-pane title="Profile">
             <span slot="title">
-              <div>진행중 작업</div>
+              <div>진행 작업</div>
             </span>
             <div role="tablist">
               <div v-for="(requestitem1, index) in requestitems1" :key="index + '_requestitems1'">
@@ -192,11 +190,11 @@
                         );
                       "
                     >
-                      <span v-if="auth == 'editor'">
+                      <span v-if="authmode == 'editor'">
                         {{ requestitem1.request_nickname }}님과의 작업이
                         진행중입니다.
                       </span>
-                      <span v-if="auth == 'noneditor'">
+                      <span v-if="authmode == 'noneditor'">
                         {{ requestitem1.response_nickname }}님과의 작업이
                         진행중입니다.
                       </span>
@@ -211,11 +209,11 @@
                       <b-card-text>
                         <table class="table table-hover">
                           <tbody>
-                            <tr v-if="auth == 'editor'">
+                            <tr v-if="authmode == 'editor'">
                               <th>요청자</th>
                               <td>{{ requestitem1.request_nickname }}</td>
                             </tr>
-                            <tr v-if="auth == 'noneditor'">
+                            <tr v-if="authmode == 'noneditor'">
                               <th>편집자</th>
                               <td>{{ requestitem1.response_nickname }}</td>
                             </tr>
@@ -263,13 +261,13 @@
                         @click="doneRequest(requestitem1.rid)"
                       >요청 완료</b-button>
                       <b-button
-                        v-if="auth == 'editor'"
+                        v-if="authmode == 'editor'"
                         class="statusBtn"
                         style="background-color: #aaaaff"
                         @click="getEmail(requestitem1.request_nickname)"
                       >이메일 보기</b-button>
                       <b-button
-                        v-if="auth == 'noneditor'"
+                        v-if="authmode == 'noneditor'"
                         class="statusBtn"
                         style="background-color: #aaaaff"
                         @click="getEmail(requestitem1.response_nickname)"
@@ -298,7 +296,7 @@
 
           <tab-pane>
             <span slot="title">
-              <div>완료된 작업</div>
+              <div>완료 작업</div>
             </span>
             <div role="tablist">
               <div v-for="(requestitem2, index) in requestitems2" :key="index + '_requestitems2'">
@@ -317,11 +315,11 @@
                         );
                       "
                     >
-                      <span v-if="auth == 'editor'">
+                      <span v-if="authmode == 'editor'">
                         {{ requestitem2.request_nickname }}님과의 작업이
                         완료되었습니다.
                       </span>
-                      <span v-if="auth == 'noneditor'">
+                      <span v-if="authmode == 'noneditor'">
                         {{ requestitem2.response_nickname }}님과의 작업이
                         완료되었습니다.
                       </span>
@@ -336,11 +334,11 @@
                       <b-card-text>
                         <table class="table table-hover">
                           <tbody>
-                            <tr v-if="auth == 'editor'">
+                            <tr v-if="authmode == 'editor'">
                               <th>요청자</th>
                               <td>{{ requestitem2.request_nickname }}</td>
                             </tr>
-                            <tr v-if="auth == 'noneditor'">
+                            <tr v-if="authmode == 'noneditor'">
                               <th>편집자</th>
                               <td>{{ requestitem2.response_nickname }}</td>
                             </tr>
@@ -384,7 +382,7 @@
                       <b-button
                         class="statusBtn"
                         style="background-color: #0099ff"
-                        v-if="auth == 'noneditor'"
+                        v-if="authmode == 'noneditor'"
                         @click="$bvModal.show('review-' + requestitem2.rid)"
                       >후기 남기기</b-button>
                       <b-modal :id="'review-' + requestitem2.rid" hide-footer>
@@ -432,11 +430,11 @@
                         );
                       "
                     >
-                      <span v-if="auth == 'editor'">
+                      <span v-if="authmode == 'editor'">
                         {{ requestitem3.request_nickname }}님과의 작업이
                         완료되었습니다.
                       </span>
-                      <span v-if="auth == 'noneditor'">
+                      <span v-if="authmode == 'noneditor'">
                         {{ requestitem3.response_nickname }}님과의 작업이
                         완료되었습니다.
                       </span>
@@ -451,11 +449,11 @@
                       <b-card-text>
                         <table class="table table-hover" style="float:left; width: 100%">
                           <tbody>
-                            <tr v-if="auth == 'editor'">
+                            <tr v-if="authmode == 'editor'">
                               <th>요청자</th>
                               <td>{{ requestitem3.request_nickname }}</td>
                             </tr>
-                            <tr v-if="auth == 'noneditor'">
+                            <tr v-if="authmode == 'noneditor'">
                               <th>편집자</th>
                               <td>{{ requestitem3.response_nickname }}</td>
                             </tr>
@@ -499,7 +497,7 @@
                       <b-button
                         class="statusBtn"
                         style="background-color: #0099ff"
-                        v-if="auth == 'noneditor'"
+                        v-if="authmode == 'noneditor'"
                         @click="getReview(requestitem3.rid)"
                       >후기 보기</b-button>
                       <b-modal id="donereview" hide-footer>
@@ -596,7 +594,7 @@ export default {
 
       idxDetail: "",
 
-      auth: "",
+      authmode: "",
       toggleVal: true,
 
       offdays: [],
@@ -622,7 +620,7 @@ export default {
         .dispatch("auth/getUserInfo", this.$session.get("uid"))
         .then((response) => {
           this.uid = this.$session.get("uid");
-          this.auth = this.$session.get("auth");
+          this.authmode = this.$session.get("auth");
           this.setUserInfo(response.data.object);
         })
         .catch(() => {
@@ -966,13 +964,13 @@ export default {
           })
     },
     toggleMode(){
-      if(this.auth == 'editor') {
+      if(this.authmode == 'editor') {
         this.toggleModeList("req");
-        this.auth = 'noneditor';
+        this.authmode = 'noneditor';
       }
       else {
         this.toggleModeList("res");
-        this.auth = 'editor';
+        this.authmode = 'editor';
       }
       this.toggleVal = !this.toggleVal;
     },
