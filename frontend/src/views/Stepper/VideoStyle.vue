@@ -6,11 +6,11 @@
     <div class="container py-4">
       <div class="row">
         <!-- 영상 종류별 버튼 -->
-        <div class="col-lg-3 col-md-6" v-for="item of videoStyle" :key="item.value">
+        <div class="col-xl-3 col-lg-4 col-md-6" v-for="item of videoStyle" :key="item.value">
           <button
             type="button"
             class="btn my-2"
-            style="min-width: 200px; min-height: 60px; !important"
+            style="min-width: 180px; min-height: 60px; !important"
             :class="{'btn-primary': !!item.status, 'btn-outline-primary': !item.status}"
             @click="selectVideoStyle(item.value)"
           >
