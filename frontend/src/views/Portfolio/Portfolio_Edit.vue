@@ -108,9 +108,9 @@
                   v-model="video.url"
                   />
                 </div>
-                <!-- <div class="col-md-1">
+                <div class="col-md-1">
                   <base-button style="margin-top:32px;" type="float-center" icon="fa fa-minus-circle" @click="deleteURL(index)"></base-button>
-                </div> -->
+                </div>
               </div>
               <div class="addButton">
                 <base-button type="float-center" icon="fa fa-plus-circle" @click="addURL()"></base-button>
@@ -559,7 +559,9 @@ import { getFormatDate } from "@/util/day-common";
       },
       deleteURL(index){
         // console.log(index);
-        delete this.portfolio.URLs[index];
+        // this.portfolio.URLs[index].url = "";
+        // delete this.portfolio.URLs[index];
+        this.portfolio.URLs.splice(index,1);
       }
     },
   };
