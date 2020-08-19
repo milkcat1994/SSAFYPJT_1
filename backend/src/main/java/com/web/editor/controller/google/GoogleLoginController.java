@@ -68,7 +68,6 @@ public class GoogleLoginController {
 	public Object googleConnect(@PathVariable int uid) {
         int res = googleUserService.googleConnect(uid);
         BasicResponse result = new BasicResponse();
-        System.out.println();
         if (res > 0) {
             result.data = "success";
             result.status = true;

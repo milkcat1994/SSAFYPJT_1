@@ -29,37 +29,17 @@
             <div class="card-header">
               <h1>
                 {{portfolio.nickname}}
-                <base-button
-                  v-if="uid != $session.get('uid') && !togleBookmark"
-                  outline
-                  type="danger"
-                  icon="ni ni-favourite-28"
-                  @click="addBookmark()"
-                >{{portfolio.markCnt}}</base-button>
-                <base-button
-                  v-if="uid != $session.get('uid') && togleBookmark"
-                  type="danger"
-                  icon="ni ni-favourite-28"
-                  @click="addBookmark()"
-                >{{portfolio.markCnt}}</base-button>
-                <base-button
-                  v-if="uid == $session.get('uid')"
-                  disabled
-                  type="danger"
-                  icon="ni ni-favourite-28"
-                >{{portfolio.markCnt}}</base-button>
-                <base-button
-                  v-if="!isLogin"
-                  size="sm"
-                  type="default float-right"
-                  @click="alertModal.show=true"
-                >작업 요청하기</base-button>
-                <base-button
-                  v-if="uid != $session.get('uid')"
-                  size="sm"
-                  type="default float-right"
-                  @click="openRequestForm()"
-                >작업 요청하기</base-button>
+                <base-button v-if="uid != $session.get('uid') && !togleBookmark" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                {{portfolio.markCnt}}
+                </base-button>
+                <base-button v-if="uid != $session.get('uid') && togleBookmark" type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
+                {{portfolio.markCnt}}
+                </base-button>
+                <base-button v-if="uid == $session.get('uid')" disabled type="danger" icon="ni ni-favourite-28">
+                {{portfolio.markCnt}}
+                </base-button>
+                <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
+                <base-button v-if="uid != $session.get('uid') && isLogin" size="sm" type="default float-right" @click="openRequestForm()"> 작업 요청하기 </base-button>
               </h1>
               <h3>{{portfolio.description}}</h3>
               <div class="col">
@@ -1184,7 +1164,7 @@ export default {
     },
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
-      console.log(tag);
+      // console.log(tag);
       this.$router.push({ name: "editors", params: { clickSearchTag: tag } });
     },
   },

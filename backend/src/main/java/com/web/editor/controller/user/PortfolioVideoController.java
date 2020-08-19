@@ -1,13 +1,11 @@
 package com.web.editor.controller.user;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 import com.web.editor.model.dto.user.PortfolioVideo;
 import com.web.editor.model.dto.user.PortfolioVideoDeleteRequest;
 import com.web.editor.model.dto.user.PortfolioVideoRequest;
 import com.web.editor.model.dto.user.PortfolioVideoSaveRequest;
-// import com.web.editor.model.dto.user.PortfolioVideoUpdateRequest;
 import com.web.editor.model.response.BasicResponse;
 import com.web.editor.model.service.user.PortfolioService;
 
@@ -39,18 +37,15 @@ public class PortfolioVideoController {
         ResponseEntity response = null;
         final BasicResponse result = new BasicResponse();
 
-        // System.out.println("영상조회 호출 " + uid);
         List<PortfolioVideo> video = portfolioService.findVideoByUid(uid);
 
         //포트폴리오의 영상이 있을 경우
         if(!video.isEmpty()){
-            // System.out.println(video.isEmpty() + " " + video.size());
             result.status = true;
             result.data = "success";
             result.object = video;
             response = new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-            // System.out.println("URL 없음 " + uid);
             result.status = false;
             result.data = "fail";
             response = new ResponseEntity<>(result, HttpStatus.OK);
@@ -133,7 +128,6 @@ public class PortfolioVideoController {
             if(res != -1){
                 result.status = true;
                 result.data = "success";
-                // System.out.println("업데이트 완료");
             } else {
                 result.status = false;
                 result.data = "fail";
