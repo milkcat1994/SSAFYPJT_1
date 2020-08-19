@@ -20,7 +20,7 @@
       <div class="card shadow border-0">
         <div class="card-header">
           <!-- <h3 class="text-center mt-2">헤더(progress bar) 들어갈 자리</h3> -->
-          <progress-bar @change-step="changeStep"></progress-bar>
+          <progress-bar :currentStep="currentStep" @change-step="changeStep"></progress-bar>
         </div>
         <div class="card-body border-0">
           <video-type v-if="currentStep === 0"></video-type>
@@ -32,7 +32,8 @@
         </div>
         <div class="card-footer d-flex justify-content-end">
           <div class="px-2">
-            <a href="#" @click.prevent="backStep">이전</a>
+            <button class="btn ex-btn" @click.prevent="backStep">이전</button>
+            <!-- <a href="#" @click.prevent="backStep">이전</a> -->
             <button class="btn btn-primary ml-4" @click.prevent="nextStep">다음</button>
           </div>
         </div>
@@ -163,5 +164,9 @@ export default {
 <style>
 #maincard {
   box-shadow: 3px 3px 3px gray;
+}
+
+.ex-btn:hover{
+  box-shadow:none;
 }
 </style>

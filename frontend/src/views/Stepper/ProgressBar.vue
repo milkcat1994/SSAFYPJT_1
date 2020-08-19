@@ -1,13 +1,15 @@
 <template>
   <div class="d-flex justify-content-center">
     <div
-      class="border-top-0 text-center mx-4 py-1"
+      class="border-top-0 text-center px-4 py-1"
       v-for="stage of stages"
       :key="stage.name"
-      :class="{ done: !!stage.status, notyet: !stage.status }"
+      :class="{ done: !!stage.status, notyet: !stage.status,current: currentStep == stage.num }"
       @click="changeStep(stage.num)"
     >
-      <span class="stage-name">{{ stage.name }}</span>
+      <span class="stage-name"
+      >{{ stage.name }}</span>
+      <!-- :class ="{current: currentStep == stage.num}" -->
     </div>
   </div>
 </template>
@@ -15,6 +17,7 @@
 <script>
 export default {
   name: "progress-bar",
+  props: ['currentStep'],
   data() {
     return {
       initStages: [
@@ -39,6 +42,12 @@ export default {
       return this.initStages;
     },
   },
+  watch:{
+    currentStep(){
+      console.log(this.currentStep)
+    
+    }
+  },
   methods: {
     changeStep(stageNum) {
       this.$emit("change-step", stageNum);
@@ -56,8 +65,14 @@ export default {
   cursor: default;
   border-bottom: 10px solid lightgray;
 }
+
 .stage-name {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.current{
+  cursor: default;
+  border-bottom: 10px solid #bcb9ed ;
 }
 </style>
