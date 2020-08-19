@@ -53,7 +53,7 @@
               :interval="3000"
               controls
               indicators
-              background="#ccc"
+              background="white"
               class="mb-4"
               style="text-shadow: 1px 1px 2px #000;"
               @sliding-start="onSlideStart"
@@ -233,8 +233,6 @@ export default {
       this.sliding = false;
     },
     keywordSearch(keyword) {
-      // console.log(keyword)
-      // BE URL 확인 후 변경
       http.get(`/search/${keyword}`).then((res) => {
         console.log(res);
         this.$router.push({ name: "search" });
@@ -260,33 +258,6 @@ export default {
     round(score) {
       return Number(score.toFixed(1));
     },
-    // getReviewInfo(uid) {
-    //   http
-    //     .get("/portfolio/review/" + uid)
-    //     .then(({ data }) => {
-    //       //성공시 평균 계산 필요 추출 필요
-    //       if (data.data == "success") {
-    //         this.reviews = data.object;
-    //         let videoAvg = 0,
-    //           kindnessAvg = 0,
-    //           finishAvg = 0;
-    //         data.object.forEach((obj) => {
-    //           videoAvg += obj.videoScore;
-    //           kindnessAvg += obj.kindnessScore;
-    //           finishAvg += obj.finishScore;
-    //         });
-    //         let length = data.object.length;
-    //         this.avgScore = (videoAvg + kindnessAvg + finishAvg) / length;
-    //         return;
-    //       } else {
-    //         return;
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       return;
-    //     });
-    // },
   },
   computed: {
     currentEditors() {
@@ -324,5 +295,10 @@ export default {
 
 #carousel-1 {
   width: 800px;
+  box-shadow: 3px 3px 3px gray;
+}
+
+#maincard {
+  box-shadow: 3px 3px 3px gray;
 }
 </style>
