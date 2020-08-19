@@ -7,24 +7,21 @@
     <div class="container">
       <div class="row d-flex justify-content-center">
         <div
-          class="zoom card p-0 col-md-6 col-lg-3 text-center"
+          class="zoom p-0 col-md-6 col-lg-3 mb-2 text-center"
           style="margin: 0.5rem 1rem;"
           v-for="item of videoSkills"
           :key="item.value"
-          :class="{selected: !!item.status}"
+          :class="{ selected: !!item.status }"
           @click="selectVideoSkills(item.value)"
         >
-          <div class="card-body">
-            <img class="icon mb-2" :src="item.img" :alt="item.name" />
-            <div class="card-title mt-2 mb-0">
-              <b>{{item.name}}</b>
-              <div class="tooltip-text">
-                {{
-                item.description
-                }}
+          <div class="check">
+            <img class="icon my-4" :src="item.img" :alt="item.name" />
+            <div class="title mt-2 mb-3">
+              <b>{{ item.name }}</b>
+              <div class="tooltip-text h5 mx-2">
+                {{ item.description }}
               </div>
             </div>
-            <!-- <p class="card-text">{{item.description}}</p> -->
           </div>
         </div>
       </div>
@@ -54,7 +51,7 @@ export default {
 };
 </script>
 <style scoped>
-.card {
+.check {
   min-height: 100px;
   cursor: pointer;
 }
@@ -67,13 +64,7 @@ export default {
   border: 1px solid darkblue;
 }
 
-.card-title {
-  /* position: relative; */
-  /* display: inline-block; */
-  /* border-bottom: 1px dotted black; */
-}
-
-.card-title .tooltip-text {
+.check .tooltip-text {
   visibility: hidden;
   width: 220px;
   background-color: black;
@@ -88,7 +79,7 @@ export default {
   z-index: 99999 !important;
 }
 
-.card-title:hover .tooltip-text {
+.check:hover .tooltip-text {
   visibility: visible;
 }
 

@@ -158,18 +158,18 @@ div.arrow {
     border-width: 0 0.8vmin 0 0;
     border-style: solid;
     border-color: #172b4d;
-    transform-origin: 90% 0;
+    transform-origin: 80% 0;
     transition: 0.2s ease;
   }
 
   &:hover::after {
     transform: rotate(45deg);
-    border-color: #ffe200;
+    border-color: #eddab9;
     height: 140%;
     cursor: pointer;
   }
   &:hover::before {
-    border-color: #ffe200;
+    border-color: #eddab9;
     transform: scale(0.8);
     cursor: pointer;
   }
