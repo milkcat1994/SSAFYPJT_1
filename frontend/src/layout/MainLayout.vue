@@ -130,7 +130,7 @@ div.arrow {
   width: 6vmin;
   height: 6vmin;
   position: fixed;
-  right: 55px;
+  right: 50px;
   bottom: 80px;
   transition: all 0.5s ease-in-out;
   opacity: 0.6;
@@ -145,7 +145,7 @@ div.arrow {
     border-color: #172b4d;
     transition: 0.2s ease;
     display: block;
-    transform-origin: 100% 0;
+    transform-origin: 90% 0;
   }
 
   &:after {
@@ -158,18 +158,23 @@ div.arrow {
     border-width: 0 0.8vmin 0 0;
     border-style: solid;
     border-color: #172b4d;
-    transform-origin: 100% 0;
+    transform-origin: 90% 0;
     transition: 0.2s ease;
   }
 
   &:hover::after {
     transform: rotate(45deg);
-    border-color: orange;
+    border-color: #ffe200;
     height: 140%;
+    cursor: pointer;
   }
   &:hover::before {
-    border-color: orange;
+    border-color: #ffe200;
     transform: scale(0.8);
+    cursor: pointer;
   }
+}
+body {
+  overflow-x: hidden;
 }
 </style>

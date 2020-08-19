@@ -110,10 +110,9 @@
       <li class="nav-item dropdown" v-if="isLogin">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
-            <!-- <i v-if="getNotifyNum() > 0" class="ni ni-bell-55" style="color:#ff0066"></i>
             <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
-            <badge type="text-light">{{ getNotifyNum() }}</badge>-->
-            <main rel="main">
+            <badge v-if="getNotifyNum() == 0" type="text-light">{{ getNotifyNum() }}</badge>
+            <main rel="main" v-if="getNotifyNum() > 0">
               <div class="notification">
                 <svg viewBox="-10 0 35 35">
                   <path
@@ -377,13 +376,12 @@ svg {
   width: 40px;
 }
 svg > path {
-  fill: #172b4d;
+  fill: #dc143c;
 }
 
 .notification--bell {
   animation: bell 2.2s linear infinite;
   transform-origin: 50% 0%;
-  color: red;
 }
 
 .notification--bellClapper {
@@ -392,9 +390,9 @@ svg > path {
 
 .notification--num {
   position: absolute;
-  top: 23%;
+  top: 20%;
   left: 75%;
-  font-size: 15px;
+  font-size: 16px;
   /* border-radius: 90%; */
   /* border: 1px; */
   color: #172b4d;
