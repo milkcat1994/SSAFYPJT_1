@@ -21,18 +21,6 @@
       <!-- for calendar -->
       <br />
       <br />
-
-      <!-- toggle mode -->
-      <toggle-button 
-        v-if="$session.get('auth') == 'editor'"
-        @change="toggleMode"
-        :value="toggleVal"
-        color="#82C7EB"
-        :sync="true"
-        :labels="{checked: '편집자', unchecked: '일반'}"
-        style="width: 200px !important;"
-        />
-
       <div style="display: table; width:100%">
         <div style="display: table-cell; text-align:center;">
           <calendar
@@ -622,7 +610,6 @@ import alertify from "alertifyjs";
 // for calenggar
 import { Calendar } from "vue-sweet-calendar";
 import "vue-sweet-calendar/dist/SweetCalendar.css";
-import { ToggleButton } from 'vue-js-toggle-button';
  
 
 
@@ -635,7 +622,6 @@ export default {
   name: "alarm",
   components: {
     Calendar,
-    ToggleButton,
   },
   data() {
     return {
@@ -1087,12 +1073,5 @@ export default {
 .alarm {
   min-height: 70vh;
 }
-
-.v-switch-label
-.v-switch-core  {
-  width: 100px !important;
-}
-
-
 
 </style>
