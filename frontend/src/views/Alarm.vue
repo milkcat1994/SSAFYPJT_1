@@ -39,11 +39,6 @@
           <i class="fas fa-circle" style="color: #ffe200; margin: 15px;">선택된 작업</i>
           <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
           <i
-            class="fas fa-circle"
-            style="color: #ff0066; margin: 15px"
-            v-if="$session.get('auth') == 'editor'"
-          >개인 일정</i>
-          <i
             v-if="$session.get('auth') == 'editor'"
             class="fas fa-circle"
             style="color: #c9c9c9; margin: 15px"
@@ -565,12 +560,6 @@ export default {
     return {
       eventCategories: [
         {
-          id: 1,
-          title: "holiday",
-          textColor: "white",
-          backgroundColor: "#ff0066",
-        },
-        {
           id: 2,
           title: "selected",
           textColor: "white",
@@ -965,12 +954,12 @@ export default {
     },
     toggleMode(){
       if(this.authmode == 'editor') {
-        this.toggleModeList("req");
         this.authmode = 'noneditor';
+        this.toggleModeList("req");
       }
       else {
-        this.toggleModeList("res");
         this.authmode = 'editor';
+        this.toggleModeList("res");
       }
       this.toggleVal = !this.toggleVal;
     },
