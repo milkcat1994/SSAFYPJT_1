@@ -137,8 +137,8 @@ export default {
   data() {
     return {
       // 태그들
-      tags: [],
-      tag: "",
+      // tags: [],
+      // tag: "",
       editorsPerPage: 5,
       currentPage: 1,
       sortKey: "정렬",
@@ -233,7 +233,7 @@ export default {
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
       // console.log(tag)
-      this.$emit("clickSearchTag", tag);
+      this.$emit("click-search-tag", tag);
     },
   },
 };

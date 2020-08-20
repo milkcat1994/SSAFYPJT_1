@@ -117,9 +117,9 @@
               <base-button slot="title" type="secondary" class="dropdown-toggle">{{
                 searchKey
               }}</base-button>
-              <!-- <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
                 >전체</a
-              > -->
+              >
               <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
                 >이름</a
               >
@@ -152,7 +152,7 @@
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @clickSearchTag="reSearchTag"
+        @click-search-tag="reSearchTag"
         ></editors-list>
     </div>
   </div>
@@ -201,7 +201,7 @@ export default {
         {name: '모션그래픽', value: 'moti', status: false}, 
       ],
       // 검색 기준
-      searchKey: "이름",
+      searchKey: "기준",
       // 검색 단어
       keyword: "",
       // 정렬 기준
@@ -250,13 +250,21 @@ export default {
       return res;
     },
   },
+  // watch: {
+  //   clickSearchTag() {
+  //     if (this.clickSearchTag != '') {
+  //       this.searchKey = '태그';
+  //       this.keyword = this.clickSearchTag;
+  //     }
+  //   this.fetchFilter();
+  //   }
+  // },
   created() {
-    // 태그 클릭으로 들어왔을경우
+    //태그 클릭으로 들어왔을경우
     if(this.clickSearchTag != ''){
       this.searchKey = '태그';
       this.keyword = this.clickSearchTag;
     }
-
     this.fetchFilter();
   },
   mounted() {
@@ -393,7 +401,7 @@ export default {
       this.clearFilterAll();
       this.keyword = "";
       this.sortBy = "NICKNAME_ASC";
-      this.searchKey = "이름";
+      this.searchKey = "전체";
       this.fetchEditors();
       this.message = "";
     }

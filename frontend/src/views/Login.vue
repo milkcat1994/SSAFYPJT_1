@@ -43,7 +43,11 @@
               required
               @keydown.enter="login()"
             ></base-input>
-
+            <div
+              v-if="!model.success"
+              class="text-left ml-3 mb-3 small"
+              style="color:red"
+            >아이디 및 비밀번호를 확인해 주세요.</div>
             <!-- <base-checkbox class="custom-control-alternative">
               <span class="text-muted">이 사이트 기억하기</span>
             </base-checkbox>-->
@@ -97,6 +101,7 @@ export default {
       model: {
         email: "",
         password: "",
+        success: true,
       },
       modal: {
         show: false,
@@ -108,6 +113,7 @@ export default {
     initInputL() {
       this.model.email = "";
       this.model.password = "";
+      this.model.success = true;
     },
     login() {
       store
@@ -119,6 +125,7 @@ export default {
           if (data.data == "success") {
             this.$session.start();
             console.log(data.object);
+            this.$store.commit("auth/mutateIsLogin", true);
             this.$session.set("uid", data.object.uid);
             this.$session.set("nickname", data.object.nickname);
             this.$session.set("auth", data.object.auth);
@@ -126,9 +133,14 @@ export default {
             this.$router.push("/");
             return;
           }
+          else if(data.data == "fail"){
+            // alertify.error("아이디 및 비밀번호를 확인해주세요", 3);
+            this.model.success = false;
+          }
         })
         .catch(() => {
-          alertify.error("아이디 및 비밀번호를 확인해주세요", 3);
+          // alertify.error("아이디 및 비밀번호를 확인해주세요", 3);
+          this.model.success = false;
           return;
         });
     },
@@ -146,6 +158,7 @@ export default {
               if (data.data == "success") {
                 alertify.success("로그인이 되었습니다.");
                 this.$session.start();
+      this.$store.commit("auth/mutateIsLogin", true);
                 this.$session.set("uid", data.object.uid);
                 this.$session.set("nickname", data.object.nickname);
                 this.$session.set("auth", data.object.auth);
