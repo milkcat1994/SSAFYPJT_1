@@ -98,7 +98,7 @@
               <h1 class="hr-sect">맞춤 편집자를 만나보세요.</h1>
             </div>
 
-            <div class="px-4" v-if="isLogin">
+            <div class="px-4" v-if="isLoggedIn">
               <div id="app">
                 <b-container>
                   <b-row>
@@ -142,7 +142,7 @@
               </div>
             </div>
 
-            <div class="px-4" v-if="!isLogin">
+            <div class="px-4" v-if="!isLoggedIn">
               <b-container>
                 <b-row>
                   <b-col cols="12" class="d-flex justify-content-center">
@@ -167,7 +167,7 @@
 import http from "@/util/http-common.js";
 import { Carousel, Slide } from "vue-carousel";
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -186,25 +186,17 @@ export default {
       recommendData: [],
       avgScore: 0,
 
-      isLogin: false,
     };
   },
   created() {
     this.fetchEditors();
-    if (this.$session.exists()) {
-      this.isLogin = true;
-    } else {
-      this.isLogin = false;
-    }
   },
   methods: {
     recommendEditors() {
       http
         .post("/recommend/" + this.$session.get("uid"))
         .then((res) => {
-          // console.log(res);
           if (res.data) {
-            // console.log(res.data);
             this.recommendData = res.data;
           }
         })
@@ -264,7 +256,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isLoggedIn"]),
+    isLoggedIn(){
+      return this.$store.getters["auth/isLoggedIn"];
+    },
+    // ...mapGetters(["auth/isLoggedIn"]),
     currentEditors() {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;
