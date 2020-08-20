@@ -192,6 +192,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             
             hashOperations.put("uid:"+searchTag.getUid(), "tagKey", "tags:"+searchTag.getUid());
         }
+        // System.out.println(setOperations.members("tags:41"));
         System.out.println("portfolioTagSave 완료");
     }
 
@@ -230,7 +231,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 		switch (searchRequest.getSearchType()) {
             case "TAG":
                 // 태그 검색이지만 태그 검색어가 없을경우 모두 검색 해야함
-                if(searchRequest.getSearchTags().isEmpty()) {
+                if((searchRequest.getSearchTags().size() == 0)||(searchRequest.getSearchTags().size() == 1 && searchRequest.getSearchTags().get(0).equals(""))) {
                     sb.append("all");
                 }
                 else{
@@ -266,6 +267,9 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     throws RedisConnectionFailureException{
         List<SearchPortfolio> resultList = new ArrayList<>();
         String searchKey = makeKey(searchRequest);
+        // System.out.println(searchRequest.getSearchTags().isEmpty());
+        // System.out.println(searchRequest.getSearchTags());
+        // System.out.println(searchRequest.getSearchTags().size());
         SearchPortfolioJoinBookmark tempResult;
         // Redis에 해당 검색 key값이 있는지 확인
         if(!hashKeys(searchKey).isEmpty()){
@@ -389,7 +393,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         switch (searchRequest.getSearchType()) {
             case "TAG":
                 // 태그 검색이지만 태그 검색어가 없을경우 모두 검색 해야함
-                if(searchRequest.getSearchTags().isEmpty()) {
+                if((searchRequest.getSearchTags().size() == 0)||(searchRequest.getSearchTags().size() == 1 && searchRequest.getSearchTags().get(0).equals(""))) {
                     sb.append("all");
                 }
                 else{
@@ -430,6 +434,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // video filter와 검색 결과를 담은 key Set이다.
         keySet.add(filterString);
         String searchString = sb.toString();
+        // System.out.println(searchString);
         sb.setLength(0);
         // 검색 결과 uid를 담는 Set이다. -> 교집합 통해 uid집합 만들기
         // nickname:uid:{nickname} 가 Hash이므로 intersect연산이 되지 않는다.

@@ -67,6 +67,7 @@ public class SearchController {
 		//만약 Redis가 연결되지 않는다면 DataBase에서 직접 값을 뽑아와야한다.
 		try {
 			searchList = searchRedisService.getListByFilter(searchRequest);
+			// System.out.println(searchList);
 		} catch (RedisConnectionFailureException e) {
 			System.out.println("Redis가 연결 되지 않습니다.");
 			// Redis 연결오류 났을 경우

@@ -26,7 +26,7 @@
         <li>검색 옵션을 변경해서 다시 검색해 보세요.</li>
       </div>
       <ul class="list-unstyled mt-4">
-        <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
+        <li class="mb-4" v-for="editor in currentEditors" :key="`currEdit_${editor.uid}`">
           <div class="container">
             <div class="row">
               <div class="col-3">
@@ -36,8 +36,8 @@
                   <LazyYoutubeVideo v-if="editor.url" :src="editor.url" style="width: 100%;" />
                   <img
                     v-else
-                    src="/img/theme/empty.png"
-                    alt="/img/theme/empty.png"
+                    src="/img/theme/empty.PNG"
+                    alt="영상없음"
                     style="width: 100%; border: 1px solid #555; height: 135px;"
                     />
                 </router-link>
@@ -84,7 +84,7 @@
                   <div class="col-8">
                     <button
                       class="btn btn-info btn-sm mb-1"
-                      :key="index"
+                      :key="`tag_${index}`"
                       @click="searchTag(tag)"
                       v-for="(tag, index) in editor.tags"
                     >{{ tag }}</button>
@@ -233,6 +233,7 @@ export default {
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
       // console.log(tag)
+      console.log(tag);
       this.$emit("click-search-tag", tag);
     },
   },

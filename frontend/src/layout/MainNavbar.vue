@@ -1,10 +1,5 @@
 <template>
-  <base-nav
-    class="navbar-top navbar-dark"
-    id="navbar-main"
-    :show-toggle-button="false"
-    expand
-  >
+  <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
     <!-- <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
       <div class="form-group mb-0">
         <base-input
@@ -37,13 +32,7 @@
               class="d-flex bg-dark text-light align-items-center px-3 py-2"
               style="display:none width:100px"
             >
-              <b-button
-                id="closebtn"
-                size="sm"
-                style="display:none;"
-                @click="hide"
-                >Close</b-button
-              >
+              <b-button id="closebtn" size="sm" style="display:none;" @click="hide">Close</b-button>
             </div>
           </template>
           <div class="pl-2 py-2 d-flex justify-content-center">
@@ -122,9 +111,11 @@
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="align-items-center text-default" slot="title">
             <i v-if="getNotifyNum() == 0" class="ni ni-bell-55"></i>
-            <badge v-if="getNotifyNum() == 0" type="text-light">{{
+            <badge v-if="getNotifyNum() == 0" type="text-light">
+              {{
               getNotifyNum()
-            }}</badge>
+              }}
+            </badge>
             <main rel="main" v-if="getNotifyNum() > 0">
               <div class="notification">
                 <svg viewBox="-10 0 35 35">
@@ -140,8 +131,7 @@
                 <span
                   class="notification--num"
                   style="font-style:inherit; font-weight: bold ;"
-                  >{{ getNotifyNum() }}</span
-                >
+                >{{ getNotifyNum() }}</span>
               </div>
             </main>
           </div>
@@ -162,12 +152,12 @@
                   {{ notifyitem.request_nickname }}님께서 영상편집을
                   요청하셨습니다
                 </span>
-                <span v-if="notifyitem.notify_type == 'accepted'">
-                  {{ notifyitem.request_nickname }}님께서 요청을 수락하셨습니다
-                </span>
-                <span v-if="notifyitem.notify_type == 'review'">
-                  {{ notifyitem.request_nickname }}님께 후기를 남길 수 있습니다
-                </span>
+                <span
+                  v-if="notifyitem.notify_type == 'accepted'"
+                >{{ notifyitem.request_nickname }}님께서 요청을 수락하셨습니다</span>
+                <span
+                  v-if="notifyitem.notify_type == 'review'"
+                >{{ notifyitem.request_nickname }}님께 후기를 남길 수 있습니다</span>
               </router-link>
             </div>
             <div class="dropdown-divider"></div>
@@ -187,41 +177,26 @@
     <ul class="navbar-nav">
       <li v-if="!isLogin" class="nav-item mr-3">
         <router-link :to="{ name: 'register' }" class="nav-link">
-          <i
-            class="fas fa-user-plus mr-1"
-            style="color: #172b4d !important;"
-          ></i>
-          <span class="nav-link-inner--text" style="color: #172b4d !important;"
-            >회원가입</span
-          >
+          <i class="fas fa-user-plus mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">회원가입</span>
         </router-link>
       </li>
       <li v-if="!isLogin" class="nav-item">
         <router-link :to="{ name: 'login' }" class="nav-link">
-          <i
-            class="fas fa-user-check mr-1"
-            style="color: #172b4d !important;"
-          ></i>
-          <span class="nav-link-inner--text" style="color: #172b4d !important;"
-            >로그인</span
-          >
+          <i class="fas fa-user-check mr-1" style="color: #172b4d !important;"></i>
+          <span class="nav-link-inner--text" style="color: #172b4d !important;">로그인</span>
         </router-link>
       </li>
     </ul>
 
     <!-- 마이페이지 -->
-    <ul
-      v-if="isLogin"
-      class="navbar-nav align-items-center ml-2 d-none d-md-flex"
-    >
+    <ul v-if="isLogin" class="navbar-nav align-items-center ml-2 d-none d-md-flex">
       <li class="nav-item dropdown">
         <base-dropdown class="nav-link pr-0" position="right">
           <div class="media align-items-center" slot="title">
             <i class="fas fa-user" style="color: #172b4d !important;"></i>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold text-default">
-                {{ nickname }}
-              </span>
+              <span class="mb-0 text-sm font-weight-bold text-default">{{ nickname }}</span>
             </div>
           </div>
 
@@ -233,16 +208,19 @@
               <i class="ni ni-single-02"></i>
               <span>내 정보</span>
             </router-link>
-            <router-link to="/404" class="dropdown-item">
-              <i class="ni ni-support-16"></i>
-              <span>도움말</span>
+            <router-link
+              v-if="isEditor"
+              :to="{
+                path: '/portfolio?no=' + this.$session.get('uid'),
+                params: { uid: this.$session.get('uid') },
+              }"
+              :key="$route.fullPath"
+            >
+              <i class="ni ni-collection mx-3"></i>
+              <span class>내 포트폴리오</span>
             </router-link>
             <div class="dropdown-divider"></div>
-            <span
-              style="cursor:pointer;"
-              class="dropdown-item"
-              @click="logout()"
-            >
+            <span style="cursor:pointer;" class="dropdown-item" @click="logout()">
               <i class="ni ni-lock-circle-open"></i>
               <span>로그아웃</span>
             </span>

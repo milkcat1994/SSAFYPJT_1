@@ -65,8 +65,8 @@
                       />
                       <img
                         v-else
-                        src="/img/theme/empty.png"
-                        alt="/img/theme/empty.png"
+                        src="img/theme/empty.png"
+                        alt="영상없음"
                         style="width: 100%;"
                       />
                       <div class="d-flex justify-content-end mt-3 mx-3">
@@ -120,7 +120,7 @@
                           v-for="recEditor in recommendData.slice(0, 10)"
                           :key="recEditor.uid"
                         >
-                          <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
+                          <b-card id="maincard" class="recCard" @click="movePortfolio(recEditor.uid)">
                             <img src alt />
                             <img
                               v-if="recEditor.url"
@@ -130,7 +130,7 @@
                             <img
                               v-else
                               src="/img/theme/empty.png"
-                              alt="/img/theme/empty.png"
+                              alt="영상없음"
                               style="width: 100%; height: 127.969px;"
                             />
                             <hr />
@@ -333,9 +333,10 @@ button:focus {
   outline: none !important;
 }
 
-.zoom:hover {
+.recCard:hover {
   -ms-transform: scale(1.07);
   -webkit-transform: scale(1.07);
   transform: scale(1.07);
+  border-radius:1em;
 }
 </style>

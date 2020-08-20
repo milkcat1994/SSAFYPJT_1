@@ -155,7 +155,7 @@
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @clickSearchTag="reSearchTag">
+        @click-search-tag="reSearchTag">
       </editors-list>
     </div>
   </div>
@@ -292,7 +292,7 @@ export default {
       this.message = "";
       http
         .post("/search", {
-          searchTags: this.keyword.split(" "),
+          searchTags: this.keyword.trim().split(" "),
           searchText: this.keyword,
           searchType: this.searchBy,
           sortType: this.sortBy,
@@ -312,7 +312,7 @@ export default {
             } else {
               this.visable = false;
             }
-            // this.visable = true;
+            console.log(res.data.object);
           } else {
             console.log(res.data.status);
           }
@@ -323,7 +323,7 @@ export default {
       this.message = "";
       http
         .post("/search", {
-          searchTags: this.keyword.split(" "),
+          searchTags: this.keyword.trim().split(" "),
           searchText: this.keyword,
           searchType: 'ALL',
           sortType: this.sortBy,
@@ -346,19 +346,19 @@ export default {
     },
     fetchFilter() {
       this.message = "";
-      let initType = this.$store.getters['stepper/getSelectedVideoType'].value
+      let initType = this.$store.getters['stepper/getSelectedVideoType']
       if (initType) {
         this.videoType.forEach(item => {
-          if (item.value == initType) {
+          if (item.value == initType.value) {
             item.status = true
             this.selectedFilters.push(item.value)
           }
         })
       }
-      let initStyle = this.$store.getters['stepper/getSelectedVideoStyle'].value
+      let initStyle = this.$store.getters['stepper/getSelectedVideoStyle']
       if (initStyle) {
         this.videoStyle.forEach(item => {
-          if (item.value == initStyle) {
+          if (item.value == initStyle.value) {
             item.status = true
             this.selectedFilters.push(item.value)
           }
