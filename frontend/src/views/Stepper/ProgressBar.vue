@@ -77,16 +77,9 @@ export default {
       return arr
     }
   },
-  watch:{
-    currentStep(){
-      console.log(this.currentStep)
-    
-    }
-  },
   // watch:{
   //   currentStep(){
   //     console.log(this.currentStep)
-    
   //   }
   // },
   methods: {

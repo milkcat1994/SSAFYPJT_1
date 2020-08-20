@@ -114,12 +114,18 @@
         <div class="d-flex justify-content-center mx-4 px-2">
           <div class="d-inline-flex">
             <base-dropdown>
-              <base-button slot="title" type="secondary" class="dropdown-toggle">
-                {{searchKey}}
-              </base-button>
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'">전체</a>
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'">이름</a>
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'">태그</a>
+              <base-button slot="title" type="secondary" class="dropdown-toggle">{{
+                searchKey
+              }}</base-button>
+              <!-- <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
+                >전체</a
+              > -->
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
+                >이름</a
+              >
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'"
+                >태그</a
+              >
             </base-dropdown>
           </div>
           <div class="d-inline-flex">
@@ -201,7 +207,7 @@ export default {
         {name: '모션그래픽', value: 'moti', status: false}, 
       ],
       // 검색 기준
-      searchKey: "기준",
+      searchKey: "이름",
       // 검색 단어
       keyword: "",
       // 정렬 기준
@@ -436,7 +442,7 @@ export default {
       this.clearFilterAll();
       this.keyword = "";
       this.sortBy = "NICKNAME_ASC";
-      this.searchKey = "전체";
+      this.searchKey = "이름";
       this.fetchEditors();
       this.message = "";
     }
