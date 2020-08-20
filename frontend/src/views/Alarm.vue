@@ -293,14 +293,14 @@
                             class="d-flex justify-content-center"
                           >
                             {{ email }}
+                            <input style="display:none" id="emailtarget" type=text v-model="email"/>
                           </div>
                           <br />
                           <b-button
                             class="justify-content-center"
                             style="background-color: #aaaaff"
-                            copytarget="emailtarget"
                           >
-                            <i class="fas fa-copy" style="color: #000000" @click="copyText"
+                            <i class="fas fa-copy" style="color: #000000" @click="copyClipboard('emailtarget')"
                               >복사하기</i
                             >
                           </b-button>
@@ -1057,8 +1057,11 @@ export default {
         "/request/" + mode + "/" + this.$session.get("nickname") + "/3"
       );
     },
-    copyText(){
-
+    copyClipboard(elementID){
+      let element = document.getElementById(elementID); //select the element
+      let elementText = element.textContent; //get the text content from the element
+      navigator.clipboard.writeText(elementText);
+      alertify.notify("이메일을 복사하였습니다.", "info", 2);
     },
   },
 };
