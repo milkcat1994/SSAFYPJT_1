@@ -112,11 +112,11 @@
                               <td>{{ requestitem0.video_skill }}</td>
                             </tr>
                             <tr>
-                              <th>원본 동영상 길이</th>
+                              <th>원본 동영상 길이(분)</th>
                               <td>{{ requestitem0.video_origin_length }}</td>
                             </tr>
                             <tr>
-                              <th>원하는 동영상 길이</th>
+                              <th>원하는 동영상 길이(분)</th>
                               <td>{{ requestitem0.video_result_length }}</td>
                             </tr>
                             <tr>
@@ -231,11 +231,11 @@
                               <td>{{ requestitem1.video_skill }}</td>
                             </tr>
                             <tr>
-                              <th>원본 동영상 길이</th>
+                              <th>원본 동영상 길이(분)</th>
                               <td>{{ requestitem1.video_origin_length }}</td>
                             </tr>
                             <tr>
-                              <th>원하는 동영상 길이</th>
+                              <th>원하는 동영상 길이(분)</th>
                               <td>{{ requestitem1.video_result_length }}</td>
                             </tr>
                             <tr>
@@ -374,11 +374,11 @@
                               <td>{{ requestitem2.video_skill }}</td>
                             </tr>
                             <tr>
-                              <th>원본 동영상 길이</th>
+                              <th>원본 동영상 길이(분)</th>
                               <td>{{ requestitem2.video_origin_length }}</td>
                             </tr>
                             <tr>
-                              <th>원하는 동영상 길이</th>
+                              <th>원하는 동영상 길이(분)</th>
                               <td>{{ requestitem2.video_result_length }}</td>
                             </tr>
                             <tr>
@@ -512,11 +512,11 @@
                               <td>{{ requestitem3.video_skill }}</td>
                             </tr>
                             <tr>
-                              <th>원본 동영상 길이</th>
+                              <th>원본 동영상 길이(분)</th>
                               <td>{{ requestitem3.video_origin_length }}</td>
                             </tr>
                             <tr>
-                              <th>원하는 동영상 길이</th>
+                              <th>원하는 동영상 길이(분)</th>
                               <td>{{ requestitem3.video_result_length }}</td>
                             </tr>
                             <tr>
