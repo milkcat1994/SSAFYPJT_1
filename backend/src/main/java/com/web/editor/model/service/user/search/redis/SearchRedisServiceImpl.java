@@ -150,7 +150,25 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             uid = (Integer) hashUidOperations.get("nickname:uid:" + searchRequestVideoInfo.getNickname(), "uid");
             //각 filter (video_type, video_style, video_skill)에 대해 uid를 가지고 있다.(tag와 비슷한 방식)
             setOperations.add("videoType:"+searchRequestVideoInfo.getVideoType(), uid);
-            setOperations.add("videoStyle:"+searchRequestVideoInfo.getVideoStyle(), uid);
+            //기타 영상종류를 거르기 위한 switch문
+            switch (searchRequestVideoInfo.getVideoStyle()) {
+                case "kids":
+                case "game":
+                case "musi":
+                case "food":
+                case "vlog":
+                case "movi":
+                case "anim":
+                case "beau":
+                case "spor":
+                    setOperations.add("videoStyle:"+searchRequestVideoInfo.getVideoStyle(), uid);
+                    break;
+            
+                case "etcs":
+                default:
+                    setOperations.add("videoStyle:etcs", uid);
+                    break;
+            }
             // skill은 String 형태, ','를 기준으로 잘라 넣어야한다.
             st = new StringTokenizer(searchRequestVideoInfo.getVideoSkill(), ",");
             while(st.hasMoreTokens()){
@@ -279,43 +297,71 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             return resultList;
         }
 
-        // videoType, videoStyle -> 1개
         Set<String> keySet = new LinkedHashSet<>();
-        keySet = new LinkedHashSet<>();
+        Set<String> videoKeySet = new LinkedHashSet<>();
 
         // 자료 부르기 위한 Key값 만드는 StringBuilder
         StringBuilder sb = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
 
 
+        // Video Style, Video Type, Video Skill 안에서는 합집합으로 계산 하며
+        // 각각 video 속성은 교집합이다. 
         // 자료 만들기 위한 key값 생성
         if(!searchRequest.getVideoStyles().isEmpty()){
             sb.append("videoStyle:");
+            sb2.append("videoStyle:");
         }
         // videoStyle을 모두 돌면서 해당되는 key값을 더해주기
         for (String string : searchRequest.getVideoStyles()) {
             keySet.add("videoStyle:"+string);
             sb.append(string+":");
+            sb2.append(string+":");
         }
+
+        if(!searchRequest.getVideoStyles().isEmpty()){
+            setOperations.unionAndStore(keySet, sb2.toString());
+            videoKeySet.add(sb2.toString());
+        }
+        keySet = new LinkedHashSet<>();
+        sb2.setLength(0);
 
         // 자료 만들기 위한 key값 생성
         if(!searchRequest.getVideoTypes().isEmpty()){
             sb.append("videoType:");
+            sb2.append("videoType:");
         }
         // videoType을 모두 돌면서 해당되는 key값을 더해주기
         for (String string : searchRequest.getVideoTypes()) {
             keySet.add("videoType:"+string);
             sb.append(string+":");
+            sb2.append(string+":");
         }
+
+        if(!searchRequest.getVideoTypes().isEmpty()){
+            setOperations.unionAndStore(keySet, sb2.toString());
+            videoKeySet.add(sb2.toString());
+        }
+        keySet = new LinkedHashSet<>();
+        sb2.setLength(0);
 
         // 자료 만들기 위한 key값 생성
         if(!searchRequest.getVideoSkills().isEmpty()){
             sb.append("videoSkill:");
+            sb2.append("videoSkill:");
         }
         // videoSkill을 모두 돌면서 해당되는 key값을 더해주기
         for (String string : searchRequest.getVideoSkills()) {
             keySet.add("videoSkill:"+string);
             sb.append(string+":");
+            sb2.append(string+":");
         }
+        if(!searchRequest.getVideoSkills().isEmpty()){
+            setOperations.unionAndStore(keySet, sb2.toString());
+            videoKeySet.add(sb2.toString());
+        }
+        keySet = new LinkedHashSet<>();
+        sb2.setLength(0);
 
         // 길이가 1이상이라면 마지막 ':'를 없애야 하기때문에
         if(sb.length()>1) {
@@ -324,15 +370,17 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // 없다면 모든 uid가 필요하다.
         else{
             keySet.add("uids");
+            videoKeySet.add("uids");
             sb.append("uids:all");
         }
         String filterString = sb.toString();
         sb.setLength(0);
 
-        // (videoSkill, videoType, videoStyle)의 합집합 구하기
-        if(!keySet.isEmpty())
-            setOperations.unionAndStore(keySet, filterString);
-
+        // (videoSkill, videoType, videoStyle)의 교집합 구하기
+        if(!videoKeySet.isEmpty())
+            setOperations.intersectAndStore(videoKeySet, filterString);
+            // setOperations.unionAndStore(keySet, filterString);
+            
         // SearchType에 따라 tag, nickname, all 이 갈린다.
         // tag는 정확한 검색 결과 여야 하며
         // nickname은 포함하는 방식으로 *{nickname}* 로 pattern 주면 가능

@@ -52,6 +52,7 @@ export default {
 }
 .selected {
   border: 1px solid darkblue;
+  border-radius: 0.375rem;
 }
 .zoom:hover {
   -ms-transform: scale(1.1);

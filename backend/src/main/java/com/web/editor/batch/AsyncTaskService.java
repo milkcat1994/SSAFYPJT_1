@@ -33,7 +33,8 @@ public class AsyncTaskService {
 			System.out.println("Redis Update Start");
 
 			// 검색 기록 모두 삭제
-			long deleteSearch = searchRedisService.deleteKeys("search:");
+			// long deleteSearch = searchRedisService.deleteKeys("search:");
+			searchRedisService.deleteKeys("*");
 			// System.out.println("검색기록 "+deleteSearch+"개 삭제");
 	
 			// DB내용 Redis로 끌어올 필요 있음. 

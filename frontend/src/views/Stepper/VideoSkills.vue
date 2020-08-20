@@ -55,6 +55,8 @@ export default {
 .check {
   min-height: 100px;
   cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 0.375rem;
 }
 .icon {
   /* display: inline-block; */
@@ -63,6 +65,7 @@ export default {
 }
 .selected {
   border: 1px solid darkblue;
+  border-radius: 0.375rem;
 }
 
 .check .tooltip-text {
