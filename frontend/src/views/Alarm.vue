@@ -1058,8 +1058,8 @@ export default {
       );
     },
     copyClipboard(elementID){
-      let element = document.getElementById(elementID); //select the element
-      let elementText = element.textContent; //get the text content from the element
+      let element = document.getElementById(elementID);
+      let elementText = element.textContent;
       navigator.clipboard.writeText(elementText);
       alertify.notify("이메일을 복사하였습니다.", "info", 2);
     },

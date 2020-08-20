@@ -163,7 +163,7 @@ export default new Vuex.Store({
       let obj = [];
       for (let index = 0; index < requestitems3.length; index++) {
         let element = requestitems3[index];
-        element.uid = index + "doneR";
+        element.idx = index + "doneR";
 
         obj.push(element);
       }
