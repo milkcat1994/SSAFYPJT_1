@@ -140,7 +140,9 @@
 
     <div class="container mt--7 mb-5">
       <!-- 편집자 목록 -->
-      <span v-if="visable">총 {{editorsAllCnt}}개의 포트폴리오 중에 검색 필터와 일치하는 {{editorsFilterCnt}}개의 포트폴리오가 검색되었습니다.</span>
+      <div class="visableText">
+        <span v-if="visable">총 {{editorsAllCnt}}명의 편집자 중에 {{editorsFilterCnt}}명의 편집자가 검색되었습니다.</span>
+      </div>
       <editors-list
         title="편집자"
         :editorsData="editors"
@@ -298,7 +300,13 @@ export default {
             if(this.editors.length == 0){
               this.message = "검색 결과가 없습니다.";
             }
-            this.editorsFilterCnt = this.editors.length;
+            if(this.selectedSkills.length > 0 || this.selectedStyle.length > 0 || this.selectedType.length > 0){
+              this.editorsFilterCnt = this.editors.length;
+              this.visable = true;
+            } else {
+              this.visable = false;
+            }
+            // this.visable = true;
           } else {
             console.log(res.data.status);
           }
@@ -360,11 +368,6 @@ export default {
           }
         })
       }
-
-      if(this.selectedFilters.length > 0)
-        this.visable = true;
-
-      console.log(this.visable);
     },
     toggleFilter(val) {
       if (val.status) {
@@ -373,6 +376,7 @@ export default {
       } else {
         this.selectedFilters.push(val.value);
         val.status = true;
+        // this.visable = true;
       }
     },
     clearFilter(value) {
@@ -439,4 +443,10 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.visableText{
+  text-align: right;
+  font-size: 14px;
+  margin-bottom: 1%;
+}
+</style>
