@@ -114,27 +114,21 @@
         <div class="d-flex justify-content-center mx-4 px-2">
           <div class="d-inline-flex">
             <base-dropdown>
-              <base-button slot="title" type="secondary" class="dropdown-toggle">{{
-                searchKey
-              }}</base-button>
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
-                >전체</a
-              >
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
-                >이름</a
-              >
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'"
-                >태그</a
-              >
+              <base-button slot="title" type="secondary" class="dropdown-toggle">
+                {{searchKey}}
+              </base-button>
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'">전체</a>
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'">이름</a>
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'">태그</a>
             </base-dropdown>
           </div>
           <div class="d-inline-flex">
             <base-input
-              placeholder="검색어를 입력해보세요"
+              placeholder="검색어를 입력하세요."
               v-model="keyword"
               @keyup.enter="fetchEditors"
-              style="width:500px;"
-            ></base-input>
+              style="width:500px;">
+            </base-input>
           </div>
           <div class="d-inline-flex">
             <button class="btn btn-primary ml-1" style="max-height: 43px;" @click="fetchEditors">검색</button>
@@ -146,14 +140,15 @@
 
     <div class="container mt--7 mb-5">
       <!-- 편집자 목록 -->
+      <span v-if="visable">총 {{editorsAllCnt}}개의 포트폴리오 중에 검색 필터와 일치하는 {{editorsFilterCnt}}개의 포트폴리오가 검색되었습니다.</span>
       <editors-list
         title="편집자"
         :editorsData="editors"
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @clickSearchTag="reSearchTag"
-        ></editors-list>
+        @clickSearchTag="reSearchTag">
+      </editors-list>
     </div>
   </div>
 </template>
@@ -175,6 +170,9 @@ export default {
   data() {
     return {
       editors: [],
+      editorsAllCnt: 0,
+      editorsFilterCnt: 0,
+      visable: false,
       // 검색 필터 모음
       videoType: [
         {name: '개인', value: 'pers', status: false},
@@ -257,6 +255,7 @@ export default {
       this.keyword = this.clickSearchTag;
     }
 
+    this.fetchEditorsCnt();
     this.fetchFilter();
   },
   mounted() {
@@ -290,6 +289,32 @@ export default {
             if(this.editors.length == 0){
               this.message = "검색 결과가 없습니다.";
             }
+            this.editorsFilterCnt = this.editors.length;
+          } else {
+            console.log(res.data.status);
+          }
+        })
+        .catch((err) => console.error(err));
+    },
+    fetchEditorsCnt() {
+      this.message = "";
+      http
+        .post("/search", {
+          searchTags: this.keyword.split(" "),
+          searchText: this.keyword,
+          searchType: 'ALL',
+          sortType: this.sortBy,
+          videoSkills: [],
+          videoStyles: [],
+          videoTypes: []
+        })
+        .then((res) => {
+          if (res.data.status) {
+            this.editors = res.data.object;
+            if(this.editors.length == 0){
+              this.message = "검색 결과가 없습니다.";
+            }
+            this.editorsAllCnt = this.editors.length;
           } else {
             console.log(res.data.status);
           }
@@ -326,6 +351,11 @@ export default {
           }
         })
       }
+
+      if(this.selectedFilters.length > 0)
+        this.visable = true;
+
+      console.log(this.visable);
     },
     toggleFilter(val) {
       if (val.status) {

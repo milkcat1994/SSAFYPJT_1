@@ -32,7 +32,7 @@
               <div class="col-3">
                 <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
-                  <img src alt />
+                  <!-- <img src alt /> -->
                   <LazyYoutubeVideo :src="editor.url" style="width: 100%;" />
                 </router-link>
               </div>
