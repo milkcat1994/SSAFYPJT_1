@@ -185,7 +185,6 @@ export default {
       editorsData: [],
       recommendData: [],
       avgScore: 0,
-
     };
   },
   created() {
@@ -193,6 +192,8 @@ export default {
   },
   methods: {
     recommendEditors() {
+      if (!this.$session.exists)
+        this.$store.commit("auth/mutateIsLogin", false);
       http
         .post("/recommend/" + this.$session.get("uid"))
         .then((res) => {
@@ -256,7 +257,7 @@ export default {
     },
   },
   computed: {
-    isLoggedIn(){
+    isLoggedIn() {
       return this.$store.getters["auth/isLoggedIn"];
     },
     // ...mapGetters(["auth/isLoggedIn"]),
@@ -267,7 +268,6 @@ export default {
     },
   },
   mounted() {
-    this.fetchEditors();
     this.recommendEditors();
   },
 };
