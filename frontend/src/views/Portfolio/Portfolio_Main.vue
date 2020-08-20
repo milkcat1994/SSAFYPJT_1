@@ -1218,29 +1218,25 @@ export default {
     },
     openRequestForm() {
       this.modal.show = true;
-      let selectedType = this.$store.getters["stepper/getSelectedVideoType"]
-        .value;
+      let selectedType = this.$store.getters["stepper/getSelectedVideoType"];
       if (selectedType) {
-        if (selectedType == "pers") this.video_type.pers = true;
-        else if (selectedType == "comm") this.video_type.comm = true;
+        if (selectedType.value == "pers") this.video_type.pers = "pers";
+        else if (selectedType.value == "comm") this.video_type.comm = "comm";
       }
-      let selectedStyle = this.$store.getters["stepper/getSelectedVideoStyle"]
-        .value;
+      let selectedStyle = this.$store.getters["stepper/getSelectedVideoStyle"].value;
       if (selectedStyle) {
-        if (selectedStyle == "kids") this.video_style.kids = true;
-        else if (selectedStyle == "game") this.video_style.game = true;
-        else if (selectedStyle == "musi") this.video_style.musi = true;
-        else if (selectedStyle == "food") this.video_style.food = true;
-        else if (selectedStyle == "vlog") this.video_style.vlog = true;
-        else if (selectedStyle == "movi") this.video_style.movi = true;
-        else if (selectedStyle == "anim") this.video_style.anim = true;
-        else if (selectedStyle == "beau") this.video_style.beau = true;
-        else if (selectedStyle == "spor") this.video_style.spor = true;
-        else if (selectedStyle == "etc") this.video_style.etcs = true;
+        if (selectedStyle == "kids") this.video_style.kids = "kids";
+        else if (selectedStyle == "game") this.video_style.game = "game";
+        else if (selectedStyle == "musi") this.video_style.musi = "musi";
+        else if (selectedStyle == "food") this.video_style.food = "food";
+        else if (selectedStyle == "vlog") this.video_style.vlog = "vlog";
+        else if (selectedStyle == "movi") this.video_style.movi = "movi";
+        else if (selectedStyle == "anim") this.video_style.anim = "anim";
+        else if (selectedStyle == "beau") this.video_style.beau = "beau";
+        else if (selectedStyle == "spor") this.video_style.spor = "spor";
+        else if (selectedStyle == "etc") this.video_style.etcs = "etc";
       }
-      let selectedSkills = this.$store.getters[
-        "stepper/getSelectedVideoSkills"
-      ];
+      let selectedSkills = this.$store.getters["stepper/getSelectedVideoSkills"];
       if (selectedSkills) {
         selectedSkills.forEach((item) => {
           if (item == "colr") this.video_skill.colr = true;
