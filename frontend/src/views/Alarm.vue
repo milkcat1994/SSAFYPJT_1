@@ -64,7 +64,8 @@
                         setRequestDate(
                           requestitem0.start_date,
                           requestitem0.end_date,
-                          requestitem0.idx
+                          requestitem0.idx,
+                          0
                         );
                       "
                     >
@@ -174,7 +175,8 @@
                         setRequestDate(
                           requestitem1.start_date,
                           requestitem1.end_date,
-                          requestitem1.idx
+                          requestitem1.idx,
+                          1
                         );
                       "
                     >
@@ -309,7 +311,8 @@
                         setRequestDate(
                           requestitem2.start_date,
                           requestitem2.end_date,
-                          requestitem2.idx
+                          requestitem2.idx,
+                          2
                         );
                       "
                     >
@@ -430,7 +433,8 @@
                         setRequestDate(
                           requestitem3.start_date,
                           requestitem3.end_date,
-                          requestitem3.idx
+                          requestitem3.idx,
+                          3
                         );
                       "
                     >
@@ -602,6 +606,7 @@ export default {
       email: "",
 
       idxDetail: "",
+      typeDetail: "",
 
       authmode: "",
       toggleVal: true,
@@ -830,14 +835,16 @@ export default {
         }
       );
     },
-    setRequestDate(start, end, idx) {
-      if (this.idxDetail == idx) {
+    setRequestDate(start, end, idx, type) {
+      if (this.idxDetail == idx && this.typeDetail == type) {
         // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
         this.setDateClean();
         this.idxDetail = "";
+        this.typeDetail = "";
         return;
       }
       this.idxDetail = idx;
+      this.typeDetail = type;
       this.events[this.events.length - 1].start = start.substring(0, 10);
       this.events[this.events.length - 1].end = end.substring(0, 10);
     },
