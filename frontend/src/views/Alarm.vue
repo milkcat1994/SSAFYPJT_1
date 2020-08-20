@@ -546,7 +546,7 @@
                         @click="getReview(requestitem3.rid)"
                         >후기 보기</b-button
                       >
-                      <b-modal id="donereview" hide-footer>
+                      <b-modal :id="'donereview' + requestitem3.rid" hide-footer>
                         <template v-slot:modal-title>내가 쓴 후기</template>
                         <div class="d-block text-center">
                           영상만족도
@@ -589,7 +589,7 @@
                           >
                           <b-button
                             id="closemodal"
-                            @click="$bvModal.hide('donereview')"
+                            @click="$bvModal.hide('donereview' + requestitem3.rid)"
                             >창닫기</b-button
                           >
                         </div>
@@ -853,16 +853,14 @@ export default {
         })
         .finally(() => {
           // 목록 새로고침
-          if (this.$session.get("auth") == "noneditor") {
-            store.dispatch(
-              "getRequestitems2",
-              "/request/req/" + this.$session.get("nickname") + "/2"
-            );
-            store.dispatch(
-              "getRequestitems3",
-              "/request/req/" + this.$session.get("nickname") + "/3"
-            );
-          }
+          store.dispatch(
+            "getRequestitems2",
+            "/request/req/" + this.$session.get("nickname") + "/2"
+          );
+          store.dispatch(
+            "getRequestitems3",
+            "/request/req/" + this.$session.get("nickname") + "/3"
+          );
         });
     },
 
@@ -877,7 +875,7 @@ export default {
             (this.EkindnessScore = data.kindnessScore),
             (this.EfinishScore = data.finishScore),
             (this.Ecomment = data.comment);
-          this.$bvModal.show("donereview");
+          this.$bvModal.show("donereview" + rid);
         })
         .catch((err) => {
           console.log(err);
@@ -924,6 +922,7 @@ export default {
     },
     deleteReview(rid) {
       let msg = "리뷰 삭제 실패했습니다.";
+      let session = this.$session;
       alertify.confirm(
         "리뷰 삭제",
         "삭제 하시겠습니까?",
@@ -935,6 +934,10 @@ export default {
                 msg = "삭제가 완료되었습니다.";
                 alertify.notify(msg, "success", 3);
                 document.getElementById("closemodal").click();
+
+                store.dispatch("getRequestitems2", "/request/req/" + session.get("nickname") + "/2");
+                store.dispatch("getRequestitems3", "/request/req/" + session.get("nickname") + "/3");
+
                 return;
               } else {
                 msg = "삭제에 실패하였습니다.";
@@ -942,16 +945,21 @@ export default {
                 return;
               }
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
               msg = "서버 통신 실패";
               alertify.error(msg, 3);
               return;
-            });
+            })
         },
         function() {
           alertify.error("취소되었습니다.");
         }
       );
+    },
+    resetReviewList(){
+       store.dispatch("getRequestitems2", "/request/req/" + this.$session.get("nickname") + "/2");
+      store.dispatch("getRequestitems3", "/request/req/" + this.$session.get("nickname") + "/3");
     },
     setRequestDate(start, end, idx) {
       if (this.idxDetail == idx) {
