@@ -41,7 +41,7 @@
             </router-link>
           </li>
           <li v-if="!isLogin" class="nav-item">
-            <router-link class="nav-link nav-link-icon" to="/user">
+            <router-link class="nav-link nav-link-icon" :to="{name : 'register' }">
               <i class="fas fa-user-plus" style="color: #172b4d !important;"></i>
               <span class="nav-link-inner--text" style="color: #172b4d !important;">회원가입</span>
             </router-link>
