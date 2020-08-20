@@ -38,4 +38,6 @@ public class RequestDto {
 	private String tag_list; // front에서 출력용, #태그1 #태그2 형식으로 출력
 	
 	private List<String> tags;	// 등록용, front에서 배열로 넘어옴
+
+	private int idx;
 }
