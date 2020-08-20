@@ -130,11 +130,11 @@
           </div>
           <div class="d-inline-flex">
             <base-input
-              placeholder="검색어를 입력해보세요"
+              placeholder="검색어를 입력하세요."
               v-model="keyword"
               @keyup.enter="fetchEditors"
-              style="width:500px;"
-            ></base-input>
+              style="width:500px;">
+            </base-input>
           </div>
           <div class="d-inline-flex">
             <button class="btn btn-primary ml-1" style="max-height: 43px;" @click="fetchEditors">검색</button>
@@ -146,14 +146,17 @@
 
     <div class="container mt--7 mb-5">
       <!-- 편집자 목록 -->
+      <div class="visableText">
+        <span v-if="visable">총 {{editorsAllCnt}}명의 편집자 중에 {{editorsFilterCnt}}명의 편집자가 검색되었습니다.</span>
+      </div>
       <editors-list
         title="편집자"
         :editorsData="editors"
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @click-search-tag="reSearchTag"
-        ></editors-list>
+        @clickSearchTag="reSearchTag">
+      </editors-list>
     </div>
   </div>
 </template>
@@ -175,6 +178,9 @@ export default {
   data() {
     return {
       editors: [],
+      editorsAllCnt: 0,
+      editorsFilterCnt: 0,
+      visable: false,
       // 검색 필터 모음
       videoType: [
         {name: '개인', value: 'pers', status: false},
@@ -265,6 +271,8 @@ export default {
       this.searchKey = '태그';
       this.keyword = this.clickSearchTag;
     }
+
+    this.fetchEditorsCnt();
     this.fetchFilter();
   },
   mounted() {
@@ -298,6 +306,38 @@ export default {
             if(this.editors.length == 0){
               this.message = "검색 결과가 없습니다.";
             }
+            if(this.selectedSkills.length > 0 || this.selectedStyle.length > 0 || this.selectedType.length > 0){
+              this.editorsFilterCnt = this.editors.length;
+              this.visable = true;
+            } else {
+              this.visable = false;
+            }
+            // this.visable = true;
+          } else {
+            console.log(res.data.status);
+          }
+        })
+        .catch((err) => console.error(err));
+    },
+    fetchEditorsCnt() {
+      this.message = "";
+      http
+        .post("/search", {
+          searchTags: this.keyword.split(" "),
+          searchText: this.keyword,
+          searchType: 'ALL',
+          sortType: this.sortBy,
+          videoSkills: [],
+          videoStyles: [],
+          videoTypes: []
+        })
+        .then((res) => {
+          if (res.data.status) {
+            this.editors = res.data.object;
+            if(this.editors.length == 0){
+              this.message = "검색 결과가 없습니다.";
+            }
+            this.editorsAllCnt = this.editors.length;
           } else {
             console.log(res.data.status);
           }
@@ -342,6 +382,7 @@ export default {
       } else {
         this.selectedFilters.push(val.value);
         val.status = true;
+        // this.visable = true;
       }
     },
     clearFilter(value) {
@@ -408,4 +449,10 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.visableText{
+  text-align: right;
+  font-size: 14px;
+  margin-bottom: 1%;
+}
+</style>

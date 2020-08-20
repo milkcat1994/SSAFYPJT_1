@@ -53,12 +53,22 @@
                 class="mb-4"
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd"
-                style="height:550px"
               >
                 <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
                   <template v-slot:img>
-                    <LazyYoutubeVideo :src="editor.url" style="width: 100%" class="mb-2" />
                     <router-link :to="`/portfolio?no=${editor.uid}`">
+                      <img
+                        v-if="editor.url"
+                        class="zoom"
+                        :src="'https://img.youtube.com/vi/' + editor.url.substr(30) + '/0.jpg'"
+                        style="width: 100%;"
+                      />
+                      <img
+                        v-else
+                        src="/img/theme/empty.png"
+                        alt="/img/theme/empty.png"
+                        style="width: 100%;"
+                      />
                       <div class="d-flex justify-content-end mt-3 mx-3">
                         <h2
                           class="mt-0 mb-1 mr-2"
@@ -75,17 +85,18 @@
                           <span class="mr-2"># {{ t }}</span>
                         </div>
                       </div>
+
+                      <div class="d-flex justify-content-end mb-3 mx-3">
+                        <h4>
+                          <i class="fas fa-heart mr-2" style="color:red"></i>
+                          <span class="mr-3">{{ editor.bookmarkNumber }}</span>
+                        </h4>
+                        <h4>
+                          <i class="fas fa-star mr-2" style="color:#ffbf00"></i>
+                          <span class="mr-3">{{ round(editor.avgScore) }}</span>
+                        </h4>
+                      </div>
                     </router-link>
-                    <div class="d-flex justify-content-end mb-3 mx-3">
-                      <h4>
-                        <i class="fas fa-heart mr-2" style="color:red"></i>
-                        <span class="mr-3">{{ editor.bookmarkNumber }}</span>
-                      </h4>
-                      <h4>
-                        <i class="fas fa-star mr-2" style="color:#ffbf00"></i>
-                        <span class="mr-3">{{ round(editor.avgScore) }}</span>
-                      </h4>
-                    </div>
                   </template>
                 </b-carousel-slide>
               </b-carousel>
@@ -98,23 +109,29 @@
               <h1 class="hr-sect">맞춤 편집자를 만나보세요.</h1>
             </div>
 
-            <div class="px-4" v-if="isLoggedIn">
+            <div class="px-4" v-if="isLoggedIn && !bookmarkemp">
               <div id="app">
                 <b-container>
                   <b-row>
                     <b-col cols="12">
                       <carousel :perPage="4" style="height:600px">
                         <slide
-                          class="p-2"
+                          class="p-2 zoom"
                           v-for="recEditor in recommendData.slice(0, 10)"
                           :key="recEditor.uid"
                         >
                           <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
                             <img src alt />
-                            <LazyYoutubeVideo
-                              :src="recEditor.url"
+                            <img
+                              v-if="recEditor.url"
+                              :src="'https://img.youtube.com/vi/' + recEditor.url.substr(30) + '/0.jpg'"
                               style="width: 100%;"
-                              class="mb-2"
+                            />
+                            <img
+                              v-else
+                              src="/img/theme/empty.png"
+                              alt="/img/theme/empty.png"
+                              style="width: 100%; height: 127.969px;"
                             />
                             <hr />
                             <b-card-text>
@@ -142,7 +159,7 @@
               </div>
             </div>
 
-            <div class="px-4" v-if="!isLoggedIn">
+            <div class="px-4" v-if="!isLoggedIn || bookmarkemp">
               <b-container>
                 <b-row>
                   <b-col cols="12" class="d-flex justify-content-center">
@@ -152,7 +169,8 @@
                     <span style="color:white">Designed by PngTree</span>
                   </b-col>
                   <b-col cols="12" class="d-flex justify-content-center">
-                    <h1 style>로그인이 필요해요!</h1>
+                    <h1 v-if="!isLoggedIn">로그인이 필요해요!</h1>
+                    <h1 v-if="isLoggedIn && bookmarkemp">자신에 스타일에 맞는 편집자를 <span style="color:#ff0080;"> 찜!</span> 해주세요</h1>
                   </b-col>
                 </b-row>
               </b-container>
@@ -166,12 +184,12 @@
 <script>
 import http from "@/util/http-common.js";
 import { Carousel, Slide } from "vue-carousel";
-import LazyYoutubeVideo from "vue-lazy-youtube-video";
+// import LazyYoutubeVideo from "vue-lazy-youtube-video";
 // import { mapGetters } from "vuex";
 
 export default {
   components: {
-    LazyYoutubeVideo,
+    // LazyYoutubeVideo,
     Carousel,
     Slide,
   },
@@ -186,6 +204,8 @@ export default {
       recommendData: [],
       avgScore: 0,
 
+      bookmarkemp: true,
+
     };
   },
   created() {
@@ -193,11 +213,18 @@ export default {
   },
   methods: {
     recommendEditors() {
+      if (!this.$session.exists)
+        this.$store.commit("auth/mutateIsLogin", false);
       http
         .post("/recommend/" + this.$session.get("uid"))
         .then((res) => {
+          if (res.data == "bookmark is empty") {
+            this.bookmarkemp = true;
+            return;
+          }
           if (res.data) {
             this.recommendData = res.data;
+            this.bookmarkemp = false;
           }
         })
         .catch((err) => console.log(err));
@@ -256,7 +283,7 @@ export default {
     },
   },
   computed: {
-    isLoggedIn(){
+    isLoggedIn() {
       return this.$store.getters["auth/isLoggedIn"];
     },
     // ...mapGetters(["auth/isLoggedIn"]),
@@ -267,7 +294,6 @@ export default {
     },
   },
   mounted() {
-    this.fetchEditors();
     this.recommendEditors();
   },
 };
@@ -305,5 +331,11 @@ export default {
 button:focus {
   border: none !important;
   outline: none !important;
+}
+
+.zoom:hover {
+  -ms-transform: scale(1.07);
+  -webkit-transform: scale(1.07);
+  transform: scale(1.07);
 }
 </style>
