@@ -215,8 +215,9 @@
                 params: { uid: this.$session.get('uid') },
               }"
               :key="$route.fullPath"
+              class="dropdown-item"
             >
-              <i class="ni ni-collection mx-3"></i>
+              <i class="ni ni-collection"></i>
               <span class>내 포트폴리오</span>
             </router-link>
             <div class="dropdown-divider"></div>
