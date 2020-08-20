@@ -33,7 +33,13 @@
                 <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
                   <img src alt />
-                  <LazyYoutubeVideo :src="editor.url" style="width: 100%;" />
+                  <LazyYoutubeVideo v-if="editor.url" :src="editor.url" style="width: 100%;" />
+                  <img
+                    v-else
+                    src="/img/theme/empty.png"
+                    alt="/img/theme/empty.png"
+                    style="width: 100%; border: 1px solid #555; height: 135px;"
+                    />
                 </router-link>
               </div>
               <div class="col-9 pt-2 d-flex flex-column justify-content-around">
