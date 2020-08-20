@@ -170,7 +170,7 @@
                   </b-col>
                   <b-col cols="12" class="d-flex justify-content-center">
                     <h1 v-if="!isLoggedIn">로그인이 필요해요!</h1>
-                    <h1 v-if="bookmarkemp">자신에 스타일에 맞는 편집자를 <span style="color:#ff0080;"> 찜!</span> 해주세요</h1>
+                    <h1 v-if="isLoggedIn && bookmarkemp">자신에 스타일에 맞는 편집자를 <span style="color:#ff0080;"> 찜!</span> 해주세요</h1>
                   </b-col>
                 </b-row>
               </b-container>
