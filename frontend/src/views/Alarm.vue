@@ -145,13 +145,13 @@
                       <div id="editorBtn" v-if="authmode == 'editor'">
                         <b-button
                           class="statusBtn"
-                          style="background-color: #0099ff"
+                          style="background-color: #0099ff; color:white"
                           @click="acceptRequest(requestitem0.rid)"
                           >요청 수락</b-button
                         >
                         <b-button
                           class="statusBtn"
-                          style="background-color: #aaaaaa"
+                          style="background-color: #aaaaaa; color:white"
                           @click="denyRequest(requestitem0.rid)"
                           >요청 거절</b-button
                         >
@@ -159,7 +159,7 @@
                       <div id="noneditorBtn" v-if="authmode == 'noneditor'">
                         <b-button
                           class="statusBtn"
-                          style="background-color: #aaaaaa"
+                          style="background-color: #aaaaaa; color:white"
                           @click="denyRequest(requestitem0.rid)"
                           >요청 취소</b-button
                         >
@@ -264,21 +264,21 @@
 
                       <b-button
                         class="statusBtn"
-                        style="background-color: #0099ff"
+                        style="background-color: #0099ff; color:white;"
                         @click="doneRequest(requestitem1.rid)"
                         >요청 완료</b-button
                       >
                       <b-button
                         v-if="authmode == 'editor'"
                         class="statusBtn"
-                        style="background-color: #aaaaff"
+                        style="background-color: #aaaaff; color:white;"
                         @click="getEmail(requestitem1.request_nickname, requestitem1.rid)"
                         >이메일 보기</b-button
                       >
                       <b-button
                         v-if="authmode == 'noneditor'"
                         class="statusBtn"
-                        style="background-color: #aaaaff"
+                        style="background-color: #aaaaff; color:white;"
                         @click="getEmail(requestitem1.response_nickname, requestitem1.rid)"
                         >이메일 보기</b-button
                       >
@@ -300,7 +300,7 @@
                             class="justify-content-center"
                             style="background-color: #aaaaff"
                           >
-                            <i class="fas fa-copy" style="color: #000000" @click="copyClipboard('emailtarget')"
+                            <i class="fas fa-copy" style="color: white" @click="copyClipboard('emailtarget')"
                               >복사하기</i
                             >
                           </b-button>
@@ -406,7 +406,7 @@
                       </b-card-text>
                       <b-button
                         class="statusBtn"
-                        style="background-color: #0099ff"
+                        style="background-color: #0099ff; color:white"
                         v-if="authmode == 'noneditor'"
                         @click="$bvModal.show('review-' + requestitem2.rid)"
                         >후기 남기기</b-button
@@ -438,11 +438,14 @@
                           </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                          <b-button @click="writeReview(requestitem2.rid)"
+                          <b-button 
+                            variant="info" @click="writeReview(requestitem2.rid)"
+                            style="color:white;"
                             >작성 완료</b-button
                           >
                           <b-button
                             @click="$bvModal.hide('review-' + requestitem2.rid)"
+                            style="color:white; background-color:gray;"
                             >창닫기</b-button
                           >
                         </div>
@@ -541,12 +544,12 @@
                       </b-card-text>
                       <b-button
                         class="statusBtn"
-                        style="background-color: #0099ff"
+                        style="background-color: #0099ff; color:white;"
                         v-if="authmode == 'noneditor'"
                         @click="getReview(requestitem3.rid)"
                         >후기 보기</b-button
                       >
-                      <b-modal id="donereview" hide-footer>
+                      <b-modal :id="'donereview' + requestitem3.rid" hide-footer>
                         <template v-slot:modal-title>내가 쓴 후기</template>
                         <div class="d-block text-center">
                           영상만족도
@@ -585,11 +588,13 @@
                           <b-button
                             variant="danger"
                             @click="deleteReview(requestitem3.rid)"
+                            style="color:white;"
                             >삭제하기</b-button
                           >
                           <b-button
                             id="closemodal"
-                            @click="$bvModal.hide('donereview')"
+                            @click="$bvModal.hide('donereview' + requestitem3.rid)"
+                            style="background-color:gray; color:white;"
                             >창닫기</b-button
                           >
                         </div>
@@ -853,16 +858,14 @@ export default {
         })
         .finally(() => {
           // 목록 새로고침
-          if (this.$session.get("auth") == "noneditor") {
-            store.dispatch(
-              "getRequestitems2",
-              "/request/req/" + this.$session.get("nickname") + "/2"
-            );
-            store.dispatch(
-              "getRequestitems3",
-              "/request/req/" + this.$session.get("nickname") + "/3"
-            );
-          }
+          store.dispatch(
+            "getRequestitems2",
+            "/request/req/" + this.$session.get("nickname") + "/2"
+          );
+          store.dispatch(
+            "getRequestitems3",
+            "/request/req/" + this.$session.get("nickname") + "/3"
+          );
         });
     },
 
@@ -877,7 +880,7 @@ export default {
             (this.EkindnessScore = data.kindnessScore),
             (this.EfinishScore = data.finishScore),
             (this.Ecomment = data.comment);
-          this.$bvModal.show("donereview");
+          this.$bvModal.show("donereview" + rid);
         })
         .catch((err) => {
           console.log(err);
@@ -924,6 +927,7 @@ export default {
     },
     deleteReview(rid) {
       let msg = "리뷰 삭제 실패했습니다.";
+      let session = this.$session;
       alertify.confirm(
         "리뷰 삭제",
         "삭제 하시겠습니까?",
@@ -935,6 +939,10 @@ export default {
                 msg = "삭제가 완료되었습니다.";
                 alertify.notify(msg, "success", 3);
                 document.getElementById("closemodal").click();
+
+                store.dispatch("getRequestitems2", "/request/req/" + session.get("nickname") + "/2");
+                store.dispatch("getRequestitems3", "/request/req/" + session.get("nickname") + "/3");
+
                 return;
               } else {
                 msg = "삭제에 실패하였습니다.";
@@ -942,16 +950,21 @@ export default {
                 return;
               }
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
               msg = "서버 통신 실패";
               alertify.error(msg, 3);
               return;
-            });
+            })
         },
         function() {
           alertify.error("취소되었습니다.");
         }
       );
+    },
+    resetReviewList(){
+       store.dispatch("getRequestitems2", "/request/req/" + this.$session.get("nickname") + "/2");
+      store.dispatch("getRequestitems3", "/request/req/" + this.$session.get("nickname") + "/3");
     },
     setRequestDate(start, end, idx) {
       if (this.idxDetail == idx) {
