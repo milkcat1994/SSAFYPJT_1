@@ -10,12 +10,6 @@
 	</select>
 
 	<!-- 요청자의 리스트 -->
-	<select id="searchListRequest" resultType="RequestDto">
-		select *
-		from request_form
-		where request_nickname = #{request_nickname} 
-		order by rid desc
-	</select>
 	<!-- done_flag 0~2 -->
 	<select id="searchListFlagRequest" resultType="RequestDto">
 		select *
@@ -26,12 +20,6 @@
 	</select>
 
 	<!-- 요청받는사람의 리스트 -->
-	<select id="searchListResponse" resultType="RequestDto">
-		select *
-		from request_form
-		where response_nickname = #{response_nickname} 
-		order by rid desc
-	</select>
 	<select id="searchListFlagResponse" resultType="RequestDto">
 		select *
 		from request_form
@@ -98,11 +86,6 @@
 		where rid = #{rid}
 	</update>
 
-	<!-- 요청 삭제 -->
-	<delete id="deleteRequest">
-		delete from request_form where rid = #{rid}
-	</delete>
-
 	<!-- 알림 등록 -->
 	<insert id="insertNotify">
 		insert into notify (
@@ -124,11 +107,6 @@
 		and read_flag = 0
 		order by nid desc
 	</select>
-
-	<!-- 알림 삭제 -->
-	<delete id="deleteNotify">
-		delete from notify where nid = #{nid}
-	</delete>
 
 	<!-- 알림 수정(읽었는지만 수정) -->
 	<update id="updateNotify" parameterType="int">

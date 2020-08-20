@@ -1,166 +1,204 @@
 <template>
   <div style="width:100%">
-    <base-header type="gradient-success" class="pt-5 pt-md-8 px-lg-5 mb-4">
+    <base-header type="gradient-success" class="pt-5 pt-md-8 px-lg-5 mb-2">
       <!-- 검색 -->
-      <div class="row mt-7">
+      <div class="row mt-3">
         <div class="col-5 ml-5">
           <!-- <h1 class="display-2 text-white">어떤 편집자를 찾으시나요?</h1> -->
 
           <!-- 검색 input -->
 
           <h1 class="display-3 mb-3">어떤 편집자를 찾으시나요?</h1>
-          <div class="mx-3 mb-3">
-            <h3 class="text-secondary mb-1">
+          <div class="ml-1 mb-3">
+            <h3 class="mb-1" style="color:#f1f4fb">
               자신의 이름으로 승부하는
-              <span class="text-primary">진짜 편집자</span>와 일해보세요.
+              <span class="text-primary mr-1" style="font-size:1.2em"
+                >진짜 편집자</span
+              >와 일해보세요.
             </h3>
-            <h3 class="text-secondary mb-1">
-              <span class="text-primary">편집</span>의 비즈니스모델은
-              <span class="text-primary">당신의 성공</span>이기에.
+            <h3 class=" mb-1" style="color:#f1f4fb;">
+              <span class="text-primary mr-1" style="font-size:1.2em">편집</span
+              >의 비즈니스모델은
+              <span class="text-primary mr-1" style="font-size:1.2em"
+                >당신의 성공</span
+              >이기에.
             </h3>
-            <h3 class="text-secondary mb-1">
+            <h3 class="mb-1" style="color:#f1f4fb;">
               당연하게도 매칭수수료
-              <span class="text-primary">0%</span>
+              <span class="text-primary mr-1" style="font-size:1.2em">0%</span>
             </h3>
           </div>
-          <div class="d-flex mx-3">
-            <b-button variant="primary" class="mr-4" @click="moveStepper()">맞춤 편집자 찾기</b-button>
-            <b-button variant="secondary" @click="moveList()">전체 편집자 보기</b-button>
+          <div class="d-flex mx-1">
+            <b-button variant="primary" class="mr-4" @click="moveStepper()"
+              >맞춤 편집자 찾기</b-button
+            >
+            <b-button variant="secondary" @click="moveList()"
+              >전체 편집자 보기</b-button
+            >
           </div>
         </div>
-        <div class="col-6 ml-4 mr-0 pr-0">
-          <img src="img/theme/friends.png" alt="png from pngtree.com" style="width:90%" />
+        <div class="col-6 ml-4 mr-0 pr-0 mb-5">
+          <img
+            src="img/theme/friends2.png"
+            alt="png from pngtree.com"
+            style="width:80%"
+          />
         </div>
       </div>
-    </base-header>
 
-    <!-- 슈퍼편집자/맞춤편집자 -->
-    <div class="contaienr">
-      <div class="row">
-        <!-- 슈퍼편집자 -->
-        <div class="col-12 mb-8 px-5">
-          <div class="my-5">
-            <h1 class="hr-sect">슈퍼편집자를 만나보세요.</h1>
-          </div>
+      <!-- 슈퍼편집자/맞춤편집자 -->
+      <div class="contaienr">
+        <div class="row">
+          <!-- 슈퍼편집자 -->
+          <div class="col-12 mb-3 px-5">
+            <div class="my-6">
+              <h1 class="hr-sect">슈퍼편집자를 만나보세요.</h1>
+            </div>
 
-          <div class="px-4 d-flex justify-content-center">
-            <b-carousel
-              id="carousel-1"
-              v-model="slide"
-              :interval="3000"
-              controls
-              indicators
-              background="#ccc"
-              class="mb-4"
-              style="text-shadow: 1px 1px 2px #000;"
-              @sliding-start="onSlideStart"
-              @sliding-end="onSlideEnd"
-            >
-              <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
-                <template v-slot:img>
-                  <LazyYoutubeVideo :src="editor.url" style="width: 100%;" class="mb-2" />
-                  <router-link :to="`/portfolio?no=${editor.uid}`">
-                    <div class="d-flex justify-content-end mt-3 mx-3">
-                      <h2
-                        class="mt-0 mb-1 mr-2"
-                        style="color:white decoration:none"
-                      >{{ editor.nickname }}</h2>
-                    </div>
-                    <div class="d-flex justify-content-end mr-3 mb-2">
-                      <div
-                        v-for="t in editor.tags.slice(0, 5)"
-                        :key="t"
-                        class="text-right mt-3"
-                        style="display:inline-block"
-                      >
-                        <span class="mr-2"># {{ t }}</span>
+            <div class="px-4 d-flex justify-content-center">
+              <b-carousel
+                id="carousel-1"
+                v-model="slide"
+                :interval="3000"
+                controls
+                indicators
+                background="white"
+                class="mb-4"
+                @sliding-start="onSlideStart"
+                @sliding-end="onSlideEnd"
+              >
+                <b-carousel-slide
+                  v-for="editor in currentEditors"
+                  :key="editor.uid"
+                >
+                  <template v-slot:img>
+                    <LazyYoutubeVideo
+                      :src="editor.url"
+                      style="width: 100%;"
+                      class="mb-2"
+                    />
+                    <router-link :to="`/portfolio?no=${editor.uid}`">
+                      <div class="d-flex justify-content-end mt-3 mx-3">
+                        <h2
+                          class="mt-0 mb-1 mr-2"
+                          style="color:white decoration:none"
+                        >
+                          {{ editor.nickname }}
+                        </h2>
                       </div>
+                      <div class="d-flex justify-content-end mr-3 mb-2">
+                        <div
+                          v-for="t in editor.tags.slice(0, 5)"
+                          :key="t"
+                          class="text-right mt-2"
+                          style="display:inline-block"
+                        >
+                          <span class="mr-2"># {{ t }}</span>
+                        </div>
+                      </div>
+                    </router-link>
+                    <div class="d-flex justify-content-end mb-3 mx-3">
+                      <h4>
+                        <i class="fas fa-heart mr-2" style="color:red"></i>
+                        <span class="mr-3">{{ editor.bookmarkNumber }}</span>
+                      </h4>
+                      <h4>
+                        <i class="fas fa-star mr-2" style="color:yellow"></i>
+                        <span class="mr-3">{{ round(editor.avgScore) }}</span>
+                      </h4>
                     </div>
-                  </router-link>
-                  <div class="d-flex justify-content-end mb-5 mx-3">
-                    <h4>
-                      <i class="fas fa-heart mr-2" style="color:red"></i>
-                      <span class="mr-3">{{ editor.bookmarkNumber }}</span>
-                    </h4>
-                  </div>
-                </template>
-              </b-carousel-slide>
-            </b-carousel>
-          </div>
-        </div>
-
-        <!-- 맞춤편집자 -->
-        <div class="col-12 mb-8 px-5">
-          <div class="my-5">
-            <h1 class="hr-sect">맞춤 편집자를 만나보세요.</h1>
+                  </template>
+                </b-carousel-slide>
+              </b-carousel>
+            </div>
           </div>
 
-          <div class="px-4" v-if="isLogin">
-            <div id="app">
-              <b-container>
-                <b-row>
-                  <b-col cols="12">
-                    <carousel :perPage="4">
-                      <slide
-                        class="p-2"
-                        v-for="recEditor in recommendData.slice(0, 10)"
-                        :key="recEditor.uid"
-                      >
-                        <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
+          <!-- 맞춤편집자 -->
+          <div class="col-12 mb-8 px-5">
+            <div class="my-5">
+              <h1 class="hr-sect">맞춤 편집자를 만나보세요.</h1>
+            </div>
+
+            <div class="px-4" v-if="isLogin">
+              <div id="app">
+                <b-container>
+                  <b-row>
+                    <b-col cols="12">
+                      <carousel :perPage="4">
+                        <slide
+                          class="p-2"
+                          v-for="recEditor in recommendData.slice(0, 10)"
+                          :key="recEditor.uid"
+                        >
+                          <b-card
+                            id="maincard"
+                            @click="movePortfolio(recEditor.uid)"
+                          >
                             <img src alt />
                             <LazyYoutubeVideo
                               :src="recEditor.url"
                               style="width: 100%;"
                               class="mb-2"
                             />
-                          <hr />
-                          <b-card-text>
+                            <hr />
+                            <b-card-text>
                               <div class="d-inline-flex">
-                                <h3 class="mt-0 mb-1">{{ recEditor.nickname }}</h3>
+                                <h3 class="mt-0 mb-1">
+                                  {{ recEditor.nickname }}
+                                </h3>
                               </div>
 
-                            <div
-                              v-for="(t, index) in recEditor.tag.split(', ').slice(0, 3)"
-                              :key="index"
-                              class="d-flex"
-                            >
-                              <span class="d-flex"># {{ t }}</span>
-                            </div>
-                            <p class="text-right">₩ {{ recEditor.pay }}</p>
-                          </b-card-text>
-                        </b-card>
-                      </slide>
-                    </carousel>
+                              <div
+                                v-for="(t, index) in recEditor.tag
+                                  .split(', ')
+                                  .slice(0, 3)"
+                                :key="index"
+                                class="d-flex"
+                              >
+                                <span class="d-flex"># {{ t }}</span>
+                              </div>
+                              <p class="text-right">₩ {{ recEditor.pay }}</p>
+                            </b-card-text>
+                          </b-card>
+                        </slide>
+                      </carousel>
+                    </b-col>
+                  </b-row>
+                </b-container>
+              </div>
+            </div>
+
+            <div class="px-4" v-if="!isLogin">
+              <b-container>
+                <b-row>
+                  <b-col cols="12" class="d-flex justify-content-center">
+                    <img
+                      src="img/theme/dogcat1.png"
+                      alt="강아지고양이"
+                      style="width:50%"
+                      class="my-0"
+                    />
+                  </b-col>
+                  <b-col cols="12" class="d-flex justify-content-center mb-2">
+                    <span style="color:white">Designed by PngTree</span>
+                  </b-col>
+                  <b-col cols="12" class="d-flex justify-content-center">
+                    <h1 style>로그인이 필요해요!</h1>
                   </b-col>
                 </b-row>
               </b-container>
             </div>
           </div>
-
-          <div class="px-4" v-if="!isLogin">
-            <b-container>
-              <b-row>
-                <b-col cols="12" class="d-flex justify-content-center">
-                  <img src="img/theme/dogcat1.png" alt="강아지고양이" style="width:50%" class="my-0" />
-                </b-col>
-                <b-col cols="12" class="d-flex justify-content-center mb-2">
-                  <span style="color:#b9cced">Designed by PngTree</span>
-                </b-col>
-                <b-col cols="12" class="d-flex justify-content-center">
-                  <h1 style>로그인이 필요해요!</h1>
-                </b-col>
-              </b-row>
-            </b-container>
-          </div>
         </div>
       </div>
-    </div>
+    </base-header>
   </div>
 </template>
 <script>
 import http from "@/util/http-common.js";
 import { Carousel, Slide } from "vue-carousel";
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -197,7 +235,7 @@ export default {
         .then((res) => {
           // console.log(res);
           if (res.data) {
-            console.log(res.data);
+            // console.log(res.data);
             this.recommendData = res.data;
           }
         })
@@ -212,7 +250,7 @@ export default {
           sortType: "SCORE_DESC",
           videoSkills: [],
           videoStyles: [],
-          videoTypes: []
+          videoTypes: [],
         })
         .then((res) => {
           if (res.data.status) {
@@ -230,8 +268,6 @@ export default {
       this.sliding = false;
     },
     keywordSearch(keyword) {
-      // console.log(keyword)
-      // BE URL 확인 후 변경
       http.get(`/search/${keyword}`).then((res) => {
         console.log(res);
         this.$router.push({ name: "search" });
@@ -253,35 +289,13 @@ export default {
     movePortfolio(uid) {
       this.$router.push("/portfolio?no=" + uid);
     },
-    // getReviewInfo(uid) {
-    //   http
-    //     .get("/portfolio/review/" + uid)
-    //     .then(({ data }) => {
-    //       //성공시 평균 계산 필요 추출 필요
-    //       if (data.data == "success") {
-    //         this.reviews = data.object;
-    //         let videoAvg = 0,
-    //           kindnessAvg = 0,
-    //           finishAvg = 0;
-    //         data.object.forEach((obj) => {
-    //           videoAvg += obj.videoScore;
-    //           kindnessAvg += obj.kindnessScore;
-    //           finishAvg += obj.finishScore;
-    //         });
-    //         let length = data.object.length;
-    //         this.avgScore = (videoAvg + kindnessAvg + finishAvg) / length;
-    //         return;
-    //       } else {
-    //         return;
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       return;
-    //     });
-    // },
+
+    round(score) {
+      return Number(score.toFixed(1));
+    },
   },
   computed: {
+    ...mapGetters(["isLoggedIn"]),
     currentEditors() {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;
@@ -316,6 +330,16 @@ export default {
 }
 
 #carousel-1 {
-  width: 800px;
+  width: 700px;
+  /* box-shadow: 3px 3px 3px gray; */
+}
+
+/* #maincard {
+  box-shadow: 3px 3px 3px gray;
+} */
+
+button:focus {
+  border: none !important;
+  outline: none !important;
 }
 </style>

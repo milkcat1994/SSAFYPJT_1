@@ -93,7 +93,7 @@ export const stepper = {
         value: 'audi',
         img: 'img/icons/search/audio.svg',
         status: false,
-        description: '음향 효과를 삽입하거나 조정하는 작업을 말합니다.',
+        description: '음향 효과를 삽입/제거하거나 조정하는 작업을 말합니다.',
       },
       {
         name: '모션그래픽',
@@ -107,7 +107,7 @@ export const stepper = {
         value: 'capt',
         img: 'img/icons/search/caption.svg',
         status: false,
-        description: '자막 관련 편집을 말합니다.',
+        description: '영상 관련 자막 편집을 말합니다.',
       },
       {
         name: '인트로',
@@ -203,6 +203,15 @@ export const stepper = {
       for (const item of state.videoSkills) {
         if (item.status == true) {
           res.push(item.value)
+        }
+      }
+      return res;
+    },
+    getSelectedVideoSkillsName(state) {
+      let res = new Array();
+      for (const item of state.videoSkills) {
+        if (item.status == true) {
+          res.push(item.name)
         }
       }
       return res;
