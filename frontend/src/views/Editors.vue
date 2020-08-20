@@ -152,7 +152,7 @@
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @clickSearchTag="reSearchTag"
+        @click-search-tag="reSearchTag"
         ></editors-list>
     </div>
   </div>
@@ -250,13 +250,21 @@ export default {
       return res;
     },
   },
+  // watch: {
+  //   clickSearchTag() {
+  //     if (this.clickSearchTag != '') {
+  //       this.searchKey = '태그';
+  //       this.keyword = this.clickSearchTag;
+  //     }
+  //   this.fetchFilter();
+  //   }
+  // },
   created() {
-    // 태그 클릭으로 들어왔을경우
+    //태그 클릭으로 들어왔을경우
     if(this.clickSearchTag != ''){
       this.searchKey = '태그';
       this.keyword = this.clickSearchTag;
     }
-
     this.fetchFilter();
   },
   mounted() {
