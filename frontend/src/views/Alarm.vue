@@ -113,11 +113,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem0.video_origin_length }}</td>
+                              <td>{{ requestitem0.video_origin_length }}분</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem0.video_result_length }}</td>
+                              <td>{{ requestitem0.video_result_length }}분</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
@@ -232,11 +232,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem1.video_origin_length }}</td>
+                              <td>{{ requestitem1.video_origin_length }}분</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem1.video_result_length }}</td>
+                              <td>{{ requestitem1.video_result_length }}분</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
@@ -272,17 +272,17 @@
                         v-if="authmode == 'editor'"
                         class="statusBtn"
                         style="background-color: #aaaaff"
-                        @click="getEmail(requestitem1.request_nickname)"
+                        @click="getEmail(requestitem1.request_nickname, requestitem1.rid)"
                         >이메일 보기</b-button
                       >
                       <b-button
                         v-if="authmode == 'noneditor'"
                         class="statusBtn"
                         style="background-color: #aaaaff"
-                        @click="getEmail(requestitem1.response_nickname)"
+                        @click="getEmail(requestitem1.response_nickname, requestitem1.rid)"
                         >이메일 보기</b-button
                       >
-                      <b-modal id="emailModal" hide-footer>
+                      <b-modal :id="'emailModal'+requestitem1.rid" hide-footer>
                         <template v-slot:modal-title
                           >{{ requestitem1.response_nickname }}님의
                           이메일</template
@@ -293,14 +293,14 @@
                             class="d-flex justify-content-center"
                           >
                             {{ email }}
+                            <input style="display:none" id="emailtarget" type=text v-model="email"/>
                           </div>
                           <br />
                           <b-button
                             class="justify-content-center"
                             style="background-color: #aaaaff"
-                            copytarget="emailtarget"
                           >
-                            <i class="fas fa-copy" style="color: #000000"
+                            <i class="fas fa-copy" style="color: #000000" @click="copyClipboard('emailtarget')"
                               >복사하기</i
                             >
                           </b-button>
@@ -375,11 +375,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem2.video_origin_length }}</td>
+                              <td>{{ requestitem2.video_origin_length }}분</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem2.video_result_length }}</td>
+                              <td>{{ requestitem2.video_result_length }}분</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
@@ -510,11 +510,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem3.video_origin_length }}</td>
+                              <td>{{ requestitem3.video_origin_length }}분</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem3.video_result_length }}</td>
+                              <td>{{ requestitem3.video_result_length }}분</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
@@ -1007,13 +1007,13 @@ export default {
         });
     },
 
-    getEmail(nickname) {
+    getEmail(nickname, rid) {
       http
         .post("/user/userfind/" + nickname)
         .then(({ data }) => {
           if (data != "not exist") {
             this.email = data;
-            this.$bvModal.show("emailModal");
+            this.$bvModal.show("emailModal" + rid);
             return;
           } else {
             return;
@@ -1056,6 +1056,12 @@ export default {
         "getRequestitems3",
         "/request/" + mode + "/" + this.$session.get("nickname") + "/3"
       );
+    },
+    copyClipboard(elementID){
+      let element = document.getElementById(elementID); //select the element
+      let elementText = element.textContent; //get the text content from the element
+      navigator.clipboard.writeText(elementText);
+      alertify.notify("이메일을 복사하였습니다.", "info", 2);
     },
   },
 };
