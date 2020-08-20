@@ -42,7 +42,7 @@
               <h1 class="hr-sect">슈퍼편집자를 만나보세요.</h1>
             </div>
 
-            <div class="px-4 d-flex justify-content-center">
+            <div class="px-4 d-flex justify-content-center"> 
               <b-carousel
                 id="carousel-1"
                 v-model="slide"
@@ -53,12 +53,18 @@
                 class="mb-4"
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd"
-                style="height:550px"
               >
                 <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
                   <template v-slot:img>
-                    <LazyYoutubeVideo :src="editor.url" style="width: 100%" class="mb-2" />
                     <router-link :to="`/portfolio?no=${editor.uid}`">
+                    <img v-if="editor.url" class="zoom" :src="'https://img.youtube.com/vi/' + editor.url.substr(30) + '/0.jpg'" 
+                      style="width: 100%;"/>
+                    <img
+                      v-else
+                      src="/img/theme/empty.png"
+                      alt="/img/theme/empty.png"
+                      style="width: 100%;"
+                    />
                       <div class="d-flex justify-content-end mt-3 mx-3">
                         <h2
                           class="mt-0 mb-1 mr-2"
@@ -75,7 +81,7 @@
                           <span class="mr-2"># {{ t }}</span>
                         </div>
                       </div>
-                    </router-link>
+                    
                     <div class="d-flex justify-content-end mb-3 mx-3">
                       <h4>
                         <i class="fas fa-heart mr-2" style="color:red"></i>
@@ -86,6 +92,7 @@
                         <span class="mr-3">{{ round(editor.avgScore) }}</span>
                       </h4>
                     </div>
+                    </router-link>
                   </template>
                 </b-carousel-slide>
               </b-carousel>
@@ -105,16 +112,19 @@
                     <b-col cols="12">
                       <carousel :perPage="4" style="height:600px">
                         <slide
-                          class="p-2"
+                          class="p-2 zoom"
                           v-for="recEditor in recommendData.slice(0, 10)"
                           :key="recEditor.uid"
                         >
                           <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
                             <img src alt />
-                            <LazyYoutubeVideo
-                              :src="recEditor.url"
-                              style="width: 100%;"
-                              class="mb-2"
+                            <img v-if="recEditor.url" :src="'https://img.youtube.com/vi/' + recEditor.url.substr(30) + '/0.jpg'" 
+                              style="width: 100%;"/>
+                            <img
+                              v-else
+                              src="/img/theme/empty.png"
+                              alt="/img/theme/empty.png"
+                              style="width: 100%; height: 127.969px;"
                             />
                             <hr />
                             <b-card-text>
@@ -166,12 +176,12 @@
 <script>
 import http from "@/util/http-common.js";
 import { Carousel, Slide } from "vue-carousel";
-import LazyYoutubeVideo from "vue-lazy-youtube-video";
+// import LazyYoutubeVideo from "vue-lazy-youtube-video";
 // import { mapGetters } from "vuex";
 
 export default {
   components: {
-    LazyYoutubeVideo,
+    // LazyYoutubeVideo,
     Carousel,
     Slide,
   },
@@ -305,5 +315,11 @@ export default {
 button:focus {
   border: none !important;
   outline: none !important;
+}
+
+.zoom:hover {
+  -ms-transform: scale(1.07);
+  -webkit-transform: scale(1.07);
+  transform: scale(1.07);
 }
 </style>
