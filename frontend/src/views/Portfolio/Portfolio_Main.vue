@@ -472,7 +472,7 @@
             alternative
             placeholder="15분 이내"
             input-classes="form-control-alternative"
-            v-model.number="request_info.video_result_length"
+            v-model="request_info.video_result_length"
           />
         </div>
         <div class="row">
