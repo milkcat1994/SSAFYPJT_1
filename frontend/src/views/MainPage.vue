@@ -120,7 +120,7 @@
                           v-for="recEditor in recommendData.slice(0, 10)"
                           :key="recEditor.uid"
                         >
-                          <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
+                          <b-card id="maincard" class="recCard" @click="movePortfolio(recEditor.uid)">
                             <img src alt />
                             <img
                               v-if="recEditor.url"
@@ -333,10 +333,10 @@ button:focus {
   outline: none !important;
 }
 
-.zoom:hover {
+.recCard:hover {
   -ms-transform: scale(1.07);
   -webkit-transform: scale(1.07);
   transform: scale(1.07);
-  
+  border-radius:1em;
 }
 </style>

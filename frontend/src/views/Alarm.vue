@@ -24,7 +24,7 @@
       <!-- for toggle -->
       <label class="switch" v-if="$session.get('auth') == 'editor'">
         <input type="checkbox" @click="toggleMode" />
-        <span class="slider round pl-2 pt-1 text-white">요청한 목록 보기</span>
+        <span class="slider round pl-2 pt-1 text-white">일반 사용자 모드</span>
       </label>
 
       <div style="display: table; width:100%">
@@ -35,18 +35,13 @@
             :offDays="offdays"
             ref="calendar"
           />
-          <i class="fas fa-circle" style="color: #ffe200; margin: 15px;"
-            >선택된 작업</i
-          >
-          <i class="fas fa-circle" style="color: #6699ff; margin: 15px"
-            >진행중 작업</i
-          >
+          <i class="fas fa-circle" style="color: #ffe200; margin: 15px;">선택된 작업</i>
+          <i class="fas fa-circle" style="color: #6699ff; margin: 15px">진행중 작업</i>
           <i
             v-if="$session.get('auth') == 'editor'"
             class="fas fa-circle"
             style="color: #c9c9c9; margin: 15px"
-            >휴일</i
-          >
+          >휴일</i>
         </div>
       </div>
 
@@ -57,10 +52,7 @@
               <div>요청 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem0, index) in requestitems0"
-                :key="index + '_requestitems0'"
-              >
+              <div v-for="(requestitem0, index) in requestitems0" :key="index + '_requestitems0'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -123,9 +115,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem0.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -147,22 +137,19 @@
                           class="statusBtn"
                           style="background-color: #0099ff; color:white"
                           @click="acceptRequest(requestitem0.rid)"
-                          >요청 수락</b-button
-                        >
+                        >요청 수락</b-button>
                         <b-button
                           class="statusBtn"
                           style="background-color: #aaaaaa; color:white"
                           @click="denyRequest(requestitem0.rid)"
-                          >요청 거절</b-button
-                        >
+                        >요청 거절</b-button>
                       </div>
                       <div id="noneditorBtn" v-if="authmode == 'noneditor'">
                         <b-button
                           class="statusBtn"
                           style="background-color: #aaaaaa; color:white"
                           @click="denyRequest(requestitem0.rid)"
-                          >요청 취소</b-button
-                        >
+                        >요청 취소</b-button>
                       </div>
                     </b-card-body>
                   </b-collapse>
@@ -176,10 +163,7 @@
               <div>진행 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem1, index) in requestitems1"
-                :key="index + '_requestitems1'"
-              >
+              <div v-for="(requestitem1, index) in requestitems1" :key="index + '_requestitems1'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -242,9 +226,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem1.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -266,34 +248,33 @@
                         class="statusBtn"
                         style="background-color: #0099ff; color:white;"
                         @click="doneRequest(requestitem1.rid)"
-                        >요청 완료</b-button
-                      >
+                      >요청 완료</b-button>
                       <b-button
                         v-if="authmode == 'editor'"
                         class="statusBtn"
                         style="background-color: #aaaaff; color:white;"
                         @click="getEmail(requestitem1.request_nickname, requestitem1.rid)"
-                        >이메일 보기</b-button
-                      >
+                      >이메일 보기</b-button>
                       <b-button
                         v-if="authmode == 'noneditor'"
                         class="statusBtn"
                         style="background-color: #aaaaff; color:white;"
                         @click="getEmail(requestitem1.response_nickname, requestitem1.rid)"
-                        >이메일 보기</b-button
-                      >
+                      >이메일 보기</b-button>
                       <b-modal :id="'emailModal'+requestitem1.rid" hide-footer>
-                        <template v-slot:modal-title
-                          >{{ requestitem1.response_nickname }}님의
-                          이메일</template
-                        >
+                        <template v-slot:modal-title>
+                          {{ requestitem1.response_nickname }}님의
+                          이메일
+                        </template>
                         <div class="d-block text-center">
-                          <div
-                            id="emailtarget"
-                            class="d-flex justify-content-center"
-                          >
+                          <div id="emailtarget" class="d-flex justify-content-center">
                             {{ email }}
-                            <input style="display:none" id="emailtarget" type=text v-model="email"/>
+                            <input
+                              style="display:none"
+                              id="emailtarget"
+                              type="text"
+                              v-model="email"
+                            />
                           </div>
                           <br />
                           <b-button
@@ -301,9 +282,7 @@
                             style="background-color: #aaaaff"
                             @click="copyClipboard('emailtarget')"
                           >
-                            <i class="fas fa-copy" style="color: white" 
-                              >복사하기</i
-                            >
+                            <i class="fas fa-copy" style="color: white">복사하기</i>
                           </b-button>
                           <br />
                         </div>
@@ -320,10 +299,7 @@
               <div>완료 작업</div>
             </span>
             <div role="tablist">
-              <div
-                v-for="(requestitem2, index) in requestitems2"
-                :key="index + '_requestitems2'"
-              >
+              <div v-for="(requestitem2, index) in requestitems2" :key="index + '_requestitems2'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -386,9 +362,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem2.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -410,8 +384,7 @@
                         style="background-color: #0099ff; color:white"
                         v-if="authmode == 'noneditor'"
                         @click="$bvModal.show('review-' + requestitem2.rid)"
-                        >후기 남기기</b-button
-                      >
+                      >후기 남기기</b-button>
                       <b-modal :id="'review-' + requestitem2.rid" hide-footer>
                         <template v-slot:modal-title>후기 작성</template>
                         <div class="d-block text-center">
@@ -419,46 +392,36 @@
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="videoScore"></star-rating>
                           </div>
-                          <hr />
-                          *편집자가 친절하게 소통했나요?
+                          <hr />*편집자가 친절하게 소통했나요?
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="kindnessScore"></star-rating>
                           </div>
-                          <hr />
-                          *편집자가 마감 기한을 잘 지켰나요?
+                          <hr />*편집자가 마감 기한을 잘 지켰나요?
                           <div class="d-flex justify-content-center">
                             <star-rating v-model="finishScore"></star-rating>
                           </div>
-                          <hr />
-                          *솔직한 한 줄 평을 남겨주세요.
+                          <hr />*솔직한 한 줄 평을 남겨주세요.
                           <div class="d-flex justify-content-center">
-                            <textarea
-                              class="form-control"
-                              v-model="comment"
-                            ></textarea>
+                            <textarea class="form-control" v-model="comment"></textarea>
                           </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                          <b-button 
-                            variant="info" @click="writeReview(requestitem2.rid)"
+                          <b-button
+                            variant="info"
+                            @click="writeReview(requestitem2.rid)"
                             style="color:white;"
-                            >작성 완료</b-button
-                          >
+                          >작성 완료</b-button>
                           <b-button
                             @click="$bvModal.hide('review-' + requestitem2.rid)"
                             style="color:white; background-color:gray;"
-                            >창닫기</b-button
-                          >
+                          >창닫기</b-button>
                         </div>
                       </b-modal>
                     </b-card-body>
                   </b-collapse>
                 </b-card>
               </div>
-              <div
-                v-for="(requestitem3, index) in requestitems3"
-                :key="index + '_requestitems3'"
-              >
+              <div v-for="(requestitem3, index) in requestitems3" :key="index + '_requestitems3'">
                 <b-card no-body class="m-1">
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
@@ -491,10 +454,7 @@
                   >
                     <b-card-body>
                       <b-card-text>
-                        <table
-                          class="table table-hover"
-                          style="float:left; width: 100%"
-                        >
+                        <table class="table table-hover" style="float:left; width: 100%">
                           <tbody>
                             <tr v-if="authmode == 'editor'">
                               <th>요청자</th>
@@ -524,9 +484,7 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem3.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
+                                <div style="color: blue; float: right">{{ requestitem.tag_list }}</div>
                               </td>
                             </tr>
                             <tr>
@@ -548,41 +506,25 @@
                         style="background-color: #0099ff; color:white;"
                         v-if="authmode == 'noneditor'"
                         @click="getReview(requestitem3.rid)"
-                        >후기 보기</b-button
-                      >
+                      >후기 보기</b-button>
                       <b-modal :id="'donereview' + requestitem3.rid" hide-footer>
                         <template v-slot:modal-title>내가 쓴 후기</template>
                         <div class="d-block text-center">
                           영상만족도
                           <div class="d-flex justify-content-center">
-                            <star-rating
-                              :rating="EvideoScore"
-                              :read-only="true"
-                            ></star-rating>
+                            <star-rating :rating="EvideoScore" :read-only="true"></star-rating>
                           </div>
-                          <hr />
-                          친절도
+                          <hr />친절도
                           <div class="d-flex justify-content-center">
-                            <star-rating
-                              :rating="EkindnessScore"
-                              :read-only="true"
-                            ></star-rating>
+                            <star-rating :rating="EkindnessScore" :read-only="true"></star-rating>
                           </div>
-                          <hr />
-                          마감속도
+                          <hr />마감속도
                           <div class="d-flex justify-content-center">
-                            <star-rating
-                              :rating="EfinishScore"
-                              :read-only="true"
-                            ></star-rating>
+                            <star-rating :rating="EfinishScore" :read-only="true"></star-rating>
                           </div>
-                          <hr />
-                          한줄평
+                          <hr />한줄평
                           <div class="d-flex justify-content-center">
-                            <textarea
-                              class="form-control"
-                              v-model="Ecomment"
-                            ></textarea>
+                            <textarea class="form-control" v-model="Ecomment"></textarea>
                           </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
@@ -590,14 +532,12 @@
                             variant="danger"
                             @click="deleteReview(requestitem3.rid)"
                             style="color:white;"
-                            >삭제하기</b-button
-                          >
+                          >삭제하기</b-button>
                           <b-button
                             id="closemodal"
                             @click="$bvModal.hide('donereview' + requestitem3.rid)"
                             style="background-color:gray; color:white;"
-                            >창닫기</b-button
-                          >
+                          >창닫기</b-button>
                         </div>
                       </b-modal>
                     </b-card-body>
@@ -932,7 +872,7 @@ export default {
       alertify.confirm(
         "리뷰 삭제",
         "삭제 하시겠습니까?",
-        function() {
+        function () {
           http
             .delete("request/review/" + rid)
             .then(({ data }) => {
@@ -941,8 +881,14 @@ export default {
                 alertify.notify(msg, "success", 3);
                 document.getElementById("closemodal").click();
 
-                store.dispatch("getRequestitems2", "/request/req/" + session.get("nickname") + "/2");
-                store.dispatch("getRequestitems3", "/request/req/" + session.get("nickname") + "/3");
+                store.dispatch(
+                  "getRequestitems2",
+                  "/request/req/" + session.get("nickname") + "/2"
+                );
+                store.dispatch(
+                  "getRequestitems3",
+                  "/request/req/" + session.get("nickname") + "/3"
+                );
 
                 return;
               } else {
@@ -952,20 +898,26 @@ export default {
               }
             })
             .catch((err) => {
-              console.log(err)
+              console.log(err);
               msg = "서버 통신 실패";
               alertify.error(msg, 3);
               return;
-            })
+            });
         },
-        function() {
+        function () {
           alertify.error("취소되었습니다.");
         }
       );
     },
-    resetReviewList(){
-       store.dispatch("getRequestitems2", "/request/req/" + this.$session.get("nickname") + "/2");
-      store.dispatch("getRequestitems3", "/request/req/" + this.$session.get("nickname") + "/3");
+    resetReviewList() {
+      store.dispatch(
+        "getRequestitems2",
+        "/request/req/" + this.$session.get("nickname") + "/2"
+      );
+      store.dispatch(
+        "getRequestitems3",
+        "/request/req/" + this.$session.get("nickname") + "/3"
+      );
     },
     setRequestDate(start, end, idx) {
       if (this.idxDetail == idx) {
@@ -1071,7 +1023,7 @@ export default {
         "/request/" + mode + "/" + this.$session.get("nickname") + "/3"
       );
     },
-    copyClipboard(elementID){
+    copyClipboard(elementID) {
       let element = document.getElementById(elementID);
       let elementText = element.textContent;
       navigator.clipboard.writeText(elementText);
@@ -1081,7 +1033,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .statusBtn {
   border: none;
   margin: 10px;
@@ -1153,5 +1105,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+td {
+  width: 800px;
+  word-break: break-all;
 }
 </style>
