@@ -6,7 +6,7 @@
     >
       <span class="mask bg-gradient-success opacity-8"></span>
       <!-- 에디터 본인 일 경우에만 활성화 되어야한다. -->
-      <router-link v-if="uid == $session.get('uid') " :to="'/portfolio/edit?no='+this.uid">
+      <router-link v-if="uid == $session.get('uid')" :to="'/portfolio/edit?no=' + this.uid">
         <base-button
           v-if="!haveTags && !haveVideo"
           type="info"
@@ -28,20 +28,40 @@
           <div class="card card-profile shadow" style="min-height: 486px;">
             <div class="card-header">
               <h1>
-                {{portfolio.nickname}}
-                <base-button v-if="uid != $session.get('uid') && !togleBookmark" outline type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
-                {{portfolio.markCnt}}
-                </base-button>
-                <base-button v-if="uid != $session.get('uid') && togleBookmark" type="danger" icon="ni ni-favourite-28" @click="addBookmark()">
-                {{portfolio.markCnt}}
-                </base-button>
-                <base-button v-if="uid == $session.get('uid')" disabled type="danger" icon="ni ni-favourite-28">
-                {{portfolio.markCnt}}
-                </base-button>
-                <base-button v-if="!isLogin" size="sm" type="default float-right" @click="alertModal.show=true"> 작업 요청하기 </base-button>
-                <base-button v-if="uid != $session.get('uid') && isLogin" size="sm" type="default float-right" @click="openRequestForm()"> 작업 요청하기 </base-button>
+                {{ portfolio.nickname }}
+                <base-button
+                  v-if="uid != $session.get('uid') && !togleBookmark"
+                  outline
+                  type="danger"
+                  icon="ni ni-favourite-28"
+                  @click="addBookmark()"
+                >{{ portfolio.markCnt }}</base-button>
+                <base-button
+                  v-if="uid != $session.get('uid') && togleBookmark"
+                  type="danger"
+                  icon="ni ni-favourite-28"
+                  @click="addBookmark()"
+                >{{ portfolio.markCnt }}</base-button>
+                <base-button
+                  v-if="uid == $session.get('uid')"
+                  disabled
+                  type="danger"
+                  icon="ni ni-favourite-28"
+                >{{ portfolio.markCnt }}</base-button>
+                <base-button
+                  v-if="!isLogin"
+                  size="sm"
+                  type="default float-right"
+                  @click="alertModal.show = true"
+                >작업 요청하기</base-button>
+                <base-button
+                  v-if="uid != $session.get('uid') && isLogin"
+                  size="sm"
+                  type="default float-right"
+                  @click="openRequestForm()"
+                >작업 요청하기</base-button>
               </h1>
-              <h3>{{portfolio.description}}</h3>
+              <h3>{{ portfolio.description }}</h3>
               <div class="col">
                 <button
                   class="btn btn-info btn-sm mb-1"
@@ -56,13 +76,16 @@
                 <div class="col">
                   <div class="text">
                     <!-- <div id="editor_skill"> -->
-                    <h4 style="margin-bottom:3%;">{{portfolio.nickname}}님은 아래와 같은 기술을 보유하고 있습니다.</h4>
+                    <h4 style="margin-bottom:3%;">
+                      {{ portfolio.nickname }}님은 아래와 같은 기술을 보유하고
+                      있습니다.
+                    </h4>
                     <div class="col">
                       <div class="row">
                         <div class="col-6" v-for="(skill, index) in portfolio.skills" :key="index">
                           <div class="row">
                             <i class="ni ni-check-bold"></i>
-                            <h3>{{skill}}</h3>
+                            <h3>{{ skill }}</h3>
                           </div>
                         </div>
                       </div>
@@ -70,22 +93,22 @@
                     <hr />
                     <div class="row">
                       <div class="col">
-                        <h3>{{portfolio.payMin}}원</h3>
+                        <h3>{{ portfolio.payMin }}원</h3>
                         <h5>분당가격</h5>
                       </div>
 
                       <div class="col">
-                        <h3>{{portfolio.workCnt}}건</h3>
+                        <h3>{{ portfolio.workCnt }}건</h3>
                         <h5>총작업개수</h5>
                       </div>
 
                       <div class="col">
-                        <h3>{{portfolio.totalRate}}</h3>
+                        <h3>{{ portfolio.totalRate }}</h3>
                         <h5>총만족도</h5>
                       </div>
 
                       <div class="col">
-                        <h3>{{portfolio.responseTime}}</h3>
+                        <h3>{{ portfolio.responseTime }}</h3>
                         <h5>평균응답시간</h5>
                       </div>
                     </div>
@@ -134,15 +157,11 @@
                   ref="calendar"
                   style="width: 100%; height: 100%"
                 />
-                <div class="row" style="margin-left: 33%;">
+                <div class="row" style="margin-left: 40%;">
                   <i
                     class="fas fa-circle"
                     style="color: #6699ff; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
                   >진행중 작업</i>
-                  <i
-                    class="fas fa-circle"
-                    style="color: #ff0066; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
-                  >개인 일정</i>
                   <i
                     class="fas fa-circle"
                     style="color: #c9c9c9; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
@@ -164,41 +183,41 @@
             </div>
             <div class="card-body pt-0 pt-md-4">
               <div class="row" style="margin-bottom: 30px; text-align:center;">
-                <div class="col-xl-4 col-lg-6 mb-30">
+                <div class="col-xl-4 col-lg-6">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:10%;">영상만족도</h3>
+                    <h3 style="margin-top:10px; margin-left:22%;">영상만족도</h3>
                     <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
-                    <p style="margin-left:50px;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
+                    <p style="margin-left:20%;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:40px;">친절도</h3>
+                    <h3 style="margin-top:10px; margin-left:20%;">친절도</h3>
                     <rate :length="5" :value="kindnessAvg" :disabled="true" />
-                    <p>
-                      편집자가 얼마나 친절히 응대하고 소통하였는지에 대해
+                    <p style="margin-left:10%;">
+                      편집자가 얼마나 친절히 응대하고
                       <br />
-                      {{reviews.length}}분이 평가한 결과입니다.
+                      소통하였는지에 대해 {{reviews.length}}분이 평가한 결과입니다.
                     </p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:40px;">마감 속도</h3>
+                    <h3 style="margin-top:10px; margin-left:20%;">마감 속도</h3>
                     <rate :length="5" :value="finishAvg" :disabled="true" />
-                    <p style="margin-left:50px;">
+                    <p style="margin-left:20%;">
                       마감 기한을 잘 맞춰주었는지에 대해
                       <br />
-                      {{reviews.length}}분이 평가한 결과입니다.
+                      {{ reviews.length }}분이 평가한 결과입니다.
                     </p>
                   </div>
                 </div>
               </div>
               <!-- </div> -->
               <div class="row">
-                <div class="col">
-                  <h2 style="margin-bottom:20px;">한줄평({{reviews.length}})</h2>
-                  <div class="col" v-for="(review,index) in reviewsMain" :key="index">
+                <div class="col ml-4">
+                  <h2 style="margin-bottom:20px;">한줄평({{ reviews.length }})</h2>
+                  <div class="col" v-for="(review, index) in reviewsMain" :key="index">
                     <div class="row">
                       <img
                         class="profile"
@@ -207,19 +226,19 @@
                       />
                       <h4
                         style="margin-top:11px; margin-right:10px; margin-left:7px;"
-                      >{{review.nickname.slice(0,1)}}***</h4>
+                      >{{ review.nickname.slice(0, 1) }}***</h4>
                       <h5
                         style="margin-top:11px; margin-right:10px;"
-                      >{{getFormatDate(review.createdDate)}}</h5>
+                      >{{ getFormatDate(review.createdDate) }}</h5>
                       <rate :length="5" :value="review.scoreAvg" :disabled="true" />
                     </div>
                     <div class="col" style="margin-top:10px; margin-left:20px;">
-                      <h4>{{review.comment}}</h4>
+                      <h4>{{ review.comment }}</h4>
                     </div>
-                    <hr />
+                    <hr class="mr-6" />
                   </div>
                   <div>
-                    {{this.reviewMessage}}
+                    {{ this.reviewMessage }}
                     <base-button
                       v-if="this.reviewLoad"
                       size="sm"
@@ -1164,14 +1183,17 @@ export default {
     },
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
-      console.log(tag);
+      // console.log(tag);
       this.$router.push({ name: "editors", params: { clickSearchTag: tag } });
     },
   },
 };
 </script>
-<style lang="scss">
-// #editor_skill{
+<style scoped>
+/* // #editor_skill{
 //   background-color: #d6d6d6;
-// }
+// } */
+.custom-control {
+  margin-right: 40px;
+}
 </style>

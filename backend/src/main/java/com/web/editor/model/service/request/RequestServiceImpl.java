@@ -39,16 +39,6 @@ public class RequestServiceImpl implements RequestService {
 
 	// 요청서 리스트(일반회원)
 	@Override
-	public List<RequestDto> searchListRequest(String request_nickname) {
-		try {
-			return requestMapper.searchListRequest(request_nickname);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
 	public List<RequestDto> searchListFlagRequest(RequestStatusDto statusDto) {
 		try {
 			return requestMapper.searchListFlagRequest(statusDto);
@@ -59,16 +49,6 @@ public class RequestServiceImpl implements RequestService {
 	}
 
 	// 요청서 리스트(편집자)
-	@Override
-	public List<RequestDto> searchListResponse(String response_nickname) {
-		try {
-			return requestMapper.searchListResponse(response_nickname);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	@Override
 	public List<RequestDto> searchListFlagResponse(RequestStatusDto statusDto) {
 		try {
@@ -135,18 +115,6 @@ public class RequestServiceImpl implements RequestService {
 		}
 	}
 
-	// 요청서 삭제
-	@Override
-	public int deleteRequest(int rid) {
-		try {
-			return requestMapper.deleteRequest(rid);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
-		}
-
-	}
-
 	// 알림
 	// 요청 알림리스트 조회(일반회원)
 	@Override
@@ -165,18 +133,6 @@ public class RequestServiceImpl implements RequestService {
 	public int insertNotify(NotifyDto notifyDto) {
 		try {
 			return requestMapper.insertNotify(notifyDto);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
-		}
-
-	}
-
-	// 알림 삭제
-	@Override
-	public int deleteNotify(int nid) {
-		try {
-			return requestMapper.deleteNotify(nid);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return -1;
