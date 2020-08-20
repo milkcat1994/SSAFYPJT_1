@@ -318,7 +318,7 @@
               type="radio"
               name="video_style"
               value="kids"
-              v-model="video_style.personal"
+              v-model="video_style.kids"
               id="kids"
               class="custom-control-input"
             />
@@ -472,7 +472,7 @@
             alternative
             placeholder="15분 이내"
             input-classes="form-control-alternative"
-            v-model.number="request_info.video_result_length"
+            v-model="request_info.video_result_length"
           />
         </div>
         <div class="row">
@@ -926,8 +926,8 @@ export default {
     initModalRequest() {
       this.modal.show = false;
       this.request_info = {
-        request_nickname: "",
-        response_nickname: "",
+        request_nickname: this.$session.get('nickname'),
+        response_nickname: this.portfolio.nickname,
         start_date: "",
         end_date: "",
         video_origin_length: "",
@@ -938,6 +938,33 @@ export default {
         video_skill: "",
         video_style: "",
         done_flag: 0,
+      };
+      this.dates= {
+        range: ""
+      };
+      this.video_skill= {
+        colr: false,
+        audi: false,
+        moti: false,
+        capt: false,
+        intr: false,
+        outr: false,
+      };
+      this.video_type= {
+        pers: false,
+        comm: false,
+      };
+      this.video_style= {
+        kids: false,
+        game: false,
+        musi: false,
+        food: false,
+        vlog: false,
+        movi: false,
+        anim: false,
+        beau: false,
+        spor: false,
+        etcs: false,
       };
     },
     getWorkCount() {
