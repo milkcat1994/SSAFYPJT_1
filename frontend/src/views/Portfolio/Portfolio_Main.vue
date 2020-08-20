@@ -431,6 +431,16 @@
             placeholder="기타 선택 시 영상 종류를 입력해주세요"
             input-classes="form-control-alternative"
             v-model="request_info.video_style"
+            disabled
+            v-if="!video_style.etcs"
+          />
+          <base-input
+            class="col-11 d-flex align-items-center"
+            alternative
+            placeholder="기타 선택 시 영상 종류를 입력해주세요"
+            input-classes="form-control-alternative"
+            v-model="request_info.video_style"
+            v-if="!!video_style.etcs"
           />
         </div>
         <div class="row">
