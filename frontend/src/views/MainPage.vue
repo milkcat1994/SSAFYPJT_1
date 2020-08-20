@@ -65,8 +65,8 @@
                       />
                       <img
                         v-else
-                        src="/img/theme/empty.png"
-                        alt="/img/theme/empty.png"
+                        src="img/theme/empty.png"
+                        alt="img/theme/empty.png"
                         style="width: 100%;"
                       />
                       <div class="d-flex justify-content-end mt-3 mx-3">
