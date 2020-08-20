@@ -98,7 +98,7 @@
               <h1 class="hr-sect">맞춤 편집자를 만나보세요.</h1>
             </div>
 
-            <div class="px-4" v-if="isLoggedIn">
+            <div class="px-4" v-if="isLoggedIn && !bookmarkemp">
               <div id="app">
                 <b-container>
                   <b-row>
@@ -142,7 +142,7 @@
               </div>
             </div>
 
-            <div class="px-4" v-if="!isLoggedIn">
+            <div class="px-4" v-if="!isLoggedIn || bookmarkemp">
               <b-container>
                 <b-row>
                   <b-col cols="12" class="d-flex justify-content-center">
@@ -152,7 +152,8 @@
                     <span style="color:white">Designed by PngTree</span>
                   </b-col>
                   <b-col cols="12" class="d-flex justify-content-center">
-                    <h1 style>로그인이 필요해요!</h1>
+                    <h1 v-if="!isLoggedIn">로그인이 필요해요!</h1>
+                    <h1 v-if="bookmarkemp">자신에 스타일에 맞는 편집자를 <span style="color:#ff0080;"> 찜!</span> 해주세요</h1>
                   </b-col>
                 </b-row>
               </b-container>
@@ -186,6 +187,8 @@ export default {
       recommendData: [],
       avgScore: 0,
 
+      bookmarkemp: true,
+
     };
   },
   created() {
@@ -196,8 +199,13 @@ export default {
       http
         .post("/recommend/" + this.$session.get("uid"))
         .then((res) => {
+          if (res.data == "bookmark is empty") {
+            this.bookmarkemp = true;
+            return;
+          }
           if (res.data) {
             this.recommendData = res.data;
+            this.bookmarkemp = false;
           }
         })
         .catch((err) => console.log(err));
