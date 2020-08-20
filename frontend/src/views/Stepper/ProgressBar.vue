@@ -83,6 +83,12 @@ export default {
     
     }
   },
+  // watch:{
+  //   currentStep(){
+  //     console.log(this.currentStep)
+    
+  //   }
+  // },
   methods: {
     changeStep(stageNum) {
       this.$emit("change-step", stageNum);

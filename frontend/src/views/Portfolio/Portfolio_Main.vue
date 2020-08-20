@@ -6,24 +6,19 @@
     >
       <span class="mask bg-gradient-success opacity-8"></span>
       <!-- 에디터 본인 일 경우에만 활성화 되어야한다. -->
-      <router-link
-        v-if="uid == $session.get('uid')"
-        :to="'/portfolio/edit?no=' + this.uid"
-      >
+      <router-link v-if="uid == $session.get('uid')" :to="'/portfolio/edit?no=' + this.uid">
         <base-button
           v-if="!haveTags && !haveVideo"
           type="info"
           class="btn btn-info float-right"
-          >등록하기</base-button
-        >
+        >등록하기</base-button>
         <base-button
           v-if="haveTags || haveVideo"
           size="sm"
           type="info"
           class="btn btn-info float-right"
           icon="ni ni-settings"
-          >수정하기</base-button
-        >
+        >수정하기</base-button>
       </router-link>
     </base-header>
 
@@ -40,41 +35,31 @@
                   type="danger"
                   icon="ni ni-favourite-28"
                   @click="addBookmark()"
-                >
-                  {{ portfolio.markCnt }}
-                </base-button>
+                >{{ portfolio.markCnt }}</base-button>
                 <base-button
                   v-if="uid != $session.get('uid') && togleBookmark"
                   type="danger"
                   icon="ni ni-favourite-28"
                   @click="addBookmark()"
-                >
-                  {{ portfolio.markCnt }}
-                </base-button>
+                >{{ portfolio.markCnt }}</base-button>
                 <base-button
                   v-if="uid == $session.get('uid')"
                   disabled
                   type="danger"
                   icon="ni ni-favourite-28"
-                >
-                  {{ portfolio.markCnt }}
-                </base-button>
+                >{{ portfolio.markCnt }}</base-button>
                 <base-button
                   v-if="!isLogin"
                   size="sm"
                   type="default float-right"
                   @click="alertModal.show = true"
-                >
-                  작업 요청하기
-                </base-button>
+                >작업 요청하기</base-button>
                 <base-button
                   v-if="uid != $session.get('uid') && isLogin"
                   size="sm"
                   type="default float-right"
                   @click="openRequestForm()"
-                >
-                  작업 요청하기
-                </base-button>
+                >작업 요청하기</base-button>
               </h1>
               <h3>{{ portfolio.description }}</h3>
               <div class="col">
@@ -83,9 +68,7 @@
                   :key="index"
                   @click="searchTag(tag)"
                   v-for="(tag, index) in tags"
-                >
-                  #{{ tag }}
-                </button>
+                >#{{ tag }}</button>
               </div>
             </div>
             <div class="card-body pt-0 pt-md-4">
@@ -99,11 +82,7 @@
                     </h4>
                     <div class="col">
                       <div class="row">
-                        <div
-                          class="col-6"
-                          v-for="(skill, index) in portfolio.skills"
-                          :key="index"
-                        >
+                        <div class="col-6" v-for="(skill, index) in portfolio.skills" :key="index">
                           <div class="row">
                             <i class="ni ni-check-bold"></i>
                             <h3>{{ skill }}</h3>
@@ -166,10 +145,7 @@
                   v-for="(video, index) in videos"
                   :key="index"
                 >
-                  <LazyYoutubeVideo
-                    :src="video.url"
-                    :aspect-ratio="video.aspectRatio"
-                  />
+                  <LazyYoutubeVideo :src="video.url" :aspect-ratio="video.aspectRatio" />
                 </div>
               </div>
               <hr />
@@ -185,13 +161,11 @@
                   <i
                     class="fas fa-circle"
                     style="color: #6699ff; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
-                    >진행중 작업</i
-                  >
+                  >진행중 작업</i>
                   <i
                     class="fas fa-circle"
                     style="color: #c9c9c9; margin-right: 100px; margin-top: 20px; margin-bottom: 10px;"
-                    >휴일</i
-                  >
+                  >휴일</i>
                 </div>
               </div>
             </div>
@@ -207,43 +181,31 @@
             <div class="card-header bg-transparent">
               <h1 class="mb-0">서비스 평가</h1>
             </div>
-            <div class="card-body pt-0 pt-md-4 ml-6">
+            <div class="card-body pt-0 pt-md-4">
               <div class="row" style="margin-bottom: 30px; text-align:center;">
                 <div class="col-xl-4 col-lg-6">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:10%;">
-                      영상만족도
-                    </h3>
-                    <rate
-                      id="satisfy"
-                      :length="5"
-                      :value="videoAvg"
-                      :disabled="true"
-                    />
-                    <p style="margin-left:50px;">
-                      최종 영상에 대해 {{ reviews.length }}분이 평가한
-                      결과입니다.
-                    </p>
+                    <h3 style="margin-top:10px; margin-left:22%;">영상만족도</h3>
+                    <rate id="satisfy" :length="5" :value="videoAvg" :disabled="true" />
+                    <p style="margin-left:20%;">최종 영상에 대해 {{reviews.length}}분이 평가한 결과입니다.</p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:40px;">친절도</h3>
+                    <h3 style="margin-top:10px; margin-left:20%;">친절도</h3>
                     <rate :length="5" :value="kindnessAvg" :disabled="true" />
-                    <p>
-                      편집자가 얼마나 친절히 응대하고 소통하였는지에 대해
+                    <p style="margin-left:10%;">
+                      편집자가 얼마나 친절히 응대하고
                       <br />
-                      {{ reviews.length }}분이 평가한 결과입니다.
+                      소통하였는지에 대해 {{reviews.length}}분이 평가한 결과입니다.
                     </p>
                   </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 mb-30">
                   <div class="row">
-                    <h3 style="margin-top:10px; margin-left:40px;">
-                      마감 속도
-                    </h3>
+                    <h3 style="margin-top:10px; margin-left:20%;">마감 속도</h3>
                     <rate :length="5" :value="finishAvg" :disabled="true" />
-                    <p style="margin-left:50px;">
+                    <p style="margin-left:20%;">
                       마감 기한을 잘 맞춰주었는지에 대해
                       <br />
                       {{ reviews.length }}분이 평가한 결과입니다.
@@ -254,14 +216,8 @@
               <!-- </div> -->
               <div class="row">
                 <div class="col ml-4">
-                  <h2 style="margin-bottom:20px;">
-                    한줄평({{ reviews.length }})
-                  </h2>
-                  <div
-                    class="col"
-                    v-for="(review, index) in reviewsMain"
-                    :key="index"
-                  >
+                  <h2 style="margin-bottom:20px;">한줄평({{ reviews.length }})</h2>
+                  <div class="col" v-for="(review, index) in reviewsMain" :key="index">
                     <div class="row">
                       <img
                         class="profile"
@@ -270,17 +226,11 @@
                       />
                       <h4
                         style="margin-top:11px; margin-right:10px; margin-left:7px;"
-                      >
-                        {{ review.nickname.slice(0, 1) }}***
-                      </h4>
-                      <h5 style="margin-top:11px; margin-right:10px;">
-                        {{ getFormatDate(review.createdDate) }}
-                      </h5>
-                      <rate
-                        :length="5"
-                        :value="review.scoreAvg"
-                        :disabled="true"
-                      />
+                      >{{ review.nickname.slice(0, 1) }}***</h4>
+                      <h5
+                        style="margin-top:11px; margin-right:10px;"
+                      >{{ getFormatDate(review.createdDate) }}</h5>
+                      <rate :length="5" :value="review.scoreAvg" :disabled="true" />
                     </div>
                     <div class="col" style="margin-top:10px; margin-left:20px;">
                       <h4>{{ review.comment }}</h4>
@@ -295,8 +245,7 @@
                       type="float-right"
                       icon="ni ni-fat-add"
                       @click="loadMoreReviews()"
-                      >더보기</base-button
-                    >
+                    >더보기</base-button>
                   </div>
                 </div>
               </div>
@@ -310,10 +259,11 @@
       <template slot="header">
         <h5 class="modal-title" id="requestForm">작업 요청서</h5>
       </template>
-      <div>
+      <div class="ml-2">
         <div class="row">
           <h3>작업 의뢰인</h3>
           <base-input
+            class="mx-3"
             alternative
             placeholder="의뢰인"
             input-classes="form-control-alternative"
@@ -324,6 +274,7 @@
         <div class="row">
           <h3>편집자</h3>
           <base-input
+            class="mx-3"
             alternative
             placeholder="편집자"
             input-classes="form-control-alternative"
@@ -334,110 +285,172 @@
         <div class="row">
           <h3>편집 목적</h3>
         </div>
-        <div class="row">
-          <base-checkbox
-            class="mb-3"
-            name="video_type"
-            value="pers"
-            v-model="video_type.pers"
-            >개인용</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_type"
-            value="comm"
-            v-model="video_type.comm"
-            >상업용</base-checkbox
-          >
+        <div class="row d-flex justify-content-center">
+          <div class="custom-control custom-radio">
+            <input
+              type="radio"
+              name="video_type"
+              value="pers"
+              v-model="video_type.pers"
+              id="pers"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label mr-4" for="pers">개인용</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input
+              type="radio"
+              name="video_type"
+              value="comm"
+              v-model="video_type.comm"
+              id="comm"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="comm">상업용</label>
+          </div>
         </div>
         <div class="row">
-          <h3>영상 종류</h3>
+          <h3 class="mb-3">영상 종류</h3>
         </div>
-        <div class="row">
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="kids"
-            v-model="video_style.personal"
-            >키즈</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="game"
-            v-model="video_style.game"
-            >게임</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="musi"
-            v-model="video_style.musi"
-            >음악/댄스</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="food"
-            v-model="video_style.food"
-            >푸드/쿠킹</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="vlog"
-            v-model="video_style.vlog"
-            >V-log</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="movi"
-            v-model="video_style.movi"
-            >영화/애니메이션</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="anim"
-            v-model="video_style.anim"
-            >동물</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="beau"
-            v-model="video_style.beau"
-            >뷰티/패션</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="spor"
-            v-model="video_style.spor"
-            >스포츠</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_style"
-            value="etcs"
-            v-model="video_style.etcs"
-            >기타</base-checkbox
-          >
+        <div class="row d-flex justify-content-center">
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="kids"
+              v-model="video_style.personal"
+              id="kids"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="kids">키즈</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="game"
+              v-model="video_style.game"
+              id="game"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="game">게임</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="musi"
+              v-model="video_style.musi"
+              id="musi"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="musi">음악/댄스</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="food"
+              v-model="video_style.food"
+              id="food"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="food">푸드/쿠킹</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="vlog"
+              v-model="video_style.vlog"
+              id="vlog"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="vlog">V-log</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="movi"
+              v-model="video_style.movi"
+              id="movi"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="movi">영화/애니메이션</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="anim"
+              v-model="video_style.anim"
+              id="anim"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="anim">동물</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="beau"
+              v-model="video_style.beau"
+              id="beau"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="beau">뷰티/패션</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="spor"
+              v-model="video_style.spor"
+              id="spor"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="spor">스포츠</label>
+          </div>
+          <div class="custom-control custom-radio col-5">
+            <input
+              type="radio"
+              name="video_style"
+              value="etcs"
+              v-model="video_style.etcs"
+              id="etcs"
+              class="custom-control-input"
+            />
+            <label class="custom-control-label" for="etcs">기타</label>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-center mt-3">
           <base-input
+            class="col-11 d-flex align-items-center"
             alternative
             placeholder="기타 선택 시 영상 종류를 입력해주세요"
             input-classes="form-control-alternative"
             v-model="request_info.video_style"
+            disabled
+            v-if="!video_style.etcs"
+          />
+          <base-input
+            class="col-11 d-flex align-items-center"
+            alternative
+            placeholder="기타 선택 시 영상 종류를 입력해주세요"
+            input-classes="form-control-alternative"
+            v-model="request_info.video_style"
+            v-if="!!video_style.etcs"
           />
         </div>
         <div class="row">
-          <h3>작업 기간</h3>
+          <h3 class="mb-3">작업 기간</h3>
           <base-input addon-left-icon="ni ni-calendar-grid-50">
             <flat-picker
               slot-scope="{ focus, blur }"
               @on-open="focus"
               @on-close="blur"
+              placeholder="시작날짜 - 종료날짜"
               :config="{ allowInput: true, mode: 'range' }"
               class="form-control datepicker"
               v-model="dates.range"
@@ -445,7 +458,7 @@
           </base-input>
         </div>
         <div class="row">
-          <h3>원본 영상 길이(분)</h3>
+          <h3 class="mr-3">원본 영상 길이(분)</h3>
           <base-input
             alternative
             placeholder="80"
@@ -454,7 +467,7 @@
           />
         </div>
         <div class="row">
-          <h3>최종 영상 길이(분)</h3>
+          <h3 class="mr-3">최종 영상 길이(분)</h3>
           <base-input
             alternative
             placeholder="15"
@@ -463,53 +476,37 @@
           />
         </div>
         <div class="row">
-          <h3>원하는 영상 편집 기술</h3>
+          <h3 class="mb-3">원하는 영상 편집 기술</h3>
         </div>
-        <div class="row">
+        <div class="row d-flex justify-content-center">
           <base-checkbox
             class="mb-3"
             name="video_skill"
             value="colr"
             v-model="video_skill.colr"
-            >색, 밝기 조정</base-checkbox
-          >
+          >색, 밝기 조정</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
             value="audi"
             v-model="video_skill.audi"
-            >음향(오디오, 음악)</base-checkbox
-          >
+          >음향(오디오, 음악)</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
             value="moti"
             v-model="video_skill.moti"
-            >모션그래픽</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_skill"
-            value="capt"
-            v-model="video_skill.capt"
-            >자막</base-checkbox
-          >
-          <base-checkbox
-            class="mb-3"
-            name="video_skill"
-            value="intr"
-            v-model="video_skill.intr"
-            >인트로</base-checkbox
-          >
+          >모션그래픽</base-checkbox>
+          <base-checkbox class="mb-3" name="video_skill" value="capt" v-model="video_skill.capt">자막</base-checkbox>
+          <base-checkbox class="mb-3" name="video_skill" value="intr" v-model="video_skill.intr">인트로</base-checkbox>
           <base-checkbox
             class="mb-3"
             name="video_skill"
             value="outr"
             v-model="video_skill.outr"
-            >아웃트로</base-checkbox
-          >
+          >아웃트로</base-checkbox>
         </div>
-        <h3>기타 요구사항</h3>
+        <h3 class="my-3">기타 요구사항</h3>
         <textarea
           class="form-control form-control-alternative"
           id="description"
@@ -519,12 +516,8 @@
         ></textarea>
       </div>
       <template slot="footer">
-        <base-button type="secondary" @click="modal.show = false"
-          >Close</base-button
-        >
-        <base-button type="primary" @click="checkRequestForm()"
-          >요청하기</base-button
-        >
+        <base-button type="secondary" @click="modal.show = false">Close</base-button>
+        <base-button type="primary" @click="checkRequestForm()">요청하기</base-button>
       </template>
     </modal>
 
@@ -540,21 +533,10 @@
 
       <template slot="footer">
         <router-link to="/login">
-          <base-button
-            class
-            text-color="white"
-            type="link"
-            @click="alertModal.show = false"
-            >로그인</base-button
-          >
+          <base-button class text-color="white" type="link" @click="alertModal.show = false">로그인</base-button>
         </router-link>
         <router-link to="/user">
-          <base-button
-            type="link"
-            text-color="white"
-            @click="alertModal.show = false"
-            >회원가입</base-button
-          >
+          <base-button type="link" text-color="white" @click="alertModal.show = false">회원가입</base-button>
         </router-link>
         <br />
         <base-button
@@ -562,8 +544,7 @@
           text-color="white"
           class="ml-auto"
           @click="alertModal.show = false"
-          >Close</base-button
-        >
+        >Close</base-button>
       </template>
     </modal>
   </div>
@@ -1318,9 +1299,12 @@ export default {
 /* // #editor_skill{
 //   background-color: #d6d6d6;
 // } */
-.custom-control{
-  margin-right:40px;
-
+.custom-control {
+  margin-right: 40px;
 }
 
+.custom-control {
+  padding-right: 10px;
+  margin-right: 0px;
+}
 </style>

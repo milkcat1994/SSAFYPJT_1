@@ -297,6 +297,7 @@ export default {
   watch: {
     // route 경로가 바뀔때마다 로그인 상태인지 확인
     $route() {
+      this.mask = false;
       if (this.$session.exists()) {
         this.isLogin = true;
       } else {
@@ -353,6 +354,7 @@ export default {
     logout() {
       this.$session.destroy();
       this.$store.commit("stepper/clearFilterFinderStatus");
+      this.$store.commit("auth/mutateIsLogin", false);
       store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});

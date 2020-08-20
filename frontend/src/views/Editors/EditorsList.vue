@@ -33,7 +33,13 @@
                 <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
                   <!-- <img src alt /> -->
-                  <LazyYoutubeVideo :src="editor.url" style="width: 100%;" />
+                  <LazyYoutubeVideo v-if="editor.url" :src="editor.url" style="width: 100%;" />
+                  <img
+                    v-else
+                    src="/img/theme/empty.png"
+                    alt="/img/theme/empty.png"
+                    style="width: 100%; border: 1px solid #555; height: 135px;"
+                    />
                 </router-link>
               </div>
               <div class="col-9 pt-2 d-flex flex-column justify-content-around">
@@ -131,8 +137,8 @@ export default {
   data() {
     return {
       // 태그들
-      tags: [],
-      tag: "",
+      // tags: [],
+      // tag: "",
       editorsPerPage: 5,
       currentPage: 1,
       sortKey: "정렬",
@@ -227,7 +233,7 @@ export default {
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
       // console.log(tag)
-      this.$emit("clickSearchTag", tag);
+      this.$emit("click-search-tag", tag);
     },
   },
 };
