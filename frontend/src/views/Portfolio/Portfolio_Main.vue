@@ -517,7 +517,7 @@
       </div>
       <template slot="footer">
         <base-button type="secondary" @click="modal.show = false">Close</base-button>
-        <base-button type="primary" @click="checkRequestForm()">요청하기</base-button>
+        <base-button type="primary" @click="beforeCheck()">요청하기</base-button>
       </template>
     </modal>
 
@@ -785,50 +785,7 @@ export default {
     // console.log(this.events);
   },
   methods: {
-    checkRequestForm() {
-      let valid = true;
-      let message = "";
-      // 필수 입력이 되었는지 확인
-      valid &&
-        !this.request_info.request_nickname &&
-        ((valid = false), (message = "의뢰인의 닉네임이 없습니다."));
-      valid &&
-        !this.request_info.response_nickname &&
-        ((valid = false), (message = "편집자의 닉네임이 없습니다."));
-      valid &&
-        !this.dates.range &&
-        ((valid = false), (message = "기간을 입력해주세요"));
-      valid &&
-        !this.request_info.video_origin_length &&
-        ((valid = false), (message = "원본 영상 길이를 입력해주세요"));
-      valid &&
-        !this.request_info.video_result_length &&
-        ((valid = false), (message = "최종 영상 길이를 입력해주세요"));
-
-      //숫자인지 체크
-      // valid &&
-      //   !this.checkNumberFormat(this.request_info.video_origin_length) &&
-      //   ((valid = false), (message = "숫자만 입력해주세요"));
-      // valid &&
-      //   !this.checkNumberFormat(this.request_info.video_result_length) &&
-      //   ((valid = false), (message = "숫자만 입력해주세요"));
-      // valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
-
-      if (valid) this.requestForm();
-      else {
-        alertify.error(message, 3);
-        return;
-      }
-    },
-    checkNumberFormat(number) {
-      let exptext = /^[0-9]/;
-      //숫자로만 이루어져 있는지 확인
-      if (exptext.test(number) == false) {
-        return false;
-      }
-      return true;
-    },
-    requestForm() {
+    beforeCheck() {
       // 요청 양식에 따라 가공
       // this.dates.range (YYYY-MM-DD || YYYY-MM-DD to YYYY-MM-DD)
       let dates = this.dates.range.split("to");
@@ -894,13 +851,64 @@ export default {
       if (this.video_skill.outr) {
         this.request_info.video_skill += ",outr";
       }
-      // console.log(dates);
+      this.checkRequestForm();
+    },
+    checkRequestForm() {
+      let valid = true;
+      let message = "";
+      // 필수 입력이 되었는지 확인
+      valid &&
+        !this.request_info.request_nickname &&
+        ((valid = false), (message = "의뢰인의 닉네임이 없습니다."));
+      valid &&
+        !this.request_info.response_nickname &&
+        ((valid = false), (message = "편집자의 닉네임이 없습니다."));
+      valid &&
+        !this.request_info.video_type &&
+        ((valid = false), (message = "편집 목적을 선택해주세요."));
+      valid &&
+        !this.request_info.video_style &&
+        ((valid = false), (message = "영상 종류를 선택해주세요."));
+      valid &&
+        !this.dates.range &&
+        ((valid = false), (message = "기간을 입력해주세요"));
+      valid &&
+        !this.request_info.video_origin_length &&
+        ((valid = false), (message = "원본 영상 길이를 입력해주세요"));
+      valid &&
+        !this.request_info.video_result_length &&
+        ((valid = false), (message = "최종 영상 길이를 입력해주세요"));
+
+      //숫자인지 체크
+      // valid &&
+      //   !this.checkNumberFormat(this.request_info.video_origin_length) &&
+      //   ((valid = false), (message = "숫자만 입력해주세요"));
+      // valid &&
+      //   !this.checkNumberFormat(this.request_info.video_result_length) &&
+      //   ((valid = false), (message = "숫자만 입력해주세요"));
+      // valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
+
+      if (valid) this.requestForm();
+      else {
+        alertify.error(message, 3);
+        return;
+      }
+    },
+    checkNumberFormat(number) {
+      let exptext = /^[0-9]/;
+      //숫자로만 이루어져 있는지 확인
+      if (exptext.test(number) == false) {
+        return false;
+      }
+      return true;
+    },
+    requestForm() {
       http
         .post("/request", this.request_info)
         .then(({ data }) => {
           if (data == "success") {
             // console.log("요청사항 완료")
-            this.initModalRequest();
+            this.initModalRequset();
             this.$store.commit("stepper/clearFilterFinderStatus");
             alertify.notify("작업 요청 완료", "success", 3);
             return;
