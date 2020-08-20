@@ -113,11 +113,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem0.video_origin_length }}분</td>
+                              <td>{{ requestitem0.video_origin_length }}</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem0.video_result_length }}분</td>
+                              <td>{{ requestitem0.video_result_length }}</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
@@ -232,11 +232,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem1.video_origin_length }}분</td>
+                              <td>{{ requestitem1.video_origin_length }}</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem1.video_result_length }}분</td>
+                              <td>{{ requestitem1.video_result_length }}</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
@@ -375,11 +375,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem2.video_origin_length }}분</td>
+                              <td>{{ requestitem2.video_origin_length }}</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem2.video_result_length }}분</td>
+                              <td>{{ requestitem2.video_result_length }}</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
@@ -513,11 +513,11 @@
                             </tr>
                             <tr>
                               <th>원본 동영상 길이</th>
-                              <td>{{ requestitem3.video_origin_length }}분</td>
+                              <td>{{ requestitem3.video_origin_length }}</td>
                             </tr>
                             <tr>
                               <th>원하는 동영상 길이</th>
-                              <td>{{ requestitem3.video_result_length }}분</td>
+                              <td>{{ requestitem3.video_result_length }}</td>
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
