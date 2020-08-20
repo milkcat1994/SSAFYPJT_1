@@ -956,6 +956,22 @@ export default {
           return;
         });
     },
+    getWorkCount2() {
+      http
+        .get("/request/res/" + this.portfolio.nickname + "/3")
+        .then(({ data }) => {
+          this.portfolio.workCnt += data.length;
+          if (data.length > 0) this.getAvgResponseTime(data);
+          else {
+            this.portfolio.responseTime = "-";
+          }
+          return;
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
+    },
     getInprogressDate() {
       http
         .get("/request/res/" + this.portfolio.nickname + "/1")
@@ -1095,6 +1111,7 @@ export default {
             // console.log(this.portfolio.skills);
             this.getInprogressDate();
             this.getWorkCount();
+            this.getWorkCount2();
             return;
           } else {
             return;
