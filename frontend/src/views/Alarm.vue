@@ -299,8 +299,9 @@
                           <b-button
                             class="justify-content-center"
                             style="background-color: #aaaaff"
+                            @click="copyClipboard('emailtarget')"
                           >
-                            <i class="fas fa-copy" style="color: white" @click="copyClipboard('emailtarget')"
+                            <i class="fas fa-copy" style="color: white" 
                               >복사하기</i
                             >
                           </b-button>
