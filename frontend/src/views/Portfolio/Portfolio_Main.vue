@@ -461,7 +461,7 @@
           <h3 class="mr-3">원본 영상 길이(분)</h3>
           <base-input
             alternative
-            placeholder="80"
+            placeholder="80분 이내"
             input-classes="form-control-alternative"
             v-model="request_info.video_origin_length"
           />
@@ -470,7 +470,7 @@
           <h3 class="mr-3">최종 영상 길이(분)</h3>
           <base-input
             alternative
-            placeholder="15"
+            placeholder="15분 이내"
             input-classes="form-control-alternative"
             v-model.number="request_info.video_result_length"
           />
