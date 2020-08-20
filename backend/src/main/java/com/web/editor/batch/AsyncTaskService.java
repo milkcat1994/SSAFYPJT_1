@@ -53,7 +53,7 @@ public class AsyncTaskService {
 			searchRedisService.deleteKeys("tags:*");
 			searchRedisService.portfolioTagSave(searchService.searchPortfolioTag());
 			
-			// long deleteSearch = searchRedisService.deleteKeys("search:");
+			long deleteSearch = searchRedisService.deleteKeys("search:");
 			// nickname과 uid Hash삭제
 			searchRedisService.deleteKeys("nickname:uid:");
 			System.out.println("Redis Update End");

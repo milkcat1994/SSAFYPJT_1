@@ -155,7 +155,7 @@
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @clickSearchTag="reSearchTag">
+        @click-search-tag="reSearchTag">
       </editors-list>
     </div>
   </div>
@@ -312,7 +312,7 @@ export default {
             } else {
               this.visable = false;
             }
-            // this.visable = true;
+            console.log(res.data.object);
           } else {
             console.log(res.data.status);
           }

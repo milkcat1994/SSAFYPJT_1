@@ -65,8 +65,8 @@
                       />
                       <img
                         v-else
-                        src="/img/theme/empty.png"
-                        alt="/img/theme/empty.png"
+                        src="/img/theme/empty.PNG"
+                        alt="영상없음"
                         style="width: 100%;"
                       />
                       <div class="d-flex justify-content-end mt-3 mx-3">
@@ -129,8 +129,8 @@
                             />
                             <img
                               v-else
-                              src="/img/theme/empty.png"
-                              alt="/img/theme/empty.png"
+                              src="/img/theme/empty.PNG"
+                              alt="영상없음"
                               style="width: 100%; height: 127.969px;"
                             />
                             <hr />
