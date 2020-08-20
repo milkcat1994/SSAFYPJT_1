@@ -908,7 +908,7 @@ export default {
         .then(({ data }) => {
           if (data == "success") {
             // console.log("요청사항 완료")
-            this.initModalRequset();
+            this.initModalRequest();
             this.$store.commit("stepper/clearFilterFinderStatus");
             alertify.notify("작업 요청 완료", "success", 3);
             return;
@@ -924,6 +924,7 @@ export default {
         });
     },
     initModalRequest() {
+      this.modal.show = false;
       this.request_info = {
         request_nickname: "",
         response_nickname: "",
@@ -938,7 +939,6 @@ export default {
         video_style: "",
         done_flag: 0,
       };
-      this.modal.show = false;
     },
     getWorkCount() {
       http
