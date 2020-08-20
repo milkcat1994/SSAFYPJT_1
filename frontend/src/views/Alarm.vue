@@ -65,7 +65,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem0.idx"
+                      v-b-toggle="'accordion-request' + requestitem0.idx"
                       variant="info"
                       @click="
                         getDetail(requestitem0.rid);
@@ -87,7 +87,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem0.idx"
+                    :id="'accordion-request' + requestitem0.idx"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -123,9 +123,6 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem0.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
                               </td>
                             </tr>
                             <tr>
@@ -184,7 +181,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem1.idx"
+                      v-b-toggle="'accordion-accept' + requestitem1.idx"
                       variant="info"
                       @click="
                         getDetail(requestitem1.rid);
@@ -206,7 +203,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem1.idx"
+                    :id="'accordion-accept' + requestitem1.idx"
                     accordion="my-accordion"
                     role="tabpane1"
                   >
@@ -242,9 +239,6 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem1.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
                               </td>
                             </tr>
                             <tr>
@@ -328,7 +322,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem2.idx"
+                      v-b-toggle="'accordion-done' + requestitem2.idx"
                       variant="info"
                       @click="
                         getDetail(requestitem2.rid);
@@ -350,7 +344,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem2.idx"
+                    :id="'accordion-done' + requestitem2.idx"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -386,9 +380,6 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem2.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
                               </td>
                             </tr>
                             <tr>
@@ -463,7 +454,7 @@
                   <b-card-header header-tag="header" class="p-1" role="tab">
                     <b-button
                       block
-                      v-b-toggle="'accordion-' + requestitem3.idx"
+                      v-b-toggle="'accordion-doneR' + requestitem3.idx"
                       variant="primary"
                       @click="
                         getDetail(requestitem3.rid);
@@ -485,7 +476,7 @@
                     </b-button>
                   </b-card-header>
                   <b-collapse
-                    :id="'accordion-' + requestitem3.idx"
+                    :id="'accordion-doneR' + requestitem3.idx"
                     accordion="my-accordion"
                     role="tabpanel"
                   >
@@ -524,9 +515,6 @@
                               <th>동영상 스타일</th>
                               <td>
                                 {{ requestitem3.video_style }}
-                                <div style="color: blue; float: right">
-                                  {{ requestitem.tag_list }}
-                                </div>
                               </td>
                             </tr>
                             <tr>
@@ -636,6 +624,12 @@ export default {
   },
   data() {
     return {
+      requestitems0: [],
+      requestitems1: [],
+      requestitems2: [],
+      requestitems3: [],
+      requestitem: {},
+
       eventCategories: [
         {
           id: 2,
@@ -702,60 +696,24 @@ export default {
           "getProgressdate",
           "/request/date/res/" + this.$session.get("nickname")
         );
-        store.dispatch(
-          "getRequestitems0",
-          "/request/res/" + this.$session.get("nickname") + "/0"
-        );
-        store.dispatch(
-          "getRequestitems1",
-          "/request/res/" + this.$session.get("nickname") + "/1"
-        );
-        store.dispatch(
-          "getRequestitems2",
-          "/request/res/" + this.$session.get("nickname") + "/2"
-        );
-        store.dispatch(
-          "getRequestitems3",
-          "/request/res/" + this.$session.get("nickname") + "/3"
-        );
       } else if (this.$session.get("auth") == "noneditor") {
         store.dispatch(
           "getProgressdate",
           "/request/date/req/" + this.$session.get("nickname")
         );
-        store.dispatch(
-          "getRequestitems0",
-          "/request/req/" + this.$session.get("nickname") + "/0"
-        );
-        store.dispatch(
-          "getRequestitems1",
-          "/request/req/" + this.$session.get("nickname") + "/1"
-        );
-        store.dispatch(
-          "getRequestitems2",
-          "/request/req/" + this.$session.get("nickname") + "/2"
-        );
-        store.dispatch(
-          "getRequestitems3",
-          "/request/req/" + this.$session.get("nickname") + "/3"
-        );
       }
+      this.setRequestList(this.$session.get("auth"));
       this.readNotify();
     }
   },
   computed: {
-    ...mapGetters(["requestitems0"]),
-    ...mapGetters(["requestitems1"]),
-    ...mapGetters(["requestitems2"]),
-    ...mapGetters(["requestitems3"]),
-    ...mapGetters(["requestitem"]),
     ...mapGetters(["progressdate"]),
     ...mapGetters(["holidaydate"]),
     ...mapGetters(["scheduledate"]),
   },
   methods: {
     getDetail(rid) {
-      store.dispatch("getRequestitem", "/request/" + rid);
+      this.requestitem = this.getRequestitem("/request/" + rid);
     },
     // 요청 수락
     acceptRequest(rid) {
@@ -771,14 +729,7 @@ export default {
         })
         .finally(() => {
           // 목록 새로고침
-          store.dispatch(
-            "getRequestitems0",
-            "/request/res/" + this.$session.get("nickname") + "/0"
-          );
-          store.dispatch(
-            "getRequestitems1",
-            "/request/res/" + this.$session.get("nickname") + "/1"
-          );
+          this.setRequestList(this.authmode);
           this.setProgressDate();
         });
     },
@@ -796,16 +747,7 @@ export default {
         })
         .finally(() => {
           // 목록 새로고침
-          if (this.$session.get("auth") == "editor")
-            store.dispatch(
-              "getRequestitems0",
-              "/request/res/" + this.$session.get("nickname") + "/0"
-            );
-          else if (this.$session.get("auth") == "noneditor")
-            store.dispatch(
-              "getRequestitems0",
-              "/request/req/" + this.$session.get("nickname") + "/0"
-            );
+          this.setRequestList(this.authmode);
           this.setDateClean();
         });
     },
@@ -823,25 +765,7 @@ export default {
         })
         .finally(() => {
           // 목록 새로고침
-          if (this.$session.get("auth") == "editor") {
-            store.dispatch(
-              "getRequestitems1",
-              "/request/res/" + this.$session.get("nickname") + "/1"
-            );
-            store.dispatch(
-              "getRequestitems2",
-              "/request/res/" + this.$session.get("nickname") + "/2"
-            );
-          } else if (this.$session.get("auth") == "noneditor") {
-            store.dispatch(
-              "getRequestitems1",
-              "/request/req/" + this.$session.get("nickname") + "/1"
-            );
-            store.dispatch(
-              "getRequestitems2",
-              "/request/req/" + this.$session.get("nickname") + "/2"
-            );
-          }
+          this.setRequestList(this.authmode);
           this.setProgressDate();
         });
     },
@@ -859,14 +783,8 @@ export default {
         })
         .finally(() => {
           // 목록 새로고침
-          store.dispatch(
-            "getRequestitems2",
-            "/request/req/" + this.$session.get("nickname") + "/2"
-          );
-          store.dispatch(
-            "getRequestitems3",
-            "/request/req/" + this.$session.get("nickname") + "/3"
-          );
+          this.getRequestitems2("/request/" + "req" + "/" + this.$session.get("nickname") + "/2");
+          this.getRequestitems3("/request/" + "req" + "/" + this.$session.get("nickname") + "/3");
         });
     },
 
@@ -929,6 +847,7 @@ export default {
     deleteReview(rid) {
       let msg = "리뷰 삭제 실패했습니다.";
       let session = this.$session;
+      let cur = this;
       alertify.confirm(
         "리뷰 삭제",
         "삭제 하시겠습니까?",
@@ -941,8 +860,8 @@ export default {
                 alertify.notify(msg, "success", 3);
                 document.getElementById("closemodal").click();
 
-                store.dispatch("getRequestitems2", "/request/req/" + session.get("nickname") + "/2");
-                store.dispatch("getRequestitems3", "/request/req/" + session.get("nickname") + "/3");
+                cur.getRequestitems2("/request/" + "req" + "/" + session.get("nickname") + "/2");
+                cur.getRequestitems3("/request/" + "req" + "/" + session.get("nickname") + "/3");
 
                 return;
               } else {
@@ -963,10 +882,6 @@ export default {
         }
       );
     },
-    resetReviewList(){
-       store.dispatch("getRequestitems2", "/request/req/" + this.$session.get("nickname") + "/2");
-      store.dispatch("getRequestitems3", "/request/req/" + this.$session.get("nickname") + "/3");
-    },
     setRequestDate(start, end, idx) {
       if (this.idxDetail == idx) {
         // 상세보기가 열려잇으면 닫으면서 날짜표시 지움
@@ -983,20 +898,22 @@ export default {
       this.events[this.events.length - 1].end = "";
     },
     setProgressDate() {
-      if (this.$session.get("auth") == "editor")
+      if (this.$session.get("auth") == "editor"){
         store.dispatch(
           "getProgressdate",
           "/request/date/res/" + this.$session.get("nickname")
         );
-      else if (this.$session.get("auth") == "noneditor")
+      }
+      else if (this.$session.get("auth") == "noneditor"){ 
         store.dispatch(
           "getProgressdate",
           "/request/date/req/" + this.$session.get("nickname")
         );
-      store.dispatch(
-        "getHolidaydate",
-        "/schedule/holiday/" + this.$session.get("uid")
-      );
+        store.dispatch(
+          "getHolidaydate",
+          "/schedule/holiday/" + this.$session.get("uid")
+        );
+      }
       this.events = this.scheduledate;
     },
 
@@ -1039,37 +956,18 @@ export default {
         });
     },
     toggleMode() {
-      if (this.authmode == "editor") {
-        this.authmode = "noneditor";
-        this.toggleModeList("req");
-      } else {
-        this.authmode = "editor";
-        this.toggleModeList("res");
-      }
-      this.toggleVal = !this.toggleVal;
-    },
+      this.requestitems0 = [];
+      this.requestitems1 = [];
+      this.requestitems2 = [];
+      this.requestitems3 = [];
+      this.idxDetail = "";
+      this.setDateClean();
+      if (this.authmode == "editor") this.authmode = "noneditor";
+      else this.authmode = "editor";
 
-    toggleModeList(mode) {
-      store.dispatch(
-        "getProgressdate",
-        "/request/date/" + mode + "/" + this.$session.get("nickname")
-      );
-      store.dispatch(
-        "getRequestitems0",
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/0"
-      );
-      store.dispatch(
-        "getRequestitems1",
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/1"
-      );
-      store.dispatch(
-        "getRequestitems2",
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/2"
-      );
-      store.dispatch(
-        "getRequestitems3",
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/3"
-      );
+      this.setRequestList(this.authmode);
+      
+      this.toggleVal = !this.toggleVal;
     },
     copyClipboard(elementID){
       let element = document.getElementById(elementID);
@@ -1077,6 +975,63 @@ export default {
       navigator.clipboard.writeText(elementText);
       alertify.notify("이메일을 복사하였습니다.", "info", 2);
     },
+    getRequestitems0(payload) {
+      http
+        .get(payload)
+        .then(({ data }) => {
+          this.requestitems0 = data;
+        })
+        .catch(() => {
+          alertify.error("에러가 발생했습니다.", 3);
+        });
+    },
+    getRequestitems1(payload) {
+      http
+        .get(payload)
+        .then(({ data }) => {
+          this.requestitems1 = data;
+        })
+        .catch(() => {
+          alertify.error("에러가 발생했습니다.", 3);
+        });
+    },
+    getRequestitems2(payload) {
+      http
+        .get(payload)
+        .then(({ data }) => {
+          this.requestitems2 = data;
+        })
+        .catch(() => {
+          alertify.error("에러가 발생했습니다.", 3);
+        });
+    },
+    getRequestitems3(payload) {
+      http
+        .get(payload)
+        .then(({ data }) => {
+          this.requestitems3 = data;
+        })
+        .catch(() => {
+          alertify.error("에러가 발생했습니다.", 3);
+        });
+    },
+    getRequestitem(payload) {
+      http.get(payload).then(({ data }) => {
+        this.requestitem = data;
+      });
+    },
+    setRequestList(authmode){
+      let mode = "";
+      if (authmode == 'editor') mode = "res";
+      else if (authmode == 'noneditor') mode = "req";
+
+      this.getRequestitems0("/request/" + mode + "/" + this.$session.get("nickname") + "/0");
+      this.getRequestitems1("/request/" + mode + "/" + this.$session.get("nickname") + "/1");
+      this.getRequestitems2("/request/" + mode + "/" + this.$session.get("nickname") + "/2");
+      this.getRequestitems3("/request/" + mode + "/" + this.$session.get("nickname") + "/3");
+      store.dispatch("getProgressdate", "/request/date/" + mode + "/" + this.$session.get("nickname"));
+
+    }
   },
 };
 </script>

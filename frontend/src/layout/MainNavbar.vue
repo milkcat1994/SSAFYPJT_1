@@ -355,7 +355,6 @@ export default {
       this.$session.destroy();
       this.$store.commit("stepper/clearFilterFinderStatus");
       this.$store.commit("auth/mutateIsLogin", false);
-      store.dispatch("initDataOnAlarm");
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
       // this.$forceUpdate();
