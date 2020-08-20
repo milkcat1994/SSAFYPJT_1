@@ -145,13 +145,13 @@
                       <div id="editorBtn" v-if="authmode == 'editor'">
                         <b-button
                           class="statusBtn"
-                          style="background-color: #0099ff"
+                          style="background-color: #0099ff; color:white"
                           @click="acceptRequest(requestitem0.rid)"
                           >요청 수락</b-button
                         >
                         <b-button
                           class="statusBtn"
-                          style="background-color: #aaaaaa"
+                          style="background-color: #aaaaaa; color:white"
                           @click="denyRequest(requestitem0.rid)"
                           >요청 거절</b-button
                         >
@@ -159,7 +159,7 @@
                       <div id="noneditorBtn" v-if="authmode == 'noneditor'">
                         <b-button
                           class="statusBtn"
-                          style="background-color: #aaaaaa"
+                          style="background-color: #aaaaaa; color:white"
                           @click="denyRequest(requestitem0.rid)"
                           >요청 취소</b-button
                         >
@@ -264,21 +264,21 @@
 
                       <b-button
                         class="statusBtn"
-                        style="background-color: #0099ff"
+                        style="background-color: #0099ff; color:white;"
                         @click="doneRequest(requestitem1.rid)"
                         >요청 완료</b-button
                       >
                       <b-button
                         v-if="authmode == 'editor'"
                         class="statusBtn"
-                        style="background-color: #aaaaff"
+                        style="background-color: #aaaaff; color:white;"
                         @click="getEmail(requestitem1.request_nickname, requestitem1.rid)"
                         >이메일 보기</b-button
                       >
                       <b-button
                         v-if="authmode == 'noneditor'"
                         class="statusBtn"
-                        style="background-color: #aaaaff"
+                        style="background-color: #aaaaff; color:white;"
                         @click="getEmail(requestitem1.response_nickname, requestitem1.rid)"
                         >이메일 보기</b-button
                       >
@@ -300,7 +300,7 @@
                             class="justify-content-center"
                             style="background-color: #aaaaff"
                           >
-                            <i class="fas fa-copy" style="color: #000000" @click="copyClipboard('emailtarget')"
+                            <i class="fas fa-copy" style="color: white" @click="copyClipboard('emailtarget')"
                               >복사하기</i
                             >
                           </b-button>
@@ -406,7 +406,7 @@
                       </b-card-text>
                       <b-button
                         class="statusBtn"
-                        style="background-color: #0099ff"
+                        style="background-color: #0099ff; color:white"
                         v-if="authmode == 'noneditor'"
                         @click="$bvModal.show('review-' + requestitem2.rid)"
                         >후기 남기기</b-button
@@ -438,11 +438,14 @@
                           </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                          <b-button @click="writeReview(requestitem2.rid)"
+                          <b-button 
+                            variant="info" @click="writeReview(requestitem2.rid)"
+                            style="color:white;"
                             >작성 완료</b-button
                           >
                           <b-button
                             @click="$bvModal.hide('review-' + requestitem2.rid)"
+                            style="color:white; background-color:gray;"
                             >창닫기</b-button
                           >
                         </div>
@@ -541,7 +544,7 @@
                       </b-card-text>
                       <b-button
                         class="statusBtn"
-                        style="background-color: #0099ff"
+                        style="background-color: #0099ff; color:white;"
                         v-if="authmode == 'noneditor'"
                         @click="getReview(requestitem3.rid)"
                         >후기 보기</b-button
@@ -585,11 +588,13 @@
                           <b-button
                             variant="danger"
                             @click="deleteReview(requestitem3.rid)"
+                            style="color:white;"
                             >삭제하기</b-button
                           >
                           <b-button
                             id="closemodal"
                             @click="$bvModal.hide('donereview' + requestitem3.rid)"
+                            style="background-color:gray; color:white;"
                             >창닫기</b-button
                           >
                         </div>
