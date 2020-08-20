@@ -24,7 +24,7 @@
       <!-- for toggle -->
       <label class="switch" v-if="$session.get('auth') == 'editor'">
         <input type="checkbox" @click="toggleMode" />
-        <span class="slider round pl-2 pt-1 text-white">요청한 목록 보기</span>
+        <span class="slider round pl-2 pt-1 text-white">일반 사용자 모드</span>
       </label>
 
       <div style="display: table; width:100%">
