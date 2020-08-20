@@ -42,7 +42,7 @@
               <h1 class="hr-sect">슈퍼편집자를 만나보세요.</h1>
             </div>
 
-            <div class="px-4 d-flex justify-content-center"> 
+            <div class="px-4 d-flex justify-content-center">
               <b-carousel
                 id="carousel-1"
                 v-model="slide"
@@ -57,14 +57,18 @@
                 <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
                   <template v-slot:img>
                     <router-link :to="`/portfolio?no=${editor.uid}`">
-                    <img v-if="editor.url" class="zoom" :src="'https://img.youtube.com/vi/' + editor.url.substr(30) + '/0.jpg'" 
-                      style="width: 100%;"/>
-                    <img
-                      v-else
-                      src="/img/theme/empty.png"
-                      alt="/img/theme/empty.png"
-                      style="width: 100%;"
-                    />
+                      <img
+                        v-if="editor.url"
+                        class="zoom"
+                        :src="'https://img.youtube.com/vi/' + editor.url.substr(30) + '/0.jpg'"
+                        style="width: 100%;"
+                      />
+                      <img
+                        v-else
+                        src="/img/theme/empty.png"
+                        alt="/img/theme/empty.png"
+                        style="width: 100%;"
+                      />
                       <div class="d-flex justify-content-end mt-3 mx-3">
                         <h2
                           class="mt-0 mb-1 mr-2"
@@ -81,17 +85,17 @@
                           <span class="mr-2"># {{ t }}</span>
                         </div>
                       </div>
-                    
-                    <div class="d-flex justify-content-end mb-3 mx-3">
-                      <h4>
-                        <i class="fas fa-heart mr-2" style="color:red"></i>
-                        <span class="mr-3">{{ editor.bookmarkNumber }}</span>
-                      </h4>
-                      <h4>
-                        <i class="fas fa-star mr-2" style="color:#ffbf00"></i>
-                        <span class="mr-3">{{ round(editor.avgScore) }}</span>
-                      </h4>
-                    </div>
+
+                      <div class="d-flex justify-content-end mb-3 mx-3">
+                        <h4>
+                          <i class="fas fa-heart mr-2" style="color:red"></i>
+                          <span class="mr-3">{{ editor.bookmarkNumber }}</span>
+                        </h4>
+                        <h4>
+                          <i class="fas fa-star mr-2" style="color:#ffbf00"></i>
+                          <span class="mr-3">{{ round(editor.avgScore) }}</span>
+                        </h4>
+                      </div>
                     </router-link>
                   </template>
                 </b-carousel-slide>
@@ -118,8 +122,11 @@
                         >
                           <b-card id="maincard" @click="movePortfolio(recEditor.uid)">
                             <img src alt />
-                            <img v-if="recEditor.url" :src="'https://img.youtube.com/vi/' + recEditor.url.substr(30) + '/0.jpg'" 
-                              style="width: 100%;"/>
+                            <img
+                              v-if="recEditor.url"
+                              :src="'https://img.youtube.com/vi/' + recEditor.url.substr(30) + '/0.jpg'"
+                              style="width: 100%;"
+                            />
                             <img
                               v-else
                               src="/img/theme/empty.png"
