@@ -35,8 +35,23 @@ export default {
         }
       })
       return this.initStages
+    },
+    selectedFilters() {
+      let arr = new Array();
+      for (const item of this.initStages) {
+        if (item.status) {
+          arr.push(item.value)
+        }
+      }
+      return arr
     }
   },
+  // watch:{
+  //   currentStep(){
+  //     console.log(this.currentStep)
+    
+  //   }
+  // },
   methods: {
     changeStep(stageNum) {
       this.$emit('change-step', stageNum)
