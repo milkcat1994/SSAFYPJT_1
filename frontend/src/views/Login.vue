@@ -119,12 +119,16 @@ export default {
           if (data.data == "success") {
             this.$session.start();
             console.log(data.object);
+            this.$store.commit("auth/mutateIsLogin", true);
             this.$session.set("uid", data.object.uid);
             this.$session.set("nickname", data.object.nickname);
             this.$session.set("auth", data.object.auth);
             this.initInputL();
             this.$router.push("/");
             return;
+          }
+          else if(data.data == "fail"){
+            alertify.error("아이디 및 비밀번호를 확인해주세요", 3);
           }
         })
         .catch(() => {
@@ -146,6 +150,7 @@ export default {
               if (data.data == "success") {
                 alertify.success("로그인이 되었습니다.");
                 this.$session.start();
+      this.$store.commit("auth/mutateIsLogin", true);
                 this.$session.set("uid", data.object.uid);
                 this.$session.set("nickname", data.object.nickname);
                 this.$session.set("auth", data.object.auth);
