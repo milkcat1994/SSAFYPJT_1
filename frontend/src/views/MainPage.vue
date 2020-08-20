@@ -65,7 +65,7 @@
                       />
                       <img
                         v-else
-                        src="/img/theme/empty.PNG"
+                        src="img/theme/empty.png"
                         alt="영상없음"
                         style="width: 100%;"
                       />
@@ -129,7 +129,7 @@
                             />
                             <img
                               v-else
-                              src="/img/theme/empty.PNG"
+                              src="/img/theme/empty.png"
                               alt="영상없음"
                               style="width: 100%; height: 127.969px;"
                             />

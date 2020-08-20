@@ -26,7 +26,7 @@
         <li>검색 옵션을 변경해서 다시 검색해 보세요.</li>
       </div>
       <ul class="list-unstyled mt-4">
-        <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
+        <li class="mb-4" v-for="editor in currentEditors" :key="`currEdit_${editor.uid}`">
           <div class="container">
             <div class="row">
               <div class="col-3">
@@ -84,7 +84,7 @@
                   <div class="col-8">
                     <button
                       class="btn btn-info btn-sm mb-1"
-                      :key="index"
+                      :key="`tag_${index}`"
                       @click="searchTag(tag)"
                       v-for="(tag, index) in editor.tags"
                     >{{ tag }}</button>
