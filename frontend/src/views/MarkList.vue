@@ -22,28 +22,31 @@
         <div
           v-for="(bookmark, index) in bookmarks"
           :key="index"
-          class="card col-lg-3 col-6 mr-5 mb-3"
-          style="width: 18rem;"
+          class="card col-lg-3 col-6 mr-5 mb-3 zoom"
+          style="width: 18rem; cursor:pointer;"
+          @click="movePortfolio(bookmark.muid)"
         >
           <br />
           <!-- src는 해당 포트폴리오의 main 동영상 링크 가져오기 -->
           <!-- 227.5 * 127.969 -->
-          <LazyYoutubeVideo
+          <img v-if="bookmark.mainUrl" :src="'https://img.youtube.com/vi/' + getMainVideo(bookmark.mainUrl).substr(30) + '/0.jpg'" 
+            style="width: 100%;"/>
+          <!-- <LazyYoutubeVideo
             v-if="bookmark.mainUrl"
             :src="getMainVideo(bookmark.mainUrl)"
             style="width: 100%;"
-          />
+          /> -->
           <!-- main video가 없을때 보여지는 img -->
           <img
             v-else
-            src="/img/theme/ryan.jpg"
-            alt="/img/theme/ryan.jpg"
+            src="/img/theme/empty.PNG"
+            alt="영상없음"
             style="width: 100%; height: 127.969px;"
           />
           <!-- src="https://www.youtube.com/embed/5iSlfF8TQ9k" -->
           <hr class="my-1" />
           <!-- card body에 해당 포트폴리오로 이동 할 수 있도록 링크 달기 -->
-          <div class="card-body" @click="movePortfolio(bookmark.muid)" style="cursor:pointer;">
+          <div class="card-body">
             <h3 class="card-title">{{bookmark.nickname}}</h3>
             <p class="card-text">
               <!-- 해당 포트폴리오의 태그 불러와서 나열 -->
@@ -94,14 +97,14 @@
 <script>
 // import { Rate } from "vue-rate";
 // import 'vue-rate/dist/vue-rate.css'
-import LazyYoutubeVideo from "vue-lazy-youtube-video";
+// import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
 export default {
   name: "marklist",
   components: {
-    LazyYoutubeVideo,
+    // LazyYoutubeVideo,
     // Rate,
   },
   data() {
@@ -226,5 +229,11 @@ export default {
 <style>
 .bookmark {
   min-height: 50vh;
+}
+
+.zoom:hover {
+  -ms-transform: scale(1.03);
+  -webkit-transform: scale(1.03);
+  transform: scale(1.03);
 }
 </style>

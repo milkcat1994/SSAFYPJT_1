@@ -26,14 +26,20 @@
         <li>검색 옵션을 변경해서 다시 검색해 보세요.</li>
       </div>
       <ul class="list-unstyled mt-4">
-        <li class="mb-4" v-for="editor in currentEditors" :key="editor.uid">
+        <li class="mb-4" v-for="editor in currentEditors" :key="`currEdit_${editor.uid}`">
           <div class="container">
             <div class="row">
               <div class="col-3">
                 <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
-                  <img src alt />
-                  <LazyYoutubeVideo :src="editor.url" style="width: 100%;" />
+                  <!-- <img src alt /> -->
+                  <LazyYoutubeVideo v-if="editor.url" :src="editor.url" style="width: 100%;" />
+                  <img
+                    v-else
+                    src="/img/theme/empty.PNG"
+                    alt="영상없음"
+                    style="width: 100%; border: 1px solid #555; height: 135px;"
+                    />
                 </router-link>
               </div>
               <div class="col-9 pt-2 d-flex flex-column justify-content-around">
@@ -78,7 +84,7 @@
                   <div class="col-8">
                     <button
                       class="btn btn-info btn-sm mb-1"
-                      :key="index"
+                      :key="`tag_${index}`"
                       @click="searchTag(tag)"
                       v-for="(tag, index) in editor.tags"
                     >{{ tag }}</button>
@@ -131,8 +137,8 @@ export default {
   data() {
     return {
       // 태그들
-      tags: [],
-      tag: "",
+      // tags: [],
+      // tag: "",
       editorsPerPage: 5,
       currentPage: 1,
       sortKey: "정렬",
@@ -226,8 +232,7 @@ export default {
     },
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
-      // console.log(tag)
-      this.$emit("clickSearchTag", tag);
+      this.$emit("click-search-tag", tag);
     },
   },
 };

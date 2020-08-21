@@ -25,12 +25,6 @@ export default new Vuex.Store({
     notifyitems: [],
     notifyitem: {},
 
-    requestitems0: [],
-    requestitems1: [],
-    requestitems2: [],
-    requestitems3: [],
-    requestitem: {},
-
     tagitem: "",
 
     progressdate: [],
@@ -44,23 +38,6 @@ export default new Vuex.Store({
     },
     notifyitem(state) {
       return state.notifyitem;
-    },
-
-    // request
-    requestitems0(state) {
-      return state.requestitems0;
-    },
-    requestitems1(state) {
-      return state.requestitems1;
-    },
-    requestitems2(state) {
-      return state.requestitems2;
-    },
-    requestitems3(state) {
-      return state.requestitems3;
-    },
-    requestitem(state) {
-      return state.requestitem;
     },
     progressdate(state) {
       return state.progressdate;
@@ -125,60 +102,6 @@ export default new Vuex.Store({
       state.notifyitem = notifyitem;
     },
 
-    // request
-    mutateSetRequestitems0(state, requestitems0) {
-      let obj = [];
-      for (let index = 0; index < requestitems0.length; index++) {
-        let element = requestitems0[index];
-        element.idx = index + "request";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems0 = obj;
-    },
-    mutateSetRequestitems1(state, requestitems1) {
-      let obj = [];
-      for (let index = 0; index < requestitems1.length; index++) {
-        let element = requestitems1[index];
-        element.idx = index + "pogreess";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems1 = obj;
-    },
-    mutateSetRequestitems2(state, requestitems2) {
-      let obj = [];
-      for (let index = 0; index < requestitems2.length; index++) {
-        let element = requestitems2[index];
-        element.idx = index + "done";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems2 = obj;
-    },
-    mutateSetRequestitems3(state, requestitems3) {
-      let obj = [];
-      for (let index = 0; index < requestitems3.length; index++) {
-        let element = requestitems3[index];
-        element.uid = index + "doneR";
-
-        obj.push(element);
-      }
-      // state.requestitems = requestitems;
-      state.requestitems3 = obj;
-    },
-    mutateSetRequestitems0123(state, requestitems) {
-      state.requestitems0 = requestitems;
-      state.requestitems1 = requestitems;
-      state.requestitems2 = requestitems;
-      state.requestitems3 = requestitems;
-    },
-    mutateSetRequestitem(state, requestitem) {
-      state.requestitem = requestitem;
-    },
     mutateSetProgressdate(state, progressdate) {
       state.progressdate = progressdate;
     },
@@ -212,52 +135,6 @@ export default new Vuex.Store({
       });
     },
 
-    // request
-    getRequestitems0(context, payload) {
-      http
-        .get(payload)
-        .then(({ data }) => {
-          context.commit("mutateSetRequestitems0", data);
-        })
-        .catch(() => {
-          alertify.error("에러가 발생했습니다.", 3);
-        });
-    },
-    getRequestitems1(context, payload) {
-      http
-        .get(payload)
-        .then(({ data }) => {
-          context.commit("mutateSetRequestitems1", data);
-        })
-        .catch(() => {
-          alertify.error("에러가 발생했습니다.", 3);
-        });
-    },
-    getRequestitems2(context, payload) {
-      http
-        .get(payload)
-        .then(({ data }) => {
-          context.commit("mutateSetRequestitems2", data);
-        })
-        .catch(() => {
-          alertify.error("에러가 발생했습니다.", 3);
-        });
-    },
-    getRequestitems3(context, payload) {
-      http
-        .get(payload)
-        .then(({ data }) => {
-          context.commit("mutateSetRequestitems3", data);
-        })
-        .catch(() => {
-          alertify.error("에러가 발생했습니다.", 3);
-        });
-    },
-    getRequestitem(context, payload) {
-      http.get(payload).then(({ data }) => {
-        context.commit("mutateSetRequestitem", data);
-      });
-    },
     getProgressdate(context, payload) {
       http.get(payload).then(({ data }) => {
         context.commit("mutateSetProgressdate", data);
@@ -268,12 +145,6 @@ export default new Vuex.Store({
         context.commit("mutateSetHolidaydate", data);
       });
     },
-    initDataOnAlarm(context) {
-      context.commit("mutateSetHolidaydate", []);
-      context.commit("mutateSetProgressdate", []);
-      context.commit("mutateSetRequestitems0123", []);
-    },
-
     getTagitem(context, payload) {
       http.get(payload).then(({ data }) => {
         context.commit("mutateSetTagitem", data);

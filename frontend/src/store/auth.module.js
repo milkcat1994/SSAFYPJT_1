@@ -49,14 +49,7 @@ export const auth = {
 
             resolve({ data });
           })
-          .catch((error) => {
-            if (error.response) {
-              if (error.response.status == "404") {
-                alert("아이디 또는 비밀번호가 올바르지 않습니다.", 3);
-              } else {
-                alert("로그인 처리시 에러가 발생했습니다.", 3);
-              }
-            }
+          .catch(() => {
             return reject();
           });
       });
