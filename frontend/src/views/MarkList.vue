@@ -39,8 +39,8 @@
           <!-- main video가 없을때 보여지는 img -->
           <img
             v-else
-            src="/img/theme/empty.png"
-            alt="/img/theme/empty.png"
+            src="/img/theme/empty.PNG"
+            alt="영상없음"
             style="width: 100%; height: 127.969px;"
           />
           <!-- src="https://www.youtube.com/embed/5iSlfF8TQ9k" -->

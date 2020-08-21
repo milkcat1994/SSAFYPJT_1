@@ -65,7 +65,7 @@
                       />
                       <img
                         v-else
-                        src="img/theme/empty.png"
+                        src="img/theme/empty.PNG"
                         alt="영상없음"
                         style="width: 100%;"
                       />
