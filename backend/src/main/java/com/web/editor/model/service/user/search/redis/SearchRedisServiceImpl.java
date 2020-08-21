@@ -231,7 +231,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
 		switch (searchRequest.getSearchType()) {
             case "TAG":
                 // 태그 검색이지만 태그 검색어가 없을경우 모두 검색 해야함
-                if((searchRequest.getSearchTags().size() == 0)||(searchRequest.getSearchTags().size() == 1 && searchRequest.getSearchTags().get(0).equals(""))) {
+                if(searchRequest.getSearchTags().size() <= 1 && searchRequest.getSearchTags().get(0).equals("")) {
                     sb.append("all");
                 }
                 else{
@@ -393,7 +393,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         switch (searchRequest.getSearchType()) {
             case "TAG":
                 // 태그 검색이지만 태그 검색어가 없을경우 모두 검색 해야함
-                if((searchRequest.getSearchTags().size() == 0)||(searchRequest.getSearchTags().size() == 1 && searchRequest.getSearchTags().get(0).equals(""))) {
+                if(searchRequest.getSearchTags().size() <= 1 && searchRequest.getSearchTags().get(0).equals("")) {
                     sb.append("all");
                 }
                 else{
@@ -434,6 +434,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // video filter와 검색 결과를 담은 key Set이다.
         keySet.add(filterString);
         String searchString = sb.toString();
+        // System.out.println(searchRequest.getSearchTags());
         // System.out.println(searchString);
         sb.setLength(0);
         // 검색 결과 uid를 담는 Set이다. -> 교집합 통해 uid집합 만들기

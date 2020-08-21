@@ -79,7 +79,6 @@ export default {
   watch: {
     // session이 바뀔때마다 로그인 상태인지 확인
     $route() {
-      // console.log("watch!!")
       if (this.$session.exists()) {
         this.isLogin = true;
         this.isEditor = this.$session.get("auth") == "editor";

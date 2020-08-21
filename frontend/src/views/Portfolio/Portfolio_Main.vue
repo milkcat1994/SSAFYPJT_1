@@ -25,7 +25,7 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col-xl-5 order-xl-2 mb-5 mb-xl-0">
-          <div class="card card-profile shadow" style="min-height: 486px;">
+          <div class="card card-profile shadow" style="min-height: 455px;">
             <div class="card-header">
               <h1>
                 {{ portfolio.nickname }}
@@ -122,7 +122,8 @@
         <div class="col-xl-7 order-xl-1">
           <card shadow type="secondary">
             <div class="HeadVideo">
-              <LazyYoutubeVideo :src="mainVideo" style="width: 100%" />
+              <LazyYoutubeVideo v-if="mainVideo.length > 31" :src="mainVideo" style="width: 100%" />
+              <img v-else src="/img/theme/empty.png" alt="영상없음" style="width: 100%;"/>
             </div>
           </card>
         </div>
@@ -1213,7 +1214,6 @@ export default {
       result.forEach((element) => {
         obj = new Object();
         obj.url = element.url;
-        // obj.previewImageSize = 'maxresdefault';
         res.push(obj);
       });
       return res;

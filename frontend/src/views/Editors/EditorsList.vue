@@ -36,7 +36,7 @@
                   <LazyYoutubeVideo v-if="editor.url" :src="editor.url" style="width: 100%;" />
                   <img
                     v-else
-                    src="/img/theme/empty.PNG"
+                    src="/img/theme/empty.png"
                     alt="영상없음"
                     style="width: 100%; border: 1px solid #555; height: 135px;"
                     />
@@ -232,8 +232,6 @@ export default {
     },
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
-      // console.log(tag)
-      console.log(tag);
       this.$emit("click-search-tag", tag);
     },
   },
