@@ -2,6 +2,7 @@
   <div>
     <div class="bg-gradient-success pb-8 pt-8">
       <div class="container">
+<<<<<<< HEAD
         <!-- <div class="col-md-12 col-lg-6">
           <search-card
             title="카테고리를 선택해 원하는 편집자를 찾아보세요"
@@ -13,6 +14,8 @@
           </search-card>
         </div>-->
 
+=======
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
         <div class="filter-finder d-flex flex-column mt-4" style>
           <!-- 영상 종류 -->
           <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
@@ -75,6 +78,7 @@
             </div>
           </div>
 
+<<<<<<< HEAD
           <!-- 선택된 필터 표시 바 -->
           <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
           <!-- 전체 해제 -->
@@ -91,6 +95,8 @@
           </div>-->
           <!-- </div> -->
 
+=======
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           <!-- 필터 적용 및 초기화 -->
           <div class="d-flex justify-content-end">
             <div class="m-2">
@@ -153,7 +159,6 @@
 </template>
 <script>
 import http from "@/util/http-common";
-// import { mapGetters } from "vuex";
 import EditorsList from "./Editors/EditorsList";
 export default {
   name: "editors",
@@ -247,15 +252,6 @@ export default {
       return res;
     },
   },
-  // watch: {
-  //   clickSearchTag() {
-  //     if (this.clickSearchTag != '') {
-  //       this.searchKey = '태그';
-  //       this.keyword = this.clickSearchTag;
-  //     }
-  //   this.fetchFilter();
-  //   }
-  // },
   created() {
     //태그 클릭으로 들어왔을경우
     if (this.clickSearchTag != "") {
@@ -328,11 +324,15 @@ export default {
         })
         .then((res) => {
           if (res.data.status) {
+<<<<<<< HEAD
             this.editors = res.data.object;
             if (this.editors.length == 0) {
               this.message = "검색 결과가 없습니다.";
             }
             this.editorsAllCnt = this.editors.length;
+=======
+            this.editorsAllCnt = res.data.object.length;
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           } else {
             console.log(res.data.status);
           }
@@ -363,9 +363,14 @@ export default {
       if (initSkills.length > 0) {
         this.videoSkills.forEach((item) => {
           if (initSkills.includes(item.value)) {
+<<<<<<< HEAD
             item.status = true;
             // this.selectedSkills.push(item.value)
             this.selectedFilters.push(item.value);
+=======
+            item.status = true
+            this.selectedFilters.push(item.value)
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           }
         });
       }
@@ -377,7 +382,6 @@ export default {
       } else {
         this.selectedFilters.push(val.value);
         val.status = true;
-        // this.visable = true;
       }
     },
     clearFilter(value) {
