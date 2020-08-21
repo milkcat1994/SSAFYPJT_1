@@ -2,18 +2,6 @@
   <div>
     <div class="bg-gradient-success pb-8 pt-8">
       <div class="container">
-
-        <!-- <div class="col-md-12 col-lg-6">
-          <search-card
-            title="카테고리를 선택해 원하는 편집자를 찾아보세요"
-            type="gradient-info"
-            sub-title="편집자 상세 검색"
-            icon="fas fa-search"
-            class="mb-0 mb-xl-0"
-          >
-          </search-card>
-        </div> -->
-
         <div class="filter-finder d-flex flex-column mt-4" style>
 
           <!-- 영상 종류 -->
@@ -83,22 +71,6 @@
             </div>
           </div>
 
-          <!-- 선택된 필터 표시 바 -->
-          <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
-          <!-- 전체 해제 -->
-            <!-- <div class="m-2 p-2">
-              <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
-            </div> -->
-          <!-- 필터들 -->
-            <!-- <div class="m-2 p-2">
-              <button class="btn btn-success btn-sm" v-for="category in selectedFilters" :key="category" @click="clearFilter(category)">{{category}}</button>
-            </div> -->
-          <!-- 적용 버튼 -->
-            <!-- <div class="m-2 p-2">
-              <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;" @click="fetchEditors">적용</button>
-            </div> -->
-          <!-- </div> -->
-
           <!-- 필터 적용 및 초기화 -->
           <div class="d-flex justify-content-end">
             <div class="m-2">
@@ -117,9 +89,9 @@
               <base-button slot="title" type="secondary" class="dropdown-toggle">{{
                 searchKey
               }}</base-button>
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
+              <!-- <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
                 >전체</a
-              >
+              > -->
               <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
                 >이름</a
               >
@@ -130,11 +102,11 @@
           </div>
           <div class="d-inline-flex">
             <base-input
-              placeholder="검색어를 입력해보세요"
+              placeholder="검색어를 입력하세요."
               v-model="keyword"
               @keyup.enter="fetchEditors"
-              style="width:500px;"
-            ></base-input>
+              style="width:500px;">
+            </base-input>
           </div>
           <div class="d-inline-flex">
             <button class="btn btn-primary ml-1" style="max-height: 43px;" @click="fetchEditors">검색</button>
@@ -146,20 +118,22 @@
 
     <div class="container mt--7 mb-5">
       <!-- 편집자 목록 -->
+      <div class="visableText">
+        <span v-if="visable">총 {{editorsAllCnt}}명의 편집자 중에 {{editorsFilterCnt}}명의 편집자가 검색되었습니다.</span>
+      </div>
       <editors-list
         title="편집자"
         :editorsData="editors"
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @clickSearchTag="reSearchTag"
-        ></editors-list>
+        @click-search-tag="reSearchTag">
+      </editors-list>
     </div>
   </div>
 </template>
 <script>
 import http from "@/util/http-common";
-// import { mapGetters } from "vuex";
 import EditorsList from "./Editors/EditorsList";
 export default {
   name: "editors",
@@ -175,6 +149,9 @@ export default {
   data() {
     return {
       editors: [],
+      editorsAllCnt: 0,
+      editorsFilterCnt: 0,
+      visable: false,
       // 검색 필터 모음
       videoType: [
         {name: '개인', value: 'pers', status: false},
@@ -201,7 +178,7 @@ export default {
         {name: '모션그래픽', value: 'moti', status: false}, 
       ],
       // 검색 기준
-      searchKey: "기준",
+      searchKey: "이름",
       // 검색 단어
       keyword: "",
       // 정렬 기준
@@ -251,12 +228,13 @@ export default {
     },
   },
   created() {
-    // 태그 클릭으로 들어왔을경우
+    //태그 클릭으로 들어왔을경우
     if(this.clickSearchTag != ''){
       this.searchKey = '태그';
       this.keyword = this.clickSearchTag;
     }
 
+    this.fetchEditorsCnt();
     this.fetchFilter();
   },
   mounted() {
@@ -276,7 +254,7 @@ export default {
       this.message = "";
       http
         .post("/search", {
-          searchTags: this.keyword.split(" "),
+          searchTags: this.keyword.trim().split(" "),
           searchText: this.keyword,
           searchType: this.searchBy,
           sortType: this.sortBy,
@@ -290,6 +268,34 @@ export default {
             if(this.editors.length == 0){
               this.message = "검색 결과가 없습니다.";
             }
+            if(this.selectedSkills.length > 0 || this.selectedStyle.length > 0 || this.selectedType.length > 0){
+              this.editorsFilterCnt = this.editors.length;
+              this.visable = true;
+            } else {
+              this.visable = false;
+            }
+            // console.log(res.data.object);
+          } else {
+            console.log(res.data.status);
+          }
+        })
+        .catch((err) => console.error(err));
+    },
+    fetchEditorsCnt() {
+      this.message = "";
+      http
+        .post("/search", {
+          searchTags: this.keyword.trim().split(" "),
+          searchText: this.keyword,
+          searchType: 'ALL',
+          sortType: this.sortBy,
+          videoSkills: [],
+          videoStyles: [],
+          videoTypes: []
+        })
+        .then((res) => {
+          if (res.data.status) {
+            this.editorsAllCnt = res.data.object.length;
           } else {
             console.log(res.data.status);
           }
@@ -298,19 +304,19 @@ export default {
     },
     fetchFilter() {
       this.message = "";
-      let initType = this.$store.getters['stepper/getSelectedVideoType'].value
+      let initType = this.$store.getters['stepper/getSelectedVideoType']
       if (initType) {
         this.videoType.forEach(item => {
-          if (item.value == initType) {
+          if (item.value == initType.value) {
             item.status = true
             this.selectedFilters.push(item.value)
           }
         })
       }
-      let initStyle = this.$store.getters['stepper/getSelectedVideoStyle'].value
+      let initStyle = this.$store.getters['stepper/getSelectedVideoStyle']
       if (initStyle) {
         this.videoStyle.forEach(item => {
-          if (item.value == initStyle) {
+          if (item.value == initStyle.value) {
             item.status = true
             this.selectedFilters.push(item.value)
           }
@@ -321,7 +327,6 @@ export default {
         this.videoSkills.forEach(item => {
           if (initSkills.includes(item.value)) {
             item.status = true
-            // this.selectedSkills.push(item.value)
             this.selectedFilters.push(item.value)
           }
         })
@@ -393,11 +398,17 @@ export default {
       this.clearFilterAll();
       this.keyword = "";
       this.sortBy = "NICKNAME_ASC";
-      this.searchKey = "전체";
+      this.searchKey = "이름";
       this.fetchEditors();
       this.message = "";
     }
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.visableText{
+  text-align: right;
+  font-size: 14px;
+  margin-bottom: 1%;
+}
+</style>

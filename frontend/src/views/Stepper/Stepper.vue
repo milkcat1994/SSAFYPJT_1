@@ -161,7 +161,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #maincard {
   box-shadow: 3px 3px 3px gray;
 }

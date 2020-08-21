@@ -12,8 +12,8 @@
 	<!-- 요청자의 리스트 -->
 	<!-- done_flag 0~2 -->
 	<select id="searchListFlagRequest" resultType="RequestDto">
-		select *
-		from request_form
+		select @ROWNUM := @ROWNUM + 1 AS idx, request_form.*
+		from request_form, (SELECT @ROWNUM := 0) R
 		where request_nickname = #{nickname}
 		and done_flag = #{done_flag} 
 		order by rid desc
@@ -21,8 +21,8 @@
 
 	<!-- 요청받는사람의 리스트 -->
 	<select id="searchListFlagResponse" resultType="RequestDto">
-		select *
-		from request_form
+		select @ROWNUM := @ROWNUM + 1 AS idx, request_form.*
+		from request_form, (SELECT @ROWNUM := 0) R
 		where response_nickname = #{nickname} 
 		and done_flag = #{done_flag}
 		order by rid desc

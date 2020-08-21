@@ -12,16 +12,11 @@
           <div class="ml-1 mb-3">
             <h3 class="mb-1" style="color:#f1f4fb">
               자신의 이름으로 승부하는
-              <span class="text-primary mr-1" style="font-size:1.2em"
-                >진짜 편집자</span
-              >와 일해보세요.
+              <span class="text-primary mr-1" style="font-size:1.2em">진짜 편집자</span>와 일해보세요.
             </h3>
-            <h3 class=" mb-1" style="color:#f1f4fb;">
-              <span class="text-primary mr-1" style="font-size:1.2em">편집</span
-              >의 비즈니스모델은
-              <span class="text-primary mr-1" style="font-size:1.2em"
-                >당신의 성공</span
-              >이기에.
+            <h3 class="mb-1" style="color:#f1f4fb;">
+              <span class="text-primary mr-1" style="font-size:1.2em">편집</span>의 비즈니스모델은
+              <span class="text-primary mr-1" style="font-size:1.2em">당신의 성공</span>이기에.
             </h3>
             <h3 class="mb-1" style="color:#f1f4fb;">
               당연하게도 매칭수수료
@@ -29,20 +24,12 @@
             </h3>
           </div>
           <div class="d-flex mx-1">
-            <b-button variant="primary" class="mr-4" @click="moveStepper()"
-              >맞춤 편집자 찾기</b-button
-            >
-            <b-button variant="secondary" @click="moveList()"
-              >전체 편집자 보기</b-button
-            >
+            <b-button variant="primary" class="mr-4" @click="moveStepper()">맞춤 편집자 찾기</b-button>
+            <b-button variant="secondary" @click="moveList()">전체 편집자 보기</b-button>
           </div>
         </div>
         <div class="col-6 ml-4 mr-0 pr-0 mb-5">
-          <img
-            src="img/theme/friends2.png"
-            alt="png from pngtree.com"
-            style="width:80%"
-          />
+          <img src="img/theme/friends2.png" alt="png from pngtree.com" style="width:80%" />
         </div>
       </div>
 
@@ -67,24 +54,26 @@
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd"
               >
-                <b-carousel-slide
-                  v-for="editor in currentEditors"
-                  :key="editor.uid"
-                >
+                <b-carousel-slide v-for="editor in currentEditors" :key="editor.uid">
                   <template v-slot:img>
-                    <LazyYoutubeVideo
-                      :src="editor.url"
-                      style="width: 100%;"
-                      class="mb-2"
-                    />
                     <router-link :to="`/portfolio?no=${editor.uid}`">
+                      <img
+                        v-if="editor.url"
+                        class="zoom"
+                        :src="'https://img.youtube.com/vi/' + editor.url.substr(30) + '/0.jpg'"
+                        style="width: 100%;"
+                      />
+                      <img
+                        v-else
+                        src="img/theme/empty.PNG"
+                        alt="영상없음"
+                        style="width: 100%;"
+                      />
                       <div class="d-flex justify-content-end mt-3 mx-3">
                         <h2
                           class="mt-0 mb-1 mr-2"
                           style="color:white decoration:none"
-                        >
-                          {{ editor.nickname }}
-                        </h2>
+                        >{{ editor.nickname }}</h2>
                       </div>
                       <div class="d-flex justify-content-end mr-3 mb-2">
                         <div
@@ -96,17 +85,18 @@
                           <span class="mr-2"># {{ t }}</span>
                         </div>
                       </div>
+
+                      <div class="d-flex justify-content-end mb-3 mx-3">
+                        <h4>
+                          <i class="fas fa-heart mr-2" style="color:red"></i>
+                          <span class="mr-3">{{ editor.bookmarkNumber }}</span>
+                        </h4>
+                        <h4>
+                          <i class="fas fa-star mr-2" style="color:#ffbf00"></i>
+                          <span class="mr-3">{{ round(editor.avgScore) }}</span>
+                        </h4>
+                      </div>
                     </router-link>
-                    <div class="d-flex justify-content-end mb-3 mx-3">
-                      <h4>
-                        <i class="fas fa-heart mr-2" style="color:red"></i>
-                        <span class="mr-3">{{ editor.bookmarkNumber }}</span>
-                      </h4>
-                      <h4>
-                        <i class="fas fa-star mr-2" style="color:yellow"></i>
-                        <span class="mr-3">{{ round(editor.avgScore) }}</span>
-                      </h4>
-                    </div>
                   </template>
                 </b-carousel-slide>
               </b-carousel>
@@ -119,33 +109,34 @@
               <h1 class="hr-sect">맞춤 편집자를 만나보세요.</h1>
             </div>
 
-            <div class="px-4" v-if="isLogin">
+            <div class="px-4" v-if="isLoggedIn && !bookmarkemp">
               <div id="app">
                 <b-container>
                   <b-row>
                     <b-col cols="12">
-                      <carousel :perPage="4">
+                      <carousel :perPage="4" style="height:600px">
                         <slide
-                          class="p-2"
+                          class="p-2 zoom"
                           v-for="recEditor in recommendData.slice(0, 10)"
                           :key="recEditor.uid"
                         >
-                          <b-card
-                            id="maincard"
-                            @click="movePortfolio(recEditor.uid)"
-                          >
+                          <b-card id="maincard" class="recCard" @click="movePortfolio(recEditor.uid)">
                             <img src alt />
-                            <LazyYoutubeVideo
-                              :src="recEditor.url"
+                            <img
+                              v-if="recEditor.url"
+                              :src="'https://img.youtube.com/vi/' + recEditor.url.substr(30) + '/0.jpg'"
                               style="width: 100%;"
-                              class="mb-2"
+                            />
+                            <img
+                              v-else
+                              src="/img/theme/empty.png"
+                              alt="영상없음"
+                              style="width: 100%; height: 127.969px;"
                             />
                             <hr />
                             <b-card-text>
                               <div class="d-inline-flex">
-                                <h3 class="mt-0 mb-1">
-                                  {{ recEditor.nickname }}
-                                </h3>
+                                <h3 class="mt-0 mb-1">{{ recEditor.nickname }}</h3>
                               </div>
 
                               <div
@@ -168,22 +159,18 @@
               </div>
             </div>
 
-            <div class="px-4" v-if="!isLogin">
+            <div class="px-4" v-if="!isLoggedIn || bookmarkemp">
               <b-container>
                 <b-row>
                   <b-col cols="12" class="d-flex justify-content-center">
-                    <img
-                      src="img/theme/dogcat1.png"
-                      alt="강아지고양이"
-                      style="width:50%"
-                      class="my-0"
-                    />
+                    <img src="img/theme/dogcat1.png" alt="강아지고양이" style="width:50%" class="my-0" />
                   </b-col>
                   <b-col cols="12" class="d-flex justify-content-center mb-2">
                     <span style="color:white">Designed by PngTree</span>
                   </b-col>
                   <b-col cols="12" class="d-flex justify-content-center">
-                    <h1 style>로그인이 필요해요!</h1>
+                    <h1 v-if="!isLoggedIn">로그인이 필요해요!</h1>
+                    <h1 v-if="isLoggedIn && bookmarkemp">자신에 스타일에 맞는 편집자를 <span style="color:#ff0080;"> 찜!</span> 해주세요</h1>
                   </b-col>
                 </b-row>
               </b-container>
@@ -197,12 +184,12 @@
 <script>
 import http from "@/util/http-common.js";
 import { Carousel, Slide } from "vue-carousel";
-import LazyYoutubeVideo from "vue-lazy-youtube-video";
-import { mapGetters } from "vuex";
+// import LazyYoutubeVideo from "vue-lazy-youtube-video";
+// import { mapGetters } from "vuex";
 
 export default {
   components: {
-    LazyYoutubeVideo,
+    // LazyYoutubeVideo,
     Carousel,
     Slide,
   },
@@ -217,26 +204,27 @@ export default {
       recommendData: [],
       avgScore: 0,
 
-      isLogin: false,
+      bookmarkemp: true,
+
     };
   },
   created() {
     this.fetchEditors();
-    if (this.$session.exists()) {
-      this.isLogin = true;
-    } else {
-      this.isLogin = false;
-    }
   },
   methods: {
     recommendEditors() {
+      if (!this.$session.exists)
+        this.$store.commit("auth/mutateIsLogin", false);
       http
         .post("/recommend/" + this.$session.get("uid"))
         .then((res) => {
-          // console.log(res);
+          if (res.data == "bookmark is empty") {
+            this.bookmarkemp = true;
+            return;
+          }
           if (res.data) {
-            // console.log(res.data);
             this.recommendData = res.data;
+            this.bookmarkemp = false;
           }
         })
         .catch((err) => console.log(err));
@@ -244,7 +232,7 @@ export default {
     fetchEditors() {
       http
         .post("/search", {
-          searchTags: [],
+          searchTags: [""],
           searchText: "",
           searchType: "ALL",
           sortType: "SCORE_DESC",
@@ -295,7 +283,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isLoggedIn"]),
+    isLoggedIn() {
+      return this.$store.getters["auth/isLoggedIn"];
+    },
+    // ...mapGetters(["auth/isLoggedIn"]),
     currentEditors() {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;
@@ -303,7 +294,6 @@ export default {
     },
   },
   mounted() {
-    this.fetchEditors();
     this.recommendEditors();
   },
 };
@@ -341,5 +331,12 @@ export default {
 button:focus {
   border: none !important;
   outline: none !important;
+}
+
+.recCard:hover {
+  -ms-transform: scale(1.07);
+  -webkit-transform: scale(1.07);
+  transform: scale(1.07);
+  border-radius:1em;
 }
 </style>
