@@ -124,7 +124,7 @@ export default {
         .then(({ data }) => {
           if (data.data == "success") {
             this.$session.start();
-            // console.log(data.object);
+            console.log(data.object);
             this.$store.commit("auth/mutateIsLogin", true);
             this.$session.set("uid", data.object.uid);
             this.$session.set("nickname", data.object.nickname);
@@ -132,7 +132,8 @@ export default {
             this.initInputL();
             this.$router.push("/");
             return;
-          } else if (data.data == "fail") {
+          }
+          else if(data.data == "fail"){
             // alertify.error("아이디 및 비밀번호를 확인해주세요", 3);
             this.model.success = false;
           }
@@ -157,7 +158,7 @@ export default {
               if (data.data == "success") {
                 alertify.success("로그인이 되었습니다.");
                 this.$session.start();
-                this.$store.commit("auth/mutateIsLogin", true);
+      this.$store.commit("auth/mutateIsLogin", true);
                 this.$session.set("uid", data.object.uid);
                 this.$session.set("nickname", data.object.nickname);
                 this.$session.set("auth", data.object.auth);
@@ -178,6 +179,7 @@ export default {
             .catch(() => {
               alert("로그인 시 에러가 발생했습니다.");
             });
+
         })
         .catch((error) => {
           console.log(error);

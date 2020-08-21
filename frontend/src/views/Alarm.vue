@@ -114,7 +114,9 @@
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
-                              <td>{{ requestitem0.video_style }}</td>
+                              <td>
+                                {{ requestitem0.video_style }}
+                              </td>
                             </tr>
                             <tr>
                               <th>진행 날짜</th>
@@ -223,7 +225,9 @@
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
-                              <td>{{ requestitem1.video_style }}</td>
+                              <td>
+                                {{ requestitem1.video_style }}
+                              </td>
                             </tr>
                             <tr>
                               <th>진행 날짜</th>
@@ -273,14 +277,14 @@
                             />
                           </div>
                           <br />
-                          <!-- <b-button
+                          <b-button
                             class="justify-content-center"
                             style="background-color: #aaaaff"
                             @click="copyClipboard('emailtarget')"
                           >
                             <i class="fas fa-copy" style="color: white">복사하기</i>
                           </b-button>
-                          <br />-->
+                          <br />
                         </div>
                       </b-modal>
                     </b-card-body>
@@ -357,7 +361,9 @@
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
-                              <td>{{ requestitem2.video_style }}</td>
+                              <td>
+                                {{ requestitem2.video_style }}
+                              </td>
                             </tr>
                             <tr>
                               <th>진행 날짜</th>
@@ -477,7 +483,9 @@
                             </tr>
                             <tr>
                               <th>동영상 스타일</th>
-                              <td>{{ requestitem3.video_style }}</td>
+                              <td>
+                                {{ requestitem3.video_style }}
+                              </td>
                             </tr>
                             <tr>
                               <th>진행 날짜</th>
@@ -728,12 +736,8 @@ export default {
         })
         .finally(() => {
           // 목록 새로고침
-          this.getRequestitems2(
-            "/request/" + "req" + "/" + this.$session.get("nickname") + "/2"
-          );
-          this.getRequestitems3(
-            "/request/" + "req" + "/" + this.$session.get("nickname") + "/3"
-          );
+          this.getRequestitems2("/request/" + "req" + "/" + this.$session.get("nickname") + "/2");
+          this.getRequestitems3("/request/" + "req" + "/" + this.$session.get("nickname") + "/3");
         });
     },
 
@@ -809,12 +813,8 @@ export default {
                 alertify.notify(msg, "success", 3);
                 document.getElementById("closemodal").click();
 
-                cur.getRequestitems2(
-                  "/request/" + "req" + "/" + session.get("nickname") + "/2"
-                );
-                cur.getRequestitems3(
-                  "/request/" + "req" + "/" + session.get("nickname") + "/3"
-                );
+                cur.getRequestitems2("/request/" + "req" + "/" + session.get("nickname") + "/2");
+                cur.getRequestitems3("/request/" + "req" + "/" + session.get("nickname") + "/3");
 
                 return;
               } else {
@@ -853,12 +853,13 @@ export default {
       this.events[this.events.length - 1].end = "";
     },
     setProgressDate() {
-      if (this.$session.get("auth") == "editor") {
+      if (this.$session.get("auth") == "editor"){
         store.dispatch(
           "getProgressdate",
           "/request/date/res/" + this.$session.get("nickname")
         );
-      } else if (this.$session.get("auth") == "noneditor") {
+      }
+      else if (this.$session.get("auth") == "noneditor"){ 
         store.dispatch(
           "getProgressdate",
           "/request/date/req/" + this.$session.get("nickname")
@@ -920,7 +921,7 @@ export default {
       else this.authmode = "editor";
 
       this.setRequestList(this.authmode);
-
+      
       this.toggleVal = !this.toggleVal;
     },
     copyClipboard(elementID) {
@@ -974,28 +975,18 @@ export default {
         this.requestitem = data;
       });
     },
-    setRequestList(authmode) {
+    setRequestList(authmode){
       let mode = "";
-      if (authmode == "editor") mode = "res";
-      else if (authmode == "noneditor") mode = "req";
+      if (authmode == 'editor') mode = "res";
+      else if (authmode == 'noneditor') mode = "req";
 
-      this.getRequestitems0(
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/0"
-      );
-      this.getRequestitems1(
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/1"
-      );
-      this.getRequestitems2(
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/2"
-      );
-      this.getRequestitems3(
-        "/request/" + mode + "/" + this.$session.get("nickname") + "/3"
-      );
-      store.dispatch(
-        "getProgressdate",
-        "/request/date/" + mode + "/" + this.$session.get("nickname")
-      );
-    },
+      this.getRequestitems0("/request/" + mode + "/" + this.$session.get("nickname") + "/0");
+      this.getRequestitems1("/request/" + mode + "/" + this.$session.get("nickname") + "/1");
+      this.getRequestitems2("/request/" + mode + "/" + this.$session.get("nickname") + "/2");
+      this.getRequestitems3("/request/" + mode + "/" + this.$session.get("nickname") + "/3");
+      store.dispatch("getProgressdate", "/request/date/" + mode + "/" + this.$session.get("nickname"));
+
+    }
   },
 };
 </script>
@@ -1077,11 +1068,5 @@ input:checked + .slider:before {
 td {
   width: 800px;
   word-break: break-all;
-}
-
-#emailtarget {
-  -khtml-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
 }
 </style>
