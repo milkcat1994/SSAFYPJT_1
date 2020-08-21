@@ -232,11 +232,6 @@ export default {
     },
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
-<<<<<<< HEAD
-      // console.log(tag)
-      // console.log(tag);
-=======
->>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
       this.$emit("click-search-tag", tag);
     },
   },

@@ -2,20 +2,6 @@
   <div>
     <div class="bg-gradient-success pb-8 pt-8">
       <div class="container">
-<<<<<<< HEAD
-        <!-- <div class="col-md-12 col-lg-6">
-          <search-card
-            title="카테고리를 선택해 원하는 편집자를 찾아보세요"
-            type="gradient-info"
-            sub-title="편집자 상세 검색"
-            icon="fas fa-search"
-            class="mb-0 mb-xl-0"
-          >
-          </search-card>
-        </div>-->
-
-=======
->>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
         <div class="filter-finder d-flex flex-column mt-4" style>
           <!-- 영상 종류 -->
           <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
@@ -78,25 +64,6 @@
             </div>
           </div>
 
-<<<<<<< HEAD
-          <!-- 선택된 필터 표시 바 -->
-          <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
-          <!-- 전체 해제 -->
-          <!-- <div class="m-2 p-2">
-              <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
-          </div>-->
-          <!-- 필터들 -->
-          <!-- <div class="m-2 p-2">
-              <button class="btn btn-success btn-sm" v-for="category in selectedFilters" :key="category" @click="clearFilter(category)">{{category}}</button>
-          </div>-->
-          <!-- 적용 버튼 -->
-          <!-- <div class="m-2 p-2">
-              <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;" @click="fetchEditors">적용</button>
-          </div>-->
-          <!-- </div> -->
-
-=======
->>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           <!-- 필터 적용 및 초기화 -->
           <div class="d-flex justify-content-end">
             <div class="m-2">
@@ -324,15 +291,7 @@ export default {
         })
         .then((res) => {
           if (res.data.status) {
-<<<<<<< HEAD
-            this.editors = res.data.object;
-            if (this.editors.length == 0) {
-              this.message = "검색 결과가 없습니다.";
-            }
-            this.editorsAllCnt = this.editors.length;
-=======
             this.editorsAllCnt = res.data.object.length;
->>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           } else {
             console.log(res.data.status);
           }
@@ -363,14 +322,8 @@ export default {
       if (initSkills.length > 0) {
         this.videoSkills.forEach((item) => {
           if (initSkills.includes(item.value)) {
-<<<<<<< HEAD
-            item.status = true;
-            // this.selectedSkills.push(item.value)
-            this.selectedFilters.push(item.value);
-=======
             item.status = true
             this.selectedFilters.push(item.value)
->>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           }
         });
       }
