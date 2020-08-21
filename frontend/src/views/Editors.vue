@@ -2,13 +2,24 @@
   <div>
     <div class="bg-gradient-success pb-8 pt-8">
       <div class="container">
-        <div class="filter-finder d-flex flex-column mt-4" style>
+<<<<<<< HEAD
+        <!-- <div class="col-md-12 col-lg-6">
+          <search-card
+            title="카테고리를 선택해 원하는 편집자를 찾아보세요"
+            type="gradient-info"
+            sub-title="편집자 상세 검색"
+            icon="fas fa-search"
+            class="mb-0 mb-xl-0"
+          >
+          </search-card>
+        </div>-->
 
+=======
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
+        <div class="filter-finder d-flex flex-column mt-4" style>
           <!-- 영상 종류 -->
           <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
-            <div
-              class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
-            >
+            <div class="d-inline-flex justify-content-center align-items-center mx-2 p-2">
               <span class="text-primary font-weight-bold">영상 목적</span>
             </div>
             <div class="d-inline-flex m-2 p-2">
@@ -28,9 +39,7 @@
           </div>
           <!-- 영상 특징 -->
           <div class="video-type px-4 mb-2 bg-white rounded-pill shadow-sm">
-            <div
-              class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
-            >
+            <div class="d-inline-flex justify-content-center align-items-center mx-2 p-2">
               <span class="text-primary font-weight-bold">영상 종류</span>
             </div>
             <div class="d-inline-flex m-2 p-2">
@@ -50,9 +59,7 @@
           </div>
           <!-- 편집 기술 -->
           <div class="edit-skill px-4 mb-2 bg-white rounded-pill shadow-sm">
-            <div
-              class="d-inline-flex justify-content-center align-items-center mx-2 p-2"
-            >
+            <div class="d-inline-flex justify-content-center align-items-center mx-2 p-2">
               <span class="text-primary font-weight-bold">편집 기술</span>
             </div>
             <div class="d-inline-flex m-2 p-2">
@@ -71,10 +78,31 @@
             </div>
           </div>
 
+<<<<<<< HEAD
+          <!-- 선택된 필터 표시 바 -->
+          <!-- <div class="filter-selected row d-flex align-items-stretch justify-content-between mx-4 p-2 bg-white rounded"> -->
+          <!-- 전체 해제 -->
+          <!-- <div class="m-2 p-2">
+              <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
+          </div>-->
+          <!-- 필터들 -->
+          <!-- <div class="m-2 p-2">
+              <button class="btn btn-success btn-sm" v-for="category in selectedFilters" :key="category" @click="clearFilter(category)">{{category}}</button>
+          </div>-->
+          <!-- 적용 버튼 -->
+          <!-- <div class="m-2 p-2">
+              <button class="btn btn-primary btn-sm" style="font-size: 0.6rem;" @click="fetchEditors">적용</button>
+          </div>-->
+          <!-- </div> -->
+
+=======
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           <!-- 필터 적용 및 초기화 -->
           <div class="d-flex justify-content-end">
             <div class="m-2">
-              <button class="btn btn-primary btn-sm" @click="clearFilterAll"><i class="fa fa-redo-alt"></i> 전체 해제</button>
+              <button class="btn btn-primary btn-sm" @click="clearFilterAll">
+                <i class="fa fa-redo-alt"></i> 전체 해제
+              </button>
             </div>
             <div class="m-2">
               <button class="btn btn-primary btn-sm" @click="fetchEditors">적용</button>
@@ -86,18 +114,16 @@
         <div class="d-flex justify-content-center mx-4 px-2">
           <div class="d-inline-flex">
             <base-dropdown>
-              <base-button slot="title" type="secondary" class="dropdown-toggle">{{
+              <base-button slot="title" type="secondary" class="dropdown-toggle">
+                {{
                 searchKey
-              }}</base-button>
+                }}
+              </base-button>
               <!-- <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
                 >전체</a
-              > -->
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
-                >이름</a
-              >
-              <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'"
-                >태그</a
-              >
+              >-->
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'">이름</a>
+              <a class="dropdown-item" href="#" @click.prevent="searchKey = '태그'">태그</a>
             </base-dropdown>
           </div>
           <div class="d-inline-flex">
@@ -105,14 +131,13 @@
               placeholder="검색어를 입력하세요."
               v-model="keyword"
               @keyup.enter="fetchEditors"
-              style="width:500px;">
-            </base-input>
+              style="width:500px;"
+            ></base-input>
           </div>
           <div class="d-inline-flex">
             <button class="btn btn-primary ml-1" style="max-height: 43px;" @click="fetchEditors">검색</button>
           </div>
         </div>
-        
       </div>
     </div>
 
@@ -127,8 +152,8 @@
         :message="message"
         @sort-by="setSortKey"
         @clear-sort="resetAll"
-        @click-search-tag="reSearchTag">
-      </editors-list>
+        @click-search-tag="reSearchTag"
+      ></editors-list>
     </div>
   </div>
 </template>
@@ -140,11 +165,11 @@ export default {
   components: {
     EditorsList,
   },
-  props:{
+  props: {
     clickSearchTag: {
       type: String,
-      default : ''
-    }
+      default: "",
+    },
   },
   data() {
     return {
@@ -154,28 +179,28 @@ export default {
       visable: false,
       // 검색 필터 모음
       videoType: [
-        {name: '개인', value: 'pers', status: false},
-        {name: '상업', value: 'comm', status: false},
+        { name: "개인", value: "pers", status: false },
+        { name: "상업", value: "comm", status: false },
       ],
       videoStyle: [
-        {name: '키즈', value: 'kids', status: false}, 
-        {name: '게임', value: 'game', status: false}, 
-        {name: '음악/댄스', value: 'musi', status: false}, 
-        {name: '푸드/쿠킹', value: 'food', status: false},
-        {name: 'V-log', value: 'vlog', status: false},
-        {name: '영화/애니메이션', value: 'movi', status: false},
-        {name: '동물', value: 'anim', status: false},
-        {name: '뷰티/패션', value: 'beau', status: false},
-        {name: '스포츠', value: 'spor', status: false},
-        {name: '기타', value: 'etcs', status: false},
+        { name: "키즈", value: "kids", status: false },
+        { name: "게임", value: "game", status: false },
+        { name: "음악/댄스", value: "musi", status: false },
+        { name: "푸드/쿠킹", value: "food", status: false },
+        { name: "V-log", value: "vlog", status: false },
+        { name: "영화/애니메이션", value: "movi", status: false },
+        { name: "동물", value: "anim", status: false },
+        { name: "뷰티/패션", value: "beau", status: false },
+        { name: "스포츠", value: "spor", status: false },
+        { name: "기타", value: "etcs", status: false },
       ],
       videoSkills: [
-        {name: '색/밝기 조정', value: 'colr', status: false}, 
-        {name: '자막', value: 'capt', status: false}, 
-        {name: '오디오/음악', value: 'audi', status: false}, 
-        {name: '인트로', value: 'intr', status: false}, 
-        {name: '아웃트로', value: 'outr', status: false}, 
-        {name: '모션그래픽', value: 'moti', status: false}, 
+        { name: "색/밝기 조정", value: "colr", status: false },
+        { name: "자막", value: "capt", status: false },
+        { name: "오디오/음악", value: "audi", status: false },
+        { name: "인트로", value: "intr", status: false },
+        { name: "아웃트로", value: "outr", status: false },
+        { name: "모션그래픽", value: "moti", status: false },
       ],
       // 검색 기준
       searchKey: "이름",
@@ -191,19 +216,19 @@ export default {
   },
   computed: {
     searchBy() {
-      if (this.searchKey == '이름') {
-        return 'NICKNAME'
-      } else if (this.searchKey == '태그') {
-        return 'TAG'
+      if (this.searchKey == "이름") {
+        return "NICKNAME";
+      } else if (this.searchKey == "태그") {
+        return "TAG";
       } else {
-        return 'ALL'
+        return "ALL";
       }
     },
     selectedType() {
       let res = new Array();
       for (const item of this.videoType) {
         if (item.status == true) {
-          res.push(item.value)
+          res.push(item.value);
         }
       }
       return res;
@@ -212,7 +237,7 @@ export default {
       let res = new Array();
       for (const item of this.videoStyle) {
         if (item.status == true) {
-          res.push(item.value)
+          res.push(item.value);
         }
       }
       return res;
@@ -221,7 +246,7 @@ export default {
       let res = new Array();
       for (const item of this.videoSkills) {
         if (item.status == true) {
-          res.push(item.value)
+          res.push(item.value);
         }
       }
       return res;
@@ -229,8 +254,8 @@ export default {
   },
   created() {
     //태그 클릭으로 들어왔을경우
-    if(this.clickSearchTag != ''){
-      this.searchKey = '태그';
+    if (this.clickSearchTag != "") {
+      this.searchKey = "태그";
       this.keyword = this.clickSearchTag;
     }
 
@@ -241,14 +266,14 @@ export default {
     this.fetchEditors();
   },
   methods: {
-    reSearchTag(keyword){
-      this.searchKey = '태그';
+    reSearchTag(keyword) {
+      this.searchKey = "태그";
       this.keyword = keyword;
       this.fetchEditors();
     },
     setSortKey(key) {
-      this.sortBy = key
-      this.fetchEditors()
+      this.sortBy = key;
+      this.fetchEditors();
     },
     fetchEditors() {
       this.message = "";
@@ -260,15 +285,19 @@ export default {
           sortType: this.sortBy,
           videoSkills: this.selectedSkills,
           videoStyles: this.selectedStyle,
-          videoTypes: this.selectedType
+          videoTypes: this.selectedType,
         })
         .then((res) => {
           if (res.data.status) {
             this.editors = res.data.object;
-            if(this.editors.length == 0){
+            if (this.editors.length == 0) {
               this.message = "검색 결과가 없습니다.";
             }
-            if(this.selectedSkills.length > 0 || this.selectedStyle.length > 0 || this.selectedType.length > 0){
+            if (
+              this.selectedSkills.length > 0 ||
+              this.selectedStyle.length > 0 ||
+              this.selectedType.length > 0
+            ) {
               this.editorsFilterCnt = this.editors.length;
               this.visable = true;
             } else {
@@ -287,15 +316,23 @@ export default {
         .post("/search", {
           searchTags: this.keyword.trim().split(" "),
           searchText: this.keyword,
-          searchType: 'ALL',
+          searchType: "ALL",
           sortType: this.sortBy,
           videoSkills: [],
           videoStyles: [],
-          videoTypes: []
+          videoTypes: [],
         })
         .then((res) => {
           if (res.data.status) {
+<<<<<<< HEAD
+            this.editors = res.data.object;
+            if (this.editors.length == 0) {
+              this.message = "검색 결과가 없습니다.";
+            }
+            this.editorsAllCnt = this.editors.length;
+=======
             this.editorsAllCnt = res.data.object.length;
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           } else {
             console.log(res.data.status);
           }
@@ -304,32 +341,38 @@ export default {
     },
     fetchFilter() {
       this.message = "";
-      let initType = this.$store.getters['stepper/getSelectedVideoType']
+      let initType = this.$store.getters["stepper/getSelectedVideoType"];
       if (initType) {
-        this.videoType.forEach(item => {
+        this.videoType.forEach((item) => {
           if (item.value == initType.value) {
-            item.status = true
-            this.selectedFilters.push(item.value)
+            item.status = true;
+            this.selectedFilters.push(item.value);
           }
-        })
+        });
       }
-      let initStyle = this.$store.getters['stepper/getSelectedVideoStyle']
+      let initStyle = this.$store.getters["stepper/getSelectedVideoStyle"];
       if (initStyle) {
-        this.videoStyle.forEach(item => {
+        this.videoStyle.forEach((item) => {
           if (item.value == initStyle.value) {
-            item.status = true
-            this.selectedFilters.push(item.value)
+            item.status = true;
+            this.selectedFilters.push(item.value);
           }
-        })
+        });
       }
-      let initSkills = this.$store.getters['stepper/getSelectedVideoSkills']
+      let initSkills = this.$store.getters["stepper/getSelectedVideoSkills"];
       if (initSkills.length > 0) {
-        this.videoSkills.forEach(item => {
+        this.videoSkills.forEach((item) => {
           if (initSkills.includes(item.value)) {
+<<<<<<< HEAD
+            item.status = true;
+            // this.selectedSkills.push(item.value)
+            this.selectedFilters.push(item.value);
+=======
             item.status = true
             this.selectedFilters.push(item.value)
+>>>>>>> bc754584d8ca2e94b85efa474b5c65de22696f7f
           }
-        })
+        });
       }
     },
     toggleFilter(val) {
@@ -346,17 +389,17 @@ export default {
       if (index > -1) {
         this.selectedFilters.splice(index, 1);
       }
-      this.videoType.forEach(e => {
+      this.videoType.forEach((e) => {
         if (e.value === value) {
           e.status = false;
         }
       });
-      this.videoStyle.forEach(e => {
+      this.videoStyle.forEach((e) => {
         if (e.value === value) {
           e.status = false;
         }
       });
-      this.videoSkills.forEach(e => {
+      this.videoSkills.forEach((e) => {
         if (e.value === value) {
           e.status = false;
         }
@@ -367,31 +410,31 @@ export default {
       // 필터된 카테고리들 토글(활성화 <-> 비활성화)
       // 작업요청서 필터(Vuex)와 동기화하지 않고 지역 변수 사용
       (this.videoType = [
-        {name: '개인', value: 'pers', status: false},
-        {name: '상업', value: 'comm', status: false},
+        { name: "개인", value: "pers", status: false },
+        { name: "상업", value: "comm", status: false },
       ]),
-      (this.videoStyle = [
-        {name: '키즈', value: 'kids', status: false}, 
-        {name: '게임', value: 'game', status: false}, 
-        {name: '음악/댄스', value: 'musi', status: false}, 
-        {name: '푸드/쿠킹', value: 'food', status: false},
-        {name: 'V-log', value: 'vlog', status: false},
-        {name: '영화/애니메이션', value: 'movi', status: false},
-        {name: '동물', value: 'anim', status: false},
-        {name: '뷰티/패션', value: 'beau', status: false},
-        {name: '스포츠', value: 'spor', status: false},
-        {name: '기타', value: 'etcs', status: false},
-      ]),
-      (this.videoSkills = [
-        {name: '색/밝기 조정', value: 'colr', status: false}, 
-        {name: '자막', value: 'capt', status: false}, 
-        {name: '오디오/음악', value: 'audi', status: false}, 
-        {name: '인트로', value: 'intr', status: false}, 
-        {name: '아웃트로', value: 'outr', status: false}, 
-        {name: '모션그래픽', value: 'moti', status: false}, 
-      ]),
-      // selectedFilters 배열 clear
-      (this.selectedFilters.length = 0);
+        (this.videoStyle = [
+          { name: "키즈", value: "kids", status: false },
+          { name: "게임", value: "game", status: false },
+          { name: "음악/댄스", value: "musi", status: false },
+          { name: "푸드/쿠킹", value: "food", status: false },
+          { name: "V-log", value: "vlog", status: false },
+          { name: "영화/애니메이션", value: "movi", status: false },
+          { name: "동물", value: "anim", status: false },
+          { name: "뷰티/패션", value: "beau", status: false },
+          { name: "스포츠", value: "spor", status: false },
+          { name: "기타", value: "etcs", status: false },
+        ]),
+        (this.videoSkills = [
+          { name: "색/밝기 조정", value: "colr", status: false },
+          { name: "자막", value: "capt", status: false },
+          { name: "오디오/음악", value: "audi", status: false },
+          { name: "인트로", value: "intr", status: false },
+          { name: "아웃트로", value: "outr", status: false },
+          { name: "모션그래픽", value: "moti", status: false },
+        ]),
+        // selectedFilters 배열 clear
+        (this.selectedFilters.length = 0);
       this.message = "";
     },
     resetAll() {
@@ -401,12 +444,12 @@ export default {
       this.searchKey = "이름";
       this.fetchEditors();
       this.message = "";
-    }
+    },
   },
 };
 </script>
 <style scoped>
-.visableText{
+.visableText {
   text-align: right;
   font-size: 14px;
   margin-bottom: 1%;
