@@ -123,10 +123,10 @@
 
 ## Document
 ### [Daily Meeting contents](https://docs.google.com/document/d/1xnoydTo05h0HvReFcqFpp50SUzsqPLf2my8h0uzs764/edit?usp=sharing)
-### [Release Note](https://github.com/SSAFYPJT_1/blob/master/wiki/Release-Notes.md)
-### [WireFrame](https://github.com/SSAFYPJT_1/blob/master/wiki/와이어프레임.md)
-### [Wiki](https://github.com/SSAFYPJT_1/blob/master/wiki/home.md)
-### [ERD](https://github.com/SSAFYPJT_1/blob/master/wiki/ERD-설계.md)
+### [Release Note](https://github.com/milkcat1994/SSAFYPJT_1/blob/master/wiki/Release-Notes.md)
+### [WireFrame](https://github.com/milkcat1994/SSAFYPJT_1/blob/master/wiki/와이어프레임.md)
+### [Wiki](https://github.com/milkcat1994/SSAFYPJT_1/blob/master/wiki/home.md)
+### [ERD](https://github.com/milkcat1994/SSAFYPJT_1/blob/master/wiki/ERD-설계.md)
 
 ## Project UCC
 📺[UCC](https://youtu.be/_M6JkZcUDF0)
