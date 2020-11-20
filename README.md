@@ -132,9 +132,6 @@
 ## Project UCC
 📺[UCC](https://youtu.be/_M6JkZcUDF0)
 
-## License
-[MIT license](https://github.com/connect-foundation/2019-15/blob/master/LICENSE)
-
 ## Copyright
 Copyright 2020. 편집. All rights reserved.
 
