@@ -36,16 +36,6 @@ import com.web.editor.model.service.user.search.redis.SearchRedisService;
 @RestController
 @RequestMapping("/search")
 public class SearchController {
-
-	// @Autowired
-	// SearchService service;
-
-	// @Autowired
-	// PortfolioService portfolioService;
-	
-	// @Autowired
-    // BookmarkService bookmarkService;
-	
 	// Redis 이용 위한 service
 	@Autowired
 	SearchRedisService searchRedisService;
@@ -67,9 +57,7 @@ public class SearchController {
 		//만약 Redis가 연결되지 않는다면 DataBase에서 직접 값을 뽑아와야한다.
 		try {
 			searchList = searchRedisService.getListByFilter(searchRequest);
-			// System.out.println(searchList);
 		} catch (RedisConnectionFailureException e) {
-			System.out.println("Redis가 연결 되지 않습니다.");
 			// Redis 연결오류 났을 경우
 			List<SearchPortfolioJoinBookmark> searchPortfolioJoinBookmarks = searchService.joinBookmarks();
 			List<SearchPortfolioJoinVideo> searchPortfolioJoinVideos = searchService.joinVideos();
@@ -86,8 +74,6 @@ public class SearchController {
 				allUidSet.add(searchPortfolioJoinBookmark.getUid());
 				initMap.put(searchPortfolioJoinBookmark.getUid(), searchPortfolioJoinBookmark);
 				uidMap.put(searchPortfolioJoinBookmark.getNickname(), searchPortfolioJoinBookmark.getUid());
-				// target = bookmarkMap.get(searchPortfolioJoinBookmark.getUid());
-				// target.setUrl(url);
 			}
 			
 			for (SearchPortfolioJoinVideo searchPortfolioJoinVideo : searchPortfolioJoinVideos) {
@@ -153,7 +139,6 @@ public class SearchController {
 				}
 			}
 
-			// searchRedisService.portfolioTagSave(searchService.searchPortfolioTag());
 			// Tag 
 			List<SearchTag> searchTags = searchService.searchPortfolioTag();
 			Map<String, Set<Integer>> tagUidMap = new HashMap<>();
@@ -181,7 +166,6 @@ public class SearchController {
 					uidTagMap.get(tagUid).add(tagName);
 				}
 			}
-
 
 			// searchRequest에서 받은 video skill, type, style 를 통해 uid Set을 union한다.
 
@@ -274,38 +258,4 @@ public class SearchController {
 		
 		return result;
 	}
-
-
-
-	// @GetMapping("/listAll")
-	// public Object searchAll() {
-	// 	ResponseEntity response = null;
-	// 	final BasicResponse result = new BasicResponse();
-	// 	List<PortfolioList> searhList = service.searchAll();
-		
-	// 	if(!searhList.isEmpty()){
-	// 		List<PortfolioTag> portfolioTags = new ArrayList<>();
-	// 		List<PortfolioVideo> urls = new ArrayList<>();
-	// 		List<BookmarkInfo> bookmarks = new ArrayList<>();
-	// 		for (int i = 0; i < searhList.size(); i++) {
-	// 			String uid = String.valueOf(searhList.get(i).getUid());
-	// 			portfolioTags = portfolioService.findTagByUid(uid);
-	// 			urls = portfolioService.findVideoByUid(uid);
-	// 			bookmarks = bookmarkService.cntBookmarkByUid(uid);
-
-	// 			searhList.get(i).setBookmarkCount(bookmarks.size());
-	// 			searhList.get(i).setURLs(urls.stream().map(u -> u.getUrl()).collect(Collectors.toList()));
-	// 			searhList.get(i).setTags(portfolioTags.stream().map(e -> e.getTagName()).collect(Collectors.toCollection(ArrayList::new)));
-	// 		}
-	// 		result.status = true;
-    //         result.data = "success";
-    //         result.object = searhList;
-	// 	} else {
-	// 		result.status = false;
-	// 		result.data = "fail";
-	// 	}
-	// 	response = new ResponseEntity<>(result, HttpStatus.OK);
-	// 	return response;
-	// }
-	
 }

@@ -30,16 +30,4 @@ public class SearchPageBean implements Serializable {
 	private int 	start=1;
 	/**한 페이지에 표시할 끝 번호 */
 	private int 	end=interval;
-	
-	
-
-//	public List<Integer> getSearchType() {
-//		return searchType;
-//	}
-//	public void setSearchType(List<Integer> searchType) {
-//		this.searchType = searchType;
-//	}
-
-	
-	
 }

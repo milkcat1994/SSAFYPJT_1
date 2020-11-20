@@ -23,7 +23,6 @@ import com.web.editor.model.dto.user.NormalRegisterRequest;
 import io.swagger.annotations.ApiOperation;
 import com.web.editor.model.service.kakao.KakaoAPI;
  
-// @Controller
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/kakao")
@@ -60,7 +59,6 @@ public class KakaoLoginController {
                 session.setAttribute("userId", userInfo.get("email"));
                 session.setAttribute("access_Token", access_Token);
                 }
-            //user = new User(email, null, nickname, "kakao", auth);
         }
 
         return response;

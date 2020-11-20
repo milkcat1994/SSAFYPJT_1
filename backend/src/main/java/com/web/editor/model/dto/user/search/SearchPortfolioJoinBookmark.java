@@ -21,7 +21,6 @@ public class SearchPortfolioJoinBookmark {
     private String nickname;
     private Integer payMin;
     private String url;
-    // private String skill;
     private Integer bookmarkNumber;
     private float avgScore;
     private String tagKey;

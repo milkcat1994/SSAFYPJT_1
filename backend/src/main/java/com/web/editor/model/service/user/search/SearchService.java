@@ -17,7 +17,6 @@ public interface SearchService {
 	public List<SearchPortfolioJoinBookmark> joinBookmarks();
 	
 	// 포트폴리오 - 영상
-	// uid, mainUrl
 	public List<SearchPortfolioJoinVideo> joinVideos();
 
 	// 포트폴리오에 등록된 tag

@@ -54,7 +54,6 @@ public class BookmarkController {
                 portfolioTags = portfolioService.findTagByUid(String.valueOf(bookmark.getMuid()));
                 bookmark.setTags(portfolioTags.stream().map(e -> e.getTagName()).collect(Collectors.toCollection(ArrayList::new)));
             }
-            // List<String> ids = persons.stream().map(e -> e.id).collect(Collectors.toCollection(ArrayList::new));
             result.status = true;
             result.data = "success";
             result.object = bookmarks;

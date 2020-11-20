@@ -23,7 +23,6 @@ public interface SearchRedisService {
     // 내부적으로 nickname, 평점 으로 저장
     void requestAndReviewSave(List<SearchAverageScore> searchAverageScores);
 
-    //
     // 위의 Join된 테이블 정보를 이용하여 사용가능한 정보를 만들어야 한다.
     // uid안의 nickname을 이용하여 SearchAverageScore가 저장된 key값을 찾아야 한다. -> 없으면 DB에서 불러오거나 0으로 산정해야한다.
     void makeUserInfo();

@@ -171,9 +171,8 @@ public class UserController {
         // uid가 int로 변하지 못합니다.
         String message = "uid_need_int";
         try {
-            user.setUid(Integer.parseInt(uid));
             // 포트폴리오에 해당 uid있다면 nickname수정할 것.
-
+            user.setUid(Integer.parseInt(uid));
         } catch (NumberFormatException nfe) {
             nfe.printStackTrace();
             result.status = false;

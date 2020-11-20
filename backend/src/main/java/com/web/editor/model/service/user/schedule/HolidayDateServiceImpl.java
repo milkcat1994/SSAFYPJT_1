@@ -16,7 +16,6 @@ public class HolidayDateServiceImpl implements HolidayDateService {
     ScheduleMapper scheduleMapper;
 
     // 일반회원의 휴일 일정 반환
-
     @Override
     public List<HolidayDate> holidayDates(int uid) {
         try {

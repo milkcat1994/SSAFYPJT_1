@@ -24,7 +24,6 @@ public class SecurityUtil {
             sha = null;
         }
         // 암호화 된 비밀번호 추출
-        // System.out.println(sha);
         return sha;
     }
 }

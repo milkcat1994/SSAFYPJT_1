@@ -32,8 +32,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     private RedisTemplate<String, Object> redisTemplateHash;
     private RedisTemplate<String, String> redisTemplateSet;
     private RedisTemplate<String, Integer> redisTemplateHashUid;
-    // tag 검색량 우선순위 위한 Set
-    // private RedisTemplate<String, Object> redisTemplateZSet;
     
     private HashOperations hashOperations;
     private HashOperations hashUidOperations;
@@ -58,15 +56,14 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                     this.redisTemplateHash.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchPortfolio.class));
                     setResultOperations = redisTemplateHash.opsForSet();
             
-            
-            
                     setOperations = redisTemplateSet.opsForSet();
                     this.redisTemplateHashUid = redisTemplateHashUid;
                     hashUidOperations = redisTemplateHashUid.opsForHash();
             
                     redisOperations = redisTemplateHash.opsForValue().getOperations();
                 } catch (RedisConnectionFailureException e) {
-                    System.out.println("Redis와 연결이 끊어져 Redis 객체 생성 불가");
+                    // Redis와 연결이 끊어져 Redis 객체 생성 불가
+                    e.printStackTrace();
                 }
     }
 
@@ -77,8 +74,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // 닉네임 -> uid
         // 평점의 경우 0으로 자동 초기화 된다.
         for (SearchPortfolioJoinBookmark searchPortfolioJoinBookmark : searchPortfolioJoinBookmarks) {
-            // searchPortfolioJoinBookmark.setInit("", "");
-            // System.out.println(searchPortfolioJoinBookmark);
             hashOperations.putAll("uid:" + searchPortfolioJoinBookmark.getUid(), objectMapper.convertValue(searchPortfolioJoinBookmark, Map.class));
 
             // nickname - uid 기억하는 hash
@@ -88,7 +83,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             setOperations.add("uids", searchPortfolioJoinBookmark.getUid());
             setOperations.add("nickname:uids:"+searchPortfolioJoinBookmark.getNickname(), searchPortfolioJoinBookmark.getUid());
         }
-        System.out.println("portfolioAndBookmarkSave 완료");
     }
 
     // mainUrl 해당 포트폴리오에 저장
@@ -99,7 +93,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             hashOperations.put("uid:" + searchPortfolioJoinVideo.getUid(), "url",
                     searchPortfolioJoinVideo.getMainUrl());
         }
-        System.out.println("portfolioAndVideoSave 완료");
     }
 
     // 닉네임에 따른 리뷰 점수 등록
@@ -110,7 +103,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "nickname", searchAverageScore.getNickname());
             hashOperations.put("nickname:review:" + searchAverageScore.getNickname(), "avgScore", searchAverageScore.getAvgScore());
         }
-        System.out.println("requestAndReviewSave 완료");
     }
 
     // Join된 테이블 정보를 이용하여 사용가능한 새로운 정보를 만들어낸다.
@@ -130,11 +122,7 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             key = iter.next();
             // 해당 nickname키들을 이용해 uid를 가져오고 해당 uid에 해당하는 Hash에 score점수를 넣는다.
             hashOperations.put("uid:"+hashUidOperations.get("nickname:uid:"+hashOperations.get(key, "nickname"), "uid"), "avgScore", hashOperations.get(key, "avgScore"));
-
-            // hashOperations.put(key, "score", hashOperations.get("nickname:" + hashOperations.get(key, "nickname"), "score"));
         }
-        System.out.println("makeUserInfo 완료");
-
         // 모든 정보를 "uid:{uid}"에 담아냈다.
     }
 
@@ -175,7 +163,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
                 setOperations.add("videoSkill:"+st.nextToken().trim(), uid);
             }
         }
-        System.out.println("searchRequestVideoInfoSave 완료");
     }
 
     // tag-uid 저장
@@ -192,8 +179,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
             
             hashOperations.put("uid:"+searchTag.getUid(), "tagKey", "tags:"+searchTag.getUid());
         }
-        // System.out.println(setOperations.members("tags:41"));
-        System.out.println("portfolioTagSave 완료");
     }
 
     
@@ -267,9 +252,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
     throws RedisConnectionFailureException{
         List<SearchPortfolio> resultList = new ArrayList<>();
         String searchKey = makeKey(searchRequest);
-        // System.out.println(searchRequest.getSearchTags().isEmpty());
-        // System.out.println(searchRequest.getSearchTags());
-        // System.out.println(searchRequest.getSearchTags().size());
         SearchPortfolioJoinBookmark tempResult;
         // Redis에 해당 검색 key값이 있는지 확인
         if(!hashKeys(searchKey).isEmpty()){
@@ -383,7 +365,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // (videoSkill, videoType, videoStyle)의 교집합 구하기
         if(!videoKeySet.isEmpty())
             setOperations.intersectAndStore(videoKeySet, filterString);
-            // setOperations.unionAndStore(keySet, filterString);
             
         // SearchType에 따라 tag, nickname, all 이 갈린다.
         // tag는 정확한 검색 결과 여야 하며
@@ -434,8 +415,6 @@ public class SearchRedisServiceImpl implements SearchRedisService {
         // video filter와 검색 결과를 담은 key Set이다.
         keySet.add(filterString);
         String searchString = sb.toString();
-        // System.out.println(searchRequest.getSearchTags());
-        // System.out.println(searchString);
         sb.setLength(0);
         // 검색 결과 uid를 담는 Set이다. -> 교집합 통해 uid집합 만들기
         // nickname:uid:{nickname} 가 Hash이므로 intersect연산이 되지 않는다.

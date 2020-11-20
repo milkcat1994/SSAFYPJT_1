@@ -61,12 +61,9 @@ public class BookmarkServiceImpl implements BookmarkService {
     public List<BookmarkInfo> cntBookmarkByUid(String muid) {
         List<BookmarkInfo> bookmarks = null;
         try {
-            // int res = 0;
             bookmarks = bookmarkMapper.cntBookmarkByUid(muid);
-            // res = bookmarks.size();
             // 찾지 못한 경우
             if (bookmarks.isEmpty()) {
-                // res = 0;
                 bookmarks = new ArrayList<>();
             }
             return bookmarks;

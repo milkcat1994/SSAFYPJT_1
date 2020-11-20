@@ -10,10 +10,8 @@ import lombok.ToString;
 @Setter
 public class BookmarkDeleteRequest {
     @ApiModelProperty(required = true)
-    // @NotNull
     int uid;
 
     @ApiModelProperty(required = true)
-    // @NotNull
     int muid;
 }

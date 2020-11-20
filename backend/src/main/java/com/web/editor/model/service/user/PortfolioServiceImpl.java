@@ -92,22 +92,6 @@ public class PortfolioServiceImpl implements PortfolioService {
         }
     }
 
-    // @Override
-    // public List<PortfolioReview> findReviewByUid(String uid) {
-    // List<PortfolioReview> review = null;
-    // try {
-    // review = portfolioMapper.findReviewByUid(uid);
-    // // 찾지 못한 경우
-    // if (review == null) {
-    // review = new ArrayList<>();
-    // }
-    // return review;
-    // } catch (SQLException e) {
-    // e.printStackTrace();
-    // return review;
-    // }
-    // }
-
     @Override
     public int portfolioInitSave(String uid) {
         try {
@@ -133,18 +117,6 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public int tagSave(PortfolioTagSaveRequest portfolioTagSaveRequest) {
         try {
-            // PortfolioTagSaveRequest pfts = null;
-            // int uid = portfolioTagSaveRequest.getPortfolioUid();
-            // StringTokenizer st = new
-            // StringTokenizer(portfolioTagSaveRequest.getTagName().trim(), "#");
-
-            // int res = 0;
-            // while (st.hasMoreTokens()) {
-            // pfts = new PortfolioTagSaveRequest(uid, st.nextToken().trim());
-            // res = portfolioMapper.tagSave(pfts);
-            // if (res < 0)
-            // break;
-            // }
             int res = portfolioMapper.tagSave(portfolioTagSaveRequest);
             return res;
         } catch (SQLException e) {

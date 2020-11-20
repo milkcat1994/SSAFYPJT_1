@@ -30,9 +30,6 @@ public interface PortfolioService {
     // 스케쥴 조회
     public List<PortfolioSchedule> findScheduleByUid(String uid);
     
-    // 리뷰 조회
-    // public List<PortfolioReview> findReviewByUid(String uid);
-    
     // 포트폴리오 초기 등록
     // uid를 이용해 uid, nickname 설정
     public int portfolioInitSave(String uid);

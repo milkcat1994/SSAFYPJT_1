@@ -25,7 +25,7 @@ public class RequestMapper {
 	@Autowired
 	private SqlSession sqlSession;
 
-	// 요청 검색return sqlSession.selectOne("normalLogin", normalLoginRequest);
+	// 요청 검색return
 	public RequestDto searchRequest(int rid) throws SQLException {
 		return sqlSession.selectOne("searchRequest", rid);
 	}

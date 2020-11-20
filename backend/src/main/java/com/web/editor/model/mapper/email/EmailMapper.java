@@ -15,7 +15,6 @@ public class EmailMapper {
 
     @Autowired
     @Qualifier("ThirdSqlSessionTemplate")
-    // @Qualifier("SecondSqlSessionTemplate")
     private SqlSession sqlSession;
 
     // email이용한 등록여부 확인

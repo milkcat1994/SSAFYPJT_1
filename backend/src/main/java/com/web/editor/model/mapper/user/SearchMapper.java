@@ -21,14 +21,6 @@ public class SearchMapper {
     @Qualifier("firstSqlSessionTemplate")
 	private SqlSession sqlSession;
 	
-    // @Autowired
-    // @Qualifier("SecondSqlSessionTemplate")
-	// private SqlSession reqSqlSession;
-
-	// public List<Portfolio> searchAll(Map map) throws SQLException {
-	// 	return sqlSession.selectList("searchAll", map);
-	// }
-	
 	// 포트폴리오 - 북마크 
 	// uid, nickname, pay_min, skill, count(bookmark)
 	public List<SearchPortfolioJoinBookmark> joinBookmarks() throws SQLException{

@@ -53,7 +53,6 @@ public class RedisCacheConfig {
         RedisTemplate<String, Integer> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
-        //출처 : https://m.blog.naver.com/PostView.nhn?blogId=cutesboy3&logNo=221469450441&proxyReferer=https:%2F%2Fwww.google.com%2F
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         //객체를 json 형태로 깨지지 않고 받기 위한 직렬화 작업
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Integer.class));
@@ -67,7 +66,6 @@ public class RedisCacheConfig {
         RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
-        //출처 : https://m.blog.naver.com/PostView.nhn?blogId=cutesboy3&logNo=221469450441&proxyReferer=https:%2F%2Fwww.google.com%2F
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         //객체를 json 형태로 깨지지 않고 받기 위한 직렬화 작업
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
@@ -81,7 +79,6 @@ public class RedisCacheConfig {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
 
-        //출처 : https://m.blog.naver.com/PostView.nhn?blogId=cutesboy3&logNo=221469450441&proxyReferer=https:%2F%2Fwww.google.com%2F
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         //객체를 json 형태로 깨지지 않고 받기 위한 직렬화 작업
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Bookmark.class));

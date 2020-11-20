@@ -17,8 +17,6 @@ import com.web.editor.model.service.user.schedule.HolidayDateService;
 
 import io.swagger.annotations.ApiOperation;
 
-//http://localhost:8080/swagger-ui.html
-
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/schedule")

@@ -34,7 +34,6 @@ public class AsyncTaskService {
 
 			// 검색 기록 모두 삭제
 			// long deleteSearch = searchRedisService.deleteKeys("search:");
-			// System.out.println("검색기록 "+deleteSearch+"개 삭제");
 			
 			// DB내용 Redis로 끌어올 필요 있음. 
 			searchRedisService.deleteKeys("uid:*");
@@ -56,11 +55,10 @@ public class AsyncTaskService {
 			long deleteSearch = searchRedisService.deleteKeys("search:");
 			// nickname과 uid Hash삭제
 			searchRedisService.deleteKeys("nickname:uid:");
-			System.out.println("Redis Update End");
 			
 		} catch (RedisConnectionFailureException e) {
-			// e.printStackTrace();
-			System.out.println("Redis연결에 실패하여 검색 기록을 삭제 및 DB에 저장 할 수 없습니다.");
+			// Redis연결에 실패하여 검색 기록을 삭제 및 DB에 저장 할 수 없습니다.
+			e.printStackTrace();
 		}
 	}
 }
