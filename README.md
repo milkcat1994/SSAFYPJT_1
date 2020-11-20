@@ -1,5 +1,7 @@
 ## Introduction
 
+![Generic badge](https://img.shields.io/badge/version-1.4.5-blue.svg) ![Generic badge](https://img.shields.io/badge/framework-vue-brightgreen.svg) ![Generic badge](https://img.shields.io/badge/framework-spring-green.svg) ![Generic badge](https://img.shields.io/badge/database-MariaDB-blue.svg) ![Generic badge](https://img.shields.io/badge/server-AWS-9cf.svg) ![Generic badge](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 #### 편하게 집에서 의뢰하자!
 **편집자**와 **의뢰자**와의 매칭을 도와주는 사이트입니다.
 
@@ -15,7 +17,6 @@
 - '전체 편집자 찾기'를 통해 여러 검색이 가능합니다.
 - 알람 페이지에서 알람과 일정 모두를 확인할 수 있습니다.
 - 참고: [크몽](https://kmong.com/), [숨고](https://soomgo.com/)
-
 
 
 ## Team
