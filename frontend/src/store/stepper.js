@@ -240,41 +240,29 @@ export const stepper = {
       return step => {
         switch (step) {
           case 0:
-            if (!getters.getSelectedVideoType) {
+            if (!getters.getSelectedVideoType)
               return false
-            } else {
-              return true
-            }
+            return true
           case 1:
-            if (!getters.getSelectedVideoStyle) {
+            if (!getters.getSelectedVideoStyle)
               return false
-            } else {
-              return true
-            }
+            return true
           case 2:
-            if (getters.getSelectedVideoSkills.length === 0) {
+            if (getters.getSelectedVideoSkills.length === 0)
               return false
-            } else {
-              return true
-            }
+            return true
           case 3:
-            if (!getters.getOriginLength) {
+            if (!getters.getOriginLength)
               return false
-            } else {
-              return true
-            }
+            return true
           case 4:
-            if (!getters.getFinalLength) {
+            if (!getters.getFinalLength)
               return false
-            } else {
-              return true
-            }
+            return true
           case 5:
-            if (getters.getDeadline.length < 2) {
+            if (getters.getDeadline.length < 2)
               return false
-            } else {
-              return true
-            }
+            return true
         }
       }
     }

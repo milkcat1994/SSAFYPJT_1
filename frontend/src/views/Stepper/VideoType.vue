@@ -46,7 +46,6 @@ export default {
   cursor: pointer;
 }
 .icon {
-  /* display: inline-block; */
   width: 100px;
   height: 100px;
 }

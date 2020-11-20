@@ -9,14 +9,8 @@
     >
       <span class="stage-name"
       >{{ stage.name }}</span>
-      <!-- :class ="{current: currentStep == stage.num}" -->
     </div>
 
-    <!-- <div class="d-flex justify-content-center mx-4 p-2 bg-white rounded">
-      <div class="m-2 p-2">
-        <button class="btn btn-success btn-sm" v-for="filter in selectedFilters" :key="filter">{{filter}}</button>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -77,11 +71,6 @@ export default {
       return arr
     }
   },
-  // watch:{
-  //   currentStep(){
-  //     console.log(this.currentStep)
-  //   }
-  // },
   methods: {
     changeStep(stageNum) {
       this.$emit("change-step", stageNum);

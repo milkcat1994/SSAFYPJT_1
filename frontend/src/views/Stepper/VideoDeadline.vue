@@ -28,8 +28,6 @@ export default {
   components: { flatPicker },
   methods: {
     changeDates(selectedDates, dateStr) {
-      // console.log(selectedDates)
-      // console.log(dateStr)
       this.$store.commit("stepper/setDeadline", dateStr);
     },
   },
@@ -39,7 +37,6 @@ export default {
       config: {
         allowInput: true,
         mode: "range",
-        // minDate: "today",
       },
     };
   },

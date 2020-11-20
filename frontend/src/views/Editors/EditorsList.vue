@@ -32,7 +32,6 @@
               <div class="col-3">
                 <!-- 영상 미리보기 -->
                 <router-link :to="`/portfolio?no=${editor.uid}`">
-                  <!-- <img src alt /> -->
                   <LazyYoutubeVideo v-if="editor.url" :src="editor.url" style="width: 100%;" />
                   <img
                     v-else
@@ -71,7 +70,6 @@
                 </div>
                 <div class="d-flex">
                   <!-- 평점 -->
-                  <!-- <span><i class="fas fa-star"></i> {{Number((editor.avgScore).toFixed(1))}}점</span> -->
                   <span>
                     <i class="fas fa-star"></i>
                     {{ round(editor.avgScore) }}점
@@ -136,9 +134,6 @@ export default {
   },
   data() {
     return {
-      // 태그들
-      // tags: [],
-      // tag: "",
       editorsPerPage: 5,
       currentPage: 1,
       sortKey: "정렬",

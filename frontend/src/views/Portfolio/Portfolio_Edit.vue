@@ -99,7 +99,6 @@
               </div>
               <div class="row" v-for="(video, index) in portfolio.URLs" :key="index">
                 <div class="col-md-11">
-                  <!-- {{index}} -->
                   <base-input
                   alternative
                   label="영상 URL"
@@ -119,17 +118,6 @@
               <div class="col">
                 <base-button v-if="!isFirstHeadVideo || !isFirstVideos || haveSchedule" size="sm" type="default float-right" @click="updateSchedule()"> 수정하기 </base-button>
                 <h4> 근무가 불가능한 날짜를 골라주세요. </h4>
-                  <!-- <div class="row"> -->
-                    <!-- <base-checkbox class="mb-3" v-model="offDays.weekday">평일</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.weekend">주말</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.mon">월</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.tue">화</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.wed">수</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.thur">목</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.fri">금</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.sat">토</base-checkbox>
-                    <base-checkbox class="mb-3" v-model="offDays.sun">일</base-checkbox> -->
-                  <!-- </div> -->
                 <vc-date-picker
                   mode='multiple'
                   v-model='disableDates'>
@@ -153,7 +141,6 @@ import { getFormatDate } from "@/util/day-common";
     name: 'portfolio_edit',
     components: {
       InputTag,
-      // alertify
     },
     data() {
       return {
@@ -247,7 +234,6 @@ import { getFormatDate } from "@/util/day-common";
                 let result = data.object.filter(video => video.mainFlag == 0);
                 this.portfolio.URLs = this.makeVideosArray(result);
                 if(this.portfolio.URLs.length == 0){
-                  // console.log("URL 없음");
                   this.isFirstVideos = true;
                 } else {
                   this.isFirstVideos = false;
@@ -257,7 +243,6 @@ import { getFormatDate } from "@/util/day-common";
                 this.portfolio.HeadURL = this.makeVideosArray(result);
 
                 if(this.portfolio.HeadURL.length == 0){
-                  // console.log("HEAD URL 없음");
                   this.isFirstHeadVideo = true;
                 } else {
                   this.isFirstHeadVideo = false;
@@ -266,7 +251,6 @@ import { getFormatDate } from "@/util/day-common";
               } else {
                 this.isFirstVideos = true;
                 this.isFirstHeadVideo = true;
-                // console.log("URL전부 없음");
                 return;
               }
             })
@@ -285,7 +269,6 @@ import { getFormatDate } from "@/util/day-common";
             this.disableDates = this.makeScheduleArray(result);
             return;
           } else {
-            // console.log("스케줄 없음");
             this.haveSchedule = false;
             return;
           }
@@ -345,7 +328,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -362,7 +344,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -387,7 +368,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -404,7 +384,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -428,7 +407,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("저장이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -446,7 +424,6 @@ import { getFormatDate } from "@/util/day-common";
           .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -456,11 +433,6 @@ import { getFormatDate } from "@/util/day-common";
         }
       },
       updatePortfolio(){
-        // Object.keys(this.checkboxes).forEach(key => {
-        //   if(this.checkboxes[key])
-        //     // console.log(Object.values(this.checkboxes[key]));
-        //     this.portfolio.skills += this.checkboxes[key] + ",";
-        // })
         if(this.checkboxes.color){
           this.portfolio.skills += ",color";
         }
@@ -479,7 +451,6 @@ import { getFormatDate } from "@/util/day-common";
         if(this.checkboxes.outro){
           this.portfolio.skills += ",outro";
         }
-        // console.log(this.portfolio.skills);
         http
         .put('/portfolio/portfolio/'+this.uid, {
           uid: this.uid,
@@ -490,7 +461,6 @@ import { getFormatDate } from "@/util/day-common";
         .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -507,7 +477,6 @@ import { getFormatDate } from "@/util/day-common";
         .then(({ data }) => {
             if(data.data == "success"){
               this.$router.push("/portfolio?no="+this.uid);
-              // alertify.notfiy("수정이 완료되었습니다.","success",3);
               return;
             } else {
               alertify.error("오류가 발생하였습니다.",3);
@@ -537,7 +506,6 @@ import { getFormatDate } from "@/util/day-common";
       makeScheduleArray(result){
         let res = [];
         result.forEach(element => {
-          // getFormatDate(element.startDate);
           res.push(element.startDate);
         })
         return res;
@@ -549,9 +517,6 @@ import { getFormatDate } from "@/util/day-common";
         })
       },
       deleteURL(index){
-        // console.log(index);
-        // this.portfolio.URLs[index].url = "";
-        // delete this.portfolio.URLs[index];
         this.portfolio.URLs.splice(index,1);
       }
     },

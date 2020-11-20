@@ -21,7 +21,6 @@
         <ul class="nav nav-footer justify-content-center justify-content-lg-end">
           <li class="nav-item">
             <router-link :to="'/about'" class="nav-link">About Us</router-link>
-            <!-- <a href="https://lab.ssafy.com/s03-webmobile1-sub3/s03p13a509/wikis/home" class="nav-link" target="_blank">About Us</a> -->
           </li>
         </ul>
       </div>

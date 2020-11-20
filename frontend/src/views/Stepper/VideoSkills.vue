@@ -59,7 +59,6 @@ export default {
   border-radius: 0.375rem;
 }
 .icon {
-  /* display: inline-block; */
   width: 100px;
   height: 100px;
 }
@@ -79,7 +78,6 @@ export default {
 
   /* Position the tooltip */
   position: absolute;
-  /* left: 0; */
   z-index: 99999 !important;
 }
 

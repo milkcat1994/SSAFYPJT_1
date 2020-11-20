@@ -19,7 +19,6 @@
     <div class="container mt--7 mb-8">
       <div class="card shadow border-0">
         <div class="card-header pb-0">
-          <!-- <h3 class="text-center mt-2">헤더(progress bar) 들어갈 자리</h3> -->
           <progress-bar :currentStep="currentStep" @change-step="changeStep"></progress-bar>
         </div>
         <div class="card-body border-0">
@@ -33,7 +32,6 @@
         <div class="card-footer d-flex justify-content-end">
           <div class="px-2">
             <button class="btn ex-btn" @click.prevent="backStep">이전</button>
-            <!-- <a href="#" @click.prevent="backStep">이전</a> -->
             <button class="btn btn-primary ml-4" @click.prevent="nextStep">다음</button>
           </div>
         </div>
@@ -43,8 +41,6 @@
 </template>
 
 <script>
-// import http from "@/util/http-common";
-// import { mapGetters } from 'vuex';
 import alertify from "alertifyjs";
 
 import ProgressBar from "./ProgressBar.vue";
@@ -76,19 +72,16 @@ export default {
       if (this.currentStep > 0) {
         this.currentStep--;
       } else {
-        // this.currentStep = 0
         this.$router.push({ name: "mainpage" });
       }
     },
     changeStep(stepNum) {
       if (this.$store.getters["stepper/isChecked"](stepNum)) {
-        // console.log(stepNum)
         this.currentStep = stepNum;
       }
     },
     // 각 단계 verification 필요 ==> 다음 버튼 활성화
     nextStep() {
-      // console.log(this.currentStep)
       if (this.currentStep < 5) {
         switch (this.currentStep) {
           case 0:
@@ -109,7 +102,6 @@ export default {
             if (
               this.$store.getters["stepper/getSelectedVideoSkills"].length === 0
             ) {
-              // console.log(this.$store.getters['stepper/getSelectedVideoSkills'])
               alertify.notify("편집 스킬을 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
@@ -117,7 +109,6 @@ export default {
             break;
           case 3:
             if (!this.$store.getters["stepper/getOriginLength"]) {
-              // console.log(this.$store.getters['stepper/getOriginLength'])
               alertify.notify("원본 길이를 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
@@ -125,27 +116,17 @@ export default {
             break;
           case 4:
             if (!this.$store.getters["stepper/getFinalLength"]) {
-              // console.log(this.$store.getters['stepper/getFinalLength'])
               alertify.notify("완성 길이를 선택해주세요", "warning", 3);
             } else {
               this.currentStep++;
             }
             break;
-          // case 5:
-          //   if (this.$store.getters['stepper/getDeadline'].length < 2) {
-          //     alertify.notify("마감 기한을 선택해주세요", "warning", 3);
-          //   } else {
-          //     // this.currentStep++;
-          //     this.$router.push("/editors");
-          //   }
         }
       } else {
         // after final step
-        // console.log(this.$store.getters['stepper/getDeadline'])
         if (this.$store.getters["stepper/getDeadline"].length < 2) {
           alertify.notify("마감 기한을 선택해주세요", "warning", 3);
         } else {
-          // this.currentStep++;
           this.$router.push("/editors");
         }
       }

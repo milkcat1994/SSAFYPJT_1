@@ -75,7 +75,6 @@
               <div class="row">
                 <div class="col">
                   <div class="text">
-                    <!-- <div id="editor_skill"> -->
                     <h4 style="margin-bottom:3%;">
                       {{ portfolio.nickname }}님은 아래와 같은 기술을 보유하고
                       있습니다.
@@ -214,7 +213,6 @@
                   </div>
                 </div>
               </div>
-              <!-- </div> -->
               <div class="row">
                 <div class="col ml-4">
                   <h2 style="margin-bottom:20px;">한줄평({{ reviews.length }})</h2>
@@ -222,6 +220,7 @@
                     <div class="row">
                       <img
                         class="profile"
+                        alt=""
                         src="img/theme/user-logos.png"
                         style="margin-top:5px; margin-left:1.5%; width: 45px; height:30px;"
                       />
@@ -552,10 +551,8 @@
 </template>
 
 <script>
-// import InputTag from 'vue-input-tag';
 import LazyYoutubeVideo from "vue-lazy-youtube-video";
 import { Rate } from "vue-rate";
-// import { BadgerAccordion, BadgerAccordionItem } from "vue-badger-accordion";
 import flatPicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import "vue-rate/dist/vue-rate.css";
@@ -572,12 +569,6 @@ import moment from "moment";
 require("moment-timezone");
 moment.tz.setDefault("Asia/Seoul");
 moment.locale("ko");
-
-// import { mapGetters } from "vuex";
-// import store from "@/store/store.js";
-// 날짜 계산 파일
-// import { getFormatDate } from "@/util/day-common";
-// import { getEndDate, getFormatDate } from "@/util/day-common";
 
 export default {
   name: "user-portfolio",
@@ -679,7 +670,6 @@ export default {
         video_result_length: "",
         video_type: "",
         request_description: "",
-        // rid: 0,
         tag_list: "",
         video_skill: "",
         video_style: "",
@@ -783,7 +773,6 @@ export default {
     // 북마크 정보 가져와서 북마크 한 인원수 보여주기
     this.getBookmarkCount();
 
-    // console.log(this.events);
   },
   methods: {
     beforeCheck() {
@@ -880,15 +869,6 @@ export default {
         !this.request_info.video_result_length &&
         ((valid = false), (message = "최종 영상 길이를 입력해주세요"));
 
-      //숫자인지 체크
-      // valid &&
-      //   !this.checkNumberFormat(this.request_info.video_origin_length) &&
-      //   ((valid = false), (message = "숫자만 입력해주세요"));
-      // valid &&
-      //   !this.checkNumberFormat(this.request_info.video_result_length) &&
-      //   ((valid = false), (message = "숫자만 입력해주세요"));
-      // valid && !this.request_info.video_type && ((valid = false), (message = '원하는 영상 종류를 입력해주세요'))
-
       if (valid) this.requestForm();
       else {
         alertify.error(message, 3);
@@ -908,14 +888,11 @@ export default {
         .post("/request", this.request_info)
         .then(({ data }) => {
           if (data == "success") {
-            // console.log("요청사항 완료")
             this.initModalRequest();
             this.$store.commit("stepper/clearFilterFinderStatus");
             alertify.notify("작업 요청 완료", "success", 3);
             return;
           } else {
-            // console.log("요청사항 실패")
-            // fail
             return;
           }
         })
@@ -1020,9 +997,7 @@ export default {
         .then(({ data }) => {
           if (data.data == "success") {
             // scheduleType=0 기본
-            // let result = data.object.filter(schedule => schedule.scheduleType == 0);
             this.makeScheduleArray(data.object);
-            // console.log(data.object);
             return;
           } else {
             return;
@@ -1073,7 +1048,6 @@ export default {
             if (isNaN(this.portfolio.totalRate)) this.portfolio.totalRate = "-";
             else
               this.portfolio.totalRate = this.round(this.portfolio.totalRate);
-            // console.log(this.portfolio.totalRate);
 
             if (this.reviews.length == 0) {
               this.reviewLoad = false;
@@ -1130,13 +1104,10 @@ export default {
           //성공시 video 추출 필요
           if (data.data == "success") {
             this.portfolio.nickname = data.object.nickname;
-            // console.log(data.object);
             this.request_info.response_nickname = data.object.nickname;
             this.portfolio.description = data.object.description;
             this.portfolio.payMin = data.object.payMin;
-            // this.portfolio.skill = data.object.skill;
             this.portfolio.skills = data.object.skill.split(",");
-            // console.log(this.portfolio.skills);
             this.getInprogressDate();
             this.getWorkCount();
             this.getWorkCount2();
@@ -1245,7 +1216,6 @@ export default {
     },
     loadMoreReviews() {
       this.cnt++;
-      // console.log(this.cnt);
       if (this.reviewsMain.length < this.reviews.length) {
         let sub = this.reviews.length - this.reviewsMain.length;
         if (sub < 5) {
@@ -1297,7 +1267,6 @@ export default {
       let finalLength = this.$store.getters["stepper/getFinalLength"];
       this.request_info.video_result_length = finalLength.name;
       this.dates.range = this.$store.getters["stepper/getDeadline"];
-      // console.log(this.dates.range);
     },
     getFormatDate(regtime) {
       return moment(new Date(regtime)).format("YY.MM.DD hh:mm");
@@ -1316,7 +1285,6 @@ export default {
             "minutes"
           );
           totalTime += time;
-          // console.log(element.response_date + " " + element.request_date + " " + totalTime);
         }
       });
       totalTime /= list.length;
@@ -1333,20 +1301,15 @@ export default {
       } else {
         this.portfolio.responseTime = "1시간 이내";
       }
-      // console.log(totalTime);
     },
     searchTag(tag) {
       // Editors.vue로 props를 이용하여 보내 태그 검색이 가능하도록 한다.
-      // console.log(tag);
       this.$router.push({ name: "editors", params: { clickSearchTag: tag } });
     },
   },
 };
 </script>
 <style scoped>
-/* // #editor_skill{
-//   background-color: #d6d6d6;
-// } */
 .custom-control {
   margin-right: 40px;
 }

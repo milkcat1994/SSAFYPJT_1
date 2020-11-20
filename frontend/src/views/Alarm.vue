@@ -13,7 +13,6 @@
     </base-header>
 
     <br />
-    <!-- <h2 class="text-center">알림창</h2> -->
     <br />
     <br />
 
@@ -273,14 +272,6 @@
                             />
                           </div>
                           <br />
-                          <!-- <b-button
-                            class="justify-content-center"
-                            style="background-color: #aaaaff"
-                            @click="copyClipboard('emailtarget')"
-                          >
-                            <i class="fas fa-copy" style="color: white">복사하기</i>
-                          </b-button>
-                          <br />-->
                         </div>
                       </b-modal>
                     </b-card-body>
@@ -670,7 +661,6 @@ export default {
           }
         })
         .catch(() => {
-          // alert('요청 수락중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침
@@ -688,7 +678,6 @@ export default {
           }
         })
         .catch(() => {
-          // alert('요청 거절중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침
@@ -706,7 +695,6 @@ export default {
           }
         })
         .catch(() => {
-          // alert('요청 거절중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침
@@ -722,9 +710,12 @@ export default {
           if (data == "success") {
             // alertify.notify("후기 작성이 완료되었습니다.", "success", 3);
           }
+          else{
+            throw 'error'
+          }
         })
-        .catch(() => {
-          // alert('요청 거절중 에러가 발생했습니다.');
+        .catch((e) => {
+          console.error(e)
         })
         .finally(() => {
           // 목록 새로고침
@@ -762,7 +753,6 @@ export default {
     },
     writeReview(rid) {
       let msg = "리뷰 작성에 실패하였습니다.";
-      // console.log(editor_nickname, rid);
       http
         .post("/request/review", {
           requestFormRid: rid,
@@ -773,7 +763,6 @@ export default {
           comment: this.comment,
         })
         .then(({ data }) => {
-          // console.log(this.videoScore);
           if (data == 1) {
             msg = "리뷰 작성이 완료되었습니다.";
             alertify.notify(msg, "success", 3);
@@ -879,9 +868,11 @@ export default {
           if (data == "success") {
             // alert('알람 읽음 완료');
           }
+          else{
+            throw 'error'
+          }
         })
         .catch(() => {
-          // alert('요청 거절중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침

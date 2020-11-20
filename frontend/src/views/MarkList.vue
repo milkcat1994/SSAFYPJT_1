@@ -27,15 +27,10 @@
           @click="movePortfolio(bookmark.muid)"
         >
           <br />
-          <!-- src는 해당 포트폴리오의 main 동영상 링크 가져오기 -->
+          <!-- 해당 포트폴리오의 main 동영상 링크 -->
           <!-- 227.5 * 127.969 -->
           <img v-if="bookmark.mainUrl" :src="'https://img.youtube.com/vi/' + getMainVideo(bookmark.mainUrl).substr(30) + '/0.jpg'" 
             style="width: 100%;"/>
-          <!-- <LazyYoutubeVideo
-            v-if="bookmark.mainUrl"
-            :src="getMainVideo(bookmark.mainUrl)"
-            style="width: 100%;"
-          /> -->
           <!-- main video가 없을때 보여지는 img -->
           <img
             v-else
@@ -43,7 +38,6 @@
             alt="영상없음"
             style="width: 100%; height: 127.969px;"
           />
-          <!-- src="https://www.youtube.com/embed/5iSlfF8TQ9k" -->
           <hr class="my-1" />
           <!-- card body에 해당 포트폴리오로 이동 할 수 있도록 링크 달기 -->
           <div class="card-body">
@@ -56,32 +50,10 @@
             <p class="card-text">
               <!-- 해당 포트폴리오의 pay/min 불러와서 작성 -->
               가격: {{getPayMin(bookmark.payMin)}}
-              <!-- <br /> -->
-              <!-- 해당 포트폴리오의 평점 계산해서 작성 -->
-              <!-- <h3> -->
-              <!-- 평점: {{getAvg(bookmark)}} -->
-              <!-- </h3> -->
             </p>
             <!-- 아래는 평점을 별로 나타내려 하였으나 2줄로 출력되어 보류 -->
-            <!-- <rate :length="5" :value="getAvg(bookmark)" :readonly="true" /> -->
-            <!-- style="bottom:15px;position:absolute;right:15px;" -->
             <div class="d-flex justify-content-end">
               <!-- 하트 표시 삭제 -->
-              <!-- <div @click.stop="deleteBookmark(bookmark.muid)">
-                <svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 16 16"
-                  class="bi bi-heart-fill"
-                  fill="red"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-                  />
-                </svg>
-              </div>-->
               <div @click.stop="deleteBookmark(bookmark.muid)">
                 <base-button type="danger" class="btn">삭제</base-button>
               </div>
@@ -95,17 +67,12 @@
 </template>
 
 <script>
-// import { Rate } from "vue-rate";
-// import 'vue-rate/dist/vue-rate.css'
-// import LazyYoutubeVideo from "vue-lazy-youtube-video";
 
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
 export default {
   name: "marklist",
   components: {
-    // LazyYoutubeVideo,
-    // Rate,
   },
   data() {
     return {
@@ -141,7 +108,6 @@ export default {
           // 북마크 조회 성공
           if (data.data == "success") {
             //추후 삭제 필요
-            // alertify.notify("북마크 조회 성공", "success", 3);
             this.bookmarks = data.object;
           }
           return;
@@ -153,9 +119,6 @@ export default {
         });
     },
     // 평점의 평균 구하기
-    // getAvg(bookmark){
-    //   return ((Number(bookmark.avgV) + Number(bookmark.avgK)+ Number(bookmark.avgF))/3).toFixed(1);
-    // },
     getPayMin(payMin) {
       if (payMin == "") {
         return "미정";
@@ -200,7 +163,6 @@ export default {
                 alertify.notify(message, "success", 3);
                 // 삭제 완료한 뒤 북마크 갱신
                 vue.bookmarksInit();
-                // vue.$router.go();
                 return;
               } else {
                 message = "삭제에 실패하였습니다.";

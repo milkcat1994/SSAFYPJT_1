@@ -8,12 +8,6 @@
           </div>
           <form role="form">
             <div class="d-flex justify-content-center">
-              <!-- <base-checkbox class="mb-3 mr-3" v-model="model.accounts.editor"
-                >Editor</base-checkbox
-              >
-              <base-checkbox class="mb-3" v-model="model.accounts.noneditor"
-                >Non-Editor</base-checkbox
-              >-->
               <div class="custom-control custom-radio custom-control-inline cursor-pointer">
                 <input
                   type="radio"
@@ -123,23 +117,6 @@
               @keydown.enter="joinCheck()"
             ></base-input>
 
-            <!-- <div class="text-muted font-italic">
-              <small>
-                password strength:
-                <span class="text-success font-weight-700">strong</span>
-              </small>
-            </div>-->
-
-            <!-- 약관동의 -->
-            <!-- <div class="row my-4">
-              <div class="col-12">
-                <base-checkbox class="custom-control-alternative">
-                  <span class="text-muted">
-                    <a href="#!">약관에 동의 하겠습니다.</a>
-                  </span>
-                </base-checkbox>
-              </div>
-            </div>-->
             <div class="text-center">
               <base-button type="primary" class="my-4" @click="joinCheck()">회원가입</base-button>
             </div>
@@ -162,7 +139,6 @@
   </div>
 </template>
 <script>
-// import { required, email, sameAs } from "vuelidate/lib/validators";
 
 import http from "@/util/http-common";
 import alertify from "alertifyjs";
@@ -315,7 +291,6 @@ export default {
           !this.model.passwordconf ||
           this.model.password !== this.model.passwordconf) &&
         ((valid = false), (message = "비밀번호를 다시 확인해주세요."));
-      console.log("valid>>" + message);
       if (valid) this.join();
       else {
         alertify.error(message, 3);
@@ -323,7 +298,6 @@ export default {
       }
     },
     join() {
-      console.log(this.model);
       http
         .post("/user", {
           auth: this.model.accounts,
@@ -332,7 +306,6 @@ export default {
           password: this.model.password,
         })
         .then(({ data }) => {
-          console.log(data);
           if (data.data == "success") {
             alertify.notify("회원가입 되었습니다.", "success", 3);
             this.$router.push("/login");
@@ -345,7 +318,6 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
           alertify.error("서버 오류 발생하였습니다.", 3);
         });
     },
@@ -370,13 +342,13 @@ export default {
     },
     emailLValid() {
       if (this.emailCheck(this.model.email)) return true;
-      else return false;
+      return false;
     },
     emailJValid() {
       if (this.emailCheck(this.model.email)) return true;
       else {
         if (this.isCheck) return true;
-        else return false;
+        return false;
       }
     },
   },

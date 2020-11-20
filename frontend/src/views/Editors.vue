@@ -89,9 +89,6 @@
               <base-button slot="title" type="secondary" class="dropdown-toggle">{{
                 searchKey
               }}</base-button>
-              <!-- <a class="dropdown-item" href="#" @click.prevent="searchKey = '전체'"
-                >전체</a
-              > -->
               <a class="dropdown-item" href="#" @click.prevent="searchKey = '이름'"
                 >이름</a
               >
@@ -274,9 +271,8 @@ export default {
             } else {
               this.visable = false;
             }
-            // console.log(res.data.object);
           } else {
-            console.log(res.data.status);
+            throw 'error'
           }
         })
         .catch((err) => console.error(err));
@@ -297,7 +293,7 @@ export default {
           if (res.data.status) {
             this.editorsAllCnt = res.data.object.length;
           } else {
-            console.log(res.data.status);
+            throw 'error'
           }
         })
         .catch((err) => console.error(err));

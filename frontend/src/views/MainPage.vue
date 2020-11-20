@@ -4,7 +4,6 @@
       <!-- 검색 -->
       <div class="row mt-3">
         <div class="col-5 ml-5">
-          <!-- <h1 class="display-2 text-white">어떤 편집자를 찾으시나요?</h1> -->
 
           <!-- 검색 input -->
 
@@ -59,6 +58,7 @@
                     <router-link :to="`/portfolio?no=${editor.uid}`">
                       <img
                         v-if="editor.url"
+                        alt=""
                         class="zoom"
                         :src="'https://img.youtube.com/vi/' + editor.url.substr(30) + '/0.jpg'"
                         style="width: 100%;"
@@ -124,6 +124,7 @@
                             <img src alt />
                             <img
                               v-if="recEditor.url"
+                              alt=""
                               :src="'https://img.youtube.com/vi/' + recEditor.url.substr(30) + '/0.jpg'"
                               style="width: 100%;"
                             />
@@ -184,12 +185,9 @@
 <script>
 import http from "@/util/http-common.js";
 import { Carousel, Slide } from "vue-carousel";
-// import LazyYoutubeVideo from "vue-lazy-youtube-video";
-// import { mapGetters } from "vuex";
 
 export default {
   components: {
-    // LazyYoutubeVideo,
     Carousel,
     Slide,
   },
@@ -243,8 +241,9 @@ export default {
         .then((res) => {
           if (res.data.status) {
             this.editorsData = res.data.object;
-          } else {
-            console.log(res.data.status);
+          }
+          else{
+            throw 'error'
           }
         })
         .catch((err) => console.error(err));
@@ -257,12 +256,10 @@ export default {
     },
     keywordSearch(keyword) {
       http.get(`/search/${keyword}`).then((res) => {
-        console.log(res);
         this.$router.push({ name: "search" });
       });
     },
     createRequest(event) {
-      console.log(event.target.value);
       this.$router.push({ name: "search" });
     },
     moveList() {
@@ -286,7 +283,6 @@ export default {
     isLoggedIn() {
       return this.$store.getters["auth/isLoggedIn"];
     },
-    // ...mapGetters(["auth/isLoggedIn"]),
     currentEditors() {
       let start = (this.currentPage - 1) * this.editorsPerPage;
       let end = this.currentPage * this.editorsPerPage;
@@ -321,12 +317,7 @@ export default {
 
 #carousel-1 {
   width: 700px;
-  /* box-shadow: 3px 3px 3px gray; */
 }
-
-/* #maincard {
-  box-shadow: 3px 3px 3px gray;
-} */
 
 button:focus {
   border: none !important;

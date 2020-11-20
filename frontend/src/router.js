@@ -9,10 +9,7 @@ Vue.use(Router);
 const requireLogin = (to, from, next) => {
   if (Vue.prototype.$session.exists()) return next();
   next({
-    // 아래 창에서 로그인 모달을 띄워줄순 없을지
     name: "login",
-    // 요청한 페이지로 이동 하기 위한 방식
-    // query: {redirect: to.fullPath}
   });
 };
 
@@ -32,10 +29,7 @@ const requireAuth = (to, from, next) => {
   )
     return next();
   next({
-    // 아래 창에서 로그인 모달을 띄워줄순 없을지
     path: "/",
-    // 요청한 페이지로 이동 하기 위한 방식
-    // query: {redirect: to.fullPath}
   });
 };
 

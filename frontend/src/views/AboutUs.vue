@@ -21,8 +21,6 @@
         <div class="col d-flex justify-content-center">
           <img class="my-3 logoimg" src="img/theme/logo.png" alt="편집" />
         </div>
-        <!-- <h2 class="col-12">편집</h2>
-        <h4 class="col-12">편하게 집에서 의뢰하세요</h4>-->
         <span class="col-12 mt-5 mb-3">
           편집은 "편하게 집에서 의뢰하세요"라는 의미를 가진 사이트로,
           사용자가 본인의 영상을 원하는 스타일대로 편집할 수 있게끔 편집자와 매칭해주는 사이트입니다.
@@ -81,13 +79,6 @@
           </div>
           <p class="d-flex align-items-center">커밋 조다빈</p>
         </div>
-
-        <!-- <b-card-group deck class="col-12">
-          <b-card img-src="https://placekitten.com/1000/300" img-alt="1로와" img-top>
-            <b-card-title>1로와</b-card-title>
-            <b-card-text>편하게 집에서 의뢰하세요</b-card-text>
-          </b-card>
-        </b-card-group>-->
       </div>
     </div>
   </div>

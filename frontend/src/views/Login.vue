@@ -48,9 +48,6 @@
               class="text-left ml-3 mb-3 small"
               style="color:red"
             >아이디 및 비밀번호를 확인해 주세요.</div>
-            <!-- <base-checkbox class="custom-control-alternative">
-              <span class="text-muted">이 사이트 기억하기</span>
-            </base-checkbox>-->
             <div class="text-center">
               <base-button type="primary" class="my-4" @click="login()">로그인</base-button>
             </div>
@@ -124,7 +121,6 @@ export default {
         .then(({ data }) => {
           if (data.data == "success") {
             this.$session.start();
-            // console.log(data.object);
             this.$store.commit("auth/mutateIsLogin", true);
             this.$session.set("uid", data.object.uid);
             this.$session.set("nickname", data.object.nickname);
@@ -133,12 +129,10 @@ export default {
             this.$router.push("/");
             return;
           } else if (data.data == "fail") {
-            // alertify.error("아이디 및 비밀번호를 확인해주세요", 3);
             this.model.success = false;
           }
         })
         .catch(() => {
-          // alertify.error("아이디 및 비밀번호를 확인해주세요", 3);
           this.model.success = false;
           return;
         });

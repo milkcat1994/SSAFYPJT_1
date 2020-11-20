@@ -1,15 +1,5 @@
 <template>
   <base-nav class="navbar-top navbar-dark" id="navbar-main" :show-toggle-button="false" expand>
-    <!-- <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-      <div class="form-group mb-0">
-        <base-input
-          placeholder="Search"
-          class="input-group-alternative"
-          alternative
-          addon-right-icon="fas fa-search"
-        ></base-input>
-      </div>
-    </form>-->
     <template>
       <div>
         <i
@@ -291,20 +281,7 @@ export default {
     maskoff() {
       this.mask = false;
       document.getElementById("closebtn").click();
-      // console.log("클릭함");
     },
-    // toggleSidebar() {
-    //   console.log("toggleOn");
-    //   this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
-    //   this.mask = true;
-    // },
-    // hideSidebar() {
-    //   this.$sidebar.displaySidebar(false);
-    //   this.mask = false;
-    // },
-    // toggleMenu() {
-    //   this.showMenu = !this.showMenu;
-    // },
     getNotifyNum() {
       this.notifyNum = this.notifyitems.data;
       return this.notifyNum;
@@ -317,9 +294,11 @@ export default {
           if (data == "success") {
             // alert('알람 읽음 완료');
           }
+          else{
+            throw ''
+          }
         })
         .catch(() => {
-          // alert('요청 거절중 에러가 발생했습니다.');
         })
         .finally(() => {
           // 목록 새로고침
@@ -336,7 +315,6 @@ export default {
       this.$store.commit("auth/mutateIsLogin", false);
       this.isLogin = false;
       this.$router.push("/").catch(() => {});
-      // this.$forceUpdate();
     },
   },
 };
@@ -371,11 +349,6 @@ main {
   align-items: center;
   position: relative;
 }
-/* .notification {
-  position: relative;
-  width: 14px;
-  height: 16.8px;
-} */
 .notification {
   display: flex;
   align-items: center;
@@ -404,10 +377,7 @@ svg > path {
   top: 22%;
   left: 75%;
   font-size: 14px;
-  /* border-radius: 90%; */
-  /* border: 1px; */
   color: #172b4d;
-  /* background-color: #ff4c13; */
   text-align: center;
   animation: notification 2.2s linear;
 }
